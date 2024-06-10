@@ -1,0 +1,35 @@
+# Workspace and Editor
+pcb-defect-detection.code-workspace
+.vscode/
+
+# Virtual Environment
+venv/
+
+# Python Caches
+__pycache__/
+
+# Scripts
+batch_scripts/
+
+# Local and Temporary Files
+**/local/
+**/temp/
+**/temp.*
+**/test.*
+
+# Test and Log Files
+**/test_results.log
+**/test_results_simple.log
+source/utils/test_result_logger.py
+**/tests/outputs/
+
+# Data Files
+pcb_defect_detection/data
+source/testing/outputs/loaded_image.png
+
+# Specific Source Files
+source/preprocessing/tests/outputs/
+source/preprocessing/notebooks/related/pipeline.json
+
+# Private References
+references/private/*
