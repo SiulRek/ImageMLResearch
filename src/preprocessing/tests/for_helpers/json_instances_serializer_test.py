@@ -54,9 +54,9 @@ class MockClassInvalidparametersAttr:
         self.parameters = param1
 
 
-class TestClassInstancesSerializer(BaseTestCase):
+class TestJSONInstancesSerializer(BaseTestCase):
     """
-    Test suite for the ClassInstancesSerializer class.
+    Test suite for the JSONInstancesSerializer class.
 
     This suite contains a set of unit tests that are designed to ensure the
     proper functionality of the ClassInstancesSerializer's methods. It tests the
