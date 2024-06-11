@@ -2,10 +2,9 @@ import json
 import os
 import random
 import re
+import warnings
 
-from src.preprocessing.helpers.for_preprocessor.parse_and_repeat import (
-    parse_and_repeat,
-)
+from src.preprocessing.helpers.for_preprocessor.parse_and_repeat import parse_and_repeat
 from src.preprocessing.helpers.for_preprocessor.randomly_select_sequential_keys import (
     randomly_select_sequential_keys,
 )
@@ -284,7 +283,7 @@ class JSONInstancesSerializer:
             msg = f"Class Instance Serializer Warning: "
             msg += f"class '{mapped_class}' has no attribute 'arguments_datatype',"
             msg += f" this can lead to faulty instanciation."
-            print(msg)
+            warnings.warn(msg)
 
         return arguments
 
