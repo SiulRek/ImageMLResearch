@@ -34,7 +34,7 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
         super().setUp()  
 
         source_data = {"key1": "value1", "key2": "value2", "key3": "value3"}
-        with open(self.source_file, "w") as file:
+        with open(self.source_file, "w", encoding="utf-8") as file:
             json.dump(source_data, file)
 
     def tearDown(self):
@@ -49,7 +49,7 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
         exclude_keys = ["key2"]
         copy_json_exclude_entries(self.source_file, self.dest_file, exclude_keys)
 
-        with open(self.dest_file, "r") as file:
+        with open(self.dest_file, "r", encoding="utf-8") as file:
             dest_data = json.load(file)
 
         self.assertNotIn("key2", dest_data)
@@ -60,10 +60,10 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
         exclude_keys = []
         copy_json_exclude_entries(self.source_file, self.dest_file, exclude_keys)
 
-        with open(self.dest_file, "r") as file:
+        with open(self.dest_file, "r", encoding="utf-8") as file:
             dest_data = json.load(file)
 
-        with open(self.source_file, "r") as file:
+        with open(self.source_file, "r", encoding="utf-8") as file:
             source_data = json.load(file)
         self.assertEqual(dest_data, source_data)
 
@@ -71,10 +71,10 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
         exclude_keys = ["key4"]
         copy_json_exclude_entries(self.source_file, self.dest_file, exclude_keys)
 
-        with open(self.dest_file, "r") as file:
+        with open(self.dest_file, "r", encoding="utf-8") as file:
             dest_data = json.load(file)
 
-        with open(self.source_file, "r") as file:
+        with open(self.source_file, "r", encoding="utf-8") as file:
             source_data = json.load(file)
         self.assertEqual(dest_data, source_data)
 

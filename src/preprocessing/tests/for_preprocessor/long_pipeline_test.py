@@ -82,7 +82,7 @@ class TestLongPipeline(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        with open(self.json_test_file, "a"):
+        with open(self.json_test_file, "a", encoding="utf-8"):
             pass
         self.preprocessor = self.create_preconfigured_image_preprocessor()
         # print(self.preprocessor.get_pipe_code_representation())

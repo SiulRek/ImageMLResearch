@@ -109,7 +109,7 @@ class TestImagePreprocessor(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.json_test_file = os.path.join(self.temp_dir, "test_pipeline.json")
-        with open(self.json_test_file, "a"):
+        with open(self.json_test_file, "a", encoding="utf-8"):
             pass
         self.pipeline = [
             RGBToGrayscale(param1=20, param2=(20, 20), param3=False),

@@ -204,7 +204,7 @@ class JSONInstancesSerializer:
         json_string = json_string.replace("},", "},\n")
         pattern = r"\[[^\[\]]*(?:\[[^\[\]]*\][^\[\]]*)*\]"
         result = re.sub(pattern, self._remove_newlines, json_string)
-        with open(json_path, "w") as file:
+        with open(json_path, "w", encoding="utf-8") as file:
             file.write(result)
 
     def save_instances_to_json(self, instance_list, json_path):
@@ -342,7 +342,7 @@ class JSONInstancesSerializer:
         """
         self._verify_json_path(json_path)
         try:
-            with open(json_path, "r") as file:
+            with open(json_path, "r", encoding="utf-8") as file:
                 separator = JSONInstancesSerializer.KEY_SEPARATOR
                 json_data = json.load(file)
                 json_data = randomly_select_sequential_keys(

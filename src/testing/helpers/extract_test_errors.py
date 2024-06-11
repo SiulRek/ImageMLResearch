@@ -7,7 +7,7 @@ def extract_test_errors(file_path):
     current_test_title_line = None
     errors = []
 
-    with open(file_path, "r") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         lines = file.readlines()
 
     for line in lines:
@@ -23,7 +23,7 @@ def extract_test_errors(file_path):
     output_file_name = f"{base}_errors{ext}"
     output_file_path = os.path.join(os.path.dirname(file_path), output_file_name)
 
-    with open(output_file_path, "w") as out_file:
+    with open(output_file_path, "w", encoding="utf-8") as out_file:
         for title_line, error_line in errors:
             out_file.write(f"{title_line}\n{error_line}\n\n")
 

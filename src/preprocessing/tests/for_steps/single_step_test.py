@@ -134,7 +134,7 @@ class TestSingleStep(BaseTestCase):
     def setUp(self):
         super().setUp()  
         self.json_test_file = os.path.join(self.temp_dir, "test_step.json")
-        with open(self.json_test_file, "a"):
+        with open(self.json_test_file, "a", encoding="utf-8"):
             pass
         self.test_step = self.TestStep(**self.parameters)
 
@@ -294,7 +294,7 @@ class TestSingleStep(BaseTestCase):
 
         step_name = self.test_step.name
 
-        with open(self.json_template, "r") as file:
+        with open(self.json_template, "r", encoding="utf-8") as file:
             json_data = json.load(file)
 
         self.assertIn(

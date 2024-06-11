@@ -68,7 +68,7 @@ class TestJSONInstancesSerializer(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.json_path = os.path.join(self.temp_dir, "test_config.json")
-        with open(self.json_path, "w"):
+        with open(self.json_path, "w", encoding="utf-8"):
             pass
         self.instance_mapping = {"MockClass1": MockClass1, "MockClass2": MockClass2}
         self.serializer = JSONInstancesSerializer(self.instance_mapping)
@@ -218,7 +218,7 @@ class TestJSONInstancesSerializer(BaseTestCase):
             temp_key: mock_class_parameters_2,
         }
 
-        with open(self.json_path, "w") as file:
+        with open(self.json_path, "w", encoding="utf-8") as file:
             json.dump(json_data, file)
         loaded_instance_list = self.serializer.get_instances_from_json(self.json_path)
 
@@ -255,7 +255,7 @@ class TestJSONInstancesSerializer(BaseTestCase):
             temp_key: mock_class_parameters_2,
         }
 
-        with open(self.json_path, "w") as file:
+        with open(self.json_path, "w", encoding="utf-8") as file:
             json.dump(json_data, file)
 
         loaded_instance_list = self.serializer.get_randomized_instances_from_json(
@@ -296,7 +296,7 @@ class TestJSONInstancesSerializer(BaseTestCase):
             key_4: mock_class_parameters_2,
         }
 
-        with open(self.json_path, "w") as file:
+        with open(self.json_path, "w", encoding="utf-8") as file:
             json.dump(json_data, file)
 
         loaded_instance_lists = []
@@ -362,7 +362,7 @@ class TestJSONInstancesSerializer(BaseTestCase):
             temp_key: mock_class_parameters_2,
         }
 
-        with open(self.json_path, "w") as file:
+        with open(self.json_path, "w", encoding="utf-8") as file:
             json.dump(json_data, file)
         loaded_instance_list = self.serializer._build_instances_from_json(
             self.json_path, randomized=False
@@ -396,7 +396,7 @@ class TestJSONInstancesSerializer(BaseTestCase):
         }
         json_data = {"MockClass2": mock_class_parameters}
 
-        with open(self.json_path, "w") as file:
+        with open(self.json_path, "w", encoding="utf-8") as file:
             json.dump(json_data, file)
 
         self.serializer.instance_mapping = {
@@ -424,7 +424,7 @@ class TestJSONInstancesSerializer(BaseTestCase):
             temp_key: mock_class_parameters_2,
         }
 
-        with open(self.json_path, "w") as file:
+        with open(self.json_path, "w", encoding="utf-8") as file:
             json.dump(json_data, file)
         with self.assertRaises(ValueError):
             self.serializer.get_randomized_instances_from_json(self.json_path)
