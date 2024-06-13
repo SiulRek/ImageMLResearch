@@ -39,6 +39,16 @@ class TestLabelManager(BaseTestCase):
             "The categorical labels do not match expected output.",
         )
 
+    def test_multi_label_not_implemented(self):
+        manager = LabelManager("multi_label")
+        with self.assertRaises(NotImplementedError):
+            manager.encode_label(self.categorical_label)
+    
+    def test_multi_class_multi_label_not_implemented(self):
+        manager = LabelManager("multi_class_multi_label")
+        with self.assertRaises(NotImplementedError):
+            manager.encode_label(self.categorical_label)
+
     def test_object_detection_labels_not_implemented(self):
         manager = LabelManager("object_detection")
         with self.assertRaises(NotImplementedError):

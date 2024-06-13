@@ -21,6 +21,8 @@ class LabelManager:
     default_label_dtype = {
         "binary": tf.float32,
         "categorical": tf.float32,
+        "multi_label": tf.float32,
+        "multi_class_multi_label": tf.float32,
         "object_detection": tf.float32,
     }
 
@@ -31,7 +33,8 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'categorical' and 'object_detection'.
+                Supported types are 'binary', 'categorical', 'multi_label',
+                'multi_class_multi_label', and 'object_detection'.
             - category_names (list, optional): The existing category names
                 for label encoding.
             - dtype (tf.DType, optional): The data type of the label.
@@ -86,7 +89,8 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'categorical' and 'object_detection'.
+                Supported types are 'binary', 'categorical', 'multi_label',
+                'multi_class_multi_label', and 'object_detection'.
 
         Returns:
             - function: The label encoder method based on the label type.
@@ -95,6 +99,10 @@ class LabelManager:
             return self.encode_binary_label
         if label_type == "categorical":
             return self.encode_categorical_label
+        if label_type == "multi_label":
+            return self.encode_multi_label
+        if label_type == "multi_class_multi_label":
+            return self.encode_multi_class_multi_label
         if label_type == "object_detection":
             return self.encode_object_detection_label
         msg = f"The label type '{label_type}' is not supported."
@@ -180,6 +188,35 @@ class LabelManager:
         except tf.errors.OpError as e:
             msg = "The number of categories is probably invalid."
             raise ValueError(msg) from e
+
+    def encode_multi_label(self, label):
+        """
+        Stub method for future implementation of multi-label encoding.
+
+        Args:
+            - label (int): The label to encode.
+
+        Raises:
+            - NotImplementedError: Indicates that the method is not yet
+                implemented.
+        """
+        msg = "Multi-label encoding is not yet implemented."
+        raise NotImplementedError(msg)
+
+    def encode_multi_class_multi_label(self, label):
+        """
+        Stub method for future implementation of multi-class multi-label
+        encoding.
+
+        Args:
+            - label (int): The label to encode.
+
+        Raises:
+            - NotImplementedError: Indicates that the method is not yet
+                implemented.
+        """
+        msg = "Multi-class multi-label encoding is not yet implemented."
+        raise NotImplementedError(msg)
 
     def encode_object_detection_label(self, _):
         """

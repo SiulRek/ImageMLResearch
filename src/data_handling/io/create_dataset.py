@@ -18,7 +18,7 @@ def create_dataset(data, label_type=None, category_names=None):
             labels should contain the corresponding labels for the specified
             'label_type'.
         - label_type (str, optional): Specifies the label encoding strategy
-            ('binary', 'categorical', or
+            ('binary', 'categorical', 'multi_label', 'multi_class_multi_label',
             'object_detection'). Default is None.
         - category_names (list, optional): The existing category names for
             label encoding if 'label_type' is not None. Default is None.
