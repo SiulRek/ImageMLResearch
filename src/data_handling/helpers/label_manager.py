@@ -20,7 +20,7 @@ class LabelManager:
 
     default_label_dtype = {
         "binary": tf.float32,
-        "category_codes": tf.float32,
+        "categorical": tf.float32,
         "object_detection": tf.float32,
     }
 
@@ -31,7 +31,7 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'category_codes' and 'object_detection'.
+                Supported types are 'binary', 'categorical' and 'object_detection'.
             - category_names (list, optional): The existing category names
                 for label encoding.
             - dtype (tf.DType, optional): The data type of the label.
@@ -70,7 +70,7 @@ class LabelManager:
         Args:
             - category_names (list): The list of category names.
         """
-        if not category_names and self._label_type == "category_codes":
+        if not category_names and self._label_type == "categorical":
             msg = "The category names are required at least to derive the number of categories."
             raise ValueError(msg)
         if not category_names and self._label_type == "binary":
@@ -86,14 +86,14 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'category_codes' and 'object_detection'.
+                Supported types are 'binary', 'categorical' and 'object_detection'.
 
         Returns:
             - function: The label encoder method based on the label type.
         """
         if label_type == "binary":
             return self.encode_binary_label
-        if label_type == "category_codes":
+        if label_type == "categorical":
             return self.encode_categorical_label
         if label_type == "object_detection":
             return self.encode_object_detection_label

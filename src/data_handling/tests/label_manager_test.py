@@ -31,7 +31,7 @@ class TestLabelManager(BaseTestCase):
             manager.encode_label(self.invalid_binary_label)
 
     def test_categorical_labels_valid_input(self):
-        manager = LabelManager("category_codes", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         result = manager.encode_label(self.categorical_label)
         expected = tf.constant([0, 0, 1, 0], dtype=tf.float32)
         self.assertTrue(
@@ -45,11 +45,11 @@ class TestLabelManager(BaseTestCase):
             manager.encode_label(self.categorical_label)
 
     def test_label_dtype(self):
-        manager = LabelManager("category_codes", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.label_dtype,
             tf.float32,
-            "Label dtype for category_codes should be tf.float32",
+            "Label dtype for categorical should be tf.float32",
         )
 
         manager = LabelManager("object_detection")
@@ -67,7 +67,7 @@ class TestLabelManager(BaseTestCase):
         )
 
     def test_label_conversion_dtype(self):
-        manager = LabelManager("category_codes", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         result = manager.encode_label(self.categorical_label)
         self.assertEqual(
             result.dtype,
@@ -76,7 +76,7 @@ class TestLabelManager(BaseTestCase):
         )
 
         manager = LabelManager(
-            "category_codes", category_names=["a", "b", "c", "d"], dtype=tf.int32
+            "categorical", category_names=["a", "b", "c", "d"], dtype=tf.int32
         )
         result = manager.encode_label(self.categorical_label)
         self.assertEqual(
@@ -106,7 +106,7 @@ class TestLabelManager(BaseTestCase):
             manager.encode_label(self.categorical_label)
 
     def test_convert_to_numeric(self):
-        manager = LabelManager("category_codes", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.convert_to_numeric("c"),
             2,
@@ -126,7 +126,7 @@ class TestLabelManager(BaseTestCase):
             manager.convert_to_numeric("e")
 
     def test_decode_label(self):
-        manager = LabelManager("category_codes", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.decode_label(2),
             "c",
