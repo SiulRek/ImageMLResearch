@@ -100,16 +100,15 @@ class JSONInstancesSerializer:
         """
         if type(obj) is tuple or type(obj) is list:
             return [self._serialize_to_json_value(item) for item in obj]
-        elif type(obj) is dict:
+        if type(obj) is dict:
             return {
                 key: self._serialize_to_json_value(value) for key, value in obj.items()
             }
         elif type(obj) in {int, float, str, bool}:
             return obj
-        else:
-            raise TypeError(
-                f"Object with value '{obj} cannot not be serialized to JSON format."
-            )
+        raise TypeError(
+            f"Object with value '{obj} cannot not be serialized to JSON format."
+        )
 
     def _add_instance_to_configurations(self, instance, configurations):
         """

@@ -73,8 +73,7 @@ def recursive_type_conversion(source_value, target_datatype_template):
                         source_item, target_item
                     )
             return converted_dict
-        else:
-            return source_value
+        return source_value
 
     else:
         return source_value

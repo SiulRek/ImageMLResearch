@@ -18,8 +18,7 @@ def parse_tfrecord(sample_proto, label_dtype=None):
     if "label" in sample:
         label = tf.io.parse_tensor(sample["label"], out_type=label_dtype)
         return image, label
-    else:
-        return image
+    return image
 
 
 def deserialize_dataset_from_tfrecord(filepath, label_dtype=None):

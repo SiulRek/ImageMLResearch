@@ -78,7 +78,7 @@ class LabelManager:
         ]:
             msg = "The category names are required at least to derive the number of categories."
             raise ValueError(msg)
-        elif not category_names and self._label_type == "binary":
+        if not category_names and self._label_type == "binary":
             self.num_categories = 2
             self.category_names = ["0", "1"]
         elif category_names:

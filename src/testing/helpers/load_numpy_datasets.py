@@ -24,5 +24,4 @@ def load_sign_digits_dataset(sample_num=None, labeled=True):
         Y = Y[:sample_num]
     if labeled:
         return tf.data.Dataset.from_tensor_slices((X, Y))
-    else:
-        return tf.data.Dataset.from_tensor_slices(X)
+    return tf.data.Dataset.from_tensor_slices(X)

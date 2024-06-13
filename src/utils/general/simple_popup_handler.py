@@ -125,8 +125,7 @@ class SimplePopupHandler:
 
             if response == "yes":
                 return True
-            else:
-                return False
+            return False
         except Exception as e:
             self.display_popup_message(f"An error occurred: {str(e)}")
 
@@ -142,8 +141,7 @@ class SimplePopupHandler:
             file_path = filedialog.askopenfilename()
             if file_path:
                 return file_path
-            else:
-                self.display_popup_message("No file selected.")
+            self.display_popup_message("No file selected.")
         except Exception as e:
             self.display_popup_message(f"An error occurred: {str(e)}")
 
