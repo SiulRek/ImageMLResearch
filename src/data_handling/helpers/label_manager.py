@@ -21,7 +21,6 @@ class LabelManager:
     default_label_dtype = {
         "binary": tf.float32,
         "category_codes": tf.float32,
-        "sparse_category_codes": tf.float32,
         "object_detection": tf.float32,
     }
 
@@ -32,8 +31,7 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'category_codes',
-                'sparse_category_codes', and 'object_detection'.
+                Supported types are 'binary', 'category_codes' and 'object_detection'.
             - category_names (list, optional): The existing category names
                 for label encoding.
             - dtype (tf.DType, optional): The data type of the label.
@@ -72,10 +70,7 @@ class LabelManager:
         Args:
             - category_names (list): The list of category names.
         """
-        if not category_names and self._label_type in [
-            "category_codes",
-            "sparse_category_codes",
-        ]:
+        if not category_names and self._label_type == "category_codes":
             msg = "The category names are required at least to derive the number of categories."
             raise ValueError(msg)
         if not category_names and self._label_type == "binary":
@@ -91,8 +86,7 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'category_codes',
-                'sparse_category_codes', and 'object_detection'.
+                Supported types are 'binary', 'category_codes' and 'object_detection'.
 
         Returns:
             - function: The label encoder method based on the label type.
@@ -101,8 +95,6 @@ class LabelManager:
             return self.encode_binary_label
         if label_type == "category_codes":
             return self.encode_categorical_label
-        if label_type == "sparse_category_codes":
-            return self.encode_sparse_categorical_label
         if label_type == "object_detection":
             return self.encode_object_detection_label
         msg = f"The label type '{label_type}' is not supported."
@@ -187,26 +179,6 @@ class LabelManager:
             raise ValueError(msg) from e
         except tf.errors.OpError as e:
             msg = "The number of categories is probably invalid."
-            raise ValueError(msg) from e
-
-    def encode_sparse_categorical_label(self, label):
-        """
-        Encodes a categorical label into sparse format suitable for sparse
-        categorical crossentropy loss.
-
-        Args:
-            - label (int): The label to encode.
-
-        Returns:
-            - tf.Tensor: A TensorFlow constant of the label in sparse
-                format.
-        """
-        try:
-            label = self.convert_to_numeric(label)
-            label = tf.constant(label, dtype=self._label_dtype)
-            return label
-        except ValueError as e:
-            msg = "The label should be convertible to an integer."
             raise ValueError(msg) from e
 
     def encode_object_detection_label(self, _):
