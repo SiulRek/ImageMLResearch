@@ -43,7 +43,7 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
         @classmethod
         def setUpClass(cls):
             super().setUpClass()
-            cls.image_dataset = cls.load_sign_language_digits_dataset(
+            cls.image_dataset = cls.load_mnist_digits_dataset(
                 sample_num=5,
                 labeled=False
             ) # Overwrite dataset defined in TestSingleStep

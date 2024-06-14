@@ -123,9 +123,8 @@ class BaseTestCase(unittest.TestCase):
         """ Class-level teardown method that removes the results directory if it is
         empy. """
         for dir_ in [cls.results_dir, cls.visualizations_dir]:
-            if os.path.exists(dir_):
+            if os.path.exists(dir_) and os.listdir(dir_) == []:
                 shutil.rmtree(dir_)
-        
 
     def setUp(self):
         """ Instance-level setup method that creates a temporary directory for use
@@ -153,46 +152,40 @@ class BaseTestCase(unittest.TestCase):
         return load_dataset_from_tf_records(tf_records_path)
 
     @classmethod
-    def load_sign_language_digits_dataset(cls, sample_num=5, labeled=False):
+    def load_mnist_digits_dataset(cls, sample_num=5, labeled=False):
         """
-        Load the sign language digits dataset used for testing. This method is
-        intended to be overridden by derived test classes to return the
-        appropriate dataset.
+        Load the MNIST digits dataset used for testing. This method is intended
+        to be overridden by derived test classes to return the appropriate
+        dataset.
 
         Returns:
-            - tf.data.Dataset: The sign language digits dataset to be used
-                for testing.
+            - tf.data.Dataset: The MNIST digits dataset to be used for
+                testing.
         """
-        dataset_dir = os.path.join(
-            cls.data_dir, "numpy_datasets", "sign_language_digits"
-        )
-        X = np.load(os.path.join(dataset_dir, "X.npy"))
-        Y = np.load(os.path.join(dataset_dir, "Y.npy"))
+        dataset = tf.keras.datasets.mnist.load_data()
 
-        X = (X * 255).astype(np.uint8)
-        if X.ndim == 3:
-            X = np.stack([X] * 3, axis=-1)
-
+        (X_train, Y_train), _ = dataset
+        X_train = np.stack([X_train] * 3, axis=-1)
         if sample_num:
-            X = X[:sample_num]
-            Y = Y[:sample_num]
+            X_train = X_train[:sample_num]
+            Y_train = Y_train[:sample_num]
         if labeled:
-            return tf.data.Dataset.from_tensor_slices((X, Y))
-        return tf.data.Dataset.from_tensor_slices(X)
+            return tf.data.Dataset.from_tensor_slices((X_train, Y_train))
+        return tf.data.Dataset.from_tensor_slices(X_train)
 
     @classmethod
-    def load_sign_language_digits_dict(cls):
+    def load_mnist_digits_dicts(cls):
         """
-        Load the sign language digits dataset as dictionaries. This method loads
-        the dataset and returns it as two separate dictionaries for images in
-        JPG and PNG formats.
+        Load the mnist digits dataset as dictionaries. This method loads the
+        dataset and returns it as two separate dictionaries for images in JPG
+        and PNG formats.
 
         Returns:
             - tuple: A tuple containing two dictionaries, one for JPG images
                 and one for PNG images. Each dictionary contains 'path' and
                 'label' keys.
         """
-        dataset_dir = os.path.join(cls.data_dir, "sign_language_digits")
+        dataset_dir = os.path.join(cls.data_dir, "mnist_digits")
         jpg_dict = {"path": [], "label": []}
         png_dict = {"path": [], "label": []}
         for file in os.listdir(dataset_dir):
@@ -206,3 +199,9 @@ class BaseTestCase(unittest.TestCase):
                 png_dict["label"].append(label)
 
         return jpg_dict, png_dict
+
+
+if __name__ == "__main__":
+    # load the mnist digits dataset
+    mnist_digits_dataset = BaseTestCase.load_mnist_digits_dataset()
+    print(mnist_digits_dataset)

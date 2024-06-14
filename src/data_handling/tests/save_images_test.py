@@ -17,7 +17,7 @@ class TestSaveImages(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.dataset = self.load_sign_language_digits_dataset(
+        self.dataset = self.load_mnist_digits_dataset(
             sample_num=5, labeled=True
         )
 

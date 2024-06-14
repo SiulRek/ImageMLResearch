@@ -14,7 +14,7 @@ class TestCreateDataset(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.jpg_dict, cls.png_dict = cls.load_sign_language_digits_dict()
+        cls.jpg_dict, cls.png_dict = cls.load_mnist_digits_dicts()
 
     def setUp(self):
         super().setUp()
