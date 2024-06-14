@@ -43,7 +43,7 @@ class LabelManager:
         self.num_categories = None
         self.category_names = None
         self._set_category_params(category_names)
-        self._encode_label_func = self._get_label_encoder(label_type)
+        self._set_label_type_functions(label_type)
         self._label_dtype = dtype or self.default_label_dtype[label_type]
 
     @property
@@ -83,35 +83,65 @@ class LabelManager:
             self.category_names = category_names
             self.num_categories = len(category_names)
 
-    def _get_label_encoder(self, label_type):
+    def _set_label_type_functions(self, label_type):
         """
-        Returns the label encoder method based on the label type.
+        Sets the label encoder and label to digit converter methods based on the
+        label type.
 
         Args:
             - label_type (str): The type of label encoding to manage.
                 Supported types are 'binary', 'categorical', 'multi_label',
                 'multi_class_multi_label', and 'object_detection'.
-
-        Returns:
-            - function: The label encoder method based on the label type.
         """
-        if label_type == "binary":
-            return self.encode_binary_label
-        if label_type == "categorical":
-            return self.encode_categorical_label
-        if label_type == "multi_label":
-            return self.encode_multi_label
-        if label_type == "multi_class_multi_label":
-            return self.encode_multi_class_multi_label
-        if label_type == "object_detection":
-            return self.encode_object_detection_label
-        msg = f"The label type '{label_type}' is not supported."
-        raise ValueError(msg)
+
+        def raise_exception_when_called(exception, msg):
+            def wrapper(_):
+                raise exception(msg)
+
+            return wrapper
+
+        label_encoders = {
+            "binary": self.encode_binary_label,
+            "categorical": self.encode_categorical_label,
+            "multi_label": raise_exception_when_called(
+                NotImplementedError, "Multi-label encoding is not yet implemented."
+            ),
+            "multi_class_multi_label": raise_exception_when_called(
+                NotImplementedError,
+                "Multi-class multi-label encoding is not yet implemented.",
+            ),
+            "object_detection": raise_exception_when_called(
+                NotImplementedError,
+                "Object detection label encoding is not yet implemented.",
+            ),
+        }
+
+        label_to_digit_converters = {
+            "binary": self.convert_label_to_digit,
+            "categorical": self.convert_categorical_label_to_digit,
+            "multi_label": raise_exception_when_called(
+                ValueError, "Cannot convert multi-label to digit."
+            ),
+            "multi_class_multi_label": raise_exception_when_called(
+                ValueError, "Cannot convert multi-class multi-label to digit."
+            ),
+            "object_detection": raise_exception_when_called(
+                ValueError, "Cannot convert object detection label to digit."
+            ),
+        }
+
+        if label_type not in label_encoders:
+            msg = f"The label type '{label_type}' is not supported."
+            raise ValueError(msg)
+
+        self._encode_label_func = label_encoders[label_type]
+        self._convert_label_to_digit_func = label_to_digit_converters[label_type]
 
     def convert_to_numeric(self, label):
         """
         Converts a label to a numeric format in the case of string labels. If it
-        is not a string, it returns the label as is.
+        is not a string, it returns the label as is (assuming it is already in
+        numeric format).
 
         Args:
             - label (str or int): The label to convert.
@@ -189,69 +219,45 @@ class LabelManager:
             msg = "The number of categories is probably invalid."
             raise ValueError(msg) from e
 
-    def encode_multi_label(self, label):
+    def numeric_to_category(self, numeric):
         """
-        Stub method for future implementation of multi-label encoding.
+        Converts a numeric label to a category name.
 
         Args:
-            - label (int): The label to encode.
-
-        Raises:
-            - NotImplementedError: Indicates that the method is not yet
-                implemented.
-        """
-        msg = "Multi-label encoding is not yet implemented."
-        raise NotImplementedError(msg)
-
-    def encode_multi_class_multi_label(self, label):
-        """
-        Stub method for future implementation of multi-class multi-label
-        encoding.
-
-        Args:
-            - label (int): The label to encode.
-
-        Raises:
-            - NotImplementedError: Indicates that the method is not yet
-                implemented.
-        """
-        msg = "Multi-class multi-label encoding is not yet implemented."
-        raise NotImplementedError(msg)
-
-    def encode_object_detection_label(self, _):
-        """
-        Stub method for future implementation of object detection label
-        encoding.
-
-        Args:
-            - label (int): The label to encode.
-
-        Raises:
-            - NotImplementedError: Indicates that the method is not yet
-                implemented.
-        """
-        msg = "Object Detection Labels are not yet implemented."
-        raise NotImplementedError(msg)
-
-    def decode_label(self, label):
-        """
-        Decodes a label from a numeric format to a string format based on the
-        category names provided during initialization.
-
-        Args:
-            - label (int): The label to decode.
+            - numeric (numeric): The numeric label to convert.
 
         Returns:
-            - str: The label in string format.
+            - str: The category name corresponding to the numeric label.
         """
         if not self.category_names:
-            msg = "No category names are provided for conversion."
-            raise ValueError(msg)
-        if not isinstance(label, int) and not isinstance(label, tf.Tensor):
-            msg = "The label is not a numeric label."
+            msg = "No category names are provided for label decoding."
             raise ValueError(msg)
         try:
-            return self.category_names[label]
+            numeric = numeric.numpy()
+        except AttributeError:
+            pass
+        try:
+            numeric = int(numeric)
+            return self.category_names[numeric]
         except IndexError as e:
-            msg = "The label is not in the list of category names."
+            msg = "The label is out of bounds for the category names."
             raise ValueError(msg) from e
+        except ValueError as e:
+            msg = "The label should be convertible to an integer."
+            raise ValueError(msg) from e
+
+    def convert_label_to_digit(self, label):
+        """
+        Converts a label to a digit.
+
+        Args:
+            - label: The label to convert.
+
+        Returns:
+            - int: The digit corresponding to the label.
+        """
+        return self._convert_label_to_digit_func(label)
+
+    def convert_categorical_label_to_digit(self, label):
+        """ Converts a categorical label to a digit. """
+        return tf.argmax(label).numpy()

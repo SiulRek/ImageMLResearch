@@ -138,19 +138,19 @@ class TestLabelManager(BaseTestCase):
     def test_decode_label(self):
         manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         self.assertEqual(
-            manager.decode_label(2),
+            manager.numeric_to_category(2),
             "c",
             "Decoding failed for valid numeric label.",
         )
         self.assertEqual(
-            manager.decode_label(tf.constant(2)),
+            manager.numeric_to_category(tf.constant(2)),
             "c",
             "Decoding failed for valid tensor label.",
         )
         with self.assertRaises(ValueError):
-            manager.decode_label(5)
+            manager.numeric_to_category(5)
         with self.assertRaises(ValueError):
-            manager.decode_label("c")
+            manager.numeric_to_category("c")
 
 
 if __name__ == "__main__":
