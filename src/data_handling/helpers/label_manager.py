@@ -116,26 +116,11 @@ class LabelManager:
             ),
         }
 
-        label_to_digit_converters = {
-            "binary": self.convert_label_to_digit,
-            "categorical": self.convert_categorical_label_to_digit,
-            "multi_label": raise_exception_when_called(
-                ValueError, "Cannot convert multi-label to digit."
-            ),
-            "multi_class_multi_label": raise_exception_when_called(
-                ValueError, "Cannot convert multi-class multi-label to digit."
-            ),
-            "object_detection": raise_exception_when_called(
-                ValueError, "Cannot convert object detection label to digit."
-            ),
-        }
-
         if label_type not in label_encoders:
             msg = f"The label type '{label_type}' is not supported."
             raise ValueError(msg)
 
         self._encode_label_func = label_encoders[label_type]
-        self._convert_label_to_digit_func = label_to_digit_converters[label_type]
 
     def convert_to_numeric(self, label):
         """
@@ -245,19 +230,3 @@ class LabelManager:
         except ValueError as e:
             msg = "The label should be convertible to an integer."
             raise ValueError(msg) from e
-
-    def convert_label_to_digit(self, label):
-        """
-        Converts a label to a digit.
-
-        Args:
-            - label: The label to convert.
-
-        Returns:
-            - int: The digit corresponding to the label.
-        """
-        return self._convert_label_to_digit_func(label)
-
-    def convert_categorical_label_to_digit(self, label):
-        """ Converts a categorical label to a digit. """
-        return tf.argmax(label).numpy()

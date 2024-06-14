@@ -43,7 +43,7 @@ class TestLabelManager(BaseTestCase):
         manager = LabelManager("multi_label")
         with self.assertRaises(NotImplementedError):
             manager.encode_label(self.categorical_label)
-    
+
     def test_multi_class_multi_label_not_implemented(self):
         manager = LabelManager("multi_class_multi_label")
         with self.assertRaises(NotImplementedError):
@@ -135,7 +135,7 @@ class TestLabelManager(BaseTestCase):
         with self.assertRaises(ValueError):
             manager.convert_to_numeric("e")
 
-    def test_decode_label(self):
+    def test_numeric_to_category(self):
         manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.numeric_to_category(2),
