@@ -30,7 +30,8 @@ from src.preprocessing.helpers.for_steps.step_utils import correct_image_tensor_
 from src.preprocessing.image_preprocessor import ImagePreprocessor
 from src.preprocessing.steps import Rotator as StepToTest
 from src.testing.base_test_case import BaseTestCase
-from src.utils import ImagePlotter, SimplePopupHandler
+from src.testing.helpers.image_plotter import ImagePlotter
+from src.utils import SimplePopupHandler
 
 # TODO Select Step to test here!
 STEP_PARAMETERS = {"angle": 180}

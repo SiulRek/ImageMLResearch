@@ -1,6 +1,3 @@
-from src.utils.general.image_plotter import (
-    ImagePlotter,
-)
 from src.utils.general.get_sample_from_distribution import (
     get_sample_from_distribution,
 )
