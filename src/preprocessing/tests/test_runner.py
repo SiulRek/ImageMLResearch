@@ -2,12 +2,12 @@ import os
 import unittest
 from unittest import defaultTestLoader as Loader
 
-from src.preprocessing.tests.for_helpers import step_base_test
+from src.preprocessing.tests.for_steps import step_base_test
 from src.preprocessing.tests.for_helpers import copy_json_exclude_entries_test
 from src.preprocessing.tests.for_helpers import recursive_type_conversion_test
 from src.preprocessing.tests.for_helpers import randomly_select_sequential_keys_test
 from src.preprocessing.tests.for_helpers import parse_and_repeat_test
-from preprocessing.tests.for_helpers import json_instances_serializer_test
+from src.preprocessing.tests.for_helpers import json_instances_serializer_test
 from src.preprocessing.tests.for_preprocessor import image_preprocessor_test
 from src.preprocessing.tests.for_preprocessor.long_pipeline_test import (
     load_long_pipeline_tests,

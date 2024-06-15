@@ -1,4 +1,4 @@
-from src.preprocessing.helpers.for_steps.step_base import StepBase
+from src.preprocessing.steps.step_base import StepBase
 
 
 class DummyStep(StepBase):

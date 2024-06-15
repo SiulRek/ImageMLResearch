@@ -15,7 +15,7 @@ from src.preprocessing.helpers.for_preprocessor.json_instances_serializer import
 from src.preprocessing.helpers.for_preprocessor.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
-from src.preprocessing.helpers.for_steps.step_base import StepBase
+from src.preprocessing.steps.step_base import StepBase
 
 
 class ImagePreprocessor:
