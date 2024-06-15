@@ -14,8 +14,8 @@ class TestPlotImages(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.image_dataset = cls.load_mnist_digits_dataset(sample_num=4)
-        cls.labeled_dataset = cls.load_mnist_digits_dataset(sample_num=4, labeled=True)
+        cls.image_dataset = cls.load_mnist_digits_dataset(sample_num=10)
+        cls.labeled_dataset = cls.load_mnist_digits_dataset(sample_num=10, labeled=True)
         cls.visualization_path = os.path.join(cls.results_dir, "plot_images_test.png")
 
     def test_plot_images_without_labels(self):
@@ -34,7 +34,7 @@ class TestPlotImages(BaseTestCase):
         """ Test plotting images with labels. """
 
         def label_to_title(label):
-            return "Label:" + str(tf.argmax(label).numpy())
+            return "Label:" + str(label.numpy())
 
         fig = plot_images(
             self.labeled_dataset, grid_size=(2, 2), label_to_title_func=label_to_title
