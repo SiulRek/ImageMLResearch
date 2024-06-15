@@ -17,7 +17,7 @@ import tensorflow as tf
 from src.preprocessing.helpers.json_instances_serializer import (
     JSONInstancesSerializer,
 )
-from src.preprocessing.helpers.step_class_mapping import (
+from src.preprocessing.definitions.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
 from src.preprocessing.steps.step_base import StepBase
@@ -73,7 +73,7 @@ class TestLongPipeline(BaseTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.json_template_file = os.path.join(
-            cls.root_dir, r"src/preprocessing/pipelines/template.json"
+            cls.root_dir, r"src/preprocessing/definitions/pipeline_template.json"
         )
         cls.json_test_file = os.path.join(cls.temp_dir, "test_pipe.json")
         cls.log_file = os.path.join(cls.output_dir, "test_results.log")

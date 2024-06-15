@@ -12,7 +12,7 @@ from src.preprocessing.helpers.get_pipeline_code_representation import (
 from src.preprocessing.helpers.json_instances_serializer import (
     JSONInstancesSerializer,
 )
-from src.preprocessing.helpers.step_class_mapping import (
+from src.preprocessing.definitions.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
 from src.preprocessing.steps.step_base import StepBase

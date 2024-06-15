@@ -14,7 +14,7 @@ from src.utils import SimplePopupHandler
 
 STEP_PARAMETERS = {"angle": 180}
 
-JSON_TEMPLATE_REL = os.path.join(r"src/preprocessing/pipelines/template.json")
+JSON_TEMPLATE_REL = os.path.join(r"src/preprocessing/definitions/pipeline_template.json")
 
 
 class GrayscaleToRGB(StepBase):

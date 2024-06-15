@@ -64,7 +64,7 @@ class StepBase(ABC):
         - 2. Add mapping of the class to the
         - constant `STEP_CLASS_MAPPING` {<self.name>: type(self)}.
         - 3. Add JSON entry of the class to
-            .src/preprocessing/pipeline/template.json
+            .src/preprocessing/definitions/pipeline_template.json
         - 4. Execute single_step_test.py over this class.
     """
 

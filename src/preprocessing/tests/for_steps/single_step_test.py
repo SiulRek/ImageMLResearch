@@ -22,7 +22,7 @@ import tensorflow as tf
 from src.preprocessing.helpers.recursive_type_conversion import (
     recursive_type_conversion,
 )
-from src.preprocessing.helpers.step_class_mapping import (
+from src.preprocessing.definitions.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
 from src.preprocessing.steps.step_base import StepBase
@@ -37,7 +37,7 @@ from src.utils import SimplePopupHandler
 STEP_PARAMETERS = {"angle": 180}
 
 
-JSON_TEMPLATE_REL = os.path.join(r"src/preprocessing/pipelines/template.json")
+JSON_TEMPLATE_REL = os.path.join(r"src/preprocessing/definitions/pipeline_template.json")
 
 
 class RGBToGrayscale(StepBase):
