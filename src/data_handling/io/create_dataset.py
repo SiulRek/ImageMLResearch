@@ -2,7 +2,7 @@ import warnings
 
 import tensorflow as tf
 
-from src.data_handling.helpers.label_manager import LabelManager
+from src.data_handling.labelling.label_manager import LabelManager
 from src.data_handling.io.decode_image import decode_image
 
 
