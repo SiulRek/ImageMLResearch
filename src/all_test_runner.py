@@ -9,9 +9,11 @@ import os
 import unittest
 
 import src.data_handling.tests.test_runner as data_handling_tests
+import src.plotting.tests.test_runner as plotting_tests
 import src.preprocessing.tests.test_runner as image_preprocessing_tests
 from src.testing.helpers.test_result_logger import TestResultLogger
 from src.utils import SimplePopupHandler
+import src.utils.tests.test_runner as utils_tests
 import src.utils.tests.test_runner as utils_tests
 
 FILE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)))
@@ -25,6 +27,8 @@ def run_tests():
     test_suite = utils_tests.load_tests(test_suite)
     test_suite = image_preprocessing_tests.load_tests(test_suite)
     test_suite = data_handling_tests.load_tests(test_suite)
+    test_suite = plotting_tests.load_tests(test_suite)
+    test_suite = utils_tests.load_tests(test_suite)
 
     result = unittest.TextTestRunner(verbosity=2).run(test_suite)
 
