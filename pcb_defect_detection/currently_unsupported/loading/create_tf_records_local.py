@@ -3,8 +3,8 @@ in the pcb-defect-detection repository. """
 
 import os
 
-import pcb_defect_detection.deprecated.loading.deep_pcb_tangali5201 as deep_pcb_dataset
-import pcb_defect_detection.deprecated.loading.kaggle_dataset as kaggle_dataset
+import pcb_defect_detection.currently_unsupported.loading.deep_pcb_tangali5201 as deep_pcb_dataset
+import pcb_defect_detection.currently_unsupported.loading.kaggle_dataset as kaggle_dataset
 from source.utils import SimplePopupHandler
 from source.utils import search_files_with_name
 
