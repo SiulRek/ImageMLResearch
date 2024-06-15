@@ -11,7 +11,7 @@ from src.data_handling.tfrecord_serialization.deserialize import (
 from src.data_handling.tfrecord_serialization.serialize import (
     serialize_dataset_to_tf_record,
 )
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class TestTFRecordSerialization(BaseTestCase):

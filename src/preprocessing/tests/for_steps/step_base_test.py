@@ -5,7 +5,7 @@ import tensorflow as tf
 
 from src.preprocessing.steps.step_base import StepBase
 from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class TfTestStep(StepBase):

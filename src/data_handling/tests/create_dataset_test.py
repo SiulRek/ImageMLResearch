@@ -5,7 +5,7 @@ import pandas as pd
 import tensorflow as tf
 
 from src.data_handling.io.create_dataset import create_dataset
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class TestCreateDataset(BaseTestCase):

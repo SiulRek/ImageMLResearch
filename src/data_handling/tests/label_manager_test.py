@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 
 from src.data_handling.labelling.label_manager import LabelManager
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class TestLabelManager(BaseTestCase):

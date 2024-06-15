@@ -29,7 +29,7 @@ from src.preprocessing.steps.step_base import StepBase
 from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 from src.preprocessing.image_preprocessor import ImagePreprocessor
 from src.preprocessing.steps import Rotator as StepToTest
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 from src.testing.helpers.image_plotter import ImagePlotter
 from src.utils import SimplePopupHandler
 

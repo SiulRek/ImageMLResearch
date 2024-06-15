@@ -5,7 +5,7 @@ import unittest
 from src.preprocessing.helpers.json_instances_serializer import (
     JSONInstancesSerializer,
 )
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class MockClass1:

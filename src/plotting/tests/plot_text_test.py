@@ -4,7 +4,7 @@ import unittest
 import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_text import plot_text
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class TestPlotText(BaseTestCase):

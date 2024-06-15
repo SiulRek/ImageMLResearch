@@ -11,8 +11,9 @@ from src.testing.helpers.load_dataset_from_tf_records import (
 )
 from src.testing.helpers.test_result_logger import TestResultLogger
 
-ROOT_DIR = os.path.join(os.path.abspath(__file__), "..", "..", "..")
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "image_data")
+FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.join(FILE_DIR, "..", "..", "..")
+DATA_DIR = os.path.join(ROOT_DIR, "src", "testing", "image_data")
 
 
 class BaseTestCase(unittest.TestCase):

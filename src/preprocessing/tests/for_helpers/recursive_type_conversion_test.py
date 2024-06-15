@@ -4,7 +4,7 @@ import unittest
 from src.preprocessing.helpers.recursive_type_conversion import (
     recursive_type_conversion,
 )
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class TestRecursiveTypeConversion(BaseTestCase):

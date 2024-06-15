@@ -5,7 +5,7 @@ import unittest
 from src.preprocessing.helpers.copy_json_exclude_entries import (
     copy_json_exclude_entries,
 )
-from src.testing.base_test_case import BaseTestCase
+from src.testing.base.base_test_case import BaseTestCase
 
 
 class TestCopyJsonExcludeEntries(BaseTestCase):

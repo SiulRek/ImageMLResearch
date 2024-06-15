@@ -16,7 +16,7 @@ from src.utils import SimplePopupHandler
 import src.utils.tests.test_runner as utils_tests
 import src.utils.tests.test_runner as utils_tests
 
-FILE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_FILE = os.path.join(FILE_DIR, "test_results.log")
 
 
