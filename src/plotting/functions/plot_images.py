@@ -4,7 +4,8 @@ import tensorflow as tf
 
 def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     """
-    Plots a grid of images from a TensorFlow dataset.
+    Plots a grid of images from a TensorFlow dataset. It determines a random
+    skip value to avoid plotting the same images every time.
 
     Parameters:
         - dataset: TensorFlow dataset containing the images and optionally
@@ -16,10 +17,16 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     """
     # Configuration
     fig_size = (grid_size[1] * 4, grid_size[0] * 4)
+    sample_num = grid_size[0] * grid_size[1]
     font_size = 12
+    dataset_length = len(list(dataset))
 
     fig, axes = plt.subplots(grid_size[0], grid_size[1], figsize=fig_size)
     axes = axes.ravel()
+
+    if dataset_length > sample_num:
+        skip = tf.random.uniform([], 0, dataset_length - sample_num, dtype=tf.int64)
+        dataset = dataset.skip(skip) if skip > 0 else dataset
 
     for i, data in enumerate(dataset.take(grid_size[0] * grid_size[1])):
         if isinstance(data, tuple):
