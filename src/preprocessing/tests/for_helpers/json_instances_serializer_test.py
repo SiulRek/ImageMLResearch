@@ -2,7 +2,7 @@ import json
 import os
 import unittest
 
-from src.preprocessing.helpers.for_preprocessor.json_instances_serializer import (
+from src.preprocessing.helpers.json_instances_serializer import (
     JSONInstancesSerializer,
 )
 from src.testing.base_test_case import BaseTestCase

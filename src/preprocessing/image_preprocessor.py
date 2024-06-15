@@ -6,13 +6,13 @@ from src.data_handling.manipulation.pack_images_and_labels import (
     pack_images_and_labels,
 )
 from src.data_handling.manipulation.unpack_dataset import unpack_dataset
-from src.preprocessing.helpers.for_preprocessor.get_pipeline_code_representation import (
+from src.preprocessing.helpers.get_pipeline_code_representation import (
     get_pipeline_code_representation,
 )
-from src.preprocessing.helpers.for_preprocessor.json_instances_serializer import (
+from src.preprocessing.helpers.json_instances_serializer import (
     JSONInstancesSerializer,
 )
-from src.preprocessing.helpers.for_preprocessor.step_class_mapping import (
+from src.preprocessing.helpers.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
 from src.preprocessing.steps.step_base import StepBase

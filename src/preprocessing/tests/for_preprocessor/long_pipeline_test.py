@@ -14,14 +14,14 @@ import unittest
 
 import tensorflow as tf
 
-from src.preprocessing.helpers.for_preprocessor.json_instances_serializer import (
+from src.preprocessing.helpers.json_instances_serializer import (
     JSONInstancesSerializer,
 )
-from src.preprocessing.helpers.for_preprocessor.step_class_mapping import (
+from src.preprocessing.helpers.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
 from src.preprocessing.steps.step_base import StepBase
-from src.preprocessing.helpers.for_tests.copy_json_exclude_entries import (
+from src.preprocessing.helpers.copy_json_exclude_entries import (
     copy_json_exclude_entries,
 )
 from src.preprocessing.image_preprocessor import ImagePreprocessor

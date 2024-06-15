@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from src.preprocessing.helpers.for_preprocessor.randomly_select_sequential_keys import (
+from src.preprocessing.helpers.randomly_select_sequential_keys import (
     randomly_select_sequential_keys,
     is_sequential,
 )

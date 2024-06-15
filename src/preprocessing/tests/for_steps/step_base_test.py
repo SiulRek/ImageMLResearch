@@ -4,7 +4,7 @@ import cv2
 import tensorflow as tf
 
 from src.preprocessing.steps.step_base import StepBase
-from src.preprocessing.helpers.for_steps.step_utils import correct_image_tensor_shape
+from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 from src.testing.base_test_case import BaseTestCase
 
 

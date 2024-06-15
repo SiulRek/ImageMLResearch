@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from src.preprocessing.helpers.for_preprocessor.parse_and_repeat import (
+from src.preprocessing.helpers.parse_and_repeat import (
     parse_and_repeat,
 )
 from src.testing.base_test_case import BaseTestCase

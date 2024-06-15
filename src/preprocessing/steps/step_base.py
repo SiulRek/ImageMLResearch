@@ -3,10 +3,10 @@ import functools
 
 import tensorflow as tf
 
-from src.preprocessing.helpers.for_steps.get_step_json_representation import (
+from src.preprocessing.helpers.get_step_json_representation import (
     get_step_json_representation,
 )
-from src.preprocessing.helpers.for_steps.step_utils import correct_image_tensor_shape
+from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 
 
 class StepBase(ABC):

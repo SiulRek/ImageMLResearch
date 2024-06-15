@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from src.preprocessing.steps.step_base import StepBase
-from src.preprocessing.helpers.for_steps.step_utils import reduce_std
+from src.preprocessing.helpers.step_utils import reduce_std
 
 
 class StandardNormalizer(StepBase):

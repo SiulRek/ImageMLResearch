@@ -19,14 +19,14 @@ from unittest.mock import patch
 
 import tensorflow as tf
 
-from src.preprocessing.helpers.for_preprocessor.recursive_type_conversion import (
+from src.preprocessing.helpers.recursive_type_conversion import (
     recursive_type_conversion,
 )
-from src.preprocessing.helpers.for_preprocessor.step_class_mapping import (
+from src.preprocessing.helpers.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
 from src.preprocessing.steps.step_base import StepBase
-from src.preprocessing.helpers.for_steps.step_utils import correct_image_tensor_shape
+from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 from src.preprocessing.image_preprocessor import ImagePreprocessor
 from src.preprocessing.steps import Rotator as StepToTest
 from src.testing.base_test_case import BaseTestCase

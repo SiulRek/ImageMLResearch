@@ -4,11 +4,11 @@ import random
 import re
 import warnings
 
-from src.preprocessing.helpers.for_preprocessor.parse_and_repeat import parse_and_repeat
-from src.preprocessing.helpers.for_preprocessor.randomly_select_sequential_keys import (
+from src.preprocessing.helpers.parse_and_repeat import parse_and_repeat
+from src.preprocessing.helpers.randomly_select_sequential_keys import (
     randomly_select_sequential_keys,
 )
-from src.preprocessing.helpers.for_preprocessor.recursive_type_conversion import (
+from src.preprocessing.helpers.recursive_type_conversion import (
     recursive_type_conversion,
 )
 from src.utils import get_sample_from_distribution
