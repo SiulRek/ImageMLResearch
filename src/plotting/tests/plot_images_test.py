@@ -15,9 +15,7 @@ class TestPlotImages(BaseTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.image_dataset = cls.load_mnist_digits_dataset(sample_num=4)
-        cls.labeled_dataset = cls.load_mnist_digits_dataset(
-            sample_num=4, labeled=True
-        )
+        cls.labeled_dataset = cls.load_mnist_digits_dataset(sample_num=4, labeled=True)
         cls.visualization_path = os.path.join(cls.results_dir, "plot_images_test.png")
 
     def test_plot_images_without_labels(self):

@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
+
 def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     """
     Plots a grid of images from a TensorFlow dataset.
@@ -13,7 +14,10 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
         - label_to_title_func: Function to convert the label to a string.
             Defaults to None.
     """
+    # Configuration
     fig_size = (grid_size[1] * 4, grid_size[0] * 4)
+    font_size = 12
+
     fig, axes = plt.subplots(grid_size[0], grid_size[1], figsize=fig_size)
     axes = axes.ravel()
 
@@ -36,5 +40,5 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
             except Exception as e:
                 msg = "Converting Label to Title failed with error"
                 raise ValueError(msg) from e
-            axes[i].set_title(label)
+            axes[i].set_title(label, fontsize=font_size)
     return fig
