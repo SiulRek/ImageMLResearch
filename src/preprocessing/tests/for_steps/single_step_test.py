@@ -19,25 +19,24 @@ from unittest.mock import patch
 
 import tensorflow as tf
 
+from src.preprocessing.definitions.step_class_mapping import STEP_CLASS_MAPPING
 from src.preprocessing.helpers.recursive_type_conversion import (
     recursive_type_conversion,
 )
-from src.preprocessing.definitions.step_class_mapping import (
-    STEP_CLASS_MAPPING,
-)
-from src.preprocessing.steps.step_base import StepBase
 from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 from src.preprocessing.image_preprocessor import ImagePreprocessor
 from src.preprocessing.steps import Rotator as StepToTest
+from src.preprocessing.steps.step_base import StepBase
 from src.testing.base.base_test_case import BaseTestCase
 from src.testing.helpers.image_plotter import ImagePlotter
-from src.utils import SimplePopupHandler
 
 # TODO Select Step to test here!
 STEP_PARAMETERS = {"angle": 180}
 
-
-JSON_TEMPLATE_REL = os.path.join(r"src/preprocessing/definitions/pipeline_template.json")
+ENABLE_VISUAL_INSPECTION = True
+JSON_TEMPLATE_REL = os.path.join(
+    r"src/preprocessing/definitions/pipeline_template.json"
+)
 
 
 class RGBToGrayscale(StepBase):
@@ -119,28 +118,25 @@ class TestSingleStep(BaseTestCase):
         cls.json_template = os.path.join(cls.root_dir, JSON_TEMPLATE_REL)
         cls.image_dataset = cls.load_geometrical_forms_dataset()
 
-        cls.popup_handler = SimplePopupHandler()
-        cls.visual_inspection = True
+        cls.visual_inspection = ENABLE_VISUAL_INSPECTION
         step_name_edit = cls.TestStep.name.replace(" ", "_").lower()
-        cls.step_visualization_dir = os.path.join(cls.visualizations_dir, step_name_edit)
-        if __name__ == "__main__":
-            cls.visual_inspection = cls.popup_handler.ask_yes_no_question(
-                "Do you want to make a visual inspection?"
-            )
+        cls.step_visualization_dir = os.path.join(
+            cls.visualizations_dir, step_name_edit
+        )
 
         if cls.visual_inspection:
             if not os.path.isdir(cls.step_visualization_dir):
                 os.makedirs(cls.step_visualization_dir)
 
     def setUp(self):
-        super().setUp()  
+        super().setUp()
         self.json_test_file = os.path.join(self.temp_dir, "test_step.json")
         with open(self.json_test_file, "a", encoding="utf-8"):
             pass
         self.test_step = self.TestStep(**self.parameters)
 
     def tearDown(self):
-        super().tearDown() 
+        super().tearDown()
         if os.path.exists(self.json_test_file):
             os.remove(self.json_test_file)
 
@@ -213,11 +209,11 @@ class TestSingleStep(BaseTestCase):
     def test_process_execution(self):
         """
         Verifies the execution and efficacy of the preprocessing step on an
-        image dataset. This test validates that the preprocessing step:
-        1. Executes without errors on a dataset of images.
-        2. Alters the images in a way that is detectable when compared to the original images,
-           suggesting successful transformation.
-        3. Processes images into the specified output datatype of the preprocessing step.
+        image dataset. This test validates that the preprocessing step: 1.
+        Executes without errors on a dataset of images. 2. Alters the images in
+        a way that is detectable when compared to the original images,
+        suggesting successful transformation. 3. Processes images into the
+        specified output datatype of the preprocessing step.
 
         The test involves applying the preprocessing step to an image dataset
         and comparing the processed images against the original ones. It

@@ -10,10 +10,8 @@ from src.preprocessing.steps.step_base import StepBase
 from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 from src.preprocessing.image_preprocessor import ImagePreprocessor
 from src.testing.base.base_test_case import BaseTestCase
-from src.utils import SimplePopupHandler
 
-STEP_PARAMETERS = {"angle": 180}
-
+ENABLE_VISUAL_INSPECTION = True
 JSON_TEMPLATE_REL = os.path.join(r"src/preprocessing/definitions/pipeline_template.json")
 
 
@@ -92,16 +90,10 @@ class TestImagePreprocessor(BaseTestCase):
         super().setUpClass()
         cls.json_template = os.path.join(cls.root_dir, JSON_TEMPLATE_REL)
         cls.image_dataset = cls.load_geometrical_forms_dataset()
-        cls.popup_handler = SimplePopupHandler()
-        cls.visual_inspection = True
+        cls.visual_inspection = ENABLE_VISUAL_INSPECTION
         cls.step_visualization_dir = os.path.join(
             cls.visualizations_dir, "image_preprocessor"
         )
-        if __name__ == "__main__":
-            cls.visual_inspection = cls.popup_handler.ask_yes_no_question(
-                "Do you want to make a visual inspection?"
-            )
-
         if cls.visual_inspection:
             if not os.path.isdir(cls.step_visualization_dir):
                 os.makedirs(cls.step_visualization_dir)

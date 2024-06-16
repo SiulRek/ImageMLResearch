@@ -12,7 +12,6 @@ import src.data_handling.tests.test_runner as data_handling_tests
 import src.plotting.tests.test_runner as plotting_tests
 import src.preprocessing.tests.test_runner as image_preprocessing_tests
 from src.testing.helpers.test_result_logger import TestResultLogger
-from src.utils import SimplePopupHandler
 import src.utils.tests.test_runner as utils_tests
 import src.utils.tests.test_runner as utils_tests
 
@@ -58,5 +57,4 @@ if __name__ == "__main__":
     TestResultLogger(LOG_FILE)
 
     message = run_tests()
-    popup_handler = SimplePopupHandler()
-    popup_handler.display_popup_message(message)
+    print(message)
