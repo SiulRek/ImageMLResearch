@@ -29,6 +29,38 @@ class TestDatasetFunctions(BaseTestCase):
         with self.assertRaises(ValueError):
             split_dataset(self.dataset, train_size=0.7, val_size=0.2, test_size=0.2)
 
+    def test_split_with_zero_size(self):
+        train, val, test = split_dataset(
+            self.dataset, train_size=0.0, val_size=0.5, test_size=0.5
+        )
+        self.assertIsNone(train, "Training set should be None when size is 0.")
+        self.assertEqual(
+            val.cardinality().numpy(), 50, "Validation set size should be 50% of total."
+        )
+        self.assertEqual(
+            test.cardinality().numpy(), 50, "Test set size should be 50% of total."
+        )
+        train, val, test = split_dataset(
+            self.dataset, train_size=0.5, val_size=0.0, test_size=0.5
+        )
+        self.assertEqual(
+            train.cardinality().numpy(), 50, "Training set size should be 50% of total."
+        )
+        self.assertIsNone(val, "Validation set should be None when size is 0.")
+        self.assertEqual(
+            test.cardinality().numpy(), 50, "Test set size should be 50% of total."
+        )
+        train, val, test = split_dataset(
+            self.dataset, train_size=0.5, val_size=0.5, test_size=0.0
+        )
+        self.assertEqual(
+            train.cardinality().numpy(), 50, "Training set size should be 50% of total."
+        )
+        self.assertEqual(
+            val.cardinality().numpy(), 50, "Validation set size should be 50% of total."
+        )
+        self.assertIsNone(test, "Test set should be None when size is 0.")
+
 
 if __name__ == "__main__":
     unittest.main()
