@@ -51,7 +51,7 @@ class TestDataHandler(BaseTestCase):
             self.fail(
                 "All tensors are equal after enhancement, indicating no shuffling occurred"
             )
-            
+
     def test_split_dataset(self):
         """ Test splitting of dataset and storage of splits in the dataset
         container. """
@@ -77,6 +77,13 @@ class TestDataHandler(BaseTestCase):
         """ Test retrieval of dataset from the dataset container. """
         dataset = self.data_handler.get_dataset("complete_dataset")
         self.assertIsInstance(dataset, tf.data.Dataset)
+
+    def test_clone_dataset(self):
+        """ Test cloning of dataset. """
+        self.data_handler.clone_dataset("complete_dataset", "cloned_dataset")
+        self.assertIn("cloned_dataset", self.data_handler.dataset_container)
+        cloned_dataset = self.data_handler.dataset_container["cloned_dataset"]
+        self.assertIsInstance(cloned_dataset, tf.data.Dataset)
 
     def test_get_nonexistent_dataset(self):
         """ Test retrieval of a non-existent dataset raises ValueError. """

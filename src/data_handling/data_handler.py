@@ -32,8 +32,6 @@ class DataHandler:
         Args:
             - data (any): The data used to create the dataset.
         """
-       
-        self.dataset_container = {}  # Reset the dataset container
         self.dataset_container["complete_dataset"] = create_dataset(
             data, self.label_type, self.category_names
         )
@@ -44,9 +42,6 @@ class DataHandler:
 
         Args:
             - dataset_name (str): The name of the dataset to check.
-
-        Raises:
-            - ValueError: If the dataset name is not found in the container.
         """
         if dataset_name not in self.dataset_container:
             msg = f"Dataset {dataset_name} not found in the dataset container."
@@ -79,8 +74,6 @@ class DataHandler:
             - repeat_num (int, optional): The number of times to repeat the
                 dataset.
         """
-        if 'complete_dataset' in dataset_names:
-            dataset_names = [keys for keys in self.dataset_container.keys()]
         for dataset_name in dataset_names:
             self._check_dataset_exists(dataset_name)
             dataset = self.dataset_container[dataset_name]
@@ -108,11 +101,7 @@ class DataHandler:
                 validation.
             - test_size (float) The proportion of the dataset for testing.
         """
-        try:
-            self._check_dataset_exists("complete_dataset")
-        except ValueError as e:
-            msg = "Please create a dataset before splitting."
-            raise ValueError(msg) from e
+        self._check_dataset_exists("complete_dataset")
         dataset = self.dataset_container["complete_dataset"]
         train_dataset, val_dataset, test_dataset = split_dataset(
             dataset, train_size, val_size, test_size
@@ -136,8 +125,9 @@ class DataHandler:
 
         Args:
             - dataset_name (str): The name of the dataset containing the
-                images. Can be 'complete_dataset' if not splitted else 'train_dataset',
-                'val_dataset' 'test_dataset'.
+                images. Can be 'complete_dataset' or 'train_dataset',
+                'val_dataset' 'test_dataset' if split already or cloned dataset
+                name.
             - output_dir (str): The directory to save the images.
             - image_format (str, optional): The format of the images.
                 Defaults to "jpg".
@@ -155,11 +145,34 @@ class DataHandler:
         Returns the specified dataset from the 'dataset_container'.
 
         Args:
-            - dataset_name (str): The name of the dataset to retrieve. Can be 'complete_dataset' if not splitted else 'train_dataset',
-                'val_dataset' 'test_dataset'.
+            - dataset_name (str): The name of the dataset to retrieve. Can
+                be 'complete_dataset' or 'train_dataset', 'val_dataset'
+                'test_dataset' if split already.
 
         Returns:
             - tf.data.Dataset: The requested dataset.
         """
         self._check_dataset_exists(dataset_name)
         return self.dataset_container[dataset_name]
+
+    def clone_dataset(self, original_name, clone_name):
+        """
+        Clones a dataset from the 'dataset_container' and stores it with a new
+        name.
+
+        Args:
+            - original_name (str): The name of the dataset to clone.
+            - clone_name (str): The name of the new cloned dataset.
+        """
+        self._check_dataset_exists(original_name)
+        original_dataset = self.dataset_container[original_name]
+        for sample in original_dataset.take(1):
+            if len(sample) == 2:
+                self.dataset_container[clone_name] = original_dataset.map(
+                    lambda x, y: (x, y)
+                )
+            elif len(sample) == 1:
+                self.dataset_container[clone_name] = original_dataset.map(lambda x: x)
+            else:
+                msg = "Invalid dataset format"
+                raise ValueError(msg)
