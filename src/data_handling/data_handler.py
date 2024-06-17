@@ -20,6 +20,7 @@ class DataHandler:
             - category_names (list, optional): The list of category names.
         """
         self.dataset_container = {}
+        self.backuped_dataset_container = {}
         self.label_manager = LabelManager(label_type, category_names)
         self.label_type = label_type
         self.category_names = category_names
@@ -42,6 +43,10 @@ class DataHandler:
 
         Args:
             - dataset_name (str): The name of the dataset to check.
+
+        Raises:
+            - ValueError: If the dataset does not exist in the dataset
+                container.
         """
         if dataset_name not in self.dataset_container:
             msg = f"Dataset {dataset_name} not found in the dataset container."
@@ -63,7 +68,7 @@ class DataHandler:
 
         Args:
             - dataset_names (list): The names of the dataset to enhance. Can
-                be 'complete_dataset' or 'train_dataset', 'val_dataset'
+                be 'complete_dataset' or 'train_dataset', 'val_dataset', or
                 'test_dataset' if split already.
             - batch_size (int, optional): The batch size for the dataset.
             - shuffle (bool, optional): Whether to shuffle the dataset.
@@ -90,16 +95,16 @@ class DataHandler:
 
     def split_dataset(self, train_size, val_size, test_size):
         """
-        Splits the complete dataset into training, validation, and test datasets
-        and stores them in the 'dataset_container'. Note that the complete
-        dataset is removed.
+        Splits the 'complete_dataset' into 'train_dataset', 'val_dataset' and
+        'test_dataset' and stores them in the 'dataset_container'. Note that the
+        complete dataset is removed.
 
         Args:
             - train_size (float): The proportion of the dataset for
                 training.
             - val_size (float): The proportion of the dataset for
                 validation.
-            - test_size (float) The proportion of the dataset for testing.
+            - test_size (float): The proportion of the dataset for testing.
         """
         self._check_dataset_exists("complete_dataset")
         dataset = self.dataset_container["complete_dataset"]
@@ -126,8 +131,7 @@ class DataHandler:
         Args:
             - dataset_name (str): The name of the dataset containing the
                 images. Can be 'complete_dataset' or 'train_dataset',
-                'val_dataset' 'test_dataset' if split already or cloned dataset
-                name.
+                'val_dataset', 'test_dataset' if split already.
             - output_dir (str): The directory to save the images.
             - image_format (str, optional): The format of the images.
                 Defaults to "jpg".
@@ -140,39 +144,27 @@ class DataHandler:
         dataset = self.dataset_container[dataset_name]
         save_images(dataset, output_dir, image_format, prefix, start_number)
 
-    def get_dataset(self, dataset_name):
-        """
-        Returns the specified dataset from the 'dataset_container'.
+    def backup_datasets(self):
+        """ Backups the current dataset container. """
+        for key, dataset in self.dataset_container.items():
+            # Create a copy of the dataset
+            for sample in dataset.take(1):
+                if isinstance(sample, tuple):
+                    self.backuped_dataset_container[key] = dataset.map(
+                        lambda x, y: (x, y)
+                    )
+                else:
+                    self.backuped_dataset_container[key] = dataset.map(lambda x: x)
 
-        Args:
-            - dataset_name (str): The name of the dataset to retrieve. Can
-                be 'complete_dataset' or 'train_dataset', 'val_dataset'
-                'test_dataset' if split already.
-
-        Returns:
-            - tf.data.Dataset: The requested dataset.
+    def restore_datasets(self):
         """
-        self._check_dataset_exists(dataset_name)
-        return self.dataset_container[dataset_name]
+        Restores the backuped dataset container.
 
-    def clone_dataset(self, original_name, clone_name):
+        Raises:
+            - ValueError: If no backuped dataset container is found.
         """
-        Clones a dataset from the 'dataset_container' and stores it with a new
-        name.
-
-        Args:
-            - original_name (str): The name of the dataset to clone.
-            - clone_name (str): The name of the new cloned dataset.
-        """
-        self._check_dataset_exists(original_name)
-        original_dataset = self.dataset_container[original_name]
-        for sample in original_dataset.take(1):
-            if len(sample) == 2:
-                self.dataset_container[clone_name] = original_dataset.map(
-                    lambda x, y: (x, y)
-                )
-            elif len(sample) == 1:
-                self.dataset_container[clone_name] = original_dataset.map(lambda x: x)
-            else:
-                msg = "Invalid dataset format"
-                raise ValueError(msg)
+        if not self.backuped_dataset_container:
+            msg = "No backuped dataset container found."
+            raise ValueError(msg)
+        self.dataset_container = self.backuped_dataset_container
+        self.backuped_dataset_container = {}

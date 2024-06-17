@@ -73,22 +73,13 @@ class TestDataHandler(BaseTestCase):
         saved_files = os.listdir(output_dir)
         self.assertGreater(len(saved_files), 0)
 
-    def test_get_dataset(self):
-        """ Test retrieval of dataset from the dataset container. """
-        dataset = self.data_handler.get_dataset("complete_dataset")
-        self.assertIsInstance(dataset, tf.data.Dataset)
-
-    def test_clone_dataset(self):
-        """ Test cloning of dataset. """
-        self.data_handler.clone_dataset("complete_dataset", "cloned_dataset")
-        self.assertIn("cloned_dataset", self.data_handler.dataset_container)
-        cloned_dataset = self.data_handler.dataset_container["cloned_dataset"]
-        self.assertIsInstance(cloned_dataset, tf.data.Dataset)
-
-    def test_get_nonexistent_dataset(self):
-        """ Test retrieval of a non-existent dataset raises ValueError. """
-        with self.assertRaises(ValueError):
-            self.data_handler.get_dataset("nonexistent_dataset")
+    def test_backup_and_restore_datasets(self):
+        """ Test backup and restore of datasets. """
+        self.assertTrue("complete_dataset" in self.data_handler.dataset_container)
+        self.data_handler.backup_datasets()
+        self.data_handler.dataset_container.pop("complete_dataset")
+        self.data_handler.restore_datasets()
+        self.assertTrue("complete_dataset" in self.data_handler.dataset_container)
 
 
 if __name__ == "__main__":
