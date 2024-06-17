@@ -69,7 +69,7 @@ class TestDataHandler(BaseTestCase):
     def test_save_images(self):
         """ Test saving images from dataset to specified directory. """
         output_dir = self.temp_dir
-        self.data_handler.save_images("complete_dataset", output_dir)
+        self.data_handler.save_images(output_dir)
         saved_files = os.listdir(output_dir)
         self.assertGreater(len(saved_files), 0)
 

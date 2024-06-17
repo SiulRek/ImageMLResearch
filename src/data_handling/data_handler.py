@@ -3,6 +3,7 @@ import tensorflow as tf
 from src.data_handling.io.create_dataset import create_dataset
 from src.data_handling.io.save_images import save_images
 from src.data_handling.labelling.label_manager import LabelManager
+from src.data_handling.labelling.temp import reverse_one_hot
 from src.data_handling.manipulation.enhance_dataset import enhance_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
 
@@ -117,31 +118,40 @@ class DataHandler:
 
         self.dataset_container.pop("complete_dataset")
 
-    def save_images(
-        self,
-        dataset_name,
-        output_dir,
-        image_format="jpg",
-        prefix="image",
-        start_number=0,
-    ):
+    def save_images(self, output_dir, prefix=None):
         """
         Saves the images from the dataset to a specified directory.
 
         Args:
-            - dataset_name (str): The name of the dataset containing the
-                images. Can be 'complete_dataset' or 'train_dataset',
-                'val_dataset', 'test_dataset' if split already.
-            - output_dir (str): The directory to save the images.
-            - image_format (str, optional): The format of the images.
-                Defaults to "jpg".
-            - prefix (str, optional): The prefix for the image file names.
-                Defaults to "image".
-            - start_number (int, optional): The starting number for the
-                image file names. Defaults to 0.
+            - output_dir (str): The directory to save the images. Defaults
+                to "jpg".
+            - prefix (str|callable, optional): The prefix for the image
+                file. Can be a string or a callable that takes the label as
+                input and returns a string. If None, the default prefix is used.
         """
-        self._check_dataset_exists(dataset_name)
-        dataset = self.dataset_container[dataset_name]
+        image_format = "jpg"
+        if prefix is None:
+
+            def prefix(label):
+                prefix = "image"
+                try:
+                    label = reverse_one_hot(label)
+                    prefix += f"_{self.label_manager.get_category(label)}"
+                except ValueError:
+                    pass
+                return prefix
+
+        start_number = 0
+
+        # concatenate all datasets in container
+        dataset_iterator = self.dataset_container.values()
+        concatenated_dataset = None
+        for dataset in dataset_iterator:
+            if dataset is None:
+                concatenated_dataset = dataset
+            else:
+                concatenated_dataset = concatenated_dataset.concatenate(dataset)
+
         save_images(dataset, output_dir, image_format, prefix, start_number)
 
     def backup_datasets(self):
