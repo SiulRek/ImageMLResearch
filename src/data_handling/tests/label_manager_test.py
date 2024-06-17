@@ -95,7 +95,7 @@ class TestLabelManager(BaseTestCase):
             "The dtype of the encoded categorical label should be tf.int32",
         )
 
-        manager = LabelManager("binary")
+        manager = LabelManager("binary", category_names=["a", "b"])
         result = manager.encode_label(self.binary_label)
         self.assertEqual(
             result.dtype,
@@ -115,42 +115,32 @@ class TestLabelManager(BaseTestCase):
         with self.assertRaises(NotImplementedError):
             manager.encode_label(self.categorical_label)
 
-    def test_convert_to_numeric(self):
+    def test_get_index(self):
         manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         self.assertEqual(
-            manager.convert_to_numeric("c"),
+            manager.get_index("c"),
             2,
             "Conversion to numeric failed for valid string label.",
         )
-        self.assertEqual(
-            manager.convert_to_numeric(3),
-            3,
-            "Conversion to numeric failed for numeric input.",
-        )
-        self.assertEqual(
-            manager.convert_to_numeric(tf.constant(3)),
-            3,
-            "Conversion to numeric failed for tensor input.",
-        )
         with self.assertRaises(ValueError):
-            manager.convert_to_numeric("e")
+            manager.get_index("e")
 
-    def test_numeric_to_category(self):
+    def test_get_category(self):
         manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
         self.assertEqual(
-            manager.numeric_to_category(2),
+            manager.get_category(2),
             "c",
             "Decoding failed for valid numeric label.",
         )
         self.assertEqual(
-            manager.numeric_to_category(tf.constant(2)),
+            manager.get_category(tf.constant(2)),
             "c",
             "Decoding failed for valid tensor label.",
         )
         with self.assertRaises(ValueError):
-            manager.numeric_to_category(5)
+            manager.get_category(5)
         with self.assertRaises(ValueError):
-            manager.numeric_to_category("c")
+            manager.get_category("c")
 
 
 if __name__ == "__main__":

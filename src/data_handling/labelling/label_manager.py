@@ -122,63 +122,42 @@ class LabelManager:
 
         self._encode_label_func = label_encoders[label_type]
 
-    def convert_to_numeric(self, label):
+    def get_index(self, category_name):
         """
-        Converts a label to a numeric format in the case of string labels. If it
-        is not a string, it returns the label as is (assuming it is already in
-        numeric format).
+        Returns the index of a category based on its name.
 
         Args:
-            - label (str or int): The label to convert.
+            - category_name (str): The name of the category.
 
         Returns:
-            - int: The label in numeric format.
+            - int: The index of the category.
         """
-        if not isinstance(label, str):
-            return label
-        try:
-            return int(label)
-        except ValueError:
-            pass
-        try:
-            return self.category_names.index(label)
-        except ValueError as e:
-            msg = "The label is not in the list of category names."
-            raise ValueError(msg) from e
-
-    def encode_label(self, label):
-        """
-        Encodes a label based on the label type and category names specified
-        during initialization to a tensor format.
-
-        Args:
-            - label (int): The label to encode.
-
-        Returns:
-            - tf.Tensor: A TensorFlow constant of the encoded label.
-        """
-        return self._encode_label_func(label)
+        category_name = self.category_names.index(category_name)
+        if category_name is not None:
+            return category_name
+        msg = "The category name is not in the category names."
+        raise ValueError(msg)
 
     def _encode_binary_label(self, label):
         """
         Encodes a binary label into a format suitable for binary classification.
 
         Args:
-            - label (int): The label to encode.
+            - label (int): The label to encode. If string it should be a
+                category name.
 
-        Returns:
-            - tf.Tensor: A TensorFlow constant of the label in binary
-                format.
+        Returns: - tf.Tensor: A TensorFlow constant of the label in binary
+        format.
         """
+        label = self.get_index(label) if isinstance(label, str) else label
         try:
-            label = self.convert_to_numeric(label)
             if label not in [0, 1]:
                 msg = "The label is invalid for binary classification."
                 raise ValueError(msg)
             label = tf.constant(label, dtype=self._label_dtype)
             return label
-        except ValueError as e:
-            msg = "The label should be convertible to an integer."
+        except tf.errors.OpError as e:
+            msg = "Failed to convert the label to a tensor."
             raise ValueError(msg) from e
 
     def _encode_categorical_label(self, label):
@@ -186,44 +165,55 @@ class LabelManager:
         Encodes a categorical label into one-hot encoded format.
 
         Args:
-            - label (int): The label to encode.
+            - label (int|str): The label to encode. If string it should be a
+                category name.
 
         Returns:
             - tf.Tensor: A one-hot encoded TensorFlow constant of the label.
         """
+        label = self.get_index(label) if isinstance(label, str) else label
         try:
-            label = self.convert_to_numeric(label)
             label = tf.constant(label, dtype=tf.int8)
             label = tf.one_hot(label, self.num_categories)
             label = tf.cast(label, self._label_dtype)
             return label
-        except ValueError as e:
-            msg = "The label should be convertible to an integer."
-            raise ValueError(msg) from e
         except tf.errors.OpError as e:
-            msg = "The number of categories is probably invalid."
+            msg = "Failed to encode the label to a tensor."
             raise ValueError(msg) from e
 
-    def numeric_to_category(self, numeric):
+    def encode_label(self, label):
         """
-        Converts a numeric label to a category name.
+        Encodes a label based on the label type and category_name names
+        specified during initialization to a tensor format.
 
         Args:
-            - numeric (numeric): The numeric label to convert.
+            - label (int): The label to encode.
+
+        Returns: - tf.Tensor: A TensorFlow constant of the encoded label.
+        """
+        return self._encode_label_func(label)
+
+    def get_category(self, index):
+        """
+        Converts a numeric label to a category_name name.
+
+        Args:
+            - index (str|numeric): The category_name index.
 
         Returns:
-            - str: The category name corresponding to the numeric label.
+            - str: The category_name name corresponding to the numeric
+                label.
         """
         if not self.category_names:
             msg = "No category names are provided for label decoding."
             raise ValueError(msg)
         try:
-            numeric = numeric.numpy()
+            index = index.numpy()
         except AttributeError:
             pass
         try:
-            numeric = int(numeric)
-            return self.category_names[numeric]
+            index = int(index)
+            return self.category_names[index]
         except IndexError as e:
             msg = "The label is out of bounds for the category names."
             raise ValueError(msg) from e
