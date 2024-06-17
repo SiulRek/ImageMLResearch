@@ -101,8 +101,8 @@ class LabelManager:
             return wrapper
 
         label_encoders = {
-            "binary": self.encode_binary_label,
-            "categorical": self.encode_categorical_label,
+            "binary": self._encode_binary_label,
+            "categorical": self._encode_categorical_label,
             "multi_label": raise_exception_when_called(
                 NotImplementedError, "Multi-label encoding is not yet implemented."
             ),
@@ -159,7 +159,7 @@ class LabelManager:
         """
         return self._encode_label_func(label)
 
-    def encode_binary_label(self, label):
+    def _encode_binary_label(self, label):
         """
         Encodes a binary label into a format suitable for binary classification.
 
@@ -181,7 +181,7 @@ class LabelManager:
             msg = "The label should be convertible to an integer."
             raise ValueError(msg) from e
 
-    def encode_categorical_label(self, label):
+    def _encode_categorical_label(self, label):
         """
         Encodes a categorical label into one-hot encoded format.
 
