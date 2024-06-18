@@ -118,7 +118,7 @@ class DataHandler(ResearchAttributes):
 
         self._dataset_container.pop("complete_dataset")
 
-    def save_images(self, output_dir, prefix=None):
+    def save_images(self, output_dir, prefix=None, num_images=None):
         """
         Saves the images from the dataset to a specified directory.
 
@@ -128,6 +128,7 @@ class DataHandler(ResearchAttributes):
             - prefix (str|callable, optional): The prefix for the image
                 file. Can be a string or a callable that takes the label as
                 input and returns a string. If None, the default prefix is used.
+            - num_images (int, optional): The number of images to save.
         """
         image_format = "jpg"
         if prefix is None:
@@ -140,7 +141,6 @@ class DataHandler(ResearchAttributes):
                 except ValueError:
                     pass
                 return prefix
-
         start_number = 0
 
         # concatenate all datasets in container
@@ -152,7 +152,12 @@ class DataHandler(ResearchAttributes):
                 concatenated_dataset = concatenated_dataset.concatenate(dataset)
 
         save_images(
-            concatenated_dataset, output_dir, image_format, prefix, start_number
+            concatenated_dataset,
+            output_dir,
+            image_format=image_format,
+            prefix=prefix,
+            start_number=start_number,
+            num_images=num_images,
         )
 
     def backup_datasets(self):
