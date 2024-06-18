@@ -1,13 +1,13 @@
 from src.data_handling.labelling.label_manager import LabelManager
 
 
-class ModuleAttributes:
+class ResearchAttributes:
     """
     A class to store attributes used by modules in the research package.
 
     Attributes:
         - dataset_container (dict): Dictionary containing datasets. When
-            creating new 'complete_dataset' is added, when splitted
+            creating new 'complete_dataset' is added, when split
             'train_dataset', 'val_dataset', and 'test_dataset' are added.
         - label_manager (LabelManager): LabelManager instance for handling
             labels.
@@ -24,7 +24,8 @@ class ModuleAttributes:
 
     def __init__(self, label_type, category_names=None):
         """
-        Initializes the ModuleBase with optional label type and category names.
+        Initializes the ResearchAttributes with optional label type and category
+        names.
 
         Args:
             - label_type (str): The type of labels used: 'binary',
@@ -41,11 +42,7 @@ class ModuleAttributes:
 
     @property
     def dataset_container(self):
-        """
-        Dictionary containing datasets. When creating new 'complete_dataset' is
-        added, when splitted 'train_dataset', 'val_dataset', and 'test_dataset'
-        are added.
-        """
+        """ Dictionary containing datasets. """
         return self._dataset_container
 
     @property
@@ -54,17 +51,8 @@ class ModuleAttributes:
         return self._label_manager
 
     @property
-    def training_history(self):
-        """ The training history of the model after fitting. """
-        return self._training_history
-
-    @property
     def predictions_container(self):
-        """
-        Dictionary containing predictions. When fitting, predictions are added.
-        The name corresponds to the dataset name replacing 'dataset' with
-        'predictions', e.g. 'train_dataset' -> 'train_predictions'.
-        """
+        """ Dictionary containing predictions. """
         return self._predictions_container
 
     @property
@@ -73,6 +61,28 @@ class ModuleAttributes:
         return self._model
 
     @property
+    def training_history(self):
+        """ The training history of the model after fitting. """
+        return self._training_history
+
+    @property
     def evaluation_metrics(self):
         """ The evaluation metrics dicts of the model after evaluating. """
         return self._evaluation_metrics
+
+
+def insert_research_attributes(instance, research_attributes):
+    """
+    Inserts the attributes from a ResearchAttributes instance into another class
+    instance.
+
+    Args:
+        - instance: The class instance to insert attributes into.
+        - research_attributes (ResearchAttributes): The ResearchAttributes
+            instance.
+    """
+    for attr_name in dir(research_attributes):
+        if not attr_name.startswith("_") and not callable(
+            getattr(research_attributes, attr_name)
+        ):
+            setattr(instance, attr_name, getattr(research_attributes, attr_name))
