@@ -23,8 +23,9 @@ class DataHandler(ResearchAttributes):
             - research_attributes (ResearchAttributes): The
                 ResearchAttributes instance.
         """
-        insert_research_attributes(self, research_attributes)
+        self._dataset_container = {}
         self._backuped_dataset_container = {}
+        insert_research_attributes(self, research_attributes)
 
     def create_dataset(self, data):
         """
@@ -141,6 +142,7 @@ class DataHandler(ResearchAttributes):
                 except ValueError:
                     pass
                 return prefix
+
         start_number = 0
 
         # concatenate all datasets in container
