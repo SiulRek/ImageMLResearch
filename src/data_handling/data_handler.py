@@ -3,7 +3,7 @@ import tensorflow as tf
 from src.data_handling.io.create_dataset import create_dataset
 from src.data_handling.io.save_images import save_images
 from src.data_handling.labelling.label_manager import LabelManager
-from src.data_handling.labelling.temp import reverse_one_hot
+from src.data_handling.labelling.label_utils import reverse_one_hot
 from src.data_handling.manipulation.enhance_dataset import enhance_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
 
@@ -147,7 +147,7 @@ class DataHandler:
         dataset_iterator = self.dataset_container.values()
         concatenated_dataset = None
         for dataset in dataset_iterator:
-            if dataset is None:
+            if concatenated_dataset is None:
                 concatenated_dataset = dataset
             else:
                 concatenated_dataset = concatenated_dataset.concatenate(dataset)
