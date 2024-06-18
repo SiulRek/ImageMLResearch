@@ -1,18 +1,25 @@
-from research.classes.module_attributes import ModuleAttributes
+from src.research.classes.research_attributes import (
+    ResearchAttributes,
+    insert_research_attributes,
+)
 
 
-class Trainer(ModuleAttributes):
-    """ A class to train a Keras model using datasets from a dataset container. """
+class Trainer(ResearchAttributes):
+    """ A class to train a Keras model using datasets from research_attributes. """
 
-    def __init__(self, label_type=None, category_names=None):
+    def __init__(self, research_attributes):
         """
-        Initializes the Trainer with optional label type and category names.
+        Initializes the Trainer with a ResearchAttributes instance.
 
         Args:
-            - label_type (str, optional): The type of labels used.
-            - category_names (list, optional): The list of category names.
+            - research_attributes (ResearchAttributes): The
+                ResearchAttributes instance.
         """
-        super().__init__(label_type, category_names)
+        self._model = None
+        self._training_history = None
+        self._predictions_container = {}
+        self._dataset_container = {}
+        insert_research_attributes(self, research_attributes)
 
     def set_compiled_model(self, model):
         """
@@ -35,10 +42,10 @@ class Trainer(ModuleAttributes):
             msg = "A compiled model must be set before calling fit."
             raise ValueError(msg)
 
-        train_dataset = self.dataset_container.get("train_dataset")
-        val_dataset = self.dataset_container.get("val_dataset")
-        complete_dataset = self.dataset_container.get("complete_dataset")
-        test_dataset = self.dataset_container.get("test_dataset")
+        train_dataset = self._dataset_container.get("train_dataset")
+        val_dataset = self._dataset_container.get("val_dataset")
+        complete_dataset = self._dataset_container.get("complete_dataset")
+        test_dataset = self._dataset_container.get("test_dataset")
 
         if val_dataset:
             kwargs["validation_data"] = val_dataset  # Add to fit kwargs.
@@ -71,5 +78,6 @@ class Trainer(ModuleAttributes):
         self._evaluate()
 
     def _evaluate(self):
+        # TODO:  Link to evaluating module here.
         msg = "Method not implemented yet."
         raise NotImplementedError(msg)
