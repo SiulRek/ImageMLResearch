@@ -1,16 +1,16 @@
 from src.data_handling.labelling.label_manager import LabelManager
 
 
-class ModuleBase:
+class ModuleAttributes:
     """
-    A base class for all modules in the research package.
+    A class to store attributes used by modules in the research package.
 
     Attributes:
         - dataset_container (dict): Dictionary containing datasets. When
             creating new 'complete_dataset' is added, when splitted
             'train_dataset', 'val_dataset', and 'test_dataset' are added.
         - label_manager (LabelManager): LabelManager instance for handling
-            labels.<
+            labels.
         - predictions_container (dict): Dictionary containing predictions.
             When fitting, predictions are added. The name corresponds to the
             dataset name replacing 'dataset' with 'predictions', e.g.

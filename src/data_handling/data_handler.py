@@ -5,10 +5,10 @@ from src.data_handling.io.save_images import save_images
 from src.data_handling.labelling.label_utils import reverse_one_hot
 from src.data_handling.manipulation.enhance_dataset import enhance_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
-from src.research.classes.module_base import ModuleBase
+from research.classes.module_attributes import ModuleAttributes
 
 
-class DataHandler(ModuleBase):
+class DataHandler(ModuleAttributes):
     """ A class to handle various dataset operations including creation,
     enhancement, splitting, and saving images. """
 

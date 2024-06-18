@@ -1,7 +1,7 @@
-from research.classes.module_base import ModuleBase
+from research.classes.module_attributes import ModuleAttributes
 
 
-class Trainer(ModuleBase):
+class Trainer(ModuleAttributes):
     """ A class to train a Keras model using datasets from a dataset container. """
 
     def __init__(self, label_type=None, category_names=None):
