@@ -5,24 +5,25 @@ from src.data_handling.io.save_images import save_images
 from src.data_handling.labelling.label_utils import reverse_one_hot
 from src.data_handling.manipulation.enhance_dataset import enhance_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
-from research.classes.module_attributes import ModuleAttributes
+from src.research.classes.research_attributes import (
+    ResearchAttributes,
+    insert_research_attributes,
+)
 
 
-class DataHandler(ModuleAttributes):
+class DataHandler(ResearchAttributes):
     """ A class to handle various dataset operations including creation,
     enhancement, splitting, and saving images. """
 
-    def __init__(self, label_type=None, category_names=None):
+    def __init__(self, research_attributes):
         """
-        Initializes the DataHandler with optional label type and category names.
+        Initializes the DataHandler with a ResearchAttributes instance.
 
         Args:
-            - label_type (str, optional): The type of labels used.
-            - category_names (list, optional): The list of category names.
+            - research_attributes (ResearchAttributes): The
+                ResearchAttributes instance.
         """
-        super().__init__(label_type, category_names)
-        self._label_type = label_type
-        self._category_names = category_names
+        insert_research_attributes(self, research_attributes)
         self._backuped_dataset_container = {}
 
     def create_dataset(self, data):
@@ -34,7 +35,7 @@ class DataHandler(ModuleAttributes):
             - data (any): The data used to create the dataset.
         """
         self._dataset_container["complete_dataset"] = create_dataset(
-            data, self._label_type, self._category_names
+            data, self.label_manager.label_type, self.label_manager.category_names
         )
 
     def _check_dataset_exists(self, dataset_name):
@@ -48,7 +49,7 @@ class DataHandler(ModuleAttributes):
             - ValueError: If the dataset does not exist in the dataset
                 container.
         """
-        if dataset_name not in self.dataset_container:
+        if dataset_name not in self._dataset_container:
             msg = f"Dataset {dataset_name} not found in the dataset container."
             raise ValueError(msg)
 
@@ -81,7 +82,7 @@ class DataHandler(ModuleAttributes):
         """
         for dataset_name in dataset_names:
             self._check_dataset_exists(dataset_name)
-            dataset = self.dataset_container[dataset_name]
+            dataset = self._dataset_container[dataset_name]
             enhanced_dataset = enhance_dataset(
                 dataset,
                 batch_size,
@@ -107,7 +108,7 @@ class DataHandler(ModuleAttributes):
             - test_size (float): The proportion of the dataset for testing.
         """
         self._check_dataset_exists("complete_dataset")
-        dataset = self.dataset_container["complete_dataset"]
+        dataset = self._dataset_container["complete_dataset"]
         train_dataset, val_dataset, test_dataset = split_dataset(
             dataset, train_size, val_size, test_size
         )
@@ -144,7 +145,7 @@ class DataHandler(ModuleAttributes):
 
         # concatenate all datasets in container
         concatenated_dataset = None
-        for dataset in self.dataset_container.values():
+        for dataset in self._dataset_container.values():
             if concatenated_dataset is None:
                 concatenated_dataset = dataset
             else:
@@ -156,7 +157,7 @@ class DataHandler(ModuleAttributes):
 
     def backup_datasets(self):
         """ Backups the current dataset container. """
-        for key, dataset in self.dataset_container.items():
+        for key, dataset in self._dataset_container.items():
             # Create a copy of the dataset
             for sample in dataset.take(1):
                 if isinstance(sample, tuple):

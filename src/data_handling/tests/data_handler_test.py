@@ -4,6 +4,7 @@ import unittest
 import tensorflow as tf
 
 from src.data_handling.data_handler import DataHandler
+from src.research.classes.research_attributes import ResearchAttributes
 from src.testing.base.base_test_case import BaseTestCase
 
 
@@ -14,9 +15,11 @@ class TestDataHandler(BaseTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.jpg_dict, cls.png_dict = cls.load_mnist_digits_dicts()
-        cls.data_handler = DataHandler(
-            label_type="categorical", category_names=[str(i) for i in range(10)]
+        research_attributes = ResearchAttributes(
+            label_type="categorical",
+            category_names=[str(i) for i in range(10)],
         )
+        cls.data_handler = DataHandler(research_attributes)
 
     def setUp(self):
         super().setUp()
