@@ -21,6 +21,8 @@ class DataHandler(ModuleBase):
             - category_names (list, optional): The list of category names.
         """
         super().__init__(label_type, category_names)
+        self._label_type = label_type
+        self._category_names = category_names
         self._backuped_dataset_container = {}
 
     def create_dataset(self, data):
@@ -32,7 +34,7 @@ class DataHandler(ModuleBase):
             - data (any): The data used to create the dataset.
         """
         self._dataset_container["complete_dataset"] = create_dataset(
-            data, self.label_type, self.category_names
+            data, self._label_type, self._category_names
         )
 
     def _check_dataset_exists(self, dataset_name):

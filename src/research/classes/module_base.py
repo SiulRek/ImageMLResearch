@@ -10,11 +10,7 @@ class ModuleBase:
             creating new 'complete_dataset' is added, when splitted
             'train_dataset', 'val_dataset', and 'test_dataset' are added.
         - label_manager (LabelManager): LabelManager instance for handling
-            labels.
-        - label_type (str): The type of labels used: 'binary',
-            'categorical', 'multi_label', 'multi_label_multi_class',
-            'object_detection'.
-        - category_names (list): The list of category names.
+            labels.<
         - predictions_container (dict): Dictionary containing predictions.
             When fitting, predictions are added. The name corresponds to the
             dataset name replacing 'dataset' with 'predictions', e.g.
@@ -38,8 +34,6 @@ class ModuleBase:
         """
         self._dataset_container = {}
         self._label_manager = LabelManager(label_type, category_names)
-        self._label_type = label_type
-        self._category_names = category_names
         self._predictions_container = {}
         self._model = None
         self._training_history = None
@@ -58,17 +52,6 @@ class ModuleBase:
     def label_manager(self):
         """ LabelManager instance for handling labels. """
         return self._label_manager
-
-    @property
-    def label_type(self):
-        """ The type of labels used: 'binary', 'categorical', 'multi_label',
-        'multi_label_multi_class', 'object_detection'. """
-        return self._label_type
-
-    @property
-    def category_names(self):
-        """ The list of category names. """
-        return self._category_names
 
     @property
     def training_history(self):
