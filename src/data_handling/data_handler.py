@@ -2,13 +2,13 @@ import tensorflow as tf
 
 from src.data_handling.io.create_dataset import create_dataset
 from src.data_handling.io.save_images import save_images
-from src.data_handling.labelling.label_manager import LabelManager
 from src.data_handling.labelling.label_utils import reverse_one_hot
 from src.data_handling.manipulation.enhance_dataset import enhance_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
+from src.research.classes.module_base import ModuleBase
 
 
-class DataHandler:
+class DataHandler(ModuleBase):
     """ A class to handle various dataset operations including creation,
     enhancement, splitting, and saving images. """
 
@@ -20,11 +20,8 @@ class DataHandler:
             - label_type (str, optional): The type of labels used.
             - category_names (list, optional): The list of category names.
         """
-        self.dataset_container = {}
-        self.backuped_dataset_container = {}
-        self.label_manager = LabelManager(label_type, category_names)
-        self.label_type = label_type
-        self.category_names = category_names
+        super().__init__(label_type, category_names)
+        self._backuped_dataset_container = {}
 
     def create_dataset(self, data):
         """
@@ -34,7 +31,7 @@ class DataHandler:
         Args:
             - data (any): The data used to create the dataset.
         """
-        self.dataset_container["complete_dataset"] = create_dataset(
+        self._dataset_container["complete_dataset"] = create_dataset(
             data, self.label_type, self.category_names
         )
 
@@ -92,7 +89,7 @@ class DataHandler:
                 cache,
                 repeat_num,
             )
-            self.dataset_container[dataset_name] = enhanced_dataset
+            self._dataset_container[dataset_name] = enhanced_dataset
 
     def split_dataset(self, train_size, val_size, test_size):
         """
@@ -112,11 +109,11 @@ class DataHandler:
         train_dataset, val_dataset, test_dataset = split_dataset(
             dataset, train_size, val_size, test_size
         )
-        self.dataset_container["train_dataset"] = train_dataset
-        self.dataset_container["val_dataset"] = val_dataset
-        self.dataset_container["test_dataset"] = test_dataset
+        self._dataset_container["train_dataset"] = train_dataset
+        self._dataset_container["val_dataset"] = val_dataset
+        self._dataset_container["test_dataset"] = test_dataset
 
-        self.dataset_container.pop("complete_dataset")
+        self._dataset_container.pop("complete_dataset")
 
     def save_images(self, output_dir, prefix=None):
         """
@@ -144,15 +141,16 @@ class DataHandler:
         start_number = 0
 
         # concatenate all datasets in container
-        dataset_iterator = self.dataset_container.values()
         concatenated_dataset = None
-        for dataset in dataset_iterator:
+        for dataset in self.dataset_container.values():
             if concatenated_dataset is None:
                 concatenated_dataset = dataset
             else:
                 concatenated_dataset = concatenated_dataset.concatenate(dataset)
 
-        save_images(dataset, output_dir, image_format, prefix, start_number)
+        save_images(
+            concatenated_dataset, output_dir, image_format, prefix, start_number
+        )
 
     def backup_datasets(self):
         """ Backups the current dataset container. """
@@ -160,11 +158,11 @@ class DataHandler:
             # Create a copy of the dataset
             for sample in dataset.take(1):
                 if isinstance(sample, tuple):
-                    self.backuped_dataset_container[key] = dataset.map(
+                    self._backuped_dataset_container[key] = dataset.map(
                         lambda x, y: (x, y)
                     )
                 else:
-                    self.backuped_dataset_container[key] = dataset.map(lambda x: x)
+                    self._backuped_dataset_container[key] = dataset.map(lambda x: x)
 
     def restore_datasets(self):
         """
@@ -173,8 +171,8 @@ class DataHandler:
         Raises:
             - ValueError: If no backuped dataset container is found.
         """
-        if not self.backuped_dataset_container:
+        if not self._backuped_dataset_container:
             msg = "No backuped dataset container found."
             raise ValueError(msg)
-        self.dataset_container = self.backuped_dataset_container
-        self.backuped_dataset_container = {}
+        self._dataset_container = self._backuped_dataset_container
+        self._backuped_dataset_container = {}
