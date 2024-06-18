@@ -90,7 +90,6 @@ class TestSaveImages(BaseTestCase):
         """ Test saving images with a function prefix. """
 
         def prefix_function(label):
-            label = tf.argmax(label)
             return f"label_{label.numpy()}"
 
         results_dir = os.path.join(self.temp_dir, "saving_images_with_function_prefix")
@@ -188,6 +187,18 @@ class TestSaveImages(BaseTestCase):
             )
         self.assertEqual(
             len(list_dir), len(list(self.dataset)), "All images should be saved."
+        )
+    
+    def test_saving_images_with_num_images(self):
+        """ Test saving images with a specified number of images. """
+        results_dir = os.path.join(self.temp_dir, "saving_images_with_num_images")
+        if os.path.exists(results_dir):
+            shutil.rmtree(results_dir)
+        os.makedirs(results_dir)
+        save_images(self.dataset, results_dir, num_images=3)
+        list_dir = os.listdir(results_dir)
+        self.assertEqual(
+            len(list_dir), 3, "Only the specified number of images should be saved."
         )
 
         

@@ -5,7 +5,9 @@ import tensorflow as tf
 
 
 def save_images(
-    dataset, output_dir, image_format="jpg", prefix="image", start_number=0
+    dataset,
+    output_dir,
+    **kwargs,
 ):
     """
     Saves images from dataset to the specified directory. Unlabeled dataset is
@@ -16,13 +18,19 @@ def save_images(
             labels.
         - output_dir (str): The directory to save the encoded image files.
         - image_format (str, optional): The format for saving images ('jpg'
-            or 'png').
+            or 'png'). Defaults to 'jpg'.
         - prefix (str or function, optional): The prefix for naming the
             saved images. If a function is provided, it should take a label and
-            return a string.
+            return a string. Defaults to None.
         - start_number (int, optional): The starting number for the
-            sequential naming.
+            sequential naming. Defaults to 0.
+        - num_images (int, optional): The number of images to save.
     """
+    image_format = kwargs.get("image_format", "jpg")
+    prefix = kwargs.get("prefix", "image_")
+    start_number = kwargs.get("start_number", 0)
+    num_images = kwargs.get("num_images", None)
+
     os.makedirs(output_dir, exist_ok=True)
 
     labeled = isinstance(dataset.element_spec, tuple)
@@ -47,6 +55,7 @@ def save_images(
         msg = "Image format not supported. Use 'jpg' or 'png'."
         raise ValueError(msg)
 
+    dataset = dataset.take(num_images) if num_images else dataset
     num_samples = sum(1 for _ in dataset)
     num_digits = max(4, math.ceil(math.log10(num_samples + start_number)))
 
@@ -56,7 +65,7 @@ def save_images(
         image, label = sample if labeled else (sample, None)
         prefix_str = prefix(label) if callable(prefix) else prefix
 
-        file_name = f"{prefix_str}_{seq_number:0{num_digits}d}.{image_format}"
+        file_name = f"{prefix_str}{seq_number:0{num_digits}d}.{image_format}"
         file_path = os.path.join(output_dir, file_name)
 
         encoded_image = encode_fn(image)
