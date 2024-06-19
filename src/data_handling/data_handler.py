@@ -54,9 +54,9 @@ class DataHandler(ResearchAttributes):
             msg = f"Dataset {dataset_name} not found in the dataset container."
             raise ValueError(msg)
 
-    def enhance_dataset(
+    def enhance_datasets(
         self,
-        dataset_names=["complete_dataset"],
+        dataset_names=None,
         batch_size=None,
         shuffle=False,
         random_seed=None,
@@ -71,7 +71,8 @@ class DataHandler(ResearchAttributes):
         Args:
             - dataset_names (list): The names of the dataset to enhance. Can
                 be 'complete_dataset' or 'train_dataset', 'val_dataset', or
-                'test_dataset' if split already.
+                'test_dataset' if split already. If None, all datasets in the
+                container are enhanced.
             - batch_size (int, optional): The batch size for the dataset.
             - shuffle (bool, optional): Whether to shuffle the dataset.
             - random_seed (int, optional): The random seed for shuffling.
@@ -81,6 +82,7 @@ class DataHandler(ResearchAttributes):
             - repeat_num (int, optional): The number of times to repeat the
                 dataset.
         """
+        dataset_names = dataset_names or list(self._dataset_container.keys())
         for dataset_name in dataset_names:
             self._check_dataset_exists(dataset_name)
             dataset = self._dataset_container[dataset_name]

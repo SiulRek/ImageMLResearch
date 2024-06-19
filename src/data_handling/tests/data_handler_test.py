@@ -35,8 +35,7 @@ class TestDataHandler(BaseTestCase):
     def test_enhance_dataset(self):
         """ Test enhancement of dataset and updating in the dataset container. """
         original_dataset = list(self.data_handler.dataset_container["complete_dataset"])
-        self.data_handler.enhance_dataset(
-            ["complete_dataset"], batch_size=2, shuffle=True, random_seed=42
+        self.data_handler.enhance_datasets(batch_size=2, shuffle=True, random_seed=42
         )
         self.assertIn("complete_dataset", self.data_handler.dataset_container)
         enhanced_dataset = self.data_handler.dataset_container["complete_dataset"]
