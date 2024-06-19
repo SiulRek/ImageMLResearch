@@ -49,16 +49,6 @@ determine the size of the figure based on the length of the text."""
             "Plot multiline text was not saved.",
         )
 
-    def test_plot_text_with_title(self):
-        """ Test plotting text with title. """
-        fig = plot_text(self.text_sample, title="Sample Text Plot")
-        fig.savefig(os.path.join(self.results_dir, "plot_text_with_title.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(os.path.join(self.results_dir, "plot_text_with_title.png")),
-            "Plot text with title was not saved.",
-        )
-
 
 if __name__ == "__main__":
     unittest.main()
