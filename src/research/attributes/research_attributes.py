@@ -16,10 +16,11 @@ class ResearchAttributes:
             dataset name replacing 'dataset' with 'predictions', e.g.
             'train_dataset' -> 'train_predictions'.
         - model (tf.keras.Model): The Keras model instance.
-        - training_history (tf.keras.callbacks.History): The training
+        - training_history (tf.keras.callbacks.History): The tracked training
             history of the model after fitting.
-        - evaluation_metrics (dict): The evaluation metrics dicts of the
+        - evaluation_metrics (dict): The tracked evaluation metrics dicts of the
             model after evaluating.
+        - figures (dict): Dictionary containing the tracked figures. {figure_name: figure}
     """
 
     def __init__(self, label_type, category_names=None):
@@ -39,6 +40,7 @@ class ResearchAttributes:
         self._model = None
         self._training_history = None
         self._evaluation_metrics = None
+        self._figures = {}
 
     @property
     def dataset_container(self):
@@ -69,3 +71,8 @@ class ResearchAttributes:
     def evaluation_metrics(self):
         """ The evaluation metrics dicts of the model after evaluating. """
         return self._evaluation_metrics
+    
+    @property
+    def figures(self):
+        """ Dictionary containing figures. {figure_name: figure} """
+        return self._figures
