@@ -1,7 +1,5 @@
-from src.research.classes.research_attributes import (
-    ResearchAttributes,
-    insert_research_attributes,
-)
+from src.research.attributes.attributes_utils import insert_research_attributes
+from src.research.attributes.research_attributes import ResearchAttributes
 
 
 class Trainer(ResearchAttributes):

@@ -4,7 +4,7 @@ import unittest
 import tensorflow as tf
 
 from src.data_handling.data_handler import DataHandler
-from src.research.classes.research_attributes import ResearchAttributes
+from src.research.attributes.research_attributes import ResearchAttributes
 from src.testing.base.base_test_case import BaseTestCase
 
 
