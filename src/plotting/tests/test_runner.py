@@ -5,6 +5,7 @@ from unittest import defaultTestLoader as Loader
 from src.plotting.tests.plot_confusion_matrix_test import TestPlotConfusionMatrix
 from src.plotting.tests.plot_text_test import TestPlotText
 from src.plotting.tests.plot_images_test import TestPlotImages
+from src.plotting.tests.plotter_test import TestPlotter
 from src.testing.helpers.test_result_logger import TestResultLogger
 
 ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
@@ -25,6 +26,7 @@ def load_tests(test_suite):
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotConfusionMatrix))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotText))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotImages))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotter))
     return test_suite
 
 
