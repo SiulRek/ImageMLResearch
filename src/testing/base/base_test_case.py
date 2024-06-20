@@ -35,9 +35,18 @@ class BaseTestCase(unittest.TestCase):
     remove_temp_dir = True
 
     @classmethod
-    def _get_class_file_path(cls):
-        file_path = sys.modules[cls.__module__].__file__
-        return file_path
+    def _infere_test_file_path(cls):
+        # 1. Attempt: infer file path from sys.modules
+        module = cls.__module__
+        if module in sys.modules:
+            return sys.modules[module].__file__
+        # 2. Attempt: infer file path from sys.argv, for the case called from Command Line
+        if len(sys.argv) > 1:
+            # 1st arg expected is the executor file
+            # 2nd arg expected is the actual test file
+            return sys.argv[1]
+        msg = "Cannot infer test file path."
+        raise FileNotFoundError(msg)
 
     @classmethod
     def _compute_output_dir(cls, parent_folder="tests"):
@@ -53,7 +62,7 @@ class BaseTestCase(unittest.TestCase):
         Returns:
             - str: The path to the output directory.
         """
-        current_dir = os.path.dirname(cls._get_class_file_path())
+        current_dir = os.path.dirname(cls._infere_test_file_path())
 
         while parent_folder not in os.listdir(current_dir):
             current_dir = os.path.dirname(current_dir)
