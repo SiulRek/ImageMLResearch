@@ -11,7 +11,7 @@ class Trainer(ResearchAttributes):
         self._model = None
         self._training_history = None
         self._predictions_container = {}
-        self._dataset_container = {}
+        self._datasets_container = {}
 
     def set_compiled_model(self, model):
         """
@@ -34,10 +34,10 @@ class Trainer(ResearchAttributes):
             msg = "A compiled model must be set before calling fit."
             raise ValueError(msg)
 
-        train_dataset = self._dataset_container.get("train_dataset")
-        val_dataset = self._dataset_container.get("val_dataset")
-        complete_dataset = self._dataset_container.get("complete_dataset")
-        test_dataset = self._dataset_container.get("test_dataset")
+        train_dataset = self._datasets_container.get("train_dataset")
+        val_dataset = self._datasets_container.get("val_dataset")
+        complete_dataset = self._datasets_container.get("complete_dataset")
+        test_dataset = self._datasets_container.get("test_dataset")
 
         if val_dataset:
             kwargs["validation_data"] = val_dataset  # Add to fit kwargs.

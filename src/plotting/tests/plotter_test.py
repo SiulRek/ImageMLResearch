@@ -28,7 +28,7 @@ class TestPlotter(BaseTestCase):
             label_type="categorical",
             category_names=[str(i) for i in range(10)],
         )
-        research_attributes._dataset_container["complete_dataset"] = self.image_dataset
+        research_attributes._datasets_container["complete_dataset"] = self.image_dataset
         self.plotter = Plotter()
         self.plotter.update_research_attributes(research_attributes)
 

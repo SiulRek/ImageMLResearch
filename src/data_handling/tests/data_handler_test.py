@@ -28,18 +28,18 @@ class TestDataHandler(BaseTestCase):
 
     def test_create_dataset(self):
         """ Test creation of dataset and storage in the dataset container. """
-        self.assertIn("complete_dataset", self.data_handler.dataset_container)
+        self.assertIn("complete_dataset", self.data_handler.datasets_container)
         self.assertIsInstance(
-            self.data_handler.dataset_container["complete_dataset"], tf.data.Dataset
+            self.data_handler.datasets_container["complete_dataset"], tf.data.Dataset
         )
 
     def test_enhance_dataset(self):
         """ Test enhancement of dataset and updating in the dataset container. """
-        original_dataset = list(self.data_handler.dataset_container["complete_dataset"])
+        original_dataset = list(self.data_handler.datasets_container["complete_dataset"])
         self.data_handler.enhance_datasets(batch_size=2, shuffle=True, random_seed=42
         )
-        self.assertIn("complete_dataset", self.data_handler.dataset_container)
-        enhanced_dataset = self.data_handler.dataset_container["complete_dataset"]
+        self.assertIn("complete_dataset", self.data_handler.datasets_container)
+        enhanced_dataset = self.data_handler.datasets_container["complete_dataset"]
         self.assertIsInstance(enhanced_dataset, tf.data.Dataset)
 
         for batch in enhanced_dataset:
@@ -59,12 +59,12 @@ class TestDataHandler(BaseTestCase):
         """ Test splitting of dataset and storage of splits in the dataset
         container. """
         self.data_handler.split_dataset(train_size=0.6, val_size=0.2, test_size=0.2)
-        self.assertIn("train_dataset", self.data_handler.dataset_container)
-        self.assertIn("val_dataset", self.data_handler.dataset_container)
-        self.assertIn("test_dataset", self.data_handler.dataset_container)
-        train_dataset = self.data_handler.dataset_container["train_dataset"]
-        val_dataset = self.data_handler.dataset_container["val_dataset"]
-        test_dataset = self.data_handler.dataset_container["test_dataset"]
+        self.assertIn("train_dataset", self.data_handler.datasets_container)
+        self.assertIn("val_dataset", self.data_handler.datasets_container)
+        self.assertIn("test_dataset", self.data_handler.datasets_container)
+        train_dataset = self.data_handler.datasets_container["train_dataset"]
+        val_dataset = self.data_handler.datasets_container["val_dataset"]
+        test_dataset = self.data_handler.datasets_container["test_dataset"]
         self.assertEqual(train_dataset.cardinality().numpy(), 3)
         self.assertEqual(val_dataset.cardinality().numpy(), 1)
         self.assertEqual(test_dataset.cardinality().numpy(), 1)
@@ -78,11 +78,11 @@ class TestDataHandler(BaseTestCase):
 
     def test_backup_and_restore_datasets(self):
         """ Test backup and restore of datasets. """
-        self.assertTrue("complete_dataset" in self.data_handler.dataset_container)
+        self.assertTrue("complete_dataset" in self.data_handler.datasets_container)
         self.data_handler.backup_datasets()
-        self.data_handler.dataset_container.pop("complete_dataset")
+        self.data_handler.datasets_container.pop("complete_dataset")
         self.data_handler.restore_datasets()
-        self.assertTrue("complete_dataset" in self.data_handler.dataset_container)
+        self.assertTrue("complete_dataset" in self.data_handler.datasets_container)
 
 
 if __name__ == "__main__":

@@ -45,7 +45,7 @@ class Plotter(ResearchAttributes):
         """
         Initializes the Plotter.
     """
-        self._dataset_container = None
+        self._datasets_container = None
         self._figures = {}  # Name: Figure
 
     def _add_figure(self, name, fig):
@@ -79,9 +79,9 @@ class Plotter(ResearchAttributes):
             - title: Optional title for the plot. Defaults to "Images".
             - show: Whether to show the plot. Defaults to False.
         """
-        dataset = self._dataset_container.get(
+        dataset = self._datasets_container.get(
             "complete_dataset"
-        ) or self._dataset_container.get("train_dataset")
+        ) or self._datasets_container.get("train_dataset")
         if not dataset:
             msg = "Neither 'complete_dataset' nor 'train_dataset' found in dataset container."
             raise ValueError(msg)

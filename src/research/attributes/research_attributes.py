@@ -7,7 +7,7 @@ class ResearchAttributes:
     A class to store attributes used by modules in the research package.
 
     Attributes:
-        - dataset_container (dict): Dictionary containing datasets. When
+        - datasets_container (dict): Dictionary containing datasets. When
             creating new 'complete_dataset' is added, when split
             'train_dataset', 'val_dataset', and 'test_dataset' are added.
         - label_manager (LabelManager): LabelManager instance for handling
@@ -35,7 +35,7 @@ class ResearchAttributes:
                 'object_detection'.
             - category_names (list, optional): The list of category names.
         """
-        self._dataset_container = {}
+        self._datasets_container = {}
         self._label_manager = LabelManager(label_type, category_names)
         self._predictions_container = {}
         self._model = None
@@ -44,9 +44,9 @@ class ResearchAttributes:
         self._figures = {}
 
     @property
-    def dataset_container(self):
+    def datasets_container(self):
         """ Dictionary containing datasets. """
-        return self._dataset_container
+        return self._datasets_container
 
     @property
     def label_manager(self):

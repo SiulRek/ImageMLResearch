@@ -16,18 +16,18 @@ class DataHandler(ResearchAttributes):
         """
         Initializes the DataHandler.
         """
-        self._dataset_container = {}
-        self._backuped_dataset_container = {}
+        self._datasets_container = {}
+        self._backuped_datasets_container = {}
 
     def create_dataset(self, data):
         """
         Creates a dataset from the given data and stores it in the
-        'dataset_container' under 'complete_dataset'.
+        'datasets_container' under 'complete_dataset'.
 
         Args:
             - data (any): The data used to create the dataset.
         """
-        self._dataset_container["complete_dataset"] = create_dataset(
+        self._datasets_container["complete_dataset"] = create_dataset(
             data, self.label_manager.label_type, self.label_manager.category_names
         )
 
@@ -42,7 +42,7 @@ class DataHandler(ResearchAttributes):
             - ValueError: If the dataset does not exist in the dataset
                 container.
         """
-        if dataset_name not in self._dataset_container:
+        if dataset_name not in self._datasets_container:
             msg = f"Dataset {dataset_name} not found in the dataset container."
             raise ValueError(msg)
 
@@ -58,7 +58,7 @@ class DataHandler(ResearchAttributes):
     ):
         """
         Enhances the dataset by applying transformations and stores the enhanced
-        dataset back in the 'dataset_container'.
+        dataset back in the 'datasets_container'.
 
         Args:
             - dataset_names (list): The names of the dataset to enhance. Can
@@ -74,10 +74,10 @@ class DataHandler(ResearchAttributes):
             - repeat_num (int, optional): The number of times to repeat the
                 dataset.
         """
-        dataset_names = dataset_names or list(self._dataset_container.keys())
+        dataset_names = dataset_names or list(self._datasets_container.keys())
         for dataset_name in dataset_names:
             self._check_dataset_exists(dataset_name)
-            dataset = self._dataset_container[dataset_name]
+            dataset = self._datasets_container[dataset_name]
             enhanced_dataset = enhance_dataset(
                 dataset,
                 batch_size,
@@ -87,12 +87,12 @@ class DataHandler(ResearchAttributes):
                 cache,
                 repeat_num,
             )
-            self._dataset_container[dataset_name] = enhanced_dataset
+            self._datasets_container[dataset_name] = enhanced_dataset
 
     def split_dataset(self, train_size, val_size, test_size):
         """
         Splits the 'complete_dataset' into 'train_dataset', 'val_dataset' and
-        'test_dataset' and stores them in the 'dataset_container'. Note that the
+        'test_dataset' and stores them in the 'datasets_container'. Note that the
         complete dataset is removed.
 
         Args:
@@ -103,15 +103,15 @@ class DataHandler(ResearchAttributes):
             - test_size (float): The proportion of the dataset for testing.
         """
         self._check_dataset_exists("complete_dataset")
-        dataset = self._dataset_container["complete_dataset"]
+        dataset = self._datasets_container["complete_dataset"]
         train_dataset, val_dataset, test_dataset = split_dataset(
             dataset, train_size, val_size, test_size
         )
-        self._dataset_container["train_dataset"] = train_dataset
-        self._dataset_container["val_dataset"] = val_dataset
-        self._dataset_container["test_dataset"] = test_dataset
+        self._datasets_container["train_dataset"] = train_dataset
+        self._datasets_container["val_dataset"] = val_dataset
+        self._datasets_container["test_dataset"] = test_dataset
 
-        self._dataset_container.pop("complete_dataset")
+        self._datasets_container.pop("complete_dataset")
 
     def save_images(self, output_dir, prefix=None, num_images=None):
         """
@@ -141,7 +141,7 @@ class DataHandler(ResearchAttributes):
 
         # concatenate all datasets in container
         concatenated_dataset = None
-        for dataset in self._dataset_container.values():
+        for dataset in self._datasets_container.values():
             if concatenated_dataset is None:
                 concatenated_dataset = dataset
             else:
@@ -158,15 +158,15 @@ class DataHandler(ResearchAttributes):
 
     def backup_datasets(self):
         """ Backups the current dataset container. """
-        for key, dataset in self._dataset_container.items():
+        for key, dataset in self._datasets_container.items():
             # Create a copy of the dataset
             for sample in dataset.take(1):
                 if isinstance(sample, tuple):
-                    self._backuped_dataset_container[key] = dataset.map(
+                    self._backuped_datasets_container[key] = dataset.map(
                         lambda x, y: (x, y)
                     )
                 else:
-                    self._backuped_dataset_container[key] = dataset.map(lambda x: x)
+                    self._backuped_datasets_container[key] = dataset.map(lambda x: x)
 
     def restore_datasets(self):
         """
@@ -175,8 +175,8 @@ class DataHandler(ResearchAttributes):
         Raises:
             - ValueError: If no backuped dataset container is found.
         """
-        if not self._backuped_dataset_container:
+        if not self._backuped_datasets_container:
             msg = "No backuped dataset container found."
             raise ValueError(msg)
-        self._dataset_container = self._backuped_dataset_container
-        self._backuped_dataset_container = {}
+        self._datasets_container = self._backuped_datasets_container
+        self._backuped_datasets_container = {}
