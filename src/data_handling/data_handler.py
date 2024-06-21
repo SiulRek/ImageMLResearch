@@ -13,19 +13,20 @@ class DataHandler(ResearchAttributes):
     enhancement, splitting, and saving images. """
 
     def __init__(self):
-        """
-        Initializes the DataHandler.
-        """
+        """ Initializes the DataHandler. """
         self._datasets_container = {}
         self._backuped_datasets_container = {}
 
-    def create_dataset(self, data):
+    def load_dataset(self, data):
         """
-        Creates a dataset from the given data and stores it in the
+        Load a dataset from the given data and stores it in the
         'datasets_container' under 'complete_dataset'.
 
         Args:
-            - data (any): The data used to create the dataset.
+            - data (dicts, list of dicts or pandas.DataFrame): Data
+                containing 'path' and labels. 'path' should contain the relative
+                file paths and labels should contain the corresponding labels
+                for the specified 'label_type'.
         """
         self._datasets_container["complete_dataset"] = create_dataset(
             data, self.label_manager.label_type, self.label_manager.category_names
@@ -92,8 +93,8 @@ class DataHandler(ResearchAttributes):
     def split_dataset(self, train_size, val_size, test_size):
         """
         Splits the 'complete_dataset' into 'train_dataset', 'val_dataset' and
-        'test_dataset' and stores them in the 'datasets_container'. Note that the
-        complete dataset is removed.
+        'test_dataset' and stores them in the 'datasets_container'. Note that
+        the complete dataset is removed.
 
         Args:
             - train_size (float): The proportion of the dataset for

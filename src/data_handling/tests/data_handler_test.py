@@ -24,9 +24,9 @@ class TestDataHandler(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.data_handler.create_dataset(self.jpg_dict)
+        self.data_handler.load_dataset(self.jpg_dict)
 
-    def test_create_dataset(self):
+    def test_load_dataset(self):
         """ Test creation of dataset and storage in the dataset container. """
         self.assertIn("complete_dataset", self.data_handler.datasets_container)
         self.assertIsInstance(
