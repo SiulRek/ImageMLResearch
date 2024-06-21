@@ -3,8 +3,6 @@ import unittest
 
 import matplotlib.pyplot as plt
 
-from src.plotting.functions.plot_images import plot_images
-from src.plotting.functions.plot_text import plot_text
 from src.plotting.plotters.plotter import Plotter
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.testing.base.base_test_case import BaseTestCase
@@ -24,7 +22,6 @@ class TestPlotter(BaseTestCase):
         )
         cls.visualization_path = os.path.join(cls.results_dir, "plotter_test.png")
 
-
     def setUp(self):
         super().setUp()
         research_attributes = ResearchAttributes(
@@ -32,7 +29,8 @@ class TestPlotter(BaseTestCase):
             category_names=[str(i) for i in range(10)],
         )
         research_attributes._dataset_container["complete_dataset"] = self.image_dataset
-        self.plotter = Plotter(research_attributes)
+        self.plotter = Plotter()
+        self.plotter.update_research_attributes(research_attributes)
 
     def test_add_figure(self):
         """ Test the _add_figure method. """
@@ -40,7 +38,9 @@ class TestPlotter(BaseTestCase):
         self.plotter._add_figure("test_figure", fig)
         self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
         self.assertEqual(
-            self.plotter._figures["test_figure"], fig, "The figure was not added correctly."
+            self.plotter._figures["test_figure"],
+            fig,
+            "The figure was not added correctly.",
         )
 
     def test_plot_images(self):

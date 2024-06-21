@@ -19,7 +19,8 @@ class TestDataHandler(BaseTestCase):
             label_type="categorical",
             category_names=[str(i) for i in range(10)],
         )
-        cls.data_handler = DataHandler(research_attributes)
+        cls.data_handler = DataHandler()
+        cls.data_handler.update_research_attributes(research_attributes)
 
     def setUp(self):
         super().setUp()

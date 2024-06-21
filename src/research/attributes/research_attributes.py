@@ -1,4 +1,5 @@
 from src.data_handling.labelling.label_manager import LabelManager
+from src.research.attributes.attributes_utils import copy_public_properties
 
 
 class ResearchAttributes:
@@ -76,3 +77,17 @@ class ResearchAttributes:
     def figures(self):
         """ Dictionary containing figures. {figure_name: figure} """
         return self._figures
+
+    def update_research_attributes(self, research_attributes):
+        """
+        Updates the attributes of the instance with the attributes of the
+        ResearchAttributes instance.
+
+        Args:
+            - instance: The class instance to insert attributes into.
+        """
+        if not isinstance(research_attributes, ResearchAttributes):
+            raise ValueError(
+                "The input instance must be of type ResearchAttributes."
+            )
+        copy_public_properties(self, research_attributes)

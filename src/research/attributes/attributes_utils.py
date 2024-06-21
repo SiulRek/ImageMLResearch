@@ -1,33 +1,33 @@
-from src.research.attributes.research_attributes import ResearchAttributes
-
-
-def insert_research_attributes(instance, research_attributes):
+def copy_public_properties(target_instance, source_instance):
     """
-    Inserts the attributes from a ResearchAttributes instance into another class
-    instance. Retrieves all public properties from research_attributes and sets
-    them as attributes in the instance.
+    Copies the public properties from one instance into another class instance.
+    Retrieves all public properties from source_instance and sets them as
+    attributes in the target_instance.
 
     Args:
-        - instance: The class instance to insert attributes into.
-        - research_attributes (ResearchAttributes): The ResearchAttributes
-            instance.
+        - target_instance: The class instance to insert attributes into.
+        - source_instance: The instance from which properties are copied.
     """
 
-    def is_property(attr_name):
-        cls = research_attributes.__class__
-        attr = getattr(cls, attr_name)
-        return isinstance(attr, property)
+    def is_public_property(attr_name, source_instance):
+        cls = source_instance.__class__
+        attr = getattr(cls, attr_name, None)
+        return isinstance(attr, property) and not attr_name.startswith("_")
 
-    if not isinstance(research_attributes, ResearchAttributes):
-        msg = "research_attributes must be an instance of ResearchAttributes"
-        msg += f"not {type(research_attributes)}."
-        raise ValueError(msg)
-
-    for attr_name in dir(research_attributes):
-        attribute = getattr(research_attributes, attr_name)
-        if (
-            not attr_name.startswith("_")
-            and not callable(attribute)
-            and is_property(attr_name)
-        ):
-            setattr(instance, "_" + attr_name, getattr(research_attributes, attr_name))
+    for attr_name in dir(source_instance):
+        if is_public_property(attr_name, source_instance):
+            try:
+                setattr(target_instance, attr_name, getattr(source_instance, attr_name))
+            # If the property is read-only, try to access the private attribute
+            except AttributeError:
+                attr_name = "_" + attr_name
+                if hasattr(source_instance, attr_name):
+                    setattr(
+                        target_instance,
+                        attr_name,
+                        getattr(source_instance, attr_name[1:]),
+                    )
+                else:
+                    msg = f"Could neither set property {attr_name} nor access"
+                    msg += "its private attribute"
+                    raise AttributeError(msg)

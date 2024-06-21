@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_images import plot_images
 from src.plotting.functions.plot_text import plot_text
-from src.research.attributes.attributes_utils import insert_research_attributes
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
@@ -42,17 +41,12 @@ def plot_decorator(default_title, default_show):
 class Plotter(ResearchAttributes):
     """ A class for plotting images and text using research attributes. """
 
-    def __init__(self, research_attributes):
+    def __init__(self):
         """
-        Initializes the Plotter with a ResearchAttributes instance.
-
-        Args:
-            - research_attributes (ResearchAttributes): The
-                ResearchAttributes instance.
-        """
+        Initializes the Plotter.
+    """
         self._dataset_container = None
         self._figures = {}  # Name: Figure
-        insert_research_attributes(self, research_attributes)
 
     def _add_figure(self, name, fig):
         """

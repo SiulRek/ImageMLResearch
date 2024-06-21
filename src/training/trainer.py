@@ -1,23 +1,17 @@
-from src.research.attributes.attributes_utils import insert_research_attributes
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
 class Trainer(ResearchAttributes):
     """ A class to train a Keras model using datasets from research_attributes. """
 
-    def __init__(self, research_attributes):
+    def __init__(self):
         """
-        Initializes the Trainer with a ResearchAttributes instance.
-
-        Args:
-            - research_attributes (ResearchAttributes): The
-                ResearchAttributes instance.
+        Initializes the Trainer.
         """
         self._model = None
         self._training_history = None
         self._predictions_container = {}
         self._dataset_container = {}
-        insert_research_attributes(self, research_attributes)
 
     def set_compiled_model(self, model):
         """

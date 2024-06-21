@@ -5,7 +5,6 @@ from src.data_handling.io.save_images import save_images
 from src.data_handling.labelling.label_utils import reverse_one_hot
 from src.data_handling.manipulation.enhance_dataset import enhance_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
-from src.research.attributes.attributes_utils import insert_research_attributes
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
@@ -13,17 +12,12 @@ class DataHandler(ResearchAttributes):
     """ A class to handle various dataset operations including creation,
     enhancement, splitting, and saving images. """
 
-    def __init__(self, research_attributes):
+    def __init__(self):
         """
-        Initializes the DataHandler with a ResearchAttributes instance.
-
-        Args:
-            - research_attributes (ResearchAttributes): The
-                ResearchAttributes instance.
+        Initializes the DataHandler.
         """
         self._dataset_container = {}
         self._backuped_dataset_container = {}
-        insert_research_attributes(self, research_attributes)
 
     def create_dataset(self, data):
         """
