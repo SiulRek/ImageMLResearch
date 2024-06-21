@@ -23,14 +23,26 @@ class DataHandler(ResearchAttributes):
         'datasets_container' under 'complete_dataset'.
 
         Args:
-            - data (dicts, list of dicts or pandas.DataFrame): Data
-                containing 'path' and labels. 'path' should contain the relative
-                file paths and labels should contain the corresponding labels
-                for the specified 'label_type'.
+            - data (tf.data.Dataset, str, dict, pandas.DataFrame): The data to load, can be a TensorFlow dataset, path to a TFRecord file or a dictionary/pandas DataFrame, with key/column is 'image' and 'label'.
         """
-        self._datasets_container["complete_dataset"] = create_dataset(
-            data, self.label_manager.label_type, self.label_manager.category_names
-        )
+        # 3 possible methods to load dataset
+        # 1. Is already of format tensorflow.data.Dataset
+        if isinstance(data, tf.data.Dataset):
+            self._datasets_container["complete_dataset"] = data
+            return
+        # 2. data is path to tfrecord file
+        if isinstance(data, str) and data.endswith(".tfrecord"):
+            self._datasets_container["complete_dataset"] = tf.data.TFRecordDataset(data)
+            return
+        # 3. data is a dictslist of dicts or pandas.DataFrame
+        try:
+            self._datasets_container["complete_dataset"] = create_dataset(
+                data, self.label_manager.label_type, self.label_manager.category_names
+            )
+            return
+        except ValueError:
+            msg = f"Not possible to load dataset from {data}."
+            raise ValueError(msg)
 
     def _check_dataset_exists(self, dataset_name):
         """
