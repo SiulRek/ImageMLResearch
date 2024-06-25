@@ -4,7 +4,7 @@ from src.research.attributes.attributes_utils import copy_public_properties
 
 class ResearchAttributes:
     """
-    A class to store attributes used by modules in the research package.
+    A class to store attributes shared between modules in the research package.
 
     Attributes:
         - datasets_container (dict): Dictionary containing datasets. When
@@ -17,11 +17,12 @@ class ResearchAttributes:
             dataset name replacing 'dataset' with 'predictions', e.g.
             'train_dataset' -> 'train_predictions'.
         - model (tf.keras.Model): The Keras model instance.
-        - training_history (tf.keras.callbacks.History): The tracked training
-            history of the model after fitting.
-        - evaluation_metrics (dict): The tracked evaluation metrics dicts of the
-            model after evaluating.
-        - figures (dict): Dictionary containing the tracked figures. {figure_name: figure}
+        - training_history (tf.keras.callbacks.History): The tracked
+            training history of the model after fitting.
+        - evaluation_metrics (dict): The tracked evaluation metrics dicts of
+            the model after evaluating. Can be set from outside.
+        - figures (dict): Dictionary containing the tracked figures.
+            {figure_name: figure}. Can be set from outside.
     """
 
     def __init__(self, label_type, category_names=None):
@@ -72,11 +73,21 @@ class ResearchAttributes:
     def evaluation_metrics(self):
         """ The evaluation metrics dicts of the model after evaluating. """
         return self._evaluation_metrics
-    
+
+    @evaluation_metrics.setter
+    def evaluation_metrics(self, evaluation_metrics):
+        """ Setter for the evaluation metrics. """
+        self._evaluation_metrics = evaluation_metrics
+
     @property
     def figures(self):
         """ Dictionary containing figures. {figure_name: figure} """
         return self._figures
+
+    @figures.setter
+    def figures(self, figures):
+        """ Setter for the figures. """
+        self._figures = figures
 
     def update_research_attributes(self, research_attributes):
         """
@@ -87,7 +98,5 @@ class ResearchAttributes:
             - instance: The class instance to insert attributes into.
         """
         if not isinstance(research_attributes, ResearchAttributes):
-            raise ValueError(
-                "The input instance must be of type ResearchAttributes."
-            )
+            raise ValueError("The input instance must be of type ResearchAttributes.")
         copy_public_properties(self, research_attributes)
