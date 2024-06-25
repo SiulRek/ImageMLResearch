@@ -38,7 +38,7 @@ class TestTrial(BaseTestCase):
             self.assertEqual(trial.trial_data["hyperparameters"], self.hyperparameters)
             self.assertTrue(os.path.exists(trial.trial_data["directory"]))
 
-    def test_trial_data_written_to_json(self):
+    def test_trial_info_written_to_json(self):
         with self.call_test_trial() as trial:
             trial_info_json = os.path.join(
                 trial.trial_data["directory"], "trial_info.json"
@@ -51,6 +51,7 @@ class TestTrial(BaseTestCase):
         self.assertEqual(data["trial_name"], self.trial_name)
         self.assertEqual(data["description"], self.description)
         self.assertEqual(data["hyperparameters"], self.hyperparameters)
+        self.assertTrue("start_time" in data)
 
     def test_add_trial_to_experiment_data(self):
         with self.call_test_trial() as trial:
@@ -85,20 +86,22 @@ class TestTrial(BaseTestCase):
 
     def test_trial_exit_with_exception(self):
 
-        def raise_error_with_traceback(msg):
+        def raise_error_with_traceback():
             try:
-                raise ValueError(msg)
+                raise ValueError()
             except ValueError as e:
-                raise ValueError(msg) from e
+                raise ValueError() from e
 
+        trial_exception_raised = False
         try:
             with self.call_test_trial():
-                msg = "An error occurred during the trial."
-                raise_error_with_traceback(msg)
+                raise_error_with_traceback()
         except TrialError as e:
-            self.assertTrue(msg in str(e))
-            self.assertIsNotNone(e.__traceback__)
-
+            trial_exception_raised = True
+            exception_msg = "An error occurred during the trial."
+            self.assertTrue(exception_msg in str(e))
+            self.assertTrue(e.__traceback__)
+        self.assertTrue(trial_exception_raised)
         self.assertEqual(len(self.mock_experiment.experiment_data["trials"]), 0)
 
     def test_non_serializable_hyperparameters(self):
