@@ -2,13 +2,13 @@ from datetime import datetime
 import json
 import os
 
+from src.experimenting.helpers.create_experiment_report import create_experiment_report
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
 class ExperimentError(Exception):
     """ Exception raised for errors that occur during the experiment. """
-    pass
 
 
 class Experiment(ResearchAttributes):
@@ -24,26 +24,46 @@ class Experiment(ResearchAttributes):
         - trials (list): List to store trial data.
     """
 
-    def __init__(self, directory, name, description, label_type, category_names=None):
+    def __init__(self, research_attributes, directory, name, description):
         """
         Initializes the Experiment with the given parameters.
 
         Args:
+            - research_attributes (ResearchAttributes): The research
+                attributes for the experiment.
             - directory (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment.
-            - label_type (str): The type of labels used in the experiment.
-            - category_names (list, optional): List of category names if
-                applicable.
+
+        Note:
+            - `Experiment` is the only research module that requires `research_attributes` during initialization, as it simplifies the usage within a context manager.
         """
-        super().__init__(label_type, category_names)
+        experiment_directory = self._make_experiment_directory(directory, name)
         self.experiment_data = {
             "name": name,
             "description": description,
             "start_time": str(datetime.now()),
-            "directory": os.path.abspath(os.path.normpath(directory)),
+            "directory": experiment_directory,
             "trials": [],
         }
+        self.update_research_attributes(research_attributes)
+
+    def _make_experiment_directory(self, directory, name):
+        """
+        Creates the experiment directory.
+
+        Args:
+            - directory (str): The directory to save the experiment data.
+            - name (str): The name of the experiment.
+
+        Returns:
+            - str: The path to the experiment directory.
+        """
+        experiment_dir = os.path.join(
+            os.path.abspath(os.path.normpath(directory)), name.replace(" ", "_")
+        )
+        os.makedirs(experiment_dir, exist_ok=True)
+        return experiment_dir
 
     def __enter__(self):
         """
@@ -86,11 +106,8 @@ class Experiment(ResearchAttributes):
             msg = "An error occurred during the experiment."
             raise ExperimentError(msg) from exc
         self.experiment_data["end_time"] = str(datetime.now())
-        report_json = os.path.join(
-            self.experiment_data["directory"], "experiment_report.json"
-        )
-        with open(report_json, "w", encoding="utf-8") as f:
-            json.dump(self.experiment_data, f, indent=4)
+
+        create_experiment_report(self.experiment_data)
 
     def trial(self, trial_name, description, hyperparameters):
         """
