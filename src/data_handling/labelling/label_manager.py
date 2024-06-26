@@ -20,7 +20,7 @@ class LabelManager:
 
     default_label_dtype = {
         "binary": tf.float32,
-        "categorical": tf.float32,
+        "multi_class": tf.float32,
         "multi_label": tf.float32,
         "multi_class_multi_label": tf.float32,
         "object_detection": tf.float32,
@@ -33,7 +33,7 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'categorical', 'multi_label',
+                Supported types are 'binary', 'multi_class', 'multi_label',
                 'multi_class_multi_label', and 'object_detection'.
             - category_names (list, optional): The existing category names
                 for label encoding.
@@ -73,7 +73,7 @@ class LabelManager:
         Args:
             - category_names (list): The list of category names.
         """
-        if not category_names and self._label_type == "categorical":
+        if not category_names and self._label_type == "multi_class":
             msg = "The category names are required at least to derive the number of categories."
             raise ValueError(msg)
         if not category_names and self._label_type == "binary":
@@ -90,7 +90,7 @@ class LabelManager:
 
         Args:
             - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'categorical', 'multi_label',
+                Supported types are 'binary', 'multi_class', 'multi_label',
                 'multi_class_multi_label', and 'object_detection'.
         """
 
@@ -102,7 +102,7 @@ class LabelManager:
 
         label_encoders = {
             "binary": self._encode_binary_label,
-            "categorical": self._encode_categorical_label,
+            "multi_class": self._encode_multi_class_label,
             "multi_label": raise_exception_when_called(
                 NotImplementedError, "Multi-label encoding is not yet implemented."
             ),
@@ -160,9 +160,9 @@ class LabelManager:
             msg = "Failed to convert the label to a tensor."
             raise ValueError(msg) from e
 
-    def _encode_categorical_label(self, label):
+    def _encode_multi_class_label(self, label):
         """
-        Encodes a categorical label into one-hot encoded format.
+        Encodes a multi_class label into one-hot encoded format.
 
         Args:
             - label (int|str): The label to encode. If string it should be a

@@ -25,7 +25,7 @@ class TestPlotter(BaseTestCase):
     def setUp(self):
         super().setUp()
         research_attributes = ResearchAttributes(
-            label_type="categorical",
+            label_type="multi_class",
             category_names=[str(i) for i in range(10)],
         )
         research_attributes._datasets_container["complete_dataset"] = self.image_dataset

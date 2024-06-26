@@ -13,7 +13,7 @@ class TestLabelManager(BaseTestCase):
         super().setUp()
         self.binary_label = 1
         self.invalid_binary_label = 2
-        self.categorical_label = 2
+        self.multi_class_label = 2
         self.invalid_label_key = {"wrong_key": 3}
 
     def test_binary_labels_valid_input(self):
@@ -30,36 +30,36 @@ class TestLabelManager(BaseTestCase):
         with self.assertRaises(ValueError):
             manager.encode_label(self.invalid_binary_label)
 
-    def test_categorical_labels_valid_input(self):
-        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
-        result = manager.encode_label(self.categorical_label)
+    def test_multi_class_labels_valid_input(self):
+        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
+        result = manager.encode_label(self.multi_class_label)
         expected = tf.constant([0, 0, 1, 0], dtype=tf.float32)
         self.assertTrue(
             tf.reduce_all(tf.equal(result, expected)),
-            "The categorical labels do not match expected output.",
+            "The multi_class labels do not match expected output.",
         )
 
     def test_multi_label_not_implemented(self):
         manager = LabelManager("multi_label")
         with self.assertRaises(NotImplementedError):
-            manager.encode_label(self.categorical_label)
+            manager.encode_label(self.multi_class_label)
 
     def test_multi_class_multi_label_not_implemented(self):
         manager = LabelManager("multi_class_multi_label")
         with self.assertRaises(NotImplementedError):
-            manager.encode_label(self.categorical_label)
+            manager.encode_label(self.multi_class_label)
 
     def test_object_detection_labels_not_implemented(self):
         manager = LabelManager("object_detection")
         with self.assertRaises(NotImplementedError):
-            manager.encode_label(self.categorical_label)
+            manager.encode_label(self.multi_class_label)
 
     def test_label_dtype(self):
-        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.label_dtype,
             tf.float32,
-            "Label dtype for categorical should be tf.float32",
+            "Label dtype for multi_class should be tf.float32",
         )
 
         manager = LabelManager("object_detection")
@@ -77,22 +77,22 @@ class TestLabelManager(BaseTestCase):
         )
 
     def test_label_conversion_dtype(self):
-        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
-        result = manager.encode_label(self.categorical_label)
+        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
+        result = manager.encode_label(self.multi_class_label)
         self.assertEqual(
             result.dtype,
             tf.float32,
-            "The dtype of the encoded categorical label should be tf.float32",
+            "The dtype of the encoded multi_class label should be tf.float32",
         )
 
         manager = LabelManager(
-            "categorical", category_names=["a", "b", "c", "d"], dtype=tf.int32
+            "multi_class", category_names=["a", "b", "c", "d"], dtype=tf.int32
         )
-        result = manager.encode_label(self.categorical_label)
+        result = manager.encode_label(self.multi_class_label)
         self.assertEqual(
             result.dtype,
             tf.int32,
-            "The dtype of the encoded categorical label should be tf.int32",
+            "The dtype of the encoded multi_class label should be tf.int32",
         )
 
         manager = LabelManager("binary", category_names=["a", "b"])
@@ -113,10 +113,10 @@ class TestLabelManager(BaseTestCase):
 
         manager = LabelManager("object_detection")
         with self.assertRaises(NotImplementedError):
-            manager.encode_label(self.categorical_label)
+            manager.encode_label(self.multi_class_label)
 
     def test_get_index(self):
-        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.get_index("c"),
             2,
@@ -126,7 +126,7 @@ class TestLabelManager(BaseTestCase):
             manager.get_index("e")
 
     def test_get_category(self):
-        manager = LabelManager("categorical", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.get_category(2),
             "c",

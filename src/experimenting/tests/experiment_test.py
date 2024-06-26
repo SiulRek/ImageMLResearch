@@ -15,7 +15,7 @@ class TestExperiment(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.label_type = "categorical"
+        cls.label_type = "multi_class"
         cls.category_names = ["cat", "dog"]
         cls.research_attributes = ResearchAttributes(
             label_type=cls.label_type, category_names=cls.category_names

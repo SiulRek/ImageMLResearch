@@ -16,7 +16,7 @@ class TestDataHandler(BaseTestCase):
         super().setUpClass()
         cls.jpg_dict, cls.png_dict = cls.load_mnist_digits_dicts()
         research_attributes = ResearchAttributes(
-            label_type="categorical",
+            label_type="multi_class",
             category_names=[str(i) for i in range(10)],
         )
         cls.data_handler = DataHandler()

@@ -32,7 +32,7 @@ class ResearchAttributes:
 
         Args:
             - label_type (str): The type of labels used: 'binary',
-                'categorical', 'multi_label', 'multi_label_multi_class',
+                'multi_class', 'multi_label', 'multi_label_multi_class',
                 'object_detection'.
             - category_names (list, optional): The list of category names.
         """

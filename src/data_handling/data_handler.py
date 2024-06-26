@@ -23,9 +23,12 @@ class DataHandler(ResearchAttributes):
         'datasets_container' under 'complete_dataset'.
 
         Args:
-            - data (tf.data.Dataset, str, dict, pandas.DataFrame): The data to load, can be a TensorFlow dataset, path to a TFRecord file or a dictionary/pandas DataFrame, with key/column is 'image' and 'label'.
+            - data (tf.data.Dataset, str, dict, pandas.DataFrame): The data
+                to load, can be a TensorFlow dataset, path to a TFRecord file or
+                a dictionary/pandas DataFrame, with key/column is 'image' and
+                'label'.
         """
-        # 3 possible methods to load dataset
+        # 3 possible methods to load dataset:
         # 1. Is already of format tensorflow.data.Dataset
         if isinstance(data, tf.data.Dataset):
             self._datasets_container["complete_dataset"] = data
