@@ -8,10 +8,11 @@ from sklearn.metrics import (
 )
 
 
-def evaluate_classification(y_true, y_pred, class_names):
+def compute_classification_metrics(y_true, y_pred, class_names):
     """
-    Evaluates a classification model from true and predicted labels. Computes
-    metrics for binary, multi-class, and multi-label classification.
+    Computes classification metrics from true and predicted labels for
+    evaluation. Calculates metrics for binary, multi-class, and multi-label
+    classification.
 
     Args:
         - y_true (np.ndarray|tf.Tensor): True labels.
@@ -26,15 +27,6 @@ def evaluate_classification(y_true, y_pred, class_names):
         - 'f1'
         - 'classification_report'
     """
-
-    def numpyify(tensor):
-        if hasattr(tensor, "numpy"):
-            return tensor.numpy()
-        return tensor
-
-    y_true = numpyify(y_true)
-    y_pred = numpyify(y_pred)
-
     y_pred = np.round(y_pred)
     accuracy = accuracy_score(y_true, y_pred)
     precision = precision_score(y_true, y_pred, average="weighted")
@@ -48,3 +40,4 @@ def evaluate_classification(y_true, y_pred, class_names):
         "f1": f1,
         "classification_report": classification_rep,
     }
+
