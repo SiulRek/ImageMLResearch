@@ -180,6 +180,7 @@ class BaseTestCase(unittest.TestCase):
             X_train = X_train[:sample_num]
             Y_train = Y_train[:sample_num]
         if labeled:
+            Y_train = tf.one_hot(Y_train, 10)
             return tf.data.Dataset.from_tensor_slices((X_train, Y_train))
         return tf.data.Dataset.from_tensor_slices(X_train)
 
