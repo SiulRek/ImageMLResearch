@@ -52,7 +52,7 @@ class TestTFRecordSerialization(BaseTestCase):
         self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
-            tfrecord_path, label_dtype=tf.uint8
+            tfrecord_path, label_dtype=tf.float32
         )
         # Smallest RTOL 0.3 to pass the test.
         # This is the reason why it is not recommended to use JPEG format for serialization.
@@ -70,12 +70,12 @@ class TestTFRecordSerialization(BaseTestCase):
         self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
-            tfrecord_path, label_dtype=tf.uint8
+            tfrecord_path, label_dtype=tf.float32
         )
         self._compare_datasets(self.dataset, deserialized_dataset)
 
-    def test_serialize_deserialize_with_float_labels(self):
-        """ Test serialization and deserialization with float labels. """
+    def test_serialize_deserialize_with_uint8_labels(self):
+        """ Test serialization and deserialization with unsigned uint8 labels. """
         results_dir = os.path.join(
             self.temp_dir, "serialize_deserialize_with_float_labels"
         )
@@ -84,14 +84,14 @@ class TestTFRecordSerialization(BaseTestCase):
         os.makedirs(results_dir)
         tfrecord_path = os.path.join(results_dir, "data.tfrecord")
 
-        float_dataset = self.dataset.map(lambda x, y: (x, tf.cast(y, tf.uint8)))
-        serialize_dataset_to_tf_record(float_dataset, tfrecord_path, image_format="png")
+        uint_dataset = self.dataset.map(lambda x, y: (x, tf.cast(y, tf.uint8)))
+        serialize_dataset_to_tf_record(uint_dataset, tfrecord_path, image_format="png")
         self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
             tfrecord_path, label_dtype=tf.uint8
         )
-        self._compare_datasets(float_dataset, deserialized_dataset)
+        self._compare_datasets(uint_dataset, deserialized_dataset)
 
     def test_serialize_deserialize_batched_dataset(self):
         """ Test serialization and deserialization with batched dataset. """
@@ -110,7 +110,7 @@ class TestTFRecordSerialization(BaseTestCase):
         self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
-            tfrecord_path, label_dtype=tf.uint8
+            tfrecord_path, label_dtype=tf.float32
         )
         self._compare_datasets(self.dataset, deserialized_dataset)
 
@@ -143,7 +143,7 @@ class TestTFRecordSerialization(BaseTestCase):
         directory. """
         with self.assertRaises(FileNotFoundError):
             deserialize_dataset_from_tfrecord(
-                "/non_existent_dir/data.tfrecord", label_dtype=tf.uint8
+                "/non_existent_dir/data.tfrecord", label_dtype=tf.float32
             )
 
 
