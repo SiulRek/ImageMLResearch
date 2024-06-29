@@ -76,9 +76,9 @@ class TestTrainer(BaseTestCase):
         self.trainer.set_compiled_model(model)
         self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
         self.assertIsNotNone(self.trainer.training_history)
-        self.assertIn("train_predictions", self.trainer.predictions_container)
-        self.assertIn("val_predictions", self.trainer.predictions_container)
-        self.assertIn("test_predictions", self.trainer.predictions_container)
+        self.assertIn("train_output", self.trainer.outputs_container)
+        self.assertIn("val_output", self.trainer.outputs_container)
+        self.assertIn("test_output", self.trainer.outputs_container)
         self.assertIsNotNone(self.trainer.evaluation_metrics)
         self._verify_metrics_dict(self.trainer.evaluation_metrics)
 
@@ -95,8 +95,8 @@ class TestTrainer(BaseTestCase):
         self.trainer.set_compiled_model(model)
         self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
         self.assertIsNotNone(self.trainer.training_history)
-        self.assertIn("train_predictions", self.trainer.predictions_container)
-        self.assertIn("test_predictions", self.trainer.predictions_container)
+        self.assertIn("train_output", self.trainer.outputs_container)
+        self.assertIn("test_output", self.trainer.outputs_container)
         self.assertIsNotNone(self.trainer.evaluation_metrics)
         self._verify_metrics_dict(self.trainer.evaluation_metrics)
 

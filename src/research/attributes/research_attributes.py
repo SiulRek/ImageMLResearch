@@ -12,17 +12,17 @@ class ResearchAttributes:
             'train_dataset', 'val_dataset', and 'test_dataset' are added.
         - label_manager (LabelManager): LabelManager instance for handling
             labels.
-        - predictions_container (dict): Dictionary containing predictions.
-            When fitting, predictions are added. The name corresponds to the
-            dataset name replacing 'dataset' with 'predictions', e.g.
-            'train_dataset' -> 'train_predictions'.
+        - outputs_container (dict): Dictionary containing outputs in form of
+            Tuple -> (y_true, y_pred). When fitting, outputs are added. The name
+            corresponds to the dataset name replacing 'dataset' with 'outputs',
+            e.g. 'train_dataset' -> 'train_outputs'.
         - model (tf.keras.Model): The Keras model instance.
         - training_history (tf.keras.callbacks.History): The tracked
             training history of the model after fitting.
         - evaluation_metrics (dict): The tracked evaluation metrics dicts of
             the model after evaluating. Can be set from outside.
         - figures (dict): Dictionary containing the tracked figures.
-            {figure_name: figure}. Can be set from outside.
+        - {figure_name: figure}. Can be set from outside.
     """
 
     def __init__(self, label_type, category_names=None):
@@ -38,7 +38,7 @@ class ResearchAttributes:
         """
         self._datasets_container = {}
         self._label_manager = LabelManager(label_type, category_names)
-        self._predictions_container = {}
+        self._outputs_container = {}
         self._model = None
         self._training_history = None
         self._evaluation_metrics = None
@@ -46,7 +46,8 @@ class ResearchAttributes:
 
     @property
     def datasets_container(self):
-        """ Dictionary containing datasets. """
+        """ Dictionary containing datasets of type tf.data.Dataset, where each
+        sample is a tuple (image, label). """
         return self._datasets_container
 
     @property
@@ -55,9 +56,9 @@ class ResearchAttributes:
         return self._label_manager
 
     @property
-    def predictions_container(self):
-        """ Dictionary containing predictions. """
-        return self._predictions_container
+    def outputs_container(self):
+        """ Dictionary containing outputs in form of Tuple -> (y_true, y_pred). """
+        return self._outputs_container
 
     @property
     def model(self):
@@ -98,5 +99,6 @@ class ResearchAttributes:
             - instance: The class instance to insert attributes into.
         """
         if not isinstance(research_attributes, ResearchAttributes):
-            raise ValueError("The input instance must be of type ResearchAttributes.")
+            msg = "The input instance must be of type ResearchAttributes."
+            raise ValueError(msg)
         copy_public_properties(self, research_attributes)

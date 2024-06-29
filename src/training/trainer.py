@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+from src.data_handling.manipulation.unpack_dataset import unpack_dataset
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.training.evaluating.compute_classification_metrics import (
     compute_classification_metrics,
@@ -12,7 +13,7 @@ class Trainer(ResearchAttributes):
     def __init__(self):
         """ Initializes the Trainer. """
         self._model = None  # Read and write
-        self._predictions_container = {}  # Read and write
+        self._outputs_container = {}  # Read and write
         self._training_history = None  # Write
         self._evaluation_metrics = None  # Write
         self._datasets_container = {}  # Read
@@ -33,6 +34,38 @@ class Trainer(ResearchAttributes):
                 msg = f"Dataset '{name}' must be batched and have 4 dimensions."
                 raise ValueError(msg)
 
+    def _evaluate(self):
+        """
+        Evaluates the model using the predictions and true labels from the
+        outputs and datasets containers. Uses 'test_dataset' if available, else
+        'complete_dataset'.
+        """
+        if self.label_manager.label_type not in [
+            "binary",
+            "multi_class",
+            "multi_label",
+        ]:
+            msg = f"Label type '{self.label_manager.label_type}' is not"
+            msg += "supported for evaluation."
+            raise ValueError(msg)
+
+        if (
+            not "complete_output" in self._outputs_container
+            and not "test_output" in self._outputs_container
+        ):
+            msg = "Neither 'complete_outputs' nor 'test_outputs' found"
+            msg += "in outputs container to evaluate."
+            raise ValueError(msg)
+
+        outputs = self._outputs_container.get("test_output")
+        if outputs is None:
+            outputs = self._outputs_container.get("complete_output")
+        y_true, y_pred = outputs
+        class_names = self.label_manager.category_names
+        self._evaluation_metrics = compute_classification_metrics(
+            y_true, y_pred, class_names
+        )
+
     def _get_labels_tensor(self, dataset_name):
         """
         Gets the labels from the dataset.
@@ -46,42 +79,6 @@ class Trainer(ResearchAttributes):
         """
         dataset = self._datasets_container[dataset_name]
         return tf.concat([y for x, y in dataset], axis=0)
-
-    def _evaluate(self):
-        """
-        Evaluates the model using the predictions and true labels from the
-        predictions and datasets containers. Uses 'test_dataset' if available,
-        else 'complete_dataset'.
-        """
-        if self.label_manager.label_type not in [
-            "binary",
-            "multi_class",
-            "multi_label",
-        ]:
-            msg = f"Label type '{self.label_manager.label_type}' is not"
-            msg += "supported for evaluation."
-            raise ValueError(msg)
-
-        if (
-            not "complete_predictions" in self._predictions_container
-            and not "test_predictions" in self._predictions_container
-        ):
-            msg = "Neither 'complete_predictions' nor 'test_predictions' found"
-            msg += "in predictions container to evaluate."
-            raise ValueError(msg)
-
-        dataset_name = (
-            "test_dataset"
-            if "test_dataset" in self._datasets_container
-            else "complete_dataset"
-        )
-        y_true = self._get_labels_tensor(dataset_name)
-        prediction_name = dataset_name.replace("dataset", "predictions")
-        y_pred = self._predictions_container[prediction_name]
-        class_names = self.label_manager.category_names
-        self._evaluation_metrics = compute_classification_metrics(
-            y_true, y_pred, class_names
-        )
 
     def fit_predict_evaluate(self, **kwargs):
         """
@@ -123,15 +120,18 @@ class Trainer(ResearchAttributes):
         fit_dataset = train_dataset if train_dataset else complete_dataset
         self._training_history = self.model.fit(fit_dataset, **kwargs)
 
-        predictions_mapping = {
-            "train_predictions": train_dataset,
-            "val_predictions": val_dataset,
-            "test_predictions": test_dataset,
-            "complete_predictions": complete_dataset,
+        outputs_mapping = {
+            "train_output": train_dataset,
+            "val_output": val_dataset,
+            "test_output": test_dataset,
+            "complete_output": complete_dataset,
         }
 
-        for name, dataset in predictions_mapping.items():
+        for output_name, dataset in outputs_mapping.items():
             if dataset:
-                self._predictions_container[name] = self.model.predict(dataset)
-
+                dataset_name = output_name.replace("output", "dataset")
+                y_pred = self.model.predict(dataset)
+                y_true = self._get_labels_tensor(dataset_name)
+                outputs = (y_true, y_pred)
+                self._outputs_container[output_name] = outputs
         self._evaluate()
