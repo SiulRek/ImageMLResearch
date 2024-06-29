@@ -16,9 +16,9 @@ class TestExperiment(BaseTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.label_type = "multi_class"
-        cls.category_names = ["cat", "dog"]
+        cls.class_names = ["cat", "dog"]
         cls.research_attributes = ResearchAttributes(
-            label_type=cls.label_type, category_names=cls.category_names
+            label_type=cls.label_type, class_names=cls.class_names
         )
 
     @patch("src.experimenting.helpers.create_experiment_report")

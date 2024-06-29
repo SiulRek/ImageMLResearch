@@ -18,7 +18,7 @@ class TestCreateDataset(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.category_names = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        self.class_names = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     def _normalize_label(self, label):
         """ Helper function to normalize the label to a predefined format. """
@@ -27,7 +27,7 @@ class TestCreateDataset(BaseTestCase):
         if isinstance(label, list):
             return label.index(1)
         if isinstance(label, tf.Tensor):
-            if label.shape[-1] == len(self.category_names):
+            if label.shape[-1] == len(self.class_names):
                 return tf.argmax(label).numpy()
             return label.numpy()
         msg = f"Invalid label type: {type(label)}"
@@ -36,7 +36,7 @@ class TestCreateDataset(BaseTestCase):
     def _expected_one_hot_label(self, label):
         """ Helper function to get the expected one-hot label encoding as a numpy
         array. """
-        one_hot_label = np.zeros(len(self.category_names))
+        one_hot_label = np.zeros(len(self.class_names))
         one_hot_label[int(label)] = 1
         return one_hot_label
 
@@ -51,7 +51,7 @@ class TestCreateDataset(BaseTestCase):
     def test_create_dataset_from_dicts_jpg(self):
         """ Test create_dataset with a list of dictionaries containing JPG images. """
         data = self.jpg_dict
-        dataset = create_dataset(data, "multi_class", self.category_names)
+        dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
@@ -61,7 +61,7 @@ class TestCreateDataset(BaseTestCase):
     def test_create_dataset_from_dicts_png(self):
         """ Test create_dataset with a list of dictionaries containing PNG images. """
         data = self.png_dict
-        dataset = create_dataset(data, "multi_class", self.category_names)
+        dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
@@ -71,7 +71,7 @@ class TestCreateDataset(BaseTestCase):
     def test_create_dataset_from_dataframe_jpg(self):
         """ Test create_dataset with a pandas DataFrame containing JPG images. """
         data = pd.DataFrame(self.jpg_dict)
-        dataset = create_dataset(data, "multi_class", self.category_names)
+        dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
@@ -81,7 +81,7 @@ class TestCreateDataset(BaseTestCase):
     def test_create_dataset_from_dataframe_png(self):
         """ Test create_dataset with a pandas DataFrame containing PNG images. """
         data = pd.DataFrame(self.png_dict)
-        dataset = create_dataset(data, "multi_class", self.category_names)
+        dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
@@ -94,7 +94,7 @@ class TestCreateDataset(BaseTestCase):
             {"path": self.png_dict["path"][0], "label": self.png_dict["label"][0]},
             {"path": self.jpg_dict["path"][1], "label": self.jpg_dict["label"][1]},
         ]
-        dataset = create_dataset(data, "multi_class", self.category_names)
+        dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
@@ -102,10 +102,10 @@ class TestCreateDataset(BaseTestCase):
             self._check_label(label, data[i]["label"])
 
     def test_one_hot_encoding(self):
-        """ Test one-hot encoding for category codes. """
+        """ Test one-hot encoding for class codes. """
         data = pd.DataFrame(self.jpg_dict)
         label_type = "multi_class"
-        dataset = create_dataset(data, label_type, self.category_names)
+        dataset = create_dataset(data, label_type, self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
@@ -125,7 +125,7 @@ class TestCreateDataset(BaseTestCase):
         """ Test if ValueError is raised for invalid data type. """
         data = "invalid_data_type"
         with self.assertRaises(ValueError):
-            create_dataset(data, "multi_class", self.category_names)
+            create_dataset(data, "multi_class", self.class_names)
 
 
 if __name__ == "__main__":

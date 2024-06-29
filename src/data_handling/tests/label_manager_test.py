@@ -31,7 +31,7 @@ class TestLabelManager(BaseTestCase):
             manager.encode_label(self.invalid_binary_label)
 
     def test_multi_class_labels_valid_input(self):
-        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("multi_class", class_names=["a", "b", "c", "d"])
         result = manager.encode_label(self.multi_class_label)
         expected = tf.constant([0, 0, 1, 0], dtype=tf.float32)
         self.assertTrue(
@@ -55,7 +55,7 @@ class TestLabelManager(BaseTestCase):
             manager.encode_label(self.multi_class_label)
 
     def test_label_dtype(self):
-        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("multi_class", class_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.label_dtype,
             tf.float32,
@@ -77,7 +77,7 @@ class TestLabelManager(BaseTestCase):
         )
 
     def test_label_conversion_dtype(self):
-        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("multi_class", class_names=["a", "b", "c", "d"])
         result = manager.encode_label(self.multi_class_label)
         self.assertEqual(
             result.dtype,
@@ -86,7 +86,7 @@ class TestLabelManager(BaseTestCase):
         )
 
         manager = LabelManager(
-            "multi_class", category_names=["a", "b", "c", "d"], dtype=tf.int32
+            "multi_class", class_names=["a", "b", "c", "d"], dtype=tf.int32
         )
         result = manager.encode_label(self.multi_class_label)
         self.assertEqual(
@@ -95,7 +95,7 @@ class TestLabelManager(BaseTestCase):
             "The dtype of the encoded multi_class label should be tf.int32",
         )
 
-        manager = LabelManager("binary", category_names=["a", "b"])
+        manager = LabelManager("binary", class_names=["a", "b"])
         result = manager.encode_label(self.binary_label)
         self.assertEqual(
             result.dtype,
@@ -116,7 +116,7 @@ class TestLabelManager(BaseTestCase):
             manager.encode_label(self.multi_class_label)
 
     def test_get_index(self):
-        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
+        manager = LabelManager("multi_class", class_names=["a", "b", "c", "d"])
         self.assertEqual(
             manager.get_index("c"),
             2,
@@ -125,22 +125,22 @@ class TestLabelManager(BaseTestCase):
         with self.assertRaises(ValueError):
             manager.get_index("e")
 
-    def test_get_category(self):
-        manager = LabelManager("multi_class", category_names=["a", "b", "c", "d"])
+    def test_get_class(self):
+        manager = LabelManager("multi_class", class_names=["a", "b", "c", "d"])
         self.assertEqual(
-            manager.get_category(2),
+            manager.get_class(2),
             "c",
             "Decoding failed for valid numeric label.",
         )
         self.assertEqual(
-            manager.get_category(tf.constant(2)),
+            manager.get_class(tf.constant(2)),
             "c",
             "Decoding failed for valid tensor label.",
         )
         with self.assertRaises(ValueError):
-            manager.get_category(5)
+            manager.get_class(5)
         with self.assertRaises(ValueError):
-            manager.get_category("c")
+            manager.get_class("c")
 
 
 if __name__ == "__main__":

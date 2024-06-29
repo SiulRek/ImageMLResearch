@@ -3,21 +3,21 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix
 
 
-def plot_confusion_matrix(y_true, y_pred, category_names):
+def plot_confusion_matrix(y_true, y_pred, class_names):
     """
     Plots a confusion matrix using Matplotlib and Seaborn.
 
     Parameters:
         - y_true: Array-like of true labels.
         - y_pred: Array-like of predicted labels.
-        - category_names: List of category names corresponding to the
+        - class_names: List of class names corresponding to the
             labels.
 
     Returns:
         - fig: The Matplotlib figure containing the confusion matrix plot.
     """
     # Configuration
-    figsize = (len(category_names) + 2, len(category_names) + 2)
+    figsize = (len(class_names) + 2, len(class_names) + 2)
     fontsize = 12
     cmap = "Blues"
     fmt = "d"
@@ -30,8 +30,8 @@ def plot_confusion_matrix(y_true, y_pred, category_names):
         annot=True,
         fmt=fmt,
         cmap=cmap,
-        xticklabels=category_names,
-        yticklabels=category_names,
+        xticklabels=class_names,
+        yticklabels=class_names,
         ax=ax,
         annot_kws={"fontsize": fontsize},
     )

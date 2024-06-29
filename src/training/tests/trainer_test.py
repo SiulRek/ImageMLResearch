@@ -26,7 +26,7 @@ class TestTrainer(BaseTestCase):
         super().setUp()
         self.trainer = Trainer()
         research_attributes = ResearchAttributes(
-            label_type="multi_class", category_names=[str(i) for i in range(10)]
+            label_type="multi_class", class_names=[str(i) for i in range(10)]
         )
         # To skip loading of datasets with DataHandler,
         # the attribute is set directly to private attribute of Trainer.

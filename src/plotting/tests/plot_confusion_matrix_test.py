@@ -15,14 +15,14 @@ class TestPlotConfusionMatrix(BaseTestCase):
         super().setUpClass()
         cls.y_true = [0, 1, 2, 2, 0, 1, 0, 2, 1, 1]
         cls.y_pred = [0, 2, 2, 2, 0, 1, 0, 0, 1, 1]
-        cls.category_names = ["Class A", "Class B", "Class C"]
+        cls.class_names = ["Class A", "Class B", "Class C"]
         cls.visualization_path = os.path.join(
             cls.results_dir, "plot_confusion_matrix_test.png"
         )
 
     def test_plot_confusion_matrix(self):
         """ Test plotting confusion matrix. """
-        fig = plot_confusion_matrix(self.y_true, self.y_pred, self.category_names)
+        fig = plot_confusion_matrix(self.y_true, self.y_pred, self.class_names)
         fig.savefig(os.path.join(self.results_dir, "confusion_matrix.png"))
         plt.close(fig)
         self.assertTrue(

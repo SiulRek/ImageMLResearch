@@ -6,7 +6,7 @@ from src.data_handling.labelling.label_manager import LabelManager
 from src.data_handling.io.decode_image import decode_image
 
 
-def create_dataset(data, label_type=None, category_names=None):
+def create_dataset(data, label_type=None, class_names=None):
     """
     Creates a TensorFlow Dataset object from the given data containing file
     paths and labels using LabelManager for label encoding. Data can be a list
@@ -18,9 +18,9 @@ def create_dataset(data, label_type=None, category_names=None):
             labels should contain the corresponding labels for the specified
             'label_type'.
         - label_type (str, optional): Specifies the label encoding strategy
-            ('binary', 'categorical', 'multi_label', 'multi_class_multi_label',
+            ('binary', 'multi_class', 'multi_label', 'multi_class_multi_label',
             'object_detection'). Default is None.
-        - category_names (list, optional): The existing category names for
+        - class_names (list, optional): The existing class names for
             label encoding if 'label_type' is not None. Default is None.
 
     Returns:
@@ -51,7 +51,7 @@ def create_dataset(data, label_type=None, category_names=None):
         raise ValueError(msg)
 
     if label_type and labels:
-        label_manager = LabelManager(label_type, category_names=category_names)
+        label_manager = LabelManager(label_type, class_names=class_names)
         labels = [label_manager.encode_label(label) for label in labels]
         dataset = tf.data.Dataset.from_tensor_slices((paths, labels))
         dataset = dataset.map(lambda path, label: (decode_image(path), label))

@@ -61,7 +61,7 @@ class Trainer(ResearchAttributes):
         if outputs is None:
             outputs = self._outputs_container.get("complete_output")
         y_true, y_pred = outputs
-        class_names = self.label_manager.category_names
+        class_names = self.label_manager.class_names
         self._evaluation_metrics = compute_classification_metrics(
             y_true, y_pred, class_names
         )

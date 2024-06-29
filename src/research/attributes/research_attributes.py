@@ -25,19 +25,19 @@ class ResearchAttributes:
         - {figure_name: figure}. Can be set from outside.
     """
 
-    def __init__(self, label_type, category_names=None):
+    def __init__(self, label_type, class_names=None):
         """
-        Initializes the ResearchAttributes with optional label type and category
+        Initializes the ResearchAttributes with optional label type and class
         names.
 
         Args:
             - label_type (str): The type of labels used: 'binary',
                 'multi_class', 'multi_label', 'multi_label_multi_class',
                 'object_detection'.
-            - category_names (list, optional): The list of category names.
+            - class_names (list, optional): The list of class names.
         """
         self._datasets_container = {}
-        self._label_manager = LabelManager(label_type, category_names)
+        self._label_manager = LabelManager(label_type, class_names)
         self._outputs_container = {}
         self._model = None
         self._training_history = None

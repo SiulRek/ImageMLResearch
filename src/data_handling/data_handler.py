@@ -40,7 +40,7 @@ class DataHandler(ResearchAttributes):
         # 3. data is a dictslist of dicts or pandas.DataFrame
         try:
             self._datasets_container["complete_dataset"] = create_dataset(
-                data, self.label_manager.label_type, self.label_manager.category_names
+                data, self.label_manager.label_type, self.label_manager.class_names
             )
             return
         except ValueError:
@@ -148,7 +148,7 @@ class DataHandler(ResearchAttributes):
                 prefix = "image"
                 try:
                     label = reverse_one_hot(label)
-                    prefix += f"_{self.label_manager.get_category(label)}"
+                    prefix += f"_{self.label_manager.get_class(label)}"
                 except ValueError:
                     pass
                 return prefix
