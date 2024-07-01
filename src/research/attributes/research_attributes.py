@@ -25,19 +25,20 @@ class ResearchAttributes:
         - {figure_name: figure}. Can be set from outside.
     """
 
-    def __init__(self, label_type, class_names=None):
+    def __init__(self, label_type=None, class_names=None):
         """
         Initializes the ResearchAttributes with optional label type and class
         names.
 
         Args:
-            - label_type (str): The type of labels used: 'binary',
+            - label_type (str, None): The type of labels used: 'binary',
                 'multi_class', 'multi_label', 'multi_label_multi_class',
-                'object_detection'.
+                'object_detection'. If None, the label_manager is initialized to
+                None.
             - class_names (list, optional): The list of class names.
         """
         self._datasets_container = {}
-        self._label_manager = LabelManager(label_type, class_names)
+        self._label_manager = LabelManager(label_type, class_names) if label_type else None
         self._outputs_container = {}
         self._model = None
         self._training_history = None
@@ -75,20 +76,10 @@ class ResearchAttributes:
         """ The evaluation metrics dicts of the model after evaluating. """
         return self._evaluation_metrics
 
-    @evaluation_metrics.setter
-    def evaluation_metrics(self, evaluation_metrics):
-        """ Setter for the evaluation metrics. """
-        self._evaluation_metrics = evaluation_metrics
-
     @property
     def figures(self):
         """ Dictionary containing figures. {figure_name: figure} """
         return self._figures
-
-    @figures.setter
-    def figures(self, figures):
-        """ Setter for the figures. """
-        self._figures = figures
 
     def update_research_attributes(self, research_attributes):
         """
@@ -102,3 +93,20 @@ class ResearchAttributes:
             msg = "The input instance must be of type ResearchAttributes."
             raise ValueError(msg)
         copy_public_properties(self, research_attributes)
+
+    def reset_research_attributes(self, except_datasets=False):
+        """
+        Resets the research attributes. Note 'label_manager' is unchanged, as it
+        should not be changed after initialization.
+
+        Args:
+            - except_datasets (bool, optional): If True, the datasets are
+                not reset.
+        """
+        if not except_datasets:
+            self._datasets_container = {}
+        self._outputs_container = {}
+        self._model = None
+        self._training_history = None
+        self._evaluation_metrics = None
+        self._figures = {}
