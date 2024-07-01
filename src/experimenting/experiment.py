@@ -12,19 +12,12 @@ class ExperimentError(Exception):
 
 
 class Experiment(ResearchAttributes):
-    """
-    A class to manage experiments and trials, inheriting from
-    ResearchAttributes.
+    """ A class to manage experiments and trials, inheriting from
+    ResearchAttributes. """
 
-    Attributes:
-        - experiment_directory (str): Directory where the experiment data is
-            saved.
-        - experiment_name (str): Name of the experiment.
-        - experiment_description (str): Description of the experiment.
-        - trials (list): List to store trial data.
-    """
-
-    def __init__(self, research_attributes, directory, name, description):
+    def __init__(
+        self, research_attributes, directory, name, description, report_kwargs=None
+    ):
         """
         Initializes the Experiment with the given parameters.
 
@@ -34,9 +27,13 @@ class Experiment(ResearchAttributes):
             - directory (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment.
+            - report_kwargs (dict, optional): Additional keyword arguments
+                for the report.
 
         Note:
-            - `Experiment` is the only research module that requires `research_attributes` during initialization, as it simplifies the usage within a context manager.
+            - `Experiment` is the only research module that requires
+                `research_attributes` during initialization, as it simplifies
+                the usage within a context manager.
         """
         experiment_directory = self._make_experiment_directory(directory, name)
         self.experiment_data = {
@@ -47,6 +44,7 @@ class Experiment(ResearchAttributes):
             "trials": [],
         }
         self.update_research_attributes(research_attributes)
+        self.report_kwargs = report_kwargs or {}
 
     def _make_experiment_directory(self, directory, name):
         """
@@ -65,6 +63,21 @@ class Experiment(ResearchAttributes):
         os.makedirs(experiment_dir, exist_ok=True)
         return experiment_dir
 
+    def _write_experiment_data(self):
+        """ Writes the experiment data to a JSON file. """
+        info_json = os.path.join(
+            self.experiment_data["directory"], "experiment_info.json"
+        )
+        experiment_data = self.experiment_data.copy()
+        experiment_data.pop("trials")
+
+        with open(info_json, "w", encoding="utf-8") as f:
+            json.dump(
+                experiment_data,
+                f,
+                indent=4,
+            )
+
     def __enter__(self):
         """
         Sets up the experiment by creating the necessary directories and files.
@@ -72,20 +85,7 @@ class Experiment(ResearchAttributes):
         Returns:
             - self: The Experiment instance.
         """
-        os.makedirs(self.experiment_data["directory"], exist_ok=True)
-        info_json = os.path.join(
-            self.experiment_data["directory"], "experiment_info.json"
-        )
-        with open(info_json, "w", encoding="utf-8") as f:
-            json.dump(
-                {
-                    "experiment_name": self.experiment_data["name"],
-                    "description": self.experiment_data["description"],
-                    "start_time": self.experiment_data["start_time"],
-                },
-                f,
-                indent=4,
-            )
+        self._write_experiment_data()
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -107,14 +107,29 @@ class Experiment(ResearchAttributes):
             raise ExperimentError(msg) from exc
         self.experiment_data["end_time"] = str(datetime.now())
 
-        create_experiment_report(self.experiment_data)
+        self._write_experiment_data()
+        create_experiment_report(self.experiment_data, **self.report_kwargs)
 
-    def trial(self, trial_name, description, hyperparameters):
+    def fetch_results(self):
+        """
+        Fetches the current results (figures and evaluation_metrics) recorded in
+        experiment.
+
+        Returns:
+            - dict: A dictionary containing the figures and
+                evaluation_metrics.
+        """
+        return {
+            "figures": self.figures,
+            "evaluation_metrics": self.evaluation_metrics,
+        }
+
+    def trial(self, name, description, hyperparameters):
         """
         Context manager to handle trials within an experiment.
 
         Args:
-            - trial_name (str): Name of the trial.
+            - name (str): Name of the trial.
             - description (str): Description of the trial.
             - hyperparameters (dict): Dictionary containing the
                 hyperparameters.
@@ -122,4 +137,4 @@ class Experiment(ResearchAttributes):
         Returns:
             - Trial: A Trial context manager instance.
         """
-        return Trial(self, trial_name, description, hyperparameters)
+        return Trial(self, name, description, hyperparameters)

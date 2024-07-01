@@ -59,7 +59,7 @@ class TestExperiment(BaseTestCase):
         with open(experiment_info_json, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        self.assertEqual(data["experiment_name"], self.name)
+        self.assertEqual(data["name"], self.name)
         self.assertEqual(data["description"], self.description)
         self.assertTrue("start_time" in data)
 
@@ -92,13 +92,13 @@ class TestExperiment(BaseTestCase):
         self.assertTrue(experiment_exception_raised)
 
     def test_trial_creation(self):
-        trial_name = "test_trial"
+        name = "test_trial"
         trial_description = "This is a test trial"
         hyperparameters = {"lr": 0.01, "batch_size": 16}
         experiment = self.call_test_experiment()
-        with experiment.trial(trial_name, trial_description, hyperparameters) as trial:
+        with experiment.trial(name, trial_description, hyperparameters) as trial:
             self.assertIsInstance(trial, Trial)
-            self.assertEqual(trial.trial_data["trial_name"], trial_name)
+            self.assertEqual(trial.trial_data["name"], name)
             self.assertEqual(trial.trial_data["description"], trial_description)
             self.assertEqual(trial.trial_data["hyperparameters"], hyperparameters)
             self.assertTrue("start_time" in trial.trial_data)

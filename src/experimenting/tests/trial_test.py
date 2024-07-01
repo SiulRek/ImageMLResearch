@@ -17,23 +17,31 @@ class TestTrial(BaseTestCase):
             "directory": self.temp_dir,
             "trials": [],
         }
-        self.mock_experiment.figures = {}
-        self.mock_experiment.evaluation_metrics = {}
+        self.mock_experiment.fetch_results.return_value = {
+            "figures": {},
+            "evaluation_metrics": {},
+        }
 
-        self.trial_name = "test_trial"
+        self.name = "test_trial"
         self.description = "A test trial"
         self.hyperparameters = {"lr": 0.001, "batch_size": 32}
         self.call_test_trial = lambda: Trial(
             experiment=self.mock_experiment,
-            trial_name=self.trial_name,
+            name=self.name,
             description=self.description,
             hyperparameters=self.hyperparameters,
         )
 
+    def _read_trial_info(self, trial):
+        trial_info_json = os.path.join(trial.trial_data["directory"], "trial_info.json")
+        with open(trial_info_json, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+
     def test_trial_initialization(self):
         with self.call_test_trial() as trial:
             self.assertIsInstance(trial, Trial)
-            self.assertEqual(trial.trial_data["trial_name"], self.trial_name)
+            self.assertEqual(trial.trial_data["name"], self.name)
             self.assertEqual(trial.trial_data["description"], self.description)
             self.assertEqual(trial.trial_data["hyperparameters"], self.hyperparameters)
             self.assertTrue(os.path.exists(trial.trial_data["directory"]))
@@ -45,10 +53,9 @@ class TestTrial(BaseTestCase):
             )
             self.assertTrue(os.path.exists(trial_info_json))
 
-        with open(trial_info_json, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        data = self._read_trial_info(trial)
 
-        self.assertEqual(data["trial_name"], self.trial_name)
+        self.assertEqual(data["name"], self.name)
         self.assertEqual(data["description"], self.description)
         self.assertEqual(data["hyperparameters"], self.hyperparameters)
         self.assertTrue("start_time" in data)
@@ -67,9 +74,11 @@ class TestTrial(BaseTestCase):
                 "history": plt.figure(),
                 "confusion_matrix": plt.figure(),
             }
-            self.mock_experiment.figures = figures
             evaluation_metrics = {"accuracy": 0.9, "f1_score": 0.8}
-            self.mock_experiment.evaluation_metrics = evaluation_metrics
+            self.mock_experiment.fetch_results.return_value = {
+                "figures": figures,
+                "evaluation_metrics": evaluation_metrics,
+            }  # Simulates the generation of trial results.
             trial_data = trial.trial_data
 
         for name, path in trial_data["figures"].items():
@@ -77,12 +86,11 @@ class TestTrial(BaseTestCase):
 
         self.assertEqual(
             trial_data["evaluation_metrics"],
-            self.mock_experiment.evaluation_metrics,
+            evaluation_metrics,
         )
-        trial_info_json = os.path.join(trial_data["directory"], "trial_info.json")
-        with open(trial_info_json, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        self.assertEqual(data, trial_data)
+        read_data = self._read_trial_info(trial)
+        trial_data.pop("training_history")
+        self.assertEqual(read_data, trial_data)
 
     def test_trial_exit_with_exception(self):
 
@@ -106,16 +114,16 @@ class TestTrial(BaseTestCase):
 
     def test_non_serializable_hyperparameters(self):
         non_serializable_params = {"lr": MagicMock(), "model": MagicMock()}
-        trial_with_non_serializable_params = Trial(
+        with Trial(
             experiment=self.mock_experiment,
-            trial_name="non_serializable_trial",
+            name="non_serializable_trial",
             description="Trial with non-serializable hyperparameters",
             hyperparameters=non_serializable_params,
-        )
+        ) as trial:
+            pass
 
-        self.assertIsNone(
-            trial_with_non_serializable_params.trial_data["hyperparameters"]
-        )
+        data = self._read_trial_info(trial)
+        self.assertIsNone(data["hyperparameters"])
 
 
 if __name__ == "__main__":
