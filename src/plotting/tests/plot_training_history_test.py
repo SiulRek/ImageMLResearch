@@ -21,27 +21,38 @@ class TestPlotTrainingHistory(BaseTestCase):
         # Create a dummy Keras model for generating training history
         cls.model = tf.keras.models.Sequential(
             [
-                tf.keras.layers.Dense(10, activation="relu", input_shape=(784,)),
+                tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
+                tf.keras.layers.experimental.preprocessing.Rescaling(1.0 / 255),
+                tf.keras.layers.Dense(10, activation="relu"),
                 tf.keras.layers.Dense(10, activation="softmax"),
             ]
         )
         cls.model.compile(
             optimizer="adam",
-            loss="sparse_categorical_crossentropy",
+            loss="categorical_crossentropy",
             metrics=["accuracy"],
         )
 
         # Load MNIST data for generating training history
-        (x_train, y_train), (x_val, y_val) = tf.keras.datasets.mnist.load_data()
-        x_train = x_train.reshape(-1, 784).astype("float32") / 255
-        x_val = x_val.reshape(-1, 784).astype("float32") / 255
+        cls.train_dataset, cls.val_dataset = cls.load_mnist_data()
 
         # Generate training history with and without validation data
-        cls.mnist_data = (x_train, y_train, x_val, y_val)
         cls.history_with_val = cls.model.fit(
-            x_train, y_train, epochs=5, validation_data=(x_val, y_val), verbose=0
+            cls.train_dataset, epochs=5, validation_data=cls.val_dataset, verbose=0
         )
-        cls.history_without_val = cls.model.fit(x_train, y_train, epochs=5, verbose=0)
+        cls.history_without_val = cls.model.fit(cls.train_dataset, epochs=5, verbose=0)
+
+    @classmethod
+    def load_mnist_data(cls):
+        """ Load MNIST data for generating training history. """
+        dataset = cls.load_mnist_digits_dataset(sample_num=1000, labeled=True)
+        dataset = dataset.shuffle(10000)
+
+        train_size = int(0.8 * len(list(dataset)))
+        train_dataset = dataset.take(train_size).batch(32)
+        val_dataset = dataset.skip(train_size).batch(32)
+
+        return train_dataset, val_dataset
 
     def test_plot_training_history_with_validation(self):
         """ Test plotting training history with validation data. """
@@ -76,12 +87,11 @@ class TestPlotTrainingHistory(BaseTestCase):
         # Add another metric to the model
         self.model.compile(
             optimizer="adam",
-            loss="sparse_categorical_crossentropy",
+            loss="categorical_crossentropy",
             metrics=["accuracy", "mae"],
         )
-        x_train, y_train, x_val, y_val = self.mnist_data
         history_multiple_metrics = self.model.fit(
-            x_train, y_train, epochs=5, validation_data=(x_val, y_val), verbose=0
+            self.train_dataset, epochs=5, validation_data=self.val_dataset, verbose=0
         )
 
         fig = plot_training_history(history_multiple_metrics)
