@@ -110,9 +110,9 @@ class Experiment(ResearchAttributes):
         self._write_experiment_data()
         create_experiment_report(self.experiment_data, **self.report_kwargs)
 
-    def fetch_results(self):
+    def get_results(self):
         """
-        Fetches the current results (figures and evaluation_metrics) recorded in
+        Gets the current results (figures and evaluation_metrics) recorded in
         experiment.
 
         Returns:

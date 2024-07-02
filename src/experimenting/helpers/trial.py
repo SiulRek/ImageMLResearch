@@ -20,7 +20,7 @@ class Trial:
             belongs to.
         - research_attributes (ResearchAttributes): Research attributes from
         - trial_data (dict): Dictionary to store trial data.
-            keys: 'name', 'description', 'start_time', 'directory',
+        - keys: 'name', 'description', 'start_time', 'directory',
             'hyperparameters', 'figures', 'evaluation_metrics',
             'training_history' (optional).
         - trial_directory (str): Directory where the trial data is saved.
@@ -60,9 +60,9 @@ class Trial:
         self.experiment_trials = experiment.experiment_data[
             "trials"
         ]  # Keep reference to track trials in experiment.
-        self.fetch_trial_results = (
-            experiment.fetch_results
-        )  # Keep reference to fetch results from trial.
+        self.get_trial_results = (
+            experiment.get_results
+        )  # Keep reference to retrieve results from trial.
         self._write_trial_data()
 
     def _assert_required_experiment_attributes(self, experiment):
@@ -145,7 +145,7 @@ class Trial:
             msg = "An error occurred during the trial."
             raise TrialError(msg) from exc
 
-        trial_results = self.fetch_trial_results()
+        trial_results = self.get_trial_results()
         # Assign 'figures' to trial_data replacing the figure objects
         # with their created paths.
         self.trial_data["figures"] = {

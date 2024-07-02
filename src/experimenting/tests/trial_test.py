@@ -17,7 +17,7 @@ class TestTrial(BaseTestCase):
             "directory": self.temp_dir,
             "trials": [],
         }
-        self.mock_experiment.fetch_results.return_value = {
+        self.mock_experiment.get_results.return_value = {
             "figures": {},
             "evaluation_metrics": {},
         }
@@ -75,7 +75,7 @@ class TestTrial(BaseTestCase):
                 "confusion_matrix": plt.figure(),
             }
             evaluation_metrics = {"accuracy": 0.9, "f1_score": 0.8}
-            self.mock_experiment.fetch_results.return_value = {
+            self.mock_experiment.get_results.return_value = {
                 "figures": figures,
                 "evaluation_metrics": evaluation_metrics,
             }  # Simulates the generation of trial results.
