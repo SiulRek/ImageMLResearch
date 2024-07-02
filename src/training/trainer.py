@@ -55,7 +55,7 @@ class Trainer(ResearchAttributes):
             not "complete_output" in self._outputs_container
             and not "test_output" in self._outputs_container
         ):
-            msg = "Neither 'complete_outputs' nor 'test_outputs' found"
+            msg = "Neither 'complete_output' nor 'test_output' found"
             msg += "in outputs container to evaluate."
             raise ValueError(msg)
 
