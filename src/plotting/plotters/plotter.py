@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_images import plot_images
 from src.plotting.functions.plot_text import plot_text
+from src.plotting.functions.plot_training_history import plot_training_history
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
@@ -25,7 +26,7 @@ def plot_decorator(default_title, default_show):
             show = kwargs.pop("show", default_show)
 
             fig = plot_func(self, *args, **kwargs)
-            fig.subplots_adjust(top=0.85)
+            fig.subplots_adjust(top=0.90)
             fig.suptitle(title, fontsize=18, fontweight="bold")
 
             name = title.lower().replace(" ", "_")
@@ -49,6 +50,7 @@ class Plotter(ResearchAttributes):
         self._outputs_container = (
             None  # Model outputs (y_true, y_pred) are stored here, when available.
         )
+        self._training_history = {}
 
     def _add_figure(self, name, fig):
         """
@@ -132,3 +134,21 @@ class Plotter(ResearchAttributes):
         except AttributeError:
             class_names = None
         return y_true, y_pred, class_names
+
+    @plot_decorator(default_title="Training History", default_show=False)
+    def plot_training_history(self, **general_plot_kwargs):
+        """
+        Plots the training history of the model.
+
+        General plot keyword arguments:
+            - title: Optional title for the plot. Defaults to "Training
+                History".
+            - show: Whether to show the plot. Defaults to False.
+
+        Returns:
+            - The figure containing the training history.
+        """
+        if not self._training_history:
+            msg = "No training history found to plot."
+            raise ValueError(msg)
+        return plot_training_history(self._training_history)

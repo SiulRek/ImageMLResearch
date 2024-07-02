@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest.mock import MagicMock
 
 import matplotlib.pyplot as plt
 
@@ -74,6 +75,29 @@ class TestPlotter(BaseTestCase):
         self.assertTrue(
             os.path.exists(os.path.join(self.results_dir, "plotter_plot_text.png")),
             "Plot text figure was not saved.",
+        )
+
+    #
+    def test_plot_training_history(self):
+        """ Test the plot_training_history method. """
+        self.plotter._training_history = MagicMock()
+        self.plotter._training_history.history = {
+            "loss": [0.25, 0.15, 0.1],
+            "val_loss": [0.3, 0.2, 0.15],
+            "accuracy": [0.9, 0.95, 0.97],
+            "val_accuracy": [0.88, 0.93, 0.95],
+        }
+        fig = self.plotter.plot_training_history(
+            title="Test Training History", show=False
+        )
+        fig.savefig(os.path.join(self.results_dir, "plotter_plot_training_history.png"))
+        self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
+        plt.close(fig)
+        self.assertTrue(
+            os.path.exists(
+                os.path.join(self.results_dir, "plotter_plot_training_history.png")
+            ),
+            "Plot training history figure was not saved.",
         )
 
 
