@@ -14,8 +14,11 @@ class DataHandler(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the DataHandler. """
-        self._datasets_container = {}
-        self._backuped_datasets_container = {}
+        super().__init__()
+        
+        # Initialize research attributes used in the DataHandler
+        self._datasets_container = {}  # Read/write
+        self._backuped_datasets_container = {}  # Read/write
 
     def load_dataset(self, data):
         """

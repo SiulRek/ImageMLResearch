@@ -1,6 +1,5 @@
 import tensorflow as tf
 
-from src.data_handling.manipulation.unpack_dataset import unpack_dataset
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.training.evaluating.compute_classification_metrics import (
     compute_classification_metrics,
@@ -12,6 +11,9 @@ class Trainer(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the Trainer. """
+        super().__init__()
+
+        # Initialize research attributes used in the Trainer
         self._model = None  # Read and write
         self._outputs_container = {}  # Read and write
         self._training_history = None  # Write

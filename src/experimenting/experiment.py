@@ -35,6 +35,12 @@ class Experiment(ResearchAttributes):
                 `research_attributes` during initialization, as it simplifies
                 the usage within a context manager.
         """
+        super().__init__()
+        
+        # Initialize research attributes used in the Experiment
+        self._figures = {}  # Read only
+        self._evaluation_metrics = {}  # Read only
+
         experiment_directory = self._make_experiment_directory(directory, name)
         self.experiment_data = {
             "name": name,
@@ -120,8 +126,8 @@ class Experiment(ResearchAttributes):
                 evaluation_metrics.
         """
         return {
-            "figures": self.figures,
-            "evaluation_metrics": self.evaluation_metrics,
+            "figures": self._figures,
+            "evaluation_metrics": self._evaluation_metrics,
         }
 
     def trial(self, name, description, hyperparameters):

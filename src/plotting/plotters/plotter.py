@@ -45,12 +45,15 @@ class Plotter(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the Plotter. """
-        self._datasets_container = None
-        self._figures = {}  # Name: Figure
-        self._outputs_container = (
-            None  # Model outputs (y_true, y_pred) are stored here, when available.
-        )
-        self._training_history = {}
+        super().__init__()
+        
+        # Initialize research attributes used in the Plotter
+        self._datasets_container = None  # Read only
+        self._figures = {
+            # Name: Figure
+        }  # Read only
+        self._outputs_container = None  # Model outputs (y_true, y_pred) are stored here, when available.  # Read only
+        self._training_history = {}  # Read only
 
     def _add_figure(self, name, fig):
         """
@@ -118,6 +121,7 @@ class Plotter(ResearchAttributes):
         Returns:
             - (Tuple): (y_true, y_pred, class_names)
         """
+
         def get_labels(name):
             try:
                 return self._outputs_container[name]
