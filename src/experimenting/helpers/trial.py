@@ -44,7 +44,7 @@ class Trial:
         experiment.reset_research_attributes(except_datasets=True)
         # Class Trial uses the research attributes from Experiment class.
         self.research_attributes = ResearchAttributes()
-        copy_public_properties(self.research_attributes, experiment)
+        copy_public_properties(experiment, self.research_attributes)
         experiment_directory = experiment.experiment_data["directory"]
         trial_directory = self._make_trial_directory(experiment_directory, name)
         self.trial_data = {

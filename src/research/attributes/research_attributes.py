@@ -92,7 +92,7 @@ class ResearchAttributes:
         if not isinstance(research_attributes, ResearchAttributes):
             msg = "The input instance must be of type ResearchAttributes."
             raise ValueError(msg)
-        copy_public_properties(self, research_attributes)
+        copy_public_properties(research_attributes, self)
 
     def reset_research_attributes(self, except_datasets=False):
         """

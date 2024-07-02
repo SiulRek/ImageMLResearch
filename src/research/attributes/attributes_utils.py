@@ -1,12 +1,12 @@
-def copy_public_properties(target_instance, source_instance):
+def copy_public_properties(source_instance, target_instance):
     """
     Copies the public properties from one instance into another class instance.
     Retrieves all public properties from source_instance and sets them as
     attributes in the target_instance.
 
     Args:
-        - target_instance: The class instance to insert attributes into.
         - source_instance: The instance from which properties are copied.
+        - target_instance: The class instance to insert attributes into.
     """
 
     def is_public_property(attr_name, source_instance):
