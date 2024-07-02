@@ -20,7 +20,7 @@ class TestDataHandler(BaseTestCase):
             class_names=[str(i) for i in range(10)],
         )
         cls.data_handler = DataHandler()
-        cls.data_handler.update_research_attributes(research_attributes)
+        cls.data_handler.synchronize_research_attributes(research_attributes)
 
     def _create_tfrecord(self, tfrecord_path):
         """

@@ -38,7 +38,9 @@ class ResearchAttributes:
             - class_names (list, optional): The list of class names.
         """
         self._datasets_container = {}
-        self._label_manager = LabelManager(label_type, class_names) if label_type else None
+        self._label_manager = (
+            LabelManager(label_type, class_names) if label_type else None
+        )
         self._outputs_container = {}
         self._model = None
         self._training_history = None
@@ -81,10 +83,10 @@ class ResearchAttributes:
         """ Dictionary containing figures. {figure_name: figure} """
         return self._figures
 
-    def update_research_attributes(self, research_attributes):
+    def synchronize_research_attributes(self, research_attributes):
         """
-        Updates the attributes of the instance with the attributes of the
-        ResearchAttributes instance.
+        Synchronizes the attributes of the instance with the attributes of the
+        ResearchAttributes instance named `research_attributes`.
 
         Args:
             - instance: The class instance to insert attributes into.

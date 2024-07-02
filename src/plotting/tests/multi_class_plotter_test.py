@@ -46,7 +46,7 @@ class TestMultiClassPlotter(BaseTestCase):
         research_attributes = ResearchAttributes(
             label_type="multi_class", class_names=cls.class_names
         )
-        cls.multi_class_plotter.update_research_attributes(research_attributes)
+        cls.multi_class_plotter.synchronize_research_attributes(research_attributes)
         cls.multi_class_plotter._retrieve_output_data = MagicMock(
             return_value=(cls.y_true, cls.y_pred, cls.class_names)
         )

@@ -31,7 +31,7 @@ class TestPlotter(BaseTestCase):
         )
         research_attributes._datasets_container["complete_dataset"] = self.image_dataset
         self.plotter = Plotter()
-        self.plotter.update_research_attributes(research_attributes)
+        self.plotter.synchronize_research_attributes(research_attributes)
 
     def test_add_figure(self):
         """ Test the _add_figure method. """

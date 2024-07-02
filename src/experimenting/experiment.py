@@ -49,7 +49,7 @@ class Experiment(ResearchAttributes):
             "directory": experiment_directory,
             "trials": [],
         }
-        self.update_research_attributes(research_attributes)
+        self.synchronize_research_attributes(research_attributes)
         self.report_kwargs = report_kwargs or {}
 
     def _make_experiment_directory(self, directory, name):

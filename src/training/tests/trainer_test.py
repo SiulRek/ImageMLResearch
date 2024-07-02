@@ -35,7 +35,7 @@ class TestTrainer(BaseTestCase):
             "val_dataset": self.val_dataset,
             "test_dataset": self.test_dataset,
         }
-        self.trainer.update_research_attributes(research_attributes)
+        self.trainer.synchronize_research_attributes(research_attributes)
 
     def _create_compiled_model(self):
         model = tf.keras.models.Sequential(
