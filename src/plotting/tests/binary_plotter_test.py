@@ -23,7 +23,7 @@ class TestBinaryPlotter(BaseTestCase):
             label_type="binary", class_names=cls.class_names
         )
         cls.binary_plotter.update_research_attributes(research_attributes)
-        cls.binary_plotter._fetch_output_data = MagicMock(
+        cls.binary_plotter._retrieve_output_data = MagicMock(
             return_value=(cls.y_true, cls.y_pred, cls.class_names)
         )
 

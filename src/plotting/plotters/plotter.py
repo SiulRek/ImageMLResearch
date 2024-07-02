@@ -111,14 +111,13 @@ class Plotter(ResearchAttributes):
         """
         return plot_text(text)
 
-    def _fetch_output_data(self):
+    def _retrieve_output_data(self):
         """
-        Fetches the output required for various plots.
+        Retrieves the output required for various plots.
 
         Returns:
             - (Tuple): (y_true, y_pred, class_names)
         """
-
         def get_labels(name):
             try:
                 return self._outputs_container[name]
