@@ -25,6 +25,7 @@ def plot_decorator(default_title, default_show):
             show = kwargs.pop("show", default_show)
 
             fig = plot_func(self, *args, **kwargs)
+            fig.subplots_adjust(top=0.85)
             fig.suptitle(title, fontsize=18, fontweight="bold")
 
             name = title.lower().replace(" ", "_")
@@ -42,11 +43,12 @@ class Plotter(ResearchAttributes):
     """ A class for plotting images and text using research attributes. """
 
     def __init__(self):
-        """
-        Initializes the Plotter.
-    """
+        """ Initializes the Plotter. """
         self._datasets_container = None
         self._figures = {}  # Name: Figure
+        self._outputs_container = (
+            None  # Model outputs (y_true, y_pred) are stored here, when available.
+        )
 
     def _add_figure(self, name, fig):
         """
@@ -78,6 +80,9 @@ class Plotter(ResearchAttributes):
         General plot keyword arguments:
             - title: Optional title for the plot. Defaults to "Images".
             - show: Whether to show the plot. Defaults to False.
+
+        Returns:
+            - The figure containing the images.
         """
         dataset = self._datasets_container.get(
             "complete_dataset"
@@ -98,5 +103,32 @@ class Plotter(ResearchAttributes):
         General plot keyword arguments:
             - title: Optional title for the plot. Defaults to 'Text'.
             - show: Whether to show the plot. Defaults to False.
+
+        Returns:
+            - The figure containing the text.
         """
         return plot_text(text)
+
+    def _fetch_output_data(self):
+        """
+        Fetches the output required for various plots.
+
+        Returns:
+            - (Tuple): (y_true, y_pred, class_names)
+        """
+
+        def get_labels(name):
+            try:
+                return self._outputs_container[name]
+            except AttributeError as e:
+                msg = f"No {name} found in the outputs container."
+                raise ValueError(msg) from e
+
+        y_true = get_labels("y_true")
+        y_pred = get_labels("y_pred")
+
+        try:
+            class_names = self.label_manager.class_names
+        except AttributeError:
+            class_names = None
+        return y_true, y_pred, class_names
