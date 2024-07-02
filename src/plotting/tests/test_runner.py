@@ -6,6 +6,8 @@ from src.plotting.tests.plot_confusion_matrix_test import TestPlotConfusionMatri
 from src.plotting.tests.plot_text_test import TestPlotText
 from src.plotting.tests.plot_images_test import TestPlotImages
 from src.plotting.tests.plotter_test import TestPlotter
+from src.plotting.tests.binary_plotter_test import TestBinaryPlotter
+from src.plotting.tests.multi_class_plotter_test import TestMultiClassPlotter
 from src.testing.helpers.test_result_logger import TestResultLogger
 
 ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
@@ -27,6 +29,8 @@ def load_tests(test_suite):
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotText))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotImages))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotter))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestBinaryPlotter))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestMultiClassPlotter))
     return test_suite
 
 
