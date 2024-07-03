@@ -46,7 +46,7 @@ class Plotter(ResearchAttributes):
     def __init__(self):
         """ Initializes the Plotter. """
         super().__init__()
-        
+
         # Initialize research attributes used in the Plotter
         self._datasets_container = None  # Read only
         self._figures = {
@@ -121,16 +121,14 @@ class Plotter(ResearchAttributes):
         Returns:
             - (Tuple): (y_true, y_pred, class_names)
         """
-
-        def get_labels(name):
-            try:
-                return self._outputs_container[name]
-            except AttributeError as e:
-                msg = f"No {name} found in the outputs container."
-                raise ValueError(msg) from e
-
-        y_true = get_labels("y_true")
-        y_pred = get_labels("y_pred")
+        complete_output = self._outputs_container.get("complete_output")
+        test_output = self._outputs_container.get("test_output")
+        output = complete_output or test_output
+        if output is None:
+            msg = "No output data found to plot."
+            raise ValueError(msg)
+        y_true = output[0]
+        y_pred = output[1]
 
         try:
             class_names = self.label_manager.class_names
