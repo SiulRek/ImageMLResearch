@@ -36,7 +36,7 @@ class Experiment(ResearchAttributes):
                 the usage within a context manager.
         """
         super().__init__()
-        
+
         # Initialize research attributes used in the Experiment
         self._figures = {}  # Read only
         self._evaluation_metrics = {}  # Read only
@@ -94,6 +94,14 @@ class Experiment(ResearchAttributes):
         self._write_experiment_data()
         return self
 
+    def _sort_trials(self):
+        """ Sorts the trials by the accuracy in descending order. """
+        if self.experiment_data["trials"] == []:
+            return
+        self.experiment_data["trials"].sort(
+            key=lambda x: x["evaluation_metrics"]["accuracy"], reverse=True
+        )
+
     def __exit__(self, exc_type, exc_value, traceback):
         """
         Cleans up the experiment and saves the report.
@@ -114,6 +122,7 @@ class Experiment(ResearchAttributes):
         self.experiment_data["end_time"] = str(datetime.now())
 
         self._write_experiment_data()
+        self._sort_trials()
         create_experiment_report(self.experiment_data, **self.report_kwargs)
 
     def get_results(self):

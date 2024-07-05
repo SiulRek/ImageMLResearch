@@ -91,19 +91,40 @@ class TestExperiment(BaseTestCase):
             self.assertTrue(e.__traceback__)
         self.assertTrue(experiment_exception_raised)
 
-    def test_trial_creation(self):
-        name = "test_trial"
-        trial_description = "This is a test trial"
-        hyperparameters = {"lr": 0.01, "batch_size": 16}
-        experiment = self.call_test_experiment()
-        with experiment.trial(name, trial_description, hyperparameters) as trial:
-            self.assertIsInstance(trial, Trial)
-            self.assertEqual(trial.trial_data["name"], name)
-            self.assertEqual(trial.trial_data["description"], trial_description)
-            self.assertEqual(trial.trial_data["hyperparameters"], hyperparameters)
-            self.assertTrue("start_time" in trial.trial_data)
-        
-        self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
+    def test_trials_creation(self):
+        trial_definitions = [
+            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
+        ]
+        with self.call_test_experiment() as experiment:
+            for i, (name, trial_description, hyperparameters) in enumerate(
+                trial_definitions
+            ):
+                with experiment.trial(
+                    name, trial_description, hyperparameters
+                ) as trial:
+                    self.assertIsInstance(trial, Trial)
+                    self.assertEqual(trial.trial_data["name"], name)
+                    self.assertEqual(trial.trial_data["description"], trial_description)
+                    self.assertEqual(
+                        trial.trial_data["hyperparameters"], hyperparameters
+                    )
+                    self.assertTrue("start_time" in trial.trial_data)
+                    # Simulate accuracy
+                    experiment._evaluation_metrics = {"accuracy": 0.9 + i * 0.1}
+
+            self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
+        self.assertEqual(len(experiment.experiment_data["trials"]), 2)
+
+        # Assert if trials are sorted by accuracy
+        self.assertEqual(
+            experiment.experiment_data["trials"][0]["evaluation_metrics"]["accuracy"], 1
+        )
+        self.assertEqual(
+            experiment.experiment_data["trials"][1]["evaluation_metrics"]["accuracy"],
+            0.9,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
