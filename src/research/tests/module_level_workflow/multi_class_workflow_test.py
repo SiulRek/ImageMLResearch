@@ -1,7 +1,6 @@
 import os
-import shutil
 import unittest
-from src.testing.helpers.empty_directory import empty_directory
+
 import tensorflow as tf
 
 from src.data_handling.data_handler import DataHandler
@@ -9,6 +8,7 @@ from src.experimenting.experiment import Experiment
 from src.plotting.plotters.multi_class_plotter import MultiClassPlotter
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.testing.base.base_test_case import BaseTestCase
+from src.testing.helpers.empty_directory import empty_directory
 from src.training.trainer import Trainer
 
 
@@ -47,44 +47,44 @@ class TestMultiClassWorkflow(BaseTestCase):
         )
         return model
 
+    def _assert_datasets_container(self, module):
+        has_datasets_container = (
+            hasattr(module, "datasets_container")
+            and module.datasets_container is not None
+        )
+        self.assertTrue(
+            has_datasets_container,
+            f"The {str(module)} does not have a datasets container.",
+        )
+        for dataset_name in ["train_dataset", "val_dataset", "test_dataset"]:
+            self.assertIn(
+                dataset_name,
+                module.datasets_container,
+                f"{dataset_name} is not in the datasets container.",
+            )
+
+    def _assert_outputs_container(self, module):
+        has_outputs_container = (
+            hasattr(module, "outputs_container")
+            and module.outputs_container is not None
+        )
+        self.assertTrue(
+            has_outputs_container,
+            f"The {str(module)} does not have an outputs container.",
+        )
+        for output_name in ["train_output", "val_output", "test_output"]:
+            self.assertIn(
+                output_name,
+                module.outputs_container,
+                f"{output_name} is not in the outputs container.",
+            )
+
     def test_workflow(self):
-        def assert_datasets_container(module):
-            has_datasets_container = (
-                hasattr(module, "datasets_container")
-                and module.datasets_container is not None
-            )
-            self.assertTrue(
-                has_datasets_container,
-                f"The {str(module)} does not have a datasets container.",
-            )
-            for dataset_name in ["train_dataset", "val_dataset", "test_dataset"]:
-                self.assertIn(
-                    dataset_name,
-                    module.datasets_container,
-                    f"{dataset_name} is not in the datasets container.",
-                )
-
-        def assert_outputs_container(module):
-            has_outputs_container = (
-                hasattr(module, "outputs_container")
-                and module.outputs_container is not None
-            )
-            self.assertTrue(
-                has_outputs_container,
-                f"The {str(module)} does not have an outputs container.",
-            )
-            for output_name in ["train_output", "val_output", "test_output"]:
-                self.assertIn(
-                    output_name,
-                    module.outputs_container,
-                    f"{output_name} is not in the outputs container.",
-                )
-
         # #### Dataset Handling ####
         dataset = self.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         self.data_handler.load_dataset(dataset)
         self.data_handler.split_dataset(train_size=0.7, val_size=0.15, test_size=0.15)
-        assert_datasets_container(self.data_handler)
+        self._assert_datasets_container(self.data_handler)
         self.data_handler.enhance_datasets(
             ["train_dataset", "val_dataset", "test_dataset"],
             batch_size=32,
@@ -95,7 +95,7 @@ class TestMultiClassWorkflow(BaseTestCase):
         )
         self.data_handler.backup_datasets()
         self.data_handler.restore_datasets()
-        assert_datasets_container(self.data_handler)
+        self._assert_datasets_container(self.data_handler)
 
         #### Experimenting ####
         trial_definitions = [
@@ -118,7 +118,7 @@ class TestMultiClassWorkflow(BaseTestCase):
             description="A test experiment",
             report_kwargs={},
         ) as experiment:
-            assert_datasets_container(experiment)
+            self._assert_datasets_container(experiment)
             self.assertTrue(
                 os.path.exists(experiment.experiment_data["directory"]),
                 "The experiment directory does not exist.",
@@ -131,7 +131,7 @@ class TestMultiClassWorkflow(BaseTestCase):
                         "The trial directory does not exist.",
                     )
                     self.trainer.synchronize_research_attributes(experiment)
-                    assert_datasets_container(self.trainer)
+                    self._assert_datasets_container(self.trainer)
                     model = self._create_compiled_model(
                         trial_definition["hyperparameters"]["units"]
                     )
@@ -139,7 +139,7 @@ class TestMultiClassWorkflow(BaseTestCase):
                     self.trainer.fit_predict_evaluate(
                         epochs=10, steps_per_epoch=10, validation_steps=5
                     )
-                    assert_outputs_container(self.trainer)
+                    self._assert_outputs_container(self.trainer)
                     has_evaluation_metrics = (
                         hasattr(self.trainer, "evaluation_metrics")
                         and self.trainer.evaluation_metrics is not None
@@ -151,7 +151,7 @@ class TestMultiClassWorkflow(BaseTestCase):
 
                     # ## Plotting ##
                     self.plotter.synchronize_research_attributes(self.trainer)
-                    assert_outputs_container(self.plotter)
+                    self._assert_outputs_container(self.plotter)
                     has_training_history = (
                         hasattr(self.trainer, "training_history")
                         and self.trainer.training_history is not None
@@ -160,23 +160,55 @@ class TestMultiClassWorkflow(BaseTestCase):
                         has_training_history,
                         "The trainer does not have a training history.",
                     )
-                    has_output_container = (
-                        hasattr(self.plotter, "outputs_container")
-                        and self.plotter.outputs_container is not None
-                    )
-                    self.assertTrue(
-                        has_output_container,
-                        "The plotter does not have an output container.",
-                    )
                     self.plotter.plot_training_history(title="Training History")
                     self.plotter.plot_confusion_matrix(title="Confusion Matrix")
                     experiment.synchronize_research_attributes(self.plotter)
 
-                self.assertEqual(
-                    len(experiment.experiment_data["trials"]),
-                    i + 1,
-                    "The number of trials is incorrect.",
-                )
+        #### Assertions of experiment files existence ####
+        self.assertEqual(
+            len(experiment.experiment_data["trials"]),
+            i + 1,
+            "The number of trials is incorrect.",
+        )
+        for trail in experiment.experiment_data["trials"]:
+            trial_directory = trail["directory"]
+            figures_exist = all(
+                [
+                    os.path.exists(os.path.join(trial_directory, figure_name + ".png"))
+                    for figure_name in ["training_history", "confusion_matrix"]
+                ]
+            )
+            self.assertTrue(
+                figures_exist,
+                f"Not all figures exist for the trial {trail['name']}.",
+            )
+            trial_info_exist = os.path.exists(
+                os.path.join(trial_directory, "trial_info.json")
+            )
+            self.assertTrue(
+                trial_info_exist,
+                f"The trial info does not exist for the trial {trail['name']}.",
+            )
+
+        experiment_directory = experiment.experiment_data["directory"]
+        experiment_info_exist = os.path.exists(
+            os.path.join(experiment_directory, "experiment_info.json")
+        )
+        self.assertTrue(
+            experiment_info_exist,
+            "The experiment info does not exist.",
+        )
+
+        experiment_report_files = [
+            f
+            for f in os.listdir(experiment_directory)
+            if f.startswith("experiment_report.")
+        ]
+        self.assertEqual(
+            len(experiment_report_files),
+            1,
+            f"Expected 1 report file, but found {len(experiment_report_files)}.",
+        )
 
 
 if __name__ == "__main__":
