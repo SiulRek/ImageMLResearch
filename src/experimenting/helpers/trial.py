@@ -95,7 +95,7 @@ class Trial:
         """
         trial_directory = os.path.join(
             experiment_directory,
-            f"trial_{name.replace(' ', '_')}",
+            f"{name.replace(' ', '_')}",
         )
         os.makedirs(trial_directory, exist_ok=True)
         return trial_directory
