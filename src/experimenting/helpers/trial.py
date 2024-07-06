@@ -1,8 +1,8 @@
-from datetime import datetime
 import json
 import os
 import warnings
 
+from src.experimenting.helpers.get_datetime import get_datetime
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -50,7 +50,7 @@ class Trial:
         self.trial_data = {
             "name": name,
             "description": description,
-            "start_time": str(datetime.now()),
+            "start_time": get_datetime(),
             "directory": trial_directory,
             "hyperparameters": hyperparameters,
             "figures": {},

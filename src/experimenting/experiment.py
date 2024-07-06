@@ -3,6 +3,7 @@ import json
 import os
 
 from src.experimenting.helpers.create_experiment_report import create_experiment_report
+from src.experimenting.helpers.get_datetime import get_datetime
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -45,7 +46,7 @@ class Experiment(ResearchAttributes):
         self.experiment_data = {
             "name": name,
             "description": description,
-            "start_time": str(datetime.now()),
+            "start_time": get_datetime(),
             "directory": experiment_directory,
             "trials": [],
         }
@@ -119,7 +120,7 @@ class Experiment(ResearchAttributes):
             exc = exc_type(exc_value).with_traceback(traceback)
             msg = "An error occurred during the experiment."
             raise ExperimentError(msg) from exc
-        self.experiment_data["end_time"] = str(datetime.now())
+        self.experiment_data["end_time"] = get_datetime()
 
         self._write_experiment_data()
         self._sort_trials()
