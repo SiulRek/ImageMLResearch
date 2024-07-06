@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import os
 from typing import Dict, Optional
 
@@ -68,54 +69,51 @@ class MarkdownFileWriter:
             self.file_lines.append(f"| {padded_key} | {padded_value} |")
         self.file_lines.append("\n")
 
-    # def write_nested_table(self, nested_table_data: Dict[str, Dict[str, str]]):
-    #     """
-    #     Writes a nested table with outer keys as column headers and inner keys
-    #     as row headers.
+    def write_nested_table(self, nested_table_data: Dict[str, Dict[str, str]]):
+        """
+        Writes a nested table with outer keys as column headers and inner keys
+        as row headers.
 
-    #     Args:
-    #         - nested_table_data (Dict[str, Dict[str, str]]): Dictionary of
-    #             dictionaries.
-    #     """
+        Args:
+            - nested_table_data (Dict[str, Dict[str, str]]): Dictionary of
+                dictionaries.
+        """
 
-    #     def max_elem_length(elements):
-    #         return max(len(elem) for elem in elements)
+        def max_elem_length(elements):
+            return max(len(elem) for elem in elements)
 
-    #     if not nested_table_data:
-    #         return
+        if not nested_table_data:
+            return
+        headers = list(nested_table_data.keys())
+        inner_dict = nested_table_data[headers[0]]
+        row_labels = list(inner_dict.keys())
 
-    #     headers = list(nested_table_data.keys())
-    #     row_labels = set()
-    #     for inner_dict in nested_table_data.values():
-    #         row_labels.update(inner_dict.keys())
-    #     row_labels = sorted(row_labels)
+        max_elem_len = max_elem_length(headers + row_labels)
+        for inner_dict in nested_table_data.values():
+            previous_max_elem_len = max_elem_len
+            max_elem_len = max_elem_length(inner_dict.keys())
+            max_elem_len = max(max_elem_len, previous_max_elem_len)
 
-    #     max_elem_len = max_elem_length(headers + row_labels)
-    #     for inner_dict in nested_table_data.values():
-    #         previous_max_elem_len = max_elem_len
-    #         max_elem_len = max_elem_length(inner_dict.keys())
-    #         max_elem_len = max(max_elem_len, previous_max_elem_len)
+        header_row = (
+            f"| {' ' * max_elem_len} | "
+            + " | ".join(header.ljust(max_elem_len) for header in headers)
+            + " |"
+        )
+        self.file_lines.append(header_row)
+        self.file_lines.append(
+            f"| {'-' * max_elem_len} | "
+            + " | ".join("-" * max_elem_len for _ in headers)
+            + " |"
+        )
 
-    #     header_row = (
-    #         f"| {' ' * max_elem_len} | "
-    #         + " | ".join(header.ljust(max_elem_len) for header in headers)
-    #         + " |"
-    #     )
-    #     self.file_lines.append(header_row)
-    #     self.file_lines.append(
-    #         f"| {'-' * max_elem_len} | "
-    #         + " | ".join("-" * max_elem_len for _ in headers)
-    #         + " |"
-    #     )
-
-    #     for label in row_labels:
-    #         label = f"{label}"
-    #         row = f"| {label.ljust(max_elem_len)} | "
-    #         for header in headers:
-    #             value = nested_table_data[header].get(label, "").ljust(max_elem_len)
-    #             row += f"{value} | "
-    #         self.file_lines.append(row)
-    #     self.file_lines.append("\n")
+        for label in row_labels:
+            label = f"{label}"
+            row = f"| {label.ljust(max_elem_len)} | "
+            for header in headers:
+                value = nested_table_data[header].get(label, "").ljust(max_elem_len)
+                row += f"{value} | "
+            self.file_lines.append(row)
+        self.file_lines.append("\n")
 
     def write_figure(self, figure_name: str, path: str):
         """
