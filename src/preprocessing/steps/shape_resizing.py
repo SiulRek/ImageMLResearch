@@ -30,10 +30,10 @@ class ShapeResizer(StepBase):
                 'bilinear', 'nearest', 'bicubic', 'lanczos3', 'lanczos5', and
                 'area'.
         """
-        self.check_resize_method(resize_method)
+        self.assert_resize_method(resize_method)
         super().__init__(locals())
 
-    def check_resize_method(self, resize_method):
+    def assert_resize_method(self, resize_method):
         if resize_method not in self.resize_methods:
             raise ValueError(
                 f"Resize method '{resize_method}' is not supported. "

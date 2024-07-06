@@ -40,7 +40,7 @@ class TestCreateDataset(BaseTestCase):
         one_hot_label[int(label)] = 1
         return one_hot_label
 
-    def _check_label(self, label, expected_label):
+    def _assert_label(self, label, expected_label):
         """ Helper function to check the label against the expected label. """
         label = self._normalize_label(label)
         expected_label = self._normalize_label(expected_label)
@@ -56,7 +56,7 @@ class TestCreateDataset(BaseTestCase):
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
             self.assertIsInstance(label, tf.Tensor)
-            self._check_label(label, data["label"][i])
+            self._assert_label(label, data["label"][i])
 
     def test_create_dataset_from_dicts_png(self):
         """ Test create_dataset with a list of dictionaries containing PNG images. """
@@ -66,7 +66,7 @@ class TestCreateDataset(BaseTestCase):
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
             self.assertIsInstance(label, tf.Tensor)
-            self._check_label(label, data["label"][i])
+            self._assert_label(label, data["label"][i])
 
     def test_create_dataset_from_dataframe_jpg(self):
         """ Test create_dataset with a pandas DataFrame containing JPG images. """
@@ -76,7 +76,7 @@ class TestCreateDataset(BaseTestCase):
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
             self.assertIsInstance(label, tf.Tensor)
-            self._check_label(label, self.jpg_dict["label"][i])
+            self._assert_label(label, self.jpg_dict["label"][i])
 
     def test_create_dataset_from_dataframe_png(self):
         """ Test create_dataset with a pandas DataFrame containing PNG images. """
@@ -86,7 +86,7 @@ class TestCreateDataset(BaseTestCase):
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
             self.assertIsInstance(label, tf.Tensor)
-            self._check_label(label, self.png_dict["label"][i])
+            self._assert_label(label, self.png_dict["label"][i])
 
     def test_dataset_from_dicts(self):
         """ Test dataset creation from a list of dictionaries. """
@@ -99,7 +99,7 @@ class TestCreateDataset(BaseTestCase):
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
             self.assertIsInstance(label, tf.Tensor)
-            self._check_label(label, data[i]["label"])
+            self._assert_label(label, data[i]["label"])
 
     def test_one_hot_encoding(self):
         """ Test one-hot encoding for class codes. """

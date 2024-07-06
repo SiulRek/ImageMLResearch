@@ -44,7 +44,7 @@ def create_experiment_report(experiment_data: Dict):
 
     # Write Experiment Metadata
     writer.write_title(f"Experiment Report: {experiment_data['name']}", level=1)
-    writer.write_title("Experiment Metadata", level=2)
+    writer.write_title("Metadata", level=2)
     writer.write_key_value("Description", experiment_data["description"])
     writer.write_key_value("Start Time", experiment_data["start_time"])
     experiment_directory_link = writer.create_link(experiment_data["directory"], "Link")

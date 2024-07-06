@@ -50,7 +50,7 @@ class DataHandler(ResearchAttributes):
             msg = f"Not possible to load dataset from {data}."
             raise ValueError(msg)
 
-    def _check_dataset_exists(self, dataset_name):
+    def _assert_dataset_exists(self, dataset_name):
         """
         Checks if a dataset name exists in the dataset container.
 
@@ -95,7 +95,7 @@ class DataHandler(ResearchAttributes):
         """
         dataset_names = dataset_names or list(self._datasets_container.keys())
         for dataset_name in dataset_names:
-            self._check_dataset_exists(dataset_name)
+            self._assert_dataset_exists(dataset_name)
             dataset = self._datasets_container[dataset_name]
             enhanced_dataset = enhance_dataset(
                 dataset,
@@ -121,7 +121,7 @@ class DataHandler(ResearchAttributes):
                 validation.
             - test_size (float): The proportion of the dataset for testing.
         """
-        self._check_dataset_exists("complete_dataset")
+        self._assert_dataset_exists("complete_dataset")
         dataset = self._datasets_container["complete_dataset"]
         train_dataset, val_dataset, test_dataset = split_dataset(
             dataset, train_size, val_size, test_size
