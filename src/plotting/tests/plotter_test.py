@@ -44,6 +44,14 @@ class TestPlotter(BaseTestCase):
             "The figure was not added correctly.",
         )
 
+    def test_retrieve_output_data(self):
+        """ Test the _retrieve_output_data method. """
+        self.plotter._outputs_container = MagicMock()
+        self.plotter._outputs_container.get = MagicMock(return_value=([1], [2]))
+        output_data = self.plotter._retrieve_output_data()
+        expected_data = ([1], [2], [str(i) for i in range(10)])
+        self.assertEqual(output_data, expected_data, "The output data is incorrect.")
+
     def test_plot_images(self):
         """ Test the plot_images method. """
 
