@@ -8,12 +8,12 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     skip value to avoid plotting the same images every time.
 
     Parameters:
-        - dataset: TensorFlow dataset containing the images and optionally
-            labels.
-        - grid_size: Tuple containing the grid size (rows, columns).
+        - dataset (tf.data.Dataset): TensorFlow dataset containing the
+            images and optionally labels.
+        - grid_size (Tuple): Tuple containing the grid size (rows, columns).
             Defaults to (2, 2).
-        - label_to_title_func: Function to convert the label to a string.
-            Defaults to None.
+        - label_to_title_func (callable): Function to convert the label to a
+            string. Defaults to None.
     """
     # Configuration
     fig_size = (grid_size[1] * 4, grid_size[0] * 4)
@@ -23,6 +23,11 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
 
     fig, axes = plt.subplots(grid_size[0], grid_size[1], figsize=fig_size)
     axes = axes.ravel()
+
+    try:
+        dataset = dataset.unbatch()
+    except (AttributeError, ValueError):
+        pass
 
     if dataset_length > sample_num:
         skip = tf.random.uniform([], 0, dataset_length - sample_num, dtype=tf.int64)
