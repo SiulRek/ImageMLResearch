@@ -84,7 +84,8 @@ class MarkdownFileWriter:
         max_elem_len = max_elem_length(headers + row_labels)
         for inner_dict in nested_table_data.values():
             previous_max_elem_len = max_elem_len
-            max_elem_len = max_elem_length(inner_dict.keys())
+            if inner_dict != {}:  # Skip empty dictionaries
+                max_elem_len = max_elem_length(inner_dict.keys())
             max_elem_len = max(max_elem_len, previous_max_elem_len)
 
         header_row = (
