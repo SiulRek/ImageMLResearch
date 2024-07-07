@@ -64,6 +64,12 @@ def create_experiment_report(experiment_data):
     experiment_directory_link = writer.create_link(from_exp_get("directory"), "Link")
     writer.write_key_value("Directory", experiment_directory_link)
 
+    # Show Initial Visualizations
+    if "figures" in experiment_data and experiment_data["figures"]:
+        writer.write_title("Initial Visualizations", level=2)
+        for fig_name, fig_path in experiment_data["figures"].items():
+            writer.write_figure(fig_name, fig_path)
+
     # Write Results Summary
     writer.write_title("Results Summary", level=2)
     summary_table = get_summary_table(experiment_data)
