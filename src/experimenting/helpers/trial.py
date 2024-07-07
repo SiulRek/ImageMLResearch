@@ -40,24 +40,11 @@ class Trial:
                 hyperparameters.
         """
         self._assert_required_experiment_attributes(experiment)
-        # Reset attributes in experiment to avoid conflicts with other trials.
         experiment.reset_research_attributes(except_datasets=True)
-        # Class Trial uses the research attributes from Experiment class.
-        self.research_attributes = ResearchAttributes()
-        copy_public_properties(experiment, self.research_attributes)
-        experiment_directory = experiment.experiment_data["directory"]
-        trial_directory = self._make_trial_directory(experiment_directory, name)
-        self.trial_data = {
-            "name": name,
-            "description": description,
-            "start_time": None,
-            "duration": None,
-            "directory": trial_directory,
-            "hyperparameters": hyperparameters,
-            "figures": {},
-            "evaluation_metrics": {},
-            "training_history": None,
-        }
+        self._init_research_attributes(experiment)
+        self._init_trial_data(
+            name, description, hyperparameters, experiment
+        )
         self.experiment_trials = experiment.experiment_data[
             "trials"
         ]  # Keep reference to track trials in experiment.
@@ -81,6 +68,37 @@ class Trial:
             if not hasattr(experiment, attr):
                 msg = f"Experiment object does not have {attr} attribute."
                 raise AttributeError(msg)
+
+    def _init_research_attributes(self, experiment):
+        """ Initialize the research attributes from the Experiment class. """
+        self.research_attributes = ResearchAttributes()
+        copy_public_properties(experiment, self.research_attributes)
+
+    def _init_trial_data(self, name, description, hyperparameters, experiment):
+        """
+        Initialize the trial data dictionary to store trial information.
+
+        Args:
+            - name (str): The name of the trial.
+            - description (str): The description of the trial.
+            - hyperparameters (dict): The hyperparameters for the trial.
+            - experiment (Experiment): The experiment instance.
+            - dict: Initialized trial data dictionary.
+        """
+        trial_directory = self._make_trial_directory(
+            experiment.experiment_data["directory"], name
+        )
+        self.trial_data =  {
+            "name": name,
+            "description": description,
+            "start_time": None,
+            "duration": None,
+            "directory": trial_directory,
+            "hyperparameters": hyperparameters,
+            "figures": {},
+            "evaluation_metrics": {},
+            "training_history": None,
+        }
 
     def _make_trial_directory(self, experiment_directory, name):
         """

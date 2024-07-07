@@ -41,6 +41,19 @@ class Experiment(ResearchAttributes):
         self._figures = {}  # Read only
         self._evaluation_metrics = {}  # Read only
 
+        self._init_experiment_data(directory, name, description)
+        self.synchronize_research_attributes(research_attributes)
+        self.report_kwargs = report_kwargs or {}
+
+    def _init_experiment_data(self, directory, name, description):
+        """
+        Initializes the experiment data to store the experiment information.
+
+        Args:
+            - directory (str): The directory to save the experiment data.
+            - name (str): The name of the experiment.
+            - description (str): The description of the experiment.
+        """
         experiment_directory = self._make_experiment_directory(directory, name)
         self.experiment_data = {
             "name": name,
@@ -50,8 +63,6 @@ class Experiment(ResearchAttributes):
             "directory": experiment_directory,
             "trials": [],
         }
-        self.synchronize_research_attributes(research_attributes)
-        self.report_kwargs = report_kwargs or {}
 
     def _make_experiment_directory(self, directory, name):
         """
@@ -64,9 +75,9 @@ class Experiment(ResearchAttributes):
         Returns:
             - str: The path to the experiment directory.
         """
-        experiment_dir = os.path.join(
-            os.path.abspath(os.path.normpath(directory)), name.replace(" ", "_")
-        )
+        directory = os.path.abspath(os.path.normpath(directory))
+        name = name.replace(" ", "_")
+        experiment_dir = os.path.join(directory, name)
         os.makedirs(experiment_dir, exist_ok=True)
         return experiment_dir
 
