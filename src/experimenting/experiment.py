@@ -76,7 +76,9 @@ class Experiment(ResearchAttributes):
             self.experiment_data["directory"], "experiment_info.json"
         )
         experiment_data = self.experiment_data.copy()
-        experiment_data.pop("trials")
+        experiment_data["trials"] = [
+            trial["name"] for trial in experiment_data["trials"]
+        ]
 
         with open(info_json, "w", encoding="utf-8") as f:
             json.dump(
@@ -124,8 +126,8 @@ class Experiment(ResearchAttributes):
             msg = "An error occurred during the experiment."
             raise ExperimentError(msg) from exc
 
-        self._write_experiment_data()
         self._sort_trials()
+        self._write_experiment_data()
         create_experiment_report(self.experiment_data, **self.report_kwargs)
 
     def get_results(self):
