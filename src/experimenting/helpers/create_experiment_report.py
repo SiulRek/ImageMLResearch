@@ -14,12 +14,21 @@ def get_summary_table(experiment_data):
         - dict: Dictionary containing the summary table with metrics as keys
             and trial names as sub-keys.
     """
+
+    def from_exp_get(key, default=None):
+        return experiment_data.get(key, default)
+
     summary_table = dict()
     chapters = dict()
-    for trial in experiment_data.get("trials", []):
-        name = trial["name"]
+    trials = from_exp_get("trials", [])
+    for trial in trials:
+
+        def from_trial_get(key, default=None):
+            return trial.get(key, default)
+
+        name = from_trial_get("name")
         chapters[name] = f"[Chapter](#{name.lower().replace(' ', '-')})"
-        metrics = trial.get("evaluation_metrics", {})
+        metrics = from_trial_get("evaluation_metrics", {})
         for key, value in metrics.items():
             if isinstance(value, str):
                 continue
@@ -38,17 +47,21 @@ def create_experiment_report(experiment_data):
     Args:
         - experiment_data (dict): Dictionary containing experiment data.
     """
-    report_path = os.path.join(experiment_data["directory"], "experiment_report.md")
+
+    def from_exp_get(key, default="N/A"):
+        return experiment_data.get(key, default)
+
+    report_path = os.path.join(from_exp_get("directory"), "experiment_report.md")
     writer = MarkdownFileWriter(report_path)
 
     # Write Experiment Metadata
-    writer.write_title(f"Experiment Report: {experiment_data['name']}", level=1)
+    writer.write_title(f"Experiment Report: {from_exp_get('name')}", level=1)
     writer.write_title("Metadata", level=2)
-    writer.write_key_value("Description", experiment_data["description"])
-    start_time = experiment_data["start_time"].split(".")[0]
+    writer.write_key_value("Description", from_exp_get("description"))
+    start_time = from_exp_get("start_time").split(".")[0]
     writer.write_key_value("Start Time", start_time)
-    writer.write_key_value("Duration", experiment_data["duration"])
-    experiment_directory_link = writer.create_link(experiment_data["directory"], "Link")
+    writer.write_key_value("Duration", from_exp_get("duration"))
+    experiment_directory_link = writer.create_link(from_exp_get("directory"), "Link")
     writer.write_key_value("Directory", experiment_directory_link)
 
     # Write Results Summary
@@ -57,16 +70,22 @@ def create_experiment_report(experiment_data):
     writer.write_nested_table(summary_table)
 
     # Write Trials
-    for trial in experiment_data.get("trials", []):
-        writer.write_title(trial["name"], level=2)
-        writer.write_key_value("Description", trial["description"])
-        start_time = trial["start_time"].split(".")[0]
-        writer.write_key_value("Start Time", start_time)
-        writer.write_key_value("Duration", trial["duration"])
-        trial_directory_link = writer.create_link(trial["directory"], "Link")
+    trials = from_exp_get("trials", [])
+    for trial in trials:
+
+        def from_trial_get(key, default="N/A"):
+            return trial.get(key, default)
+
+        writer.write_title(from_trial_get("name"), level=2)
+        writer.write_key_value("Description", from_trial_get("description"))
+        start_time = from_trial_get("start_time").split(".")[0]
+        writer.write_key_value("Start Time",start_time)
+        writer.write_key_value("Duration", from_trial_get("duration"))
+        trial_directory_link = writer.create_link(from_trial_get("directory"), "Link")
         writer.write_key_value("Directory", trial_directory_link)
         hyperparameter_table = {
-            param: str(value) for param, value in trial["hyperparameters"].items()
+            param: str(value)
+            for param, value in from_trial_get("hyperparameters", {}).items()
         }
         writer.write_title("Hyperparameters:", level=3)
         writer.write_key_value_table(
