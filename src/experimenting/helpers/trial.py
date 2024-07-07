@@ -2,7 +2,7 @@ import json
 import os
 import warnings
 
-from src.experimenting.helpers.get_datetime import get_datetime
+from src.experimenting.helpers.datetime_utils import get_datetime, get_duration
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -50,7 +50,8 @@ class Trial:
         self.trial_data = {
             "name": name,
             "description": description,
-            "start_time": get_datetime(),
+            "start_time": None,
+            "duration": None,
             "directory": trial_directory,
             "hyperparameters": hyperparameters,
             "figures": {},
@@ -63,7 +64,6 @@ class Trial:
         self.get_trial_results = (
             experiment.get_results
         )  # Keep reference to retrieve results from trial.
-        self._write_trial_data()
 
     def _assert_required_experiment_attributes(self, experiment):
         """
@@ -126,6 +126,7 @@ class Trial:
             - self: The Trial instance.
         """
         os.makedirs(self.trial_data["directory"], exist_ok=True)
+        self.trial_data["start_time"] = get_datetime()
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -140,6 +141,9 @@ class Trial:
         Raises:
             - TrialError: If an exception occurred during the trial.
         """
+        duration = get_duration(self.trial_data["start_time"])
+        self.trial_data["duration"] = duration
+
         if exc_type is not None:
             exc = exc_type(exc_value).with_traceback(traceback)
             msg = "An error occurred during the trial."
