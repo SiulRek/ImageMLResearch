@@ -60,6 +60,10 @@ class TestTrial(BaseTestCase):
         self.assertEqual(data["description"], self.description)
         self.assertEqual(data["hyperparameters"], self.hyperparameters)
         self.assertTrue("start_time" in data)
+        self.assertTrue("duration" in data)
+        self.assertTrue("figures" in data)
+        self.assertTrue("evaluation_metrics" in data)
+        # self.assertTrue("training_history" in data)
 
     def test_add_trial_to_experiment_data(self):
         with self.call_test_trial() as trial:
