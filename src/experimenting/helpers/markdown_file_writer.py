@@ -1,6 +1,4 @@
-from collections import OrderedDict
 import os
-from typing import Dict, Optional
 
 
 class MarkdownFileWriter:
@@ -12,23 +10,23 @@ class MarkdownFileWriter:
             saved.
     """
 
-    def __init__(self, file_path: str):
+    def __init__(self, file_path):
         self.file_path = file_path
         self.file_dir = os.path.dirname(file_path)
         self.file_lines = []
 
-    def write_title(self, title: str, level: int = 1):
+    def write_title(self, title, level=1):
         """
         Writes a title to the file.
 
         Args:
             - title (str): The text of the title.
-            - level (int optional): The level of the title, where 1 is the
+            - level (int, optional): The level of the title, where 1 is the
                 highest level. Defaults to 1.
         """
         self.file_lines.append(f"{'#' * level} {title}\n")
 
-    def write_text(self, text: str):
+    def write_text(self, text):
         """
         Writes a plain text paragraph to the file.
 
@@ -37,22 +35,17 @@ class MarkdownFileWriter:
         """
         self.file_lines.append(f"{text}\n")
 
-    def write_key_value_table(
-        self,
-        table_data: Dict[str, str],
-        key_label: str = "Key",
-        value_label: str = "Value",
-    ):
+    def write_key_value_table(self, table_data, key_label="Key", value_label="Value"):
         """
         Writes a table with key-value pairs, where each row contains a key and a
         value.
 
         Args:
-            - table_data (Dict[str, str]): Dictionary containing key-value
+            - table_data (dict[str, str]): Dictionary containing key-value
                 pairs.
-            - key_label (str optional): Label of the key column. Defaults to
-                "Key".
-            - value_label (str optional): Label of the value column.
+            - key_label (str, optional): Label of the key column. Defaults
+                to "Key".
+            - value_label (str, optional): Label of the value column.
                 Defaults to "Value".
         """
         elements = list(table_data.keys()) + list(table_data.values())
@@ -69,13 +62,13 @@ class MarkdownFileWriter:
             self.file_lines.append(f"| {padded_key} | {padded_value} |")
         self.file_lines.append("\n")
 
-    def write_nested_table(self, nested_table_data: Dict[str, Dict[str, str]]):
+    def write_nested_table(self, nested_table_data):
         """
         Writes a nested table with outer keys as column headers and inner keys
         as row headers.
 
         Args:
-            - nested_table_data (Dict[str, Dict[str, str]]): Dictionary of
+            - nested_table_data (dict[str, dict[str, str]]): Dictionary of
                 dictionaries.
         """
 
@@ -115,7 +108,7 @@ class MarkdownFileWriter:
             self.file_lines.append(row)
         self.file_lines.append("\n")
 
-    def write_figure(self, figure_name: str, path: str):
+    def write_figure(self, figure_name, path):
         """
         Writes a Markdown image link to the file.
 
@@ -126,7 +119,7 @@ class MarkdownFileWriter:
         figure_link = self.create_link(path, figure_name)
         self.file_lines.append(f"!{figure_link}\n")
 
-    def write_key_value(self, key: str, value: str):
+    def write_key_value(self, key, value):
         """
         Writes a key-value pair in bullet point format to the file.
 
@@ -136,14 +129,14 @@ class MarkdownFileWriter:
         """
         self.file_lines.append(f"*    {key}: {value}\n")
 
-    def create_link(self, path: str, hyperlink_text: Optional[str] = None) -> str:
+    def create_link(self, path, hyperlink_text=None):
         """
         Creates a Markdown hyperlink to a given path.
 
         Args:
             - path (str): The file path for the link.
-            - hyperlink_text (str optional): The hyperlink text. Defaults to
-                "[Link]".
+            - hyperlink_text (str, optional): The hyperlink text. Defaults
+                to "[Link]".
 
         Returns:
             - str: The Markdown formatted hyperlink.

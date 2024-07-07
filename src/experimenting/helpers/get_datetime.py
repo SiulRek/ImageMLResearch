@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def get_datetime() -> str:
+def get_datetime():
     """
     Returns the current date and time formatted as a beautiful string.
 

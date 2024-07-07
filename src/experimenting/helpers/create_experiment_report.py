@@ -1,14 +1,13 @@
 import os
-from typing import Dict
 
 from src.experimenting.helpers.markdown_file_writer import MarkdownFileWriter
 
 
-def get_summary_table(experiment_data: Dict) -> Dict:
+def get_summary_table(experiment_data):
     """
     Generate a summary table for the experiment report.
 
-    Parameters:
+    Args:
         - experiment_data (dict): Dictionary containing experiment data.
 
     Returns:
@@ -31,12 +30,12 @@ def get_summary_table(experiment_data: Dict) -> Dict:
     return summary_table
 
 
-def create_experiment_report(experiment_data: Dict):
+def create_experiment_report(experiment_data):
     """
     Generate a comprehensive experiment report in Markdown format and save it to
     a file.
 
-    Parameters:
+    Args:
         - experiment_data (dict): Dictionary containing experiment data.
     """
     report_path = os.path.join(experiment_data["directory"], "experiment_report.md")
