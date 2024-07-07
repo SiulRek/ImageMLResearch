@@ -45,7 +45,9 @@ def create_experiment_report(experiment_data):
     writer.write_title(f"Experiment Report: {experiment_data['name']}", level=1)
     writer.write_title("Metadata", level=2)
     writer.write_key_value("Description", experiment_data["description"])
-    writer.write_key_value("Start Time", experiment_data["start_time"])
+    start_time = experiment_data["start_time"].split(".")[0]
+    writer.write_key_value("Start Time", start_time)
+    writer.write_key_value("Duration", experiment_data["duration"])
     experiment_directory_link = writer.create_link(experiment_data["directory"], "Link")
     writer.write_key_value("Directory", experiment_directory_link)
 
@@ -58,7 +60,9 @@ def create_experiment_report(experiment_data):
     for trial in experiment_data.get("trials", []):
         writer.write_title(trial["name"], level=2)
         writer.write_key_value("Description", trial["description"])
-        writer.write_key_value("Start Time", trial["start_time"])
+        start_time = trial["start_time"].split(".")[0]
+        writer.write_key_value("Start Time", start_time)
+        writer.write_key_value("Duration", trial["duration"])
         trial_directory_link = writer.create_link(trial["directory"], "Link")
         writer.write_key_value("Directory", trial_directory_link)
         hyperparameter_table = {
