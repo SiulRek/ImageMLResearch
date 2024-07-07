@@ -105,6 +105,12 @@ class Experiment(ResearchAttributes):
             key=lambda x: x["evaluation_metrics"]["accuracy"], reverse=True
         )
 
+    def _raise_exception_if_any(self, exc_type, exc_value, traceback):
+        if exc_type is not None:
+            exc = exc_type(exc_value).with_traceback(traceback)
+            msg = "An error occurred during the experiment."
+            raise ExperimentError(msg) from exc
+
     def __exit__(self, exc_type, exc_value, traceback):
         """
         Cleans up the experiment and saves the report.
@@ -121,10 +127,7 @@ class Experiment(ResearchAttributes):
         duration = get_duration(self.experiment_data["start_time"])
         self.experiment_data["duration"] = duration
 
-        if exc_type is not None:
-            exc = exc_type(exc_value).with_traceback(traceback)
-            msg = "An error occurred during the experiment."
-            raise ExperimentError(msg) from exc
+        self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         self._sort_trials()
         self._write_experiment_data()

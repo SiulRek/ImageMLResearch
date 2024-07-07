@@ -129,6 +129,12 @@ class Trial:
         self.trial_data["start_time"] = get_datetime()
         return self
 
+    def _raise_exception_if_any(self, exc_type, exc_value, traceback):
+        if exc_type is not None:
+            exc = exc_type(exc_value).with_traceback(traceback)
+            msg = "An error occurred during the trial."
+            raise TrialError(msg) from exc
+
     def __exit__(self, exc_type, exc_value, traceback):
         """
         Saves the trial data and figures and creates experiment report.
@@ -144,10 +150,7 @@ class Trial:
         duration = get_duration(self.trial_data["start_time"])
         self.trial_data["duration"] = duration
 
-        if exc_type is not None:
-            exc = exc_type(exc_value).with_traceback(traceback)
-            msg = "An error occurred during the trial."
-            raise TrialError(msg) from exc
+        self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         trial_results = self.get_trial_results()
         # Assign 'figures' to trial_data replacing the figure objects
