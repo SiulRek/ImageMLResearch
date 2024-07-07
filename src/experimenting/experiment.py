@@ -3,6 +3,7 @@ import os
 
 from src.experimenting.helpers.create_experiment_report import create_experiment_report
 from src.experimenting.helpers.datetime_utils import get_datetime, get_duration
+from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -44,6 +45,7 @@ class Experiment(ResearchAttributes):
         self._init_experiment_data(directory, name, description)
         self.synchronize_research_attributes(research_attributes)
         self.report_kwargs = report_kwargs or {}
+        self._no_trial_executed = True
 
     def _init_experiment_data(self, directory, name, description):
         """
@@ -61,6 +63,7 @@ class Experiment(ResearchAttributes):
             "start_time": None,
             "duration": None,
             "directory": experiment_directory,
+            "figures": {},
             "trials": [],
         }
 
@@ -171,4 +174,15 @@ class Experiment(ResearchAttributes):
         Returns:
             - Trial: A Trial context manager instance.
         """
+        if self._no_trial_executed:
+            # Allow for figures outside of trials.
+            figures = self._figures
+            experiment_dir = self.experiment_data["directory"]
+            figures = map_figures_to_paths(figures, experiment_dir)
+            self.experiment_data["figures"] = figures
+            self._no_trial_executed = False
+
+        # Avoids conflicts between trials.
+        self.reset_research_attributes(except_datasets=True)
+        
         return Trial(self, name, description, hyperparameters)
