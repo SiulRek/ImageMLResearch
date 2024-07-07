@@ -62,6 +62,8 @@ class TestExperiment(BaseTestCase):
         self.assertEqual(data["name"], self.name)
         self.assertEqual(data["description"], self.description)
         self.assertTrue("start_time" in data)
+        self.assertTrue("duration" in data)
+        self.assertTrue("trials" in data)
 
     def test_create_experiment_report_called(self):
         with patch.object(
