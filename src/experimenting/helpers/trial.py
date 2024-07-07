@@ -3,6 +3,7 @@ import os
 import warnings
 
 from src.experimenting.helpers.datetime_utils import get_datetime, get_duration
+from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -40,11 +41,8 @@ class Trial:
                 hyperparameters.
         """
         self._assert_required_experiment_attributes(experiment)
-        experiment.reset_research_attributes(except_datasets=True)
         self._init_research_attributes(experiment)
-        self._init_trial_data(
-            name, description, hyperparameters, experiment
-        )
+        self._init_trial_data(name, description, hyperparameters, experiment)
         self.experiment_trials = experiment.experiment_data[
             "trials"
         ]  # Keep reference to track trials in experiment.
@@ -88,7 +86,7 @@ class Trial:
         trial_directory = self._make_trial_directory(
             experiment.experiment_data["directory"], name
         )
-        self.trial_data =  {
+        self.trial_data = {
             "name": name,
             "description": description,
             "start_time": None,
@@ -171,16 +169,10 @@ class Trial:
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         trial_results = self.get_trial_results()
-        # Assign 'figures' to trial_data replacing the figure objects
-        # with their created paths.
-        self.trial_data["figures"] = {
-            name: f"{self.trial_data['directory']}/{name}.png"
-            for name in trial_results["figures"]
-        }
-        for path, fig in zip(
-            self.trial_data["figures"].values(), trial_results["figures"].values()
-        ):
-            fig.savefig(path)
+        
+        self.trial_data["figures"] = map_figures_to_paths(
+            trial_results["figures"], self.trial_data["directory"]
+        )
 
         self.trial_data["evaluation_metrics"] = trial_results["evaluation_metrics"]
 
