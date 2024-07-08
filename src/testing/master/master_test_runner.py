@@ -14,6 +14,7 @@ import src.plotting.tests.test_runner as plotting_tests
 import src.preprocessing.tests.test_runner as preprocessing_tests
 from src.testing.helpers.test_result_logger import TestResultLogger
 import src.training.tests.test_runner as training_tests
+import src.research.tests.test_runner as research_tests
 import src.utils.tests.test_runner as utils_tests
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,6 +32,7 @@ def run_tests():
     test_suite = utils_tests.load_tests(test_suite)
     test_suite = experimenting_tests.load_tests(test_suite)
     test_suite = training_tests.load_tests(test_suite)
+    test_suite = research_tests.load_tests(test_suite)
 
     result = unittest.TextTestRunner(verbosity=2).run(test_suite)
 
