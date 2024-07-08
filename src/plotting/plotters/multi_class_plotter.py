@@ -2,6 +2,7 @@ import numpy as np
 
 from src.data_handling.labelling.label_utils import reverse_one_hot
 from src.plotting.functions.plot_confusion_matrix import plot_confusion_matrix
+from src.plotting.functions.plot_results import plot_multi_class_classification_results
 from src.plotting.plotters.plotter import Plotter, plot_decorator
 
 
@@ -45,3 +46,24 @@ class MultiClassPlotter(Plotter):
             return name
         
         return super().plot_images(grid_size, label_to_title_func)
+    @plot_decorator(default_title="Results", default_show=True)
+    def plot_results(self, grid_size=(2, 2), prediction_bar=False):
+        """
+        Plots a grid of images with their true and predicted labels. If the
+        prediction_bar parameter is set to True, it also shows a bar plot with
+        the predicted probabilities.
+
+        Args:
+            - grid_size (Tuple): Tuple containing the grid size (rows,
+                columns). Defaults to (2, 2).
+            - prediction_bar (bool): Whether to show the predicted
+                probabilities as a bar plot. Defaults to False.
+
+        Returns:
+            - The figure containing the images and labels.
+        """
+        data = self._retrieve_input_output_data()
+        x, y_true, y_pred, class_names = data
+        return plot_multi_class_classification_results(
+           x, y_true, y_pred, class_names, grid_size, prediction_bar
+        )

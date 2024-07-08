@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import MagicMock
 
 import matplotlib.pyplot as plt
+import numpy as np
 import tensorflow as tf
 
 from src.plotting.plotters.multi_class_plotter import MultiClassPlotter
@@ -30,6 +31,9 @@ class TestMultiClassPlotter(BaseTestCase):
         cls.multi_class_plotter._retrieve_output_data = MagicMock(
             return_value=(y_true, y_pred, cls.class_names)
         )
+        cls.multi_class_plotter._retrieve_input_output_data = MagicMock(
+            return_value=(cls._get_images(dataset), y_true, y_pred, cls.class_names)
+        )
 
     def setUp(self):
         super().setUp()
@@ -49,6 +53,13 @@ class TestMultiClassPlotter(BaseTestCase):
         preds = tf.random.uniform((sample_num,), minval=0, maxval=10, dtype=tf.int32)
         preds = tf.one_hot(preds, depth=10)
         return preds
+
+    @classmethod
+    def _get_images(cls, dataset):
+        images_list = []
+        for images, _ in dataset:
+            images_list.append(images.numpy())
+        return np.array(images_list)
 
     def test_plot_images(self):
         """ Test the plot_images method. """
@@ -98,6 +109,30 @@ class TestMultiClassPlotter(BaseTestCase):
                 )
             ),
             "Confusion matrix figure was not saved.",
+        )
+
+    def test_plot_results(self):
+        """ Test the plot_results method. """
+        fig = self.multi_class_plotter.plot_results(
+            grid_size=(2, 2), prediction_bar=True
+        )
+        self.assertEqual(
+            len(self.multi_class_plotter.figures), 1, "The figure was not added."
+        )
+        self.assertIn(
+            "results",
+            self.multi_class_plotter.figures,
+            "The figure name is incorrect.",
+        )
+        fig.savefig(
+            os.path.join(self.results_dir, "multi_class_plotter_plot_results.png")
+        )
+        plt.close(fig)
+        self.assertTrue(
+            os.path.exists(
+                os.path.join(self.results_dir, "multi_class_plotter_plot_results.png")
+            ),
+            "Results figure was not saved.",
         )
 
 
