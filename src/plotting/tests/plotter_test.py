@@ -2,9 +2,10 @@ import os
 import unittest
 from unittest.mock import MagicMock
 
-import matplotlib.pyplot as plt
 from keras.layers import Dense
 from keras.models import Sequential
+import matplotlib.pyplot as plt
+import tensorflow as tf
 
 from src.plotting.plotters.plotter import Plotter
 from src.research.attributes.research_attributes import ResearchAttributes
@@ -62,6 +63,18 @@ class TestPlotter(BaseTestCase):
         output_data = self.plotter._retrieve_output_data()
         expected_data = ([1], [2], [str(i) for i in range(10)])
         self.assertEqual(output_data, expected_data, "The output data is incorrect.")
+
+    def test_retrieve_input_output_data(self):
+        """ Test the _retrieve_input_output_data method. """
+        self.plotter._datasets_container["test_dataset"] = (
+            tf.data.Dataset.from_tensor_slices(([3], [0]))
+        )
+        self.plotter._outputs_container["test_output"] = ([1], [2])
+        input_output_data = self.plotter._retrieve_input_output_data()
+        expected_data = ([3], [1], [2], [str(i) for i in range(10)])
+        self.assertEqual(
+            input_output_data, expected_data, "The input-output data is incorrect."
+        )
 
     def test_plot_images(self):
         """ Test the plot_images method. """

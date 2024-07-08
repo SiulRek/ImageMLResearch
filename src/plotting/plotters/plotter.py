@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
 from src.plotting.functions.plot_images import plot_images
 from src.plotting.functions.plot_model_summary import plot_model_summary
@@ -134,16 +135,24 @@ class Plotter(ResearchAttributes):
             raise ValueError(msg)
         return plot_model_summary(self._model)
 
-    def _retrieve_output_data(self):
+    def _retrieve_output_data(self, output_name=None):
         """
         Retrieves the output required for various plots.
+
+        Args:
+            - output_name (optional): The name of the output to retrieve.
+                Defaults to None, than the output is retrieved from either
+                'complete_output' or 'test_output' from the ´output_container´.
 
         Returns:
             - (Tuple): (y_true, y_pred, class_names)
         """
-        complete_output = self._outputs_container.get("complete_output")
-        test_output = self._outputs_container.get("test_output")
-        output = complete_output or test_output
+        if output_name is not None:
+            output = self._outputs_container.get(output_name)
+        else:
+            complete_output = self._outputs_container.get("complete_output")
+            test_output = self._outputs_container.get("test_output")
+            output = complete_output or test_output
         if output is None:
             msg = "No output data found to plot."
             raise ValueError(msg)
@@ -155,6 +164,53 @@ class Plotter(ResearchAttributes):
         except AttributeError:
             class_names = None
         return y_true, y_pred, class_names
+
+    def _get_inputs(self, dataset):
+        """
+        Retrieves the input data from the dataset.
+
+        Args:
+            - dataset: The dataset from which to retrieve the input data.
+
+        Returns:
+            - The input data.
+        """
+        try:
+            dataset = dataset.unbatch()
+        except (AttributeError, ValueError):
+            pass
+        inputs_list = []
+        for inputs, _ in dataset:
+            inputs_list.append(tf.expand_dims(inputs, axis=0))
+        inputs_tensor = tf.concat(inputs_list, axis=0)
+        return inputs_tensor
+
+    def _retrieve_input_output_data(self):
+        """
+        Retrieves the input and output data required for various plots.
+
+        Returns:
+            - (Tuple): (x, y_true, y_pred, class_names)
+        """
+        for dataset_name in ["complete_dataset", "test_dataset"]:
+            if (
+                dataset_name in self._datasets_container
+                and self._datasets_container[dataset_name]
+            ):
+                output_name = dataset_name.replace("dataset", "output")
+                if output_name in self._outputs_container:
+                    dataset = self._datasets_container[dataset_name]
+                    break
+        else:
+            msg = "No dataset synced with outputs found to plot. Probably due"
+            msg += "to two reasons: 1. Neither 'complete_dataset' nor"
+            msg += "'train_dataset' found in datasets container. 2. No output"
+            msg += "data synced with the dataset found in outputs container."
+            raise ValueError(msg)
+        x = self._get_inputs(dataset)
+        y_true, y_pred, class_names = self._retrieve_output_data(output_name)
+
+        return x, y_true, y_pred, class_names
 
     @plot_decorator(default_title="Training History", default_show=False)
     def plot_training_history(self, **general_plot_kwargs):
