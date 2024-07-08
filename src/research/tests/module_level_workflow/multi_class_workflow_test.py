@@ -123,6 +123,11 @@ class TestMultiClassWorkflow(BaseTestCase):
                 os.path.exists(experiment.experiment_data["directory"]),
                 "The experiment directory does not exist.",
             )
+
+            # Initial Visualization
+            self.plotter.synchronize_research_attributes(experiment)
+            self.plotter.plot_images()
+            experiment.synchronize_research_attributes(self.plotter)
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.trial(**trial_definition) as trial:
                     # ## Training ##
@@ -169,6 +174,13 @@ class TestMultiClassWorkflow(BaseTestCase):
             len(experiment.experiment_data["trials"]),
             i + 1,
             "The number of trials is incorrect.",
+        )
+        images_plot = os.path.join(
+            experiment.experiment_data["directory"], "images.png"
+        )
+        self.assertTrue(
+            os.path.exists(images_plot),
+            "The images plot does not exist.",
         )
         for trail in experiment.experiment_data["trials"]:
             trial_directory = trail["directory"]
