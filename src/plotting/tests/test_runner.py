@@ -2,12 +2,13 @@ import os
 import unittest
 from unittest import defaultTestLoader as Loader
 
-from src.plotting.tests.plot_confusion_matrix_test import TestPlotConfusionMatrix
-from src.plotting.tests.plot_text_test import TestPlotText
-from src.plotting.tests.plot_images_test import TestPlotImages
-from src.plotting.tests.plotter_test import TestPlotter
 from src.plotting.tests.binary_plotter_test import TestBinaryPlotter
 from src.plotting.tests.multi_class_plotter_test import TestMultiClassPlotter
+from src.plotting.tests.plot_confusion_matrix_test import TestPlotConfusionMatrix
+from src.plotting.tests.plot_images_test import TestPlotImages
+from src.plotting.tests.plot_text_test import TestPlotText
+from src.plotting.tests.plot_training_history_test import TestPlotTrainingHistory
+from src.plotting.tests.plotter_test import TestPlotter
 from src.testing.helpers.test_result_logger import TestResultLogger
 
 ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
@@ -20,10 +21,12 @@ def load_tests(test_suite):
     Populates the given test suite with the specified test cases.
 
     Args:
-        - test_suite (unittest.TestSuite): The test suite to which the tests will be added.
+        - test_suite (unittest.TestSuite): The test suite to which the tests
+            will be added.
 
     Returns:
-        - unittest.TestSuite: The test suite populated with the specified tests.
+        - unittest.TestSuite: The test suite populated with the specified
+            tests.
     """
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotConfusionMatrix))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotText))
@@ -31,6 +34,7 @@ def load_tests(test_suite):
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotter))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestBinaryPlotter))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestMultiClassPlotter))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotTrainingHistory))
     return test_suite
 
 
