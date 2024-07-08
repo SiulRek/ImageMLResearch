@@ -18,7 +18,7 @@ def get_duration(start_time):
     Returns the duration between the start time and the current time.
 
     Args:
-        - start_time (str): The start time of the experiment.
+        - start_time (str): The start time in the format 'YYYY-MM-DD HH:MM:SS:MS'.
 
     Returns:
         - str: The duration between the start time and the current time.

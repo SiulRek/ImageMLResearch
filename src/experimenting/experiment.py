@@ -2,7 +2,7 @@ import json
 import os
 
 from src.experimenting.helpers.create_experiment_report import create_experiment_report
-from src.experimenting.helpers.datetime_utils import get_datetime, get_duration
+from src.experimenting.helpers.time_utils import get_datetime, get_duration
 from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
