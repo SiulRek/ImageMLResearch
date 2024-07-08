@@ -80,7 +80,17 @@ class Trainer(ResearchAttributes):
             - tf.Tensor: Labels from the dataset.
         """
         dataset = self._datasets_container[dataset_name]
-        return tf.concat([y for x, y in dataset], axis=0)
+        
+        try:
+            dataset = dataset.unbatch()
+        except (AttributeError, ValueError):
+            pass
+
+        labels_list = []
+        for _, labels in dataset:
+            labels_list.append(tf.expand_dims(labels, axis=0)) 
+        labels_tensor = tf.concat(labels_list, axis=0)
+        return labels_tensor
 
     def fit_predict_evaluate(self, **kwargs):
         """
