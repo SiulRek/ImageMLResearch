@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_images import plot_images
+from src.plotting.functions.plot_model_summary import plot_model_summary
 from src.plotting.functions.plot_text import plot_text
 from src.plotting.functions.plot_training_history import plot_training_history
 from src.research.attributes.research_attributes import ResearchAttributes
@@ -54,6 +55,7 @@ class Plotter(ResearchAttributes):
         }  # Read only
         self._outputs_container = None  # Model outputs (y_true, y_pred) are stored here, when available.  # Read only
         self._training_history = {}  # Read only
+        self._model = None  # Read only
 
     def _add_figure(self, name, fig):
         """
@@ -113,6 +115,24 @@ class Plotter(ResearchAttributes):
             - The figure containing the text.
         """
         return plot_text(text)
+
+    @plot_decorator(default_title="Model Summary", default_show=False)
+    def plot_model_summary(self, **general_plot_kwargs):
+        """
+        Plots the summary of the given model.
+
+        General plot keyword arguments:
+            - title: Optional title for the plot. Defaults to "Model
+                Summary".
+            - show: Whether to show the plot. Defaults to False.
+
+        Returns:
+            - The figure containing the model summary.
+        """
+        if not self._model:
+            msg = "No model found to plot."
+            raise ValueError(msg)
+        return plot_model_summary(self._model)
 
     def _retrieve_output_data(self):
         """

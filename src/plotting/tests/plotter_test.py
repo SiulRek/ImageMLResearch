@@ -3,6 +3,8 @@ import unittest
 from unittest.mock import MagicMock
 
 import matplotlib.pyplot as plt
+from keras.layers import Dense
+from keras.models import Sequential
 
 from src.plotting.plotters.plotter import Plotter
 from src.research.attributes.research_attributes import ResearchAttributes
@@ -23,6 +25,14 @@ class TestPlotter(BaseTestCase):
         )
         cls.visualization_path = os.path.join(cls.results_dir, "plotter_test.png")
 
+        # Create a simple model for testing plot_model_summary
+        cls.model = Sequential(
+            [
+                Dense(32, input_shape=(784,), activation="relu"),
+                Dense(10, activation="softmax"),
+            ]
+        )
+
     def setUp(self):
         super().setUp()
         research_attributes = ResearchAttributes(
@@ -32,6 +42,7 @@ class TestPlotter(BaseTestCase):
         research_attributes._datasets_container["complete_dataset"] = self.image_dataset
         self.plotter = Plotter()
         self.plotter.synchronize_research_attributes(research_attributes)
+        self.plotter._model = self.model  # Set the model for plot_model_summary
 
     def test_add_figure(self):
         """ Test the _add_figure method. """
@@ -85,7 +96,6 @@ class TestPlotter(BaseTestCase):
             "Plot text figure was not saved.",
         )
 
-    #
     def test_plot_training_history(self):
         """ Test the plot_training_history method. """
         self.plotter._training_history = MagicMock()
@@ -106,6 +116,23 @@ class TestPlotter(BaseTestCase):
                 os.path.join(self.results_dir, "plotter_plot_training_history.png")
             ),
             "Plot training history figure was not saved.",
+        )
+
+    def test_plot_model_summary(self):
+        """ Test the plot_model_summary method. """
+        fig = self.plotter.plot_model_summary(title="Test Model Summary", show=False)
+        fig.savefig(os.path.join(self.results_dir, "plotter_plot_model_summary.png"))
+        self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
+        self.assertIn(
+            "test_model_summary",
+            self.plotter._figures,
+            "The figure name is incorrect.",
+        )
+        self.assertTrue(
+            os.path.exists(
+                os.path.join(self.results_dir, "plotter_plot_model_summary.png")
+            ),
+            "Model summary figure was not saved.",
         )
 
 
