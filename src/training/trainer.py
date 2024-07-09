@@ -118,7 +118,7 @@ class Trainer(ResearchAttributes):
         test_dataset = self._datasets_container.get("test_dataset", None)
 
         if train_dataset is None and complete_dataset is None:
-            msg = "Neither 'test_dataset' nor 'complete_dataset' found in"
+            msg = "Neither 'train_dataset' nor 'complete_dataset' found in"
             msg += "dataset container for training."
             raise ValueError(msg)
         if test_dataset is None and complete_dataset is None:
