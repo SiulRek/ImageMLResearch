@@ -53,25 +53,29 @@ class TestDataHandler(BaseTestCase):
                 )
                 writer.write(example.SerializeToString())
 
+    # def _assert_dataset(self, dataset, labeled=True):
+    #     self.assertIsInstance(
+    #         dataset, tf.data.Dataset
+    #     )
+
+    #     for sample in dataset.take(1):
+    #         if labeled:
+    #             try:
+    #                 image, label = sample
+    #             except TypeError:
+    #                 self.fail("Dataset is not a tuple of image and label.")
+    #         else:
+    #             image = sample
+    #         self.assertIn(image.shape, [(28, 28, 1), (28, 28, 3)])
+    #         self.assertEqual(label.shape, (10,))
+
     def test_load_dataset_from_dict(self):
         """ Test creation of dataset and storage in the dataset container. """
         self.data_handler.load_dataset(self.jpg_dict)
         self.assertIn("complete_dataset", self.data_handler.datasets_container)
-        self.assertIsInstance(
-            self.data_handler.datasets_container["complete_dataset"], tf.data.Dataset
-        )
-
-    def test_load_dataset_from_tfrecord(self):
-        """ Test loading of dataset from TFRecord file. """
-        # Create a TFRecord file
-        tfrecord_path = os.path.join(self.temp_dir, "test.tfrecord")
-        self._create_tfrecord(tfrecord_path)
-
-        self.data_handler.load_dataset(tfrecord_path)
-        self.assertIn("complete_dataset", self.data_handler._datasets_container)
-        self.assertIsInstance(
-            self.data_handler._datasets_container["complete_dataset"], tf.data.Dataset
-        )
+        dataset = self.data_handler.datasets_container["complete_dataset"]
+        self.assertIsInstance(dataset, tf.data.Dataset)
+        # self._assert_dataset(dataset)
 
     def test_load_dataset_from_tf_dataset(self):
         """ Test loading of dataset from a TensorFlow Dataset. """

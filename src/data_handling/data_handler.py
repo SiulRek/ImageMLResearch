@@ -5,6 +5,9 @@ from src.data_handling.io.save_images import save_images
 from src.data_handling.labelling.label_utils import reverse_one_hot
 from src.data_handling.manipulation.enhance_dataset import enhance_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
+from src.data_handling.tfrecord_serialization.deserialize import (
+    deserialize_dataset_from_tfrecord,
+)
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
@@ -15,7 +18,7 @@ class DataHandler(ResearchAttributes):
     def __init__(self):
         """ Initializes the DataHandler. """
         super().__init__()
-        
+
         # Initialize research attributes used in the DataHandler
         self._datasets_container = {}  # Read/write
         self._backuped_datasets_container = {}  # Read/write
@@ -26,21 +29,16 @@ class DataHandler(ResearchAttributes):
         'datasets_container' under 'complete_dataset'.
 
         Args:
-            - data (tf.data.Dataset, str, dict, pandas.DataFrame): The data
-                to load, can be a TensorFlow dataset, path to a TFRecord file or
-                a dictionary/pandas DataFrame, with key/column is 'image' and
-                'label'.
+            - data (tf.data.Dataset, dict, pandas.DataFrame): The data to
+                load, can be a TensorFlow dataset or a dictionary/pandas
+                DataFrame, with key/column is 'image' and 'label'.
         """
-        # 3 possible methods to load dataset:
+        # 2 possible methods to load dataset:
         # 1. Is already of format tensorflow.data.Dataset
         if isinstance(data, tf.data.Dataset):
             self._datasets_container["complete_dataset"] = data
             return
-        # 2. data is path to tfrecord file
-        if isinstance(data, str) and data.endswith(".tfrecord"):
-            self._datasets_container["complete_dataset"] = tf.data.TFRecordDataset(data)
-            return
-        # 3. data is a dictslist of dicts or pandas.DataFrame
+        # 2. data is type dictslist of dicts or pandas.DataFrame
         try:
             self._datasets_container["complete_dataset"] = create_dataset(
                 data, self.label_manager.label_type, self.label_manager.class_names
