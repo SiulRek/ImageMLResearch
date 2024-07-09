@@ -26,13 +26,15 @@ class TestPlotter(BaseTestCase):
         )
         cls.visualization_path = os.path.join(cls.results_dir, "plotter_test.png")
 
-        # Create a simple model for testing plot_model_summary
-        cls.model = Sequential(
+    @classmethod
+    def _create_model(cls):
+        model = Sequential(
             [
                 Dense(32, input_shape=(784,), activation="relu"),
                 Dense(10, activation="softmax"),
             ]
         )
+        return model
 
     def setUp(self):
         super().setUp()
@@ -43,7 +45,9 @@ class TestPlotter(BaseTestCase):
         research_attributes._datasets_container["complete_dataset"] = self.image_dataset
         self.plotter = Plotter()
         self.plotter.synchronize_research_attributes(research_attributes)
-        self.plotter._model = self.model  # Set the model for plot_model_summary
+        self.plotter._model = (
+            self._create_model()
+        )  # Set the model for plot_model_summary
 
     def test_add_figure(self):
         """ Test the _add_figure method. """
