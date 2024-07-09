@@ -22,52 +22,16 @@ class TestDataHandler(BaseTestCase):
         cls.data_handler = DataHandler()
         cls.data_handler.synchronize_research_attributes(research_attributes)
 
-    def _create_tfrecord(self, tfrecord_path):
-        """
-        Creates a TFRecord file with sample data.
+    def _assert_dataset(self, dataset):
+        """ Asserts that the dataset is of type tf.data.Dataset and that the images
+        and labels have the correct shapes. """
+        self.assertIsInstance(
+            dataset, tf.data.Dataset, "Dataset is not of type tf.data.Dataset."
+        )
 
-        Args:
-            - tfrecord_path (str): The path to the TFRecord file to create.
-        """
-        with tf.io.TFRecordWriter(tfrecord_path) as writer:
-            for i in range(10):
-                image = tf.random.normal((28, 28, 1)).numpy()
-                label = i
-                example = tf.train.Example(
-                    features=tf.train.Features(
-                        feature={
-                            "image": tf.train.Feature(
-                                bytes_list=tf.train.BytesList(
-                                    value=[
-                                        tf.io.encode_jpeg(
-                                            tf.convert_to_tensor(image, dtype=tf.uint8)
-                                        ).numpy()
-                                    ]
-                                )
-                            ),
-                            "label": tf.train.Feature(
-                                int64_list=tf.train.Int64List(value=[label])
-                            ),
-                        }
-                    )
-                )
-                writer.write(example.SerializeToString())
-
-    # def _assert_dataset(self, dataset, labeled=True):
-    #     self.assertIsInstance(
-    #         dataset, tf.data.Dataset
-    #     )
-
-    #     for sample in dataset.take(1):
-    #         if labeled:
-    #             try:
-    #                 image, label = sample
-    #             except TypeError:
-    #                 self.fail("Dataset is not a tuple of image and label.")
-    #         else:
-    #             image = sample
-    #         self.assertIn(image.shape, [(28, 28, 1), (28, 28, 3)])
-    #         self.assertEqual(label.shape, (10,))
+        for image, label in dataset.take(1):
+            self.assertIn(image.shape, [(28, 28, 1), (28, 28, 3)])
+            self.assertEqual(label.shape, (10,))
 
     def test_load_dataset_from_dict(self):
         """ Test creation of dataset and storage in the dataset container. """
@@ -75,19 +39,19 @@ class TestDataHandler(BaseTestCase):
         self.assertIn("complete_dataset", self.data_handler.datasets_container)
         dataset = self.data_handler.datasets_container["complete_dataset"]
         self.assertIsInstance(dataset, tf.data.Dataset)
-        # self._assert_dataset(dataset)
+        self._assert_dataset(dataset)
 
     def test_load_dataset_from_tf_dataset(self):
         """ Test loading of dataset from a TensorFlow Dataset. """
         images = tf.random.normal((10, 28, 28, 1))
         labels = tf.constant([i for i in range(10)])
+        labels = tf.one_hot(labels, 10)
         dataset = tf.data.Dataset.from_tensor_slices((images, labels))
 
         self.data_handler.load_dataset(dataset)
         self.assertIn("complete_dataset", self.data_handler._datasets_container)
-        self.assertIsInstance(
-            self.data_handler._datasets_container["complete_dataset"], tf.data.Dataset
-        )
+        dataset = self.data_handler.datasets_container["complete_dataset"]
+        self._assert_dataset(dataset)
 
     def test_enhance_dataset(self):
         """ Test enhancement of dataset and updating in the dataset container. """
@@ -98,13 +62,13 @@ class TestDataHandler(BaseTestCase):
         self.data_handler.enhance_datasets(batch_size=2, shuffle=True, random_seed=42)
         self.assertIn("complete_dataset", self.data_handler.datasets_container)
         enhanced_dataset = self.data_handler.datasets_container["complete_dataset"]
-        self.assertIsInstance(enhanced_dataset, tf.data.Dataset)
 
         for batch in enhanced_dataset:
             self.assertEqual(batch[0].shape[0], 2)
             break
 
         enhanced_dataset_unbatched = enhanced_dataset.unbatch()
+        self._assert_dataset(enhanced_dataset_unbatched)
         for original, enhanced in zip(original_dataset, enhanced_dataset_unbatched):
             if not tf.reduce_all(tf.equal(original[0], enhanced[0])):
                 break
@@ -124,6 +88,9 @@ class TestDataHandler(BaseTestCase):
         train_dataset = self.data_handler.datasets_container["train_dataset"]
         val_dataset = self.data_handler.datasets_container["val_dataset"]
         test_dataset = self.data_handler.datasets_container["test_dataset"]
+        self._assert_dataset(train_dataset)
+        self._assert_dataset(val_dataset)
+        self._assert_dataset(test_dataset)
         self.assertEqual(train_dataset.cardinality().numpy(), 3)
         self.assertEqual(val_dataset.cardinality().numpy(), 1)
         self.assertEqual(test_dataset.cardinality().numpy(), 1)
@@ -144,6 +111,7 @@ class TestDataHandler(BaseTestCase):
         self.data_handler.datasets_container.pop("complete_dataset")
         self.data_handler.restore_datasets()
         self.assertTrue("complete_dataset" in self.data_handler.datasets_container)
+        self._assert_dataset(self.data_handler.datasets_container["complete_dataset"])
 
 
 if __name__ == "__main__":
