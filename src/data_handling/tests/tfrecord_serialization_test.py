@@ -54,7 +54,7 @@ class TestTFRecordSerialization(BaseTestCase):
         deserialized_dataset = deserialize_dataset_from_tfrecord(
             tfrecord_path, label_dtype=tf.float32
         )
-        # Smallest RTOL 0.3 to pass the test.
+        # Smallest ATOL 20 to pass the test.
         # This is the reason why it is not recommended to use JPEG format for serialization.
         self._compare_datasets(self.dataset, deserialized_dataset, atol=20)
 
