@@ -85,6 +85,7 @@ class TestDataHandler(BaseTestCase):
         self.assertIn("train_dataset", self.data_handler.datasets_container)
         self.assertIn("val_dataset", self.data_handler.datasets_container)
         self.assertIn("test_dataset", self.data_handler.datasets_container)
+        self.assertNotIn("complete_dataset", self.data_handler.datasets_container)
         train_dataset = self.data_handler.datasets_container["train_dataset"]
         val_dataset = self.data_handler.datasets_container["val_dataset"]
         test_dataset = self.data_handler.datasets_container["test_dataset"]
