@@ -2,8 +2,8 @@ import json
 import os
 import warnings
 
-from src.experimenting.helpers.time_utils import get_datetime, get_duration
 from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
+from src.experimenting.helpers.time_utils import get_datetime, get_duration
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -116,6 +116,23 @@ class Trial:
         os.makedirs(trial_directory, exist_ok=True)
         return trial_directory
 
+    def __enter__(self):
+        """
+        Sets up the trial by creating the necessary directories.
+
+        Returns:
+            - self: The Trial instance.
+        """
+        os.makedirs(self.trial_data["directory"], exist_ok=True)
+        self.trial_data["start_time"] = get_datetime()
+        return self
+
+    def _raise_exception_if_any(self, exc_type, exc_value, traceback):
+        if exc_type is not None:
+            exc = exc_type(exc_value).with_traceback(traceback)
+            msg = "An error occurred during the trial."
+            raise TrialError(msg) from exc
+
     def _write_trial_data(self):
         """ Writes the trial data to a JSON file. """
         trial_info_json = os.path.join(self.trial_data["directory"], "trial_info.json")
@@ -133,23 +150,6 @@ class Trial:
             trial_data["hyperparameters"] = None
             with open(trial_info_json, "w", encoding="utf-8") as f:
                 json.dump(trial_data, f, indent=4)
-
-    def __enter__(self):
-        """
-        Sets up the trial by creating the necessary directories.
-
-        Returns:
-            - self: The Trial instance.
-        """
-        os.makedirs(self.trial_data["directory"], exist_ok=True)
-        self.trial_data["start_time"] = get_datetime()
-        return self
-
-    def _raise_exception_if_any(self, exc_type, exc_value, traceback):
-        if exc_type is not None:
-            exc = exc_type(exc_value).with_traceback(traceback)
-            msg = "An error occurred during the trial."
-            raise TrialError(msg) from exc
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
@@ -169,7 +169,7 @@ class Trial:
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         trial_results = self.get_trial_results()
-        
+
         self.trial_data["figures"] = map_figures_to_paths(
             trial_results["figures"], self.trial_data["directory"]
         )
