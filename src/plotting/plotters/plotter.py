@@ -22,13 +22,18 @@ def generate_unique_key_name(name, keys):
 def plot_decorator(default_title, default_show):
     """ Decorator for all plotting functions. It adds a title to the plot and saves
     the figure in the plotter. """
-
     def decorator(plot_func):
         def wrapper(self, *args, **kwargs):
             title = kwargs.pop("title", default_title)
             show = kwargs.pop("show", default_show)
 
             fig = plot_func(self, *args, **kwargs)
+
+            if not isinstance(fig, plt.Figure):
+                msg = "The plot function must return a"
+                msg += "matplotlib.pyplot.Figure."
+                raise ValueError(msg)
+            
             fig.subplots_adjust(top=0.90)
             fig.suptitle(title, fontsize=18, fontweight="bold")
 
@@ -37,9 +42,7 @@ def plot_decorator(default_title, default_show):
             if show:
                 plt.show()
             return fig
-
         return wrapper
-
     return decorator
 
 
