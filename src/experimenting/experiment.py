@@ -2,8 +2,8 @@ import json
 import os
 
 from src.experimenting.helpers.create_experiment_report import create_experiment_report
-from src.experimenting.helpers.time_utils import get_datetime, get_duration
 from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
+from src.experimenting.helpers.time_utils import get_datetime, get_duration
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -84,23 +84,6 @@ class Experiment(ResearchAttributes):
         os.makedirs(experiment_dir, exist_ok=True)
         return experiment_dir
 
-    def _write_experiment_data(self):
-        """ Writes the experiment data to a JSON file. """
-        info_json = os.path.join(
-            self.experiment_data["directory"], "experiment_info.json"
-        )
-        experiment_data = self.experiment_data.copy()
-        experiment_data["trials"] = [
-            trial["name"] for trial in experiment_data["trials"]
-        ]
-
-        with open(info_json, "w", encoding="utf-8") as f:
-            json.dump(
-                experiment_data,
-                f,
-                indent=4,
-            )
-
     def __enter__(self):
         """
         Sets up the experiment by creating the necessary directories and files.
@@ -124,6 +107,23 @@ class Experiment(ResearchAttributes):
             exc = exc_type(exc_value).with_traceback(traceback)
             msg = "An error occurred during the experiment."
             raise ExperimentError(msg) from exc
+
+    def _write_experiment_data(self):
+        """ Writes the experiment data to a JSON file. """
+        info_json = os.path.join(
+            self.experiment_data["directory"], "experiment_info.json"
+        )
+        experiment_data = self.experiment_data.copy()
+        experiment_data["trials"] = [
+            trial["name"] for trial in experiment_data["trials"]
+        ]
+
+        with open(info_json, "w", encoding="utf-8") as f:
+            json.dump(
+                experiment_data,
+                f,
+                indent=4,
+            )
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
@@ -184,5 +184,5 @@ class Experiment(ResearchAttributes):
 
         # Avoids conflicts between trials.
         self.reset_research_attributes(except_datasets=True)
-        
+
         return Trial(self, name, description, hyperparameters)
