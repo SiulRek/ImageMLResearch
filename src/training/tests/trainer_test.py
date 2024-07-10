@@ -114,6 +114,19 @@ class TestTrainer(BaseTestCase):
         with self.assertRaises(ValueError):
             self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
 
+    def test_contents_of_output_container_after_fit_predict_evaluate(self):
+        model = self._create_compiled_model()
+        self.trainer.set_compiled_model(model)
+        self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
+        self.assertIn("train_output", self.trainer.outputs_container)
+        self.assertIn("val_output", self.trainer.outputs_container)
+        self.assertIn("test_output", self.trainer.outputs_container)
+        output = self.trainer.outputs_container["train_output"]
+        self.assertIsInstance(output, tuple)
+        for true_label, pred_label in zip(*output):
+            self.assertEqual(len(true_label), len(pred_label))
+            self.assertEqual(len(true_label), 10)
+
 
 if __name__ == "__main__":
     unittest.main()
