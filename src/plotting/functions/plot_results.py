@@ -10,7 +10,7 @@ def plot_multi_class_classification_results(
     prediction_bar parameter is set to True, it also shows a bar plot with the
     predicted probabilities.
 
-    Parameters:
+    Args:
         - x (np.ndarray): Input data (images, can be grayscale or RGB).
         - y_true (np.ndarray): True labels, one-hot encoded.
         - y_pred (np.ndarray): Predicted labels, one-hot encoded.

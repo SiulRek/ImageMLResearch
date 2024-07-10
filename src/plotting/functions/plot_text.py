@@ -5,7 +5,7 @@ def plot_text(text):
     """
     Plots the given text on a matplotlib figure.
 
-    Parameters:
+    Args:
         - text: The text to be plotted.
     """
     # Determine the size based on text length

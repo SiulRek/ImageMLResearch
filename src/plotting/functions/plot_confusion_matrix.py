@@ -7,7 +7,7 @@ def plot_confusion_matrix(y_true, y_pred, class_names):
     """
     Plots a confusion matrix using Matplotlib and Seaborn.
 
-    Parameters:
+    Args:
         - y_true: Array-like of true labels.
         - y_pred: Array-like of predicted labels.
         - class_names: List of class names corresponding to the

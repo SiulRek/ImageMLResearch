@@ -5,7 +5,7 @@ def plot_training_history(history):
     """
     Plots the training and validation history of a Keras model.
 
-    Parameters:
+    Args:
         - history: History object returned by the fit method of a Keras
             model.
 

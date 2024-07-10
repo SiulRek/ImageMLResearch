@@ -40,7 +40,7 @@ class ImagePlotter(ImagePlotterBase):
         """
         Plots 9 images from the given TensorFlow dataset.
 
-        Parameters:
+        Args:
             - image_tf_dataset: TensorFlow dataset containing the images.
             - Title: Plot title. Defaults to 'Images
         """
@@ -67,7 +67,7 @@ class ImagePlotter(ImagePlotterBase):
         """
         Plots a comparison of original and processed image.
 
-        Parameters:
+        Args:
             - original_tf_dataset: TensorFlow dataset containing the origina
                 image.
             - compare_tf_dataset: TensorFlow dataset containing the compare

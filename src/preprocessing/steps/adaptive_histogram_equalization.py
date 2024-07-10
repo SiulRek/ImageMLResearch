@@ -20,7 +20,7 @@ class AdaptiveHistogramEqualizer(StepBase):
         Initializes the AdaptiveHistogramEqualizer object that can be integrated
         in an image preprocessing pipeline.
 
-        Parameters:
+        Args:
             - clip_limit (float): Threshold for contrast limiting. Higher
                 values increase contrast; too high values may lead to noise
                 amplification.

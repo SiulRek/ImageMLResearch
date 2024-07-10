@@ -10,7 +10,7 @@ def get_sample_from_distribution(distribution_data):
     specifying the type of distribution, and additional parameters required by
     the selected distribution.
 
-    Parameters:
+    Args:
         - distribution_data (dict): A dictionary containing the distribution
             type and its corresponding parameters.
 
