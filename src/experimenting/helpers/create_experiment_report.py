@@ -70,8 +70,17 @@ def create_experiment_report(experiment_data):
         for fig_name, fig_path in experiment_data["figures"].items():
             writer.write_figure(fig_name, fig_path)
 
+    # Write Description Summary
+    writer.write_title("Summary", level=2)
+    writer.write_title("Trials", level=3)
+    for trial in from_exp_get("trials", []):
+        try:
+            writer.write_key_value(trial["name"], trial["description"])
+        except (KeyError, TypeError):
+            pass
+
     # Write Results Summary
-    writer.write_title("Results Summary", level=2)
+    writer.write_title("Results", level=3)
     summary_table = get_summary_table(experiment_data)
     writer.write_nested_table(summary_table)
 
