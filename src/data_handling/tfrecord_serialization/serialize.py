@@ -2,6 +2,8 @@ import os
 
 import tensorflow as tf
 
+from src.utils import unbatch_dataset_if_batched
+
 
 def _bytes_feature(value):
     """ Returns a bytes_list from a string / byte. """
@@ -54,18 +56,12 @@ def serialize_dataset_to_tf_record(dataset, filepath, image_format):
         msg += "either 'png' or 'jpeg'."
         raise ValueError(msg)
 
+    dataset = unbatch_dataset_if_batched(dataset)
+
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
-
-    element_spec = dataset.element_spec
-    labeled = isinstance(element_spec, tuple)
-    if (labeled and element_spec[0].shape.ndims == 4) or (
-        not labeled and element_spec.shape.ndims == 4
-    ):
-        dataset = dataset.unbatch()
-
     with tf.io.TFRecordWriter(filepath) as writer:
         for sample in dataset:
-            if labeled:
+            if isinstance(sample, tuple):
                 image, label = sample
             else:
                 image, label = sample, None

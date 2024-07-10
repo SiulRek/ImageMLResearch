@@ -6,6 +6,7 @@ from src.plotting.functions.plot_model_summary import plot_model_summary
 from src.plotting.functions.plot_text import plot_text
 from src.plotting.functions.plot_training_history import plot_training_history
 from src.research.attributes.research_attributes import ResearchAttributes
+from src.utils import unbatch_dataset_if_batched
 
 
 def generate_unique_key_name(name, keys):
@@ -175,10 +176,8 @@ class Plotter(ResearchAttributes):
         Returns:
             - The input data.
         """
-        try:
-            dataset = dataset.unbatch()
-        except (AttributeError, ValueError):
-            pass
+        dataset = unbatch_dataset_if_batched(dataset)
+
         inputs_list = []
         for inputs, _ in dataset:
             inputs_list.append(tf.expand_dims(inputs, axis=0))

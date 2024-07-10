@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
+from src.utils import unbatch_dataset_if_batched
+
 
 def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     """
@@ -21,17 +23,14 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     font_size = 12
     dataset_length = len(list(dataset))
 
-    fig, axes = plt.subplots(grid_size[0], grid_size[1], figsize=fig_size)
-    axes = axes.ravel()
-
-    try:
-        dataset = dataset.unbatch()
-    except (AttributeError, ValueError):
-        pass
+    dataset = unbatch_dataset_if_batched(dataset)
 
     if dataset_length > sample_num:
         skip = tf.random.uniform([], 0, dataset_length - sample_num, dtype=tf.int64)
         dataset = dataset.skip(skip) if skip > 0 else dataset
+
+    fig, axes = plt.subplots(grid_size[0], grid_size[1], figsize=fig_size)
+    axes = axes.ravel()
 
     for i, data in enumerate(dataset.take(grid_size[0] * grid_size[1])):
         if isinstance(data, tuple):
