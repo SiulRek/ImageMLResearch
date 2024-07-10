@@ -71,6 +71,11 @@ class TestTrainer(BaseTestCase):
         self.trainer.set_compiled_model(model)
         self.assertIs(self.trainer.model, model)
 
+    def test_get_labels_tensor(self):
+        label_tensor = self.trainer._get_labels_tensor('train_dataset')
+        self.assertIsInstance(label_tensor, tf.Tensor)
+        self.assertEqual(label_tensor.shape[1], 10)
+
     def test_fit_predict_evaluate(self):
         model = self._create_compiled_model()
         self.trainer.set_compiled_model(model)
