@@ -36,7 +36,9 @@ class Experiment(ResearchAttributes):
                 `research_attributes` during initialization, as it simplifies
                 the usage within a context manager.
         """
-        super().__init__()
+        # Not initializing ResearchAttributes here, 
+        # prefer call synchronize_research_attributes explicitly.
+        # super().__init__()
 
         # Initialize research attributes used in the Experiment
         self._figures = {

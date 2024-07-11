@@ -14,7 +14,9 @@ class DataHandler(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the DataHandler. """
-        super().__init__()
+        # Not initializing ResearchAttributes here, 
+        # prefer call synchronize_research_attributes explicitly.
+        # super().__init__()
 
         # Initialize research attributes used in the DataHandler
         self._datasets_container = {
