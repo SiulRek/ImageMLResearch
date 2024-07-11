@@ -12,7 +12,7 @@ class Trainer(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the Trainer. """
-        # Not initializing ResearchAttributes here, 
+        # Not initializing ResearchAttributes here,
         # prefer call synchronize_research_attributes explicitly.
         # super().__init__()
 
@@ -22,10 +22,12 @@ class Trainer(ResearchAttributes):
         }  # Read
         self._model = None  # Read and write
         self._outputs_container = {
-            # Output name: Tuple -> (y_true, y_pred)    
+            # Output name: Tuple -> (y_true, y_pred)
         }  # Read and write
         self._training_history = None  # Write
-        self._evaluation_metrics = None  # Write
+        self._evaluation_metrics = {
+            # Metric name: Metric value
+        }  # Write
 
     def set_compiled_model(self, model):
         """
@@ -71,9 +73,10 @@ class Trainer(ResearchAttributes):
             outputs = self._outputs_container.get("complete_output")
         y_true, y_pred = outputs
         class_names = self.label_manager.class_names
-        self._evaluation_metrics = compute_classification_metrics(
+        classification_metrics = compute_classification_metrics(
             y_true, y_pred, class_names
         )
+        self._evaluation_metrics.update(classification_metrics)
 
     def _get_labels_tensor(self, dataset_name):
         """
