@@ -102,7 +102,7 @@ class TestExperiment(BaseTestCase):
             for i, (name, trial_description, hyperparameters) in enumerate(
                 trial_definitions
             ):
-                with experiment.trial(
+                with experiment.run_trial(
                     name, trial_description, hyperparameters
                 ) as trial:
                     self.assertIsInstance(trial, Trial)

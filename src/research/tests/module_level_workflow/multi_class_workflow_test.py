@@ -129,7 +129,7 @@ class TestMultiClassWorkflow(BaseTestCase):
             self.plotter.plot_images()
             experiment.synchronize_research_attributes(self.plotter)
             for i, trial_definition in enumerate(trial_definitions):
-                with experiment.trial(**trial_definition) as trial:
+                with experiment.run_trial(**trial_definition) as trial:
                     # ## Training ##
                     self.assertTrue(
                         os.path.exists(trial.trial_data["directory"]),

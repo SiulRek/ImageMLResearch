@@ -161,9 +161,9 @@ class Experiment(ResearchAttributes):
             "evaluation_metrics": self._evaluation_metrics,
         }
 
-    def trial(self, name, description, hyperparameters):
+    def run_trial(self, name, description, hyperparameters):
         """
-        Context manager to handle trials within an experiment.
+        Runs a trial context manager within the experiment context manager.
 
         Args:
             - name (str): Name of the trial.

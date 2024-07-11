@@ -49,9 +49,7 @@ class TestTrial(BaseTestCase):
     def test_trial_info_written_to_json(self):
         with self.call_test_trial() as trial:
             pass
-        trial_info_json = os.path.join(
-            trial.trial_data["directory"], "trial_info.json"
-        )
+        trial_info_json = os.path.join(trial.trial_data["directory"], "trial_info.json")
         self.assertTrue(os.path.exists(trial_info_json))
 
         data = self._read_trial_info(trial)
