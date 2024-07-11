@@ -44,7 +44,7 @@ class ResearchAttributes:
         self._outputs_container = {}
         self._model = None
         self._training_history = None
-        self._evaluation_metrics = None
+        self._evaluation_metrics = {}
         self._figures = {}
 
     @property
@@ -106,9 +106,9 @@ class ResearchAttributes:
                 not reset.
         """
         if not except_datasets:
-            self._datasets_container = {}
-        self._outputs_container = {}
+            self._datasets_container.clear()
+        self._outputs_container.clear()
         self._model = None
         self._training_history = None
-        self._evaluation_metrics = None
-        self._figures = {}
+        self._evaluation_metrics.clear()
+        self._figures.clear()
