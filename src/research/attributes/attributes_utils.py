@@ -25,8 +25,9 @@ def copy_public_properties(source_instance, target_instance):
 
     for attr_name in dir(source_instance):
         if is_public_property(attr_name, source_instance):
+            source_value = getattr(source_instance, attr_name)
             try:
-                setattr(target_instance, attr_name, getattr(source_instance, attr_name))
+                setattr(target_instance, attr_name, source_value)
             # If the property is read-only, try to access the private attribute
             except AttributeError:
                 attr_name = "_" + attr_name
@@ -34,7 +35,7 @@ def copy_public_properties(source_instance, target_instance):
                     setattr(
                         target_instance,
                         attr_name,
-                        getattr(source_instance, attr_name[1:]),
+                        source_value,
                     )
                 else:
                     msg = f"Could neither set property {attr_name} nor access"
