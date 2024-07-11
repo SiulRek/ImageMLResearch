@@ -15,11 +15,15 @@ class Trainer(ResearchAttributes):
         super().__init__()
 
         # Initialize research attributes used in the Trainer
+        self._datasets_container = {
+            # Dataset name: Dataset
+        }  # Read
         self._model = None  # Read and write
-        self._outputs_container = {}  # Read and write
+        self._outputs_container = {
+            # Output name: Tuple -> (y_true, y_pred)    
+        }  # Read and write
         self._training_history = None  # Write
         self._evaluation_metrics = None  # Write
-        self._datasets_container = {}  # Read
 
     def set_compiled_model(self, model):
         """

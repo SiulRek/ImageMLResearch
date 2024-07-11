@@ -54,11 +54,15 @@ class Plotter(ResearchAttributes):
         super().__init__()
 
         # Initialize research attributes used in the Plotter
-        self._datasets_container = None  # Read only
-        self._figures = {
-            # Name: Figure
+        self._datasets_container = {
+            # Dataset Name: Dataset
         }  # Read only
-        self._outputs_container = None  # Model outputs (y_true, y_pred) are stored here, when available.  # Read only
+        self._figures = {
+            # Figure Name: Figure
+        }  # Read only
+        self._outputs_container = {
+            # Output Name: Tuple -> (y_true, y_pred) 
+        }  # Read only
         self._training_history = {}  # Read only
         self._model = None  # Read only
 

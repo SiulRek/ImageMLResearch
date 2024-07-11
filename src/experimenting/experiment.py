@@ -39,8 +39,12 @@ class Experiment(ResearchAttributes):
         super().__init__()
 
         # Initialize research attributes used in the Experiment
-        self._figures = {}  # Read only
-        self._evaluation_metrics = {}  # Read only
+        self._figures = {
+            # Name: Figure
+        }  # Read only
+        self._evaluation_metrics = {
+            # Metric: Value
+        }  # Read only
 
         self._init_experiment_data(directory, name, description)
         self.synchronize_research_attributes(research_attributes)
