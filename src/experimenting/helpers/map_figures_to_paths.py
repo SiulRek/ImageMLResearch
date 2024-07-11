@@ -3,7 +3,8 @@ import os
 
 def map_figures_to_paths(figures, directory):
     """
-    Converts the key-figure pairs to key-path pairs and saves the figures.
+    Converts the key-figure pairs to key-path pairs and saves the figures. It
+    does not modify the input dictionary, instead it creates a new one.
 
     Args:
         - figures (dict): The dictionary of figures.
