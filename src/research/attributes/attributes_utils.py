@@ -1,3 +1,17 @@
+def is_public_property(attr_name, source_instance):
+    """
+    Checks if an attribute is a public property of a class instance.
+
+    Args:
+        - attr_name (str): The attribute name to check.
+        - source_instance: The instance to check the attribute in.
+
+    """
+    cls = source_instance.__class__
+    attr = getattr(cls, attr_name, None)
+    return isinstance(attr, property) and not attr_name.startswith("_")
+
+
 def copy_public_properties(source_instance, target_instance):
     """
     Copies the public properties from one instance into another class instance.
@@ -8,11 +22,6 @@ def copy_public_properties(source_instance, target_instance):
         - source_instance: The instance from which properties are copied.
         - target_instance: The class instance to insert attributes into.
     """
-
-    def is_public_property(attr_name, source_instance):
-        cls = source_instance.__class__
-        attr = getattr(cls, attr_name, None)
-        return isinstance(attr, property) and not attr_name.startswith("_")
 
     for attr_name in dir(source_instance):
         if is_public_property(attr_name, source_instance):
