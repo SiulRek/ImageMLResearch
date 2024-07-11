@@ -1,3 +1,4 @@
+from copy import copy
 import json
 import os
 import warnings
@@ -159,7 +160,7 @@ class Trial:
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
             - traceback: The traceback if an exception occurred.
-
+C
         Raises:
             - TrialError: If an exception occurred during the trial.
         """
@@ -173,8 +174,9 @@ class Trial:
         self.trial_data["figures"] = map_figures_to_paths(
             trial_results["figures"], self.trial_data["directory"]
         )
-
-        self.trial_data["evaluation_metrics"] = trial_results["evaluation_metrics"]
+        self.trial_data["evaluation_metrics"] = copy(
+            trial_results["evaluation_metrics"]
+        )
 
         self._write_trial_data()
 
