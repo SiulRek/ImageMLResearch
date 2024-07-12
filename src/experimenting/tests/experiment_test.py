@@ -113,7 +113,7 @@ class TestExperiment(BaseTestCase):
                     )
                     self.assertTrue("start_time" in trial.trial_data)
                     # Simulate accuracy
-                    experiment._evaluation_metrics = {"accuracy": 0.9 + i * 0.1}
+                    experiment._evaluation_metrics.update({"accuracy": 0.9 + i * 0.1})
 
             self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
         self.assertEqual(len(experiment.experiment_data["trials"]), 2)
