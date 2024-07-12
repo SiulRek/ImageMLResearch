@@ -3,7 +3,10 @@ import unittest
 from unittest import defaultTestLoader as Loader
 
 from src.research.tests.module_level_workflow.multi_class_workflow_test import (
-    TestMultiClassWorkflow,
+    TestMultiClassModuleLevelWorkflow
+)
+from src.research.tests.researcher_level_workflow.multi_class_workflow_test import (
+    TestMultiClassResearcherLevelWorkflow
 )
 from src.testing.helpers.test_result_logger import TestResultLogger
 
@@ -13,7 +16,8 @@ LOG_FILE = os.path.join(OUTPUT_DIR, "test_results.log")
 
 
 def load_tests(test_suite):
-    test_suite.addTest(Loader.loadTestsFromTestCase(TestMultiClassWorkflow))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestMultiClassModuleLevelWorkflow))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestMultiClassResearcherLevelWorkflow))
     return test_suite
 
 
