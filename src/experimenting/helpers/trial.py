@@ -159,9 +159,8 @@ class Trial:
         Args:
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
-            - traceback: The traceback if an exception occurred.
-C
-        Raises:
+            - traceback: The traceback if an exception occurred. C
+            - Raises:
             - TrialError: If an exception occurred during the trial.
         """
         duration = get_duration(self.trial_data["start_time"])
@@ -176,7 +175,7 @@ C
         )
         self.trial_data["evaluation_metrics"] = copy(
             trial_results["evaluation_metrics"]
-        )
+        )  # Copy as the source trial_results might be modified later (e.g. in next Trial)
 
         self._write_trial_data()
 
