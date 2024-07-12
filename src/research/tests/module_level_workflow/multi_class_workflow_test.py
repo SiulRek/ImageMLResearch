@@ -12,7 +12,7 @@ from src.testing.helpers.empty_directory import empty_directory
 from src.training.trainer import Trainer
 
 
-class TestMultiClassWorkflow(BaseTestCase):
+class TestMultiClassModuleLevelWorkflow(BaseTestCase):
     """ Test case for the multi-class research workflow on module level. """
 
     @classmethod
