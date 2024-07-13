@@ -130,9 +130,7 @@ class Trial:
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
         if exc_type is not None:
-            exc = exc_type(exc_value).with_traceback(traceback)
-            msg = "An error occurred during the trial."
-            raise TrialError(msg) from exc
+            raise
 
     def _write_trial_data(self):
         """ Writes the trial data to a JSON file. """

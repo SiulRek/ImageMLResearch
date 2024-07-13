@@ -110,9 +110,7 @@ class Experiment(ResearchAttributes):
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
         if exc_type is not None:
-            exc = exc_type(exc_value).with_traceback(traceback)
-            msg = "An error occurred during the experiment."
-            raise ExperimentError(msg) from exc
+            raise
 
     def _write_experiment_data(self):
         """ Writes the experiment data to a JSON file. """
