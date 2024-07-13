@@ -112,7 +112,7 @@ class Trainer(ResearchAttributes):
         Args:
             - **kwargs: Keyword arguments for the Keras model's fit method.
         """
-        if self.model is None:
+        if self._model is None:
             msg = "A compiled model must be set before calling fit."
             raise ValueError(msg)
 
@@ -136,7 +136,7 @@ class Trainer(ResearchAttributes):
             kwargs["validation_data"] = val_dataset  # Add to fit kwargs.
 
         fit_dataset = train_dataset if train_dataset else complete_dataset
-        self._training_history = self.model.fit(fit_dataset, **kwargs)
+        self._training_history = self._model.fit(fit_dataset, **kwargs)
 
         outputs_mapping = {
             "train_output": train_dataset,
@@ -148,7 +148,7 @@ class Trainer(ResearchAttributes):
         for output_name, dataset in outputs_mapping.items():
             if dataset:
                 dataset_name = output_name.replace("output", "dataset")
-                y_pred = self.model.predict(dataset)
+                y_pred = self._model.predict(dataset)
                 y_true = self._get_labels_tensor(dataset_name)
                 outputs = (y_true, y_pred)
                 self._outputs_container[output_name] = outputs
