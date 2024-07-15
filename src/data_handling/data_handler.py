@@ -14,7 +14,7 @@ class DataHandler(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the DataHandler. """
-        # Not initializing ResearchAttributes here, 
+        # Not initializing ResearchAttributes here,
         # prefer call synchronize_research_attributes explicitly.
         # super().__init__()
 
@@ -24,7 +24,7 @@ class DataHandler(ResearchAttributes):
         }  # Read/write
 
         self._backuped_datasets_container = {}
-        
+
     def load_dataset(self, data):
         """
         Load a dataset from the given data and stores it in the
@@ -46,9 +46,9 @@ class DataHandler(ResearchAttributes):
                 data, self.label_manager.label_type, self.label_manager.class_names
             )
             return
-        except ValueError:
+        except ValueError as exc:
             msg = f"Not possible to load dataset from {data}."
-            raise ValueError(msg)
+            raise ValueError(msg) from exc
 
     def _assert_dataset_exists(self, dataset_name):
         """
@@ -69,10 +69,8 @@ class DataHandler(ResearchAttributes):
         self,
         dataset_names=None,
         batch_size=None,
-        shuffle=False,
-        random_seed=None,
+        shuffle_seed=None,
         prefetch_buffer_size=tf.data.experimental.AUTOTUNE,
-        cache=False,
         repeat_num=None,
     ):
         """
@@ -85,8 +83,8 @@ class DataHandler(ResearchAttributes):
                 'test_dataset' if split already. If None, all datasets in the
                 container are enhanced.
             - batch_size (int, optional): The batch size for the dataset.
-            - shuffle (bool, optional): Whether to shuffle the dataset.
-            - random_seed (int, optional): The random seed for shuffling.
+            - shuffle_seed (int, optional): The seed for shuffling the
+                dataset. If None, no shuffling is applied.
             - prefetch_buffer_size (int, optional): The prefetch buffer
                 size.
             - cache (bool, optional): Whether to cache the dataset.
@@ -99,12 +97,10 @@ class DataHandler(ResearchAttributes):
             dataset = self._datasets_container[dataset_name]
             enhanced_dataset = enhance_dataset(
                 dataset,
-                batch_size,
-                shuffle,
-                random_seed,
-                prefetch_buffer_size,
-                cache,
-                repeat_num,
+                batch_size=batch_size,
+                shuffle_seed=shuffle_seed,
+                prefetch_buffer_size=prefetch_buffer_size,
+                repeat_num=repeat_num,
             )
             self._datasets_container[dataset_name] = enhanced_dataset
 

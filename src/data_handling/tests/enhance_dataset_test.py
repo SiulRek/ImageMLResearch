@@ -15,7 +15,7 @@ class TestEnhanceDataset(BaseTestCase):
 
     def test_shuffling(self):
         original_first_element = next(iter(self.dataset)).numpy()
-        enhanced = enhance_dataset(self.dataset, shuffle=True, random_seed=42)
+        enhanced = enhance_dataset(self.dataset, shuffle_seed=42)
         enhanced_first_element = next(iter(enhanced)).numpy()
         self.assertFalse(
             tf.reduce_all(tf.equal(original_first_element, enhanced_first_element)),

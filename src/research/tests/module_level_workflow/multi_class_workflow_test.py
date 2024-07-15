@@ -88,8 +88,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         self.data_handler.enhance_datasets(
             ["train_dataset", "val_dataset", "test_dataset"],
             batch_size=32,
-            shuffle=True,
-            random_seed=42,
+            shuffle_seed=42,
             prefetch_buffer_size=10,
             repeat_num=1,
         )
@@ -142,7 +141,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                     )
                     self.trainer.set_compiled_model(model)
                     self.trainer.fit_predict_evaluate(
-                        epochs=10, steps_per_epoch=10, validation_steps=5
+                        epochs=10, validation_steps=5
                     )
                     self._assert_outputs_container(self.trainer)
                     has_evaluation_metrics = (
