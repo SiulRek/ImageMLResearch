@@ -1,5 +1,7 @@
 import tensorflow as tf
 
+from src.data_handling.manipulation.shuffle_dataset import shuffle_dataset
+
 
 def enhance_dataset(
     dataset,
@@ -34,8 +36,7 @@ def enhance_dataset(
         - tf.data.Dataset: The enhanced TensorFlow dataset.
     """
     if shuffle:
-        shuffle_buffer_size = dataset.cardinality().numpy()
-        dataset = dataset.shuffle(buffer_size=shuffle_buffer_size, seed=random_seed)
+        dataset = shuffle_dataset(dataset, random_seed=random_seed)
 
     if batch_size:
         dataset = dataset.batch(batch_size)

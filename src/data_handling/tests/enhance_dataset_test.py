@@ -11,16 +11,15 @@ class TestEnhanceDataset(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.dataset = tf.data.Dataset.range(100)
+        self.dataset = self.load_mnist_digits_dataset(sample_num=100)
 
     def test_shuffling(self):
         original_first_element = next(iter(self.dataset)).numpy()
         enhanced = enhance_dataset(self.dataset, shuffle=True, random_seed=42)
         enhanced_first_element = next(iter(enhanced)).numpy()
-        self.assertNotEqual(
-            original_first_element,
-            enhanced_first_element,
-            "Shuffling did not change dataset order.",
+        self.assertFalse(
+            tf.reduce_all(tf.equal(original_first_element, enhanced_first_element)),
+            "Shuffling did not change the order of the dataset.",
         )
 
     def test_batching(self):
