@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch
 from unittest.mock import MagicMock
 
-from src.experimenting.experiment import Experiment, ExperimentError
+from src.experimenting.experiment import Experiment
 import src.experimenting.experiment as experiment_module
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
@@ -86,10 +86,8 @@ class TestExperiment(BaseTestCase):
         try:
             with self.call_test_experiment():
                 raise_error_with_traceback()
-        except ExperimentError as e:
+        except ValueError as e:
             experiment_exception_raised = True
-            exception_message = "An error occurred during the experiment."
-            self.assertTrue(exception_message in str(e))
             self.assertTrue(e.__traceback__)
         self.assertTrue(experiment_exception_raised)
 
