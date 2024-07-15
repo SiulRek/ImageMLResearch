@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 
 import matplotlib.pyplot as plt
 
-from src.experimenting.helpers.trial import Trial, TrialError
+from src.experimenting.helpers.trial import Trial
 from src.testing.base.base_test_case import BaseTestCase
 
 
@@ -107,10 +107,8 @@ class TestTrial(BaseTestCase):
         try:
             with self.call_test_trial():
                 raise_error_with_traceback()
-        except TrialError as e:
+        except ValueError as e:
             trial_exception_raised = True
-            exception_msg = "An error occurred during the trial."
-            self.assertTrue(exception_msg in str(e))
             self.assertTrue(e.__traceback__)
         self.assertTrue(trial_exception_raised)
         self.assertEqual(len(self.mock_experiment.experiment_data["trials"]), 0)
