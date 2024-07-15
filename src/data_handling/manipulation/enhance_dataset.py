@@ -9,7 +9,6 @@ def enhance_dataset(
     shuffle=False,
     random_seed=None,
     prefetch_buffer_size=tf.data.experimental.AUTOTUNE,
-    cache=False,
     repeat_num=None,
 ):
     """
@@ -27,8 +26,6 @@ def enhance_dataset(
             is True.
         - prefetch_buffer_size (int, optional): Number of batches to
             prefetch (default is tf.data.experimental.AUTOTUNE).
-        - cache (bool, optional): Whether to cache the dataset. Default is
-            False.
         - repeat_num (int, optional): Number of times to repeat the dataset.
             None for indefinite repeat.
 
@@ -45,8 +42,5 @@ def enhance_dataset(
 
     if repeat_num is not None:
         dataset = dataset.repeat(repeat_num)
-
-    if cache:
-        dataset = dataset.cache()
 
     return dataset

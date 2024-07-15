@@ -38,15 +38,6 @@ class TestEnhanceDataset(BaseTestCase):
             "Dataset should be repeated 3 times, totaling 300 elements.",
         )
 
-    def test_caching(self):
-        try:
-            enhanced = enhance_dataset(self.dataset, cache=True)
-            self.assertIsInstance(
-                enhanced, tf.data.Dataset, "Caching failed to return a tf.data.Dataset."
-            )
-        except Exception as e:
-            self.fail(f"Enhance dataset with caching raised an exception: {e}")
-
 
 if __name__ == "__main__":
     unittest.main()
