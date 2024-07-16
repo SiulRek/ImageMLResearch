@@ -11,9 +11,9 @@ def plot_multi_class_classification_results(
     predicted probabilities.
 
     Args:
-        - x (np.ndarray): Input data (images, can be grayscale or RGB).
-        - y_true (np.ndarray): True labels, one-hot encoded.
-        - y_pred (np.ndarray): Predicted labels, one-hot encoded.
+        - x (array-like): Input data (images, can be grayscale or RGB).
+        - y_true (array-like): True labels, one-hot encoded.
+        - y_pred (array-like): Predicted labels, one-hot encoded.
         - class_names (List): List of class names.
         - grid_size (Tuple): Tuple containing the grid size (rows, columns).
             Defaults to (2, 2).
@@ -41,7 +41,7 @@ def plot_multi_class_classification_results(
         true_label_index = np.argmax(true_label)
         predicted_label_index = np.argmax(predicted_probs)
         cmap = {"cmap": "gray"} if image.shape[-1] == 1 else {}
-        img_ax.imshow(image.squeeze(), **cmap)
+        img_ax.imshow(image, **cmap)
         img_ax.axis("off")
 
         title_color = "green" if predicted_label_index == true_label_index else "red"
