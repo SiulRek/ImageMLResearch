@@ -66,7 +66,7 @@ class TestMultiClassPlotter(BaseTestCase):
 
     def test_plot_images(self):
         """ Test the plot_images method. """
-        fig = self.multi_class_plotter.plot_images(grid_size=(2, 2))
+        fig = self.multi_class_plotter.plot_images(grid_size=(2, 2), title="Images")
         self.assertEqual(
             len(self.multi_class_plotter.figures), 1, "The figure was not added."
         )

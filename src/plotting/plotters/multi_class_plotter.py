@@ -30,13 +30,17 @@ class MultiClassPlotter(Plotter):
         fig = plot_confusion_matrix(y_true, y_pred, class_names)
         return fig
 
-    def plot_images(self, grid_size=(2, 2)):
+    def plot_images(self, grid_size=(2, 2), **general_plot_kwargs):
         """
         Plots a grid of images from a TensorFlow dataset.
 
         Args:
             - grid_size (Tuple): Tuple containing the grid size (rows,
                 columns). Defaults to (2, 2).
+
+        General plot keyword arguments:
+            - title: Optional title for the plot. Defaults to 'Images'.
+            - show: Whether to show the plot. Defaults to False.
 
         Returns:
             - The figure containing the images.
@@ -47,7 +51,9 @@ class MultiClassPlotter(Plotter):
             name = self.label_manager.get_class(label)
             return name
 
-        return super().plot_images(grid_size, label_to_title_func)
+        return super().plot_images(
+            grid_size, label_to_title_func, **general_plot_kwargs
+        )
 
     @plot_decorator(default_title="Results", default_show=True)
     def plot_results(self, grid_size=(2, 2), prediction_bar=False):
