@@ -20,7 +20,7 @@ class TestMultiClassPlotter(BaseTestCase):
         sample_num = 100
         dataset = cls.load_mnist_digits_dataset(sample_num=sample_num, labeled=True)
         cls.class_names = ["Digit " + str(i) for i in range(10)]
-        y_true = cls._get_labels_tensor(dataset)
+        y_true = cls._get_labels_array(dataset)
         y_pred = cls._get_random_preds_tensor(sample_num)
         cls.multi_class_plotter = MultiClassPlotter()
         research_attributes = ResearchAttributes(
@@ -40,7 +40,7 @@ class TestMultiClassPlotter(BaseTestCase):
         self.multi_class_plotter._figures = {}  # Reset figures before each test
 
     @classmethod
-    def _get_labels_tensor(cls, dataset):
+    def _get_labels_array(cls, dataset):
         labels_list = []
         for _, labels in dataset:
             labels_list.append(tf.expand_dims(labels, axis=0))

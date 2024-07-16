@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import tensorflow as tf
 
 from src.plotting.functions.plot_images import plot_images
@@ -22,6 +23,7 @@ def generate_unique_key_name(name, keys):
 def plot_decorator(default_title, default_show):
     """ Decorator for all plotting functions. It adds a title to the plot and saves
     the figure in the plotter. """
+
     def decorator(plot_func):
         def wrapper(self, *args, **kwargs):
             title = kwargs.pop("title", default_title)
@@ -33,7 +35,7 @@ def plot_decorator(default_title, default_show):
                 msg = "The plot function must return a"
                 msg += "matplotlib.pyplot.Figure."
                 raise ValueError(msg)
-            
+
             fig.subplots_adjust(top=0.90)
             fig.suptitle(title, fontsize=18, fontweight="bold")
 
@@ -42,7 +44,9 @@ def plot_decorator(default_title, default_show):
             if show:
                 plt.show()
             return fig
+
         return wrapper
+
     return decorator
 
 
@@ -51,7 +55,7 @@ class Plotter(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the Plotter. """
-        # Not initializing ResearchAttributes here, 
+        # Not initializing ResearchAttributes here,
         # prefer call synchronize_research_attributes explicitly.
         # super().__init__()
 
@@ -63,7 +67,7 @@ class Plotter(ResearchAttributes):
             # Figure Name: Figure
         }  # Read only
         self._outputs_container = {
-            # Output Name: Tuple -> (y_true, y_pred) 
+            # Output Name: Tuple -> (y_true, y_pred)
         }  # Read only
         self._training_history = {}  # Read only
         self._model = None  # Read only
@@ -145,6 +149,26 @@ class Plotter(ResearchAttributes):
             raise ValueError(msg)
         return plot_model_summary(self._model)
 
+    def _to_numpy_array(self, array):
+        """
+        Converts an array to a numpy array using two approaches:
+            - 1. If the array has a 'numpy' method, it is called.
+            - 2. If the array does not have a 'numpy' method, it is
+                converted to a numpy array using np.array.
+
+        Args:
+            - array (array-like): The array to convert.
+
+        Returns:
+            - The numpy array.
+        """
+        if isinstance(array, np.ndarray):
+            return array
+        try:
+            return array.numpy()
+        except AttributeError:
+            return np.array(array)
+
     def _retrieve_output_data(self, output_name=None):
         """
         Retrieves the output required for various plots.
@@ -175,7 +199,7 @@ class Plotter(ResearchAttributes):
             class_names = None
         return y_true, y_pred, class_names
 
-    def _get_inputs(self, dataset):
+    def _retrieve_input_data(self, dataset):
         """
         Retrieves the input data from the dataset.
 
@@ -212,10 +236,10 @@ class Plotter(ResearchAttributes):
         else:
             msg = "No dataset synced with outputs found to plot. Probably due"
             msg += "to two reasons: 1. Neither 'complete_dataset' nor"
-            msg += "'train_dataset' found in datasets container. 2. No output"
+            msg += "'test_dataset' found in datasets container. 2. No output"
             msg += "data synced with the dataset found in outputs container."
             raise ValueError(msg)
-        x = self._get_inputs(dataset)
+        x = self._retrieve_input_data(dataset)
         y_true, y_pred, class_names = self._retrieve_output_data(output_name)
 
         return x, y_true, y_pred, class_names

@@ -40,12 +40,14 @@ class MultiClassPlotter(Plotter):
         Returns:
             - The figure containing the images.
         """
+
         def label_to_title_func(label):
             label = reverse_one_hot(label)
             name = self.label_manager.get_class(label)
             return name
-        
+
         return super().plot_images(grid_size, label_to_title_func)
+
     @plot_decorator(default_title="Results", default_show=True)
     def plot_results(self, grid_size=(2, 2), prediction_bar=False):
         """
@@ -64,6 +66,7 @@ class MultiClassPlotter(Plotter):
         """
         data = self._retrieve_input_output_data()
         x, y_true, y_pred, class_names = data
+        x = self._to_numpy_array(x)
         return plot_multi_class_classification_results(
-           x, y_true, y_pred, class_names, grid_size, prediction_bar
+            x, y_true, y_pred, class_names, grid_size, prediction_bar
         )
