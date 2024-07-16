@@ -8,8 +8,9 @@ def plot_model_summary(model):
     Plot the summary of the passed model.
 
     Args:
-        - model: Keras model to plot the summary.
-        - Returns:
+        - model (Keras.Model): Keras model to plot the summary.
+    
+    Returns:
         - fig: Matplotlib figure for the model configuration.
     """
     # Configuration

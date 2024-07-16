@@ -8,10 +8,9 @@ def plot_confusion_matrix(y_true, y_pred, class_names):
     Plots a confusion matrix using Matplotlib and Seaborn.
 
     Args:
-        - y_true: Array-like of true labels.
-        - y_pred: Array-like of predicted labels.
-        - class_names: List of class names corresponding to the
-            labels.
+        - y_true (array-like): True labels.
+        - y_pred (array-like): Predicted labels.
+        - class_names (List): List of class names.
 
     Returns:
         - fig: The Matplotlib figure containing the confusion matrix plot.
