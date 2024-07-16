@@ -18,7 +18,7 @@ class BinaryPlotter(Plotter):
         Returns:
             - The figure containing the confusion matrix.
         """
-        y_true, y_pred, class_names = self._retrieve_output_data()
+        y_true, y_pred, class_names = self._retrieve_test_output_data()
         fig = plot_confusion_matrix(y_true, y_pred, class_names)
         return fig
 

@@ -23,7 +23,8 @@ class MultiClassPlotter(Plotter):
         Returns:
             - The figure containing the confusion matrix.
         """
-        y_true, y_pred, class_names = self._retrieve_output_data()
+        y_true, y_pred = self._retrieve_test_output_data()
+        class_names = self._retrieve_class_names()
         y_true = np.argmax(y_true, axis=1)
         y_pred = np.argmax(y_pred, axis=1)
         fig = plot_confusion_matrix(y_true, y_pred, class_names)
@@ -64,8 +65,9 @@ class MultiClassPlotter(Plotter):
         Returns:
             - The figure containing the images and labels.
         """
-        data = self._retrieve_input_output_data()
-        x, y_true, y_pred, class_names = data
+        data = self._retrieve_test_input_output_data()
+        x, y_true, y_pred = data
+        class_names = self._retrieve_class_names()
         x = self._to_numpy_array(x)
         return plot_multi_class_classification_results(
             x, y_true, y_pred, class_names, grid_size, prediction_bar

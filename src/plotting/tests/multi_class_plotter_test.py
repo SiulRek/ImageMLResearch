@@ -28,11 +28,14 @@ class TestMultiClassPlotter(BaseTestCase):
         )
         research_attributes._datasets_container["complete_dataset"] = dataset
         cls.multi_class_plotter.synchronize_research_attributes(research_attributes)
-        cls.multi_class_plotter._retrieve_output_data = MagicMock(
-            return_value=(y_true, y_pred, cls.class_names)
+        cls.multi_class_plotter._retrieve_test_output_data = MagicMock(
+            return_value=(y_true, y_pred)
         )
-        cls.multi_class_plotter._retrieve_input_output_data = MagicMock(
-            return_value=(cls._get_images(dataset), y_true, y_pred, cls.class_names)
+        cls.multi_class_plotter._retrieve_test_input_output_data = MagicMock(
+            return_value=(cls._get_images(dataset), y_true, y_pred)
+        )
+        cls.multi_class_plotter._retrieve_class_names = MagicMock(
+            return_value=cls.class_names
         )
 
     def setUp(self):

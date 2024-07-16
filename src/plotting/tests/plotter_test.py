@@ -64,7 +64,7 @@ class TestPlotter(BaseTestCase):
         """ Test the _retrieve_output_data method. """
         self.plotter._outputs_container = MagicMock()
         self.plotter._outputs_container.get = MagicMock(return_value=([1], [2]))
-        output_data = self.plotter._retrieve_output_data()
+        output_data = self.plotter._retrieve_test_output_data()
         expected_data = ([1], [2], [str(i) for i in range(10)])
         self.assertEqual(output_data, expected_data, "The output data is incorrect.")
 
@@ -74,7 +74,7 @@ class TestPlotter(BaseTestCase):
             tf.data.Dataset.from_tensor_slices(([3], [0]))
         )
         self.plotter._outputs_container["test_output"] = ([1], [2])
-        input_output_data = self.plotter._retrieve_input_output_data()
+        input_output_data = self.plotter._retrieve_test_input_output_data()
         expected_data = ([3], [1], [2], [str(i) for i in range(10)])
         self.assertEqual(
             input_output_data, expected_data, "The input-output data is incorrect."

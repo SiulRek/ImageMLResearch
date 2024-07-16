@@ -29,7 +29,7 @@ class TestBinaryPlotter(BaseTestCase):
         )
         research_attributes._datasets_container["complete_dataset"] = dataset
         cls.binary_plotter.synchronize_research_attributes(research_attributes)
-        cls.binary_plotter._retrieve_output_data = MagicMock(
+        cls.binary_plotter._retrieve_test_output_data = MagicMock(
             return_value=(y_true, y_pred, cls.class_names)
         )
 

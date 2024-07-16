@@ -6,7 +6,8 @@ from src.utils import unbatch_dataset_if_batched
 
 
 class DataRetriever(ResearchAttributes):
-    """ A class to retrieve input and output data for plotting. """
+    """ A class to retrieve input and output data from the `datasets_containers` and
+    `outputs_containers` in ResearchAttributes. """
 
     def __init__(self):
         """ Initializes the DataRetriever. """
@@ -42,13 +43,27 @@ class DataRetriever(ResearchAttributes):
         except AttributeError:
             return np.array(array)
 
-    def _retrieve_output_data(self):
+    def _retrieve_class_names(self):
+        """
+        Retrieves the class names from the label manager.
+
+        Returns:
+            - The class names.
+        """
+        try:
+            class_names = self.label_manager.class_names
+        except AttributeError:
+            msg = "No class names found in the label manager."
+            raise AttributeError(msg)
+        return class_names
+
+    def _retrieve_test_output_data(self):
         """
         Retrieves the output of test dataset containing the true and predicted
         labels.
 
         Returns:
-            - (Tuple): (y_true, y_pred, class_names)
+            - (Tuple): (y_true, y_pred)
         """
         complete_output = self._outputs_container.get("complete_output")
         test_output = self._outputs_container.get("test_output")
@@ -59,24 +74,24 @@ class DataRetriever(ResearchAttributes):
             raise ValueError(msg)
         y_true = output[0]
         y_pred = output[1]
-
-        try:
-            class_names = self.label_manager.class_names
-        except AttributeError:
-            class_names = None
-        return y_true, y_pred, class_names
+        return y_true, y_pred
 
     def _retrieve_output_data_by_name(self, output_name):
+        """
+        Retrieve output data by name.
+
+        Args:
+            - output_name (str): The name of the output data in the output
+                container to retrieve.
+
+        Returns:
+            - The output data associated with the given name.
+        """
         if output_name not in self._outputs_container:
             msg = f"No output data found with name '{output_name}' to plot."
             raise ValueError(msg)
 
-        try:
-            class_names = self.label_manager.class_names
-        except AttributeError:
-            class_names = None
-
-        return *self._outputs_container[output_name], class_names
+        return self._outputs_container[output_name]
 
     def _retrieve_input_data_by_name(self, dataset_name):
         """
@@ -101,12 +116,12 @@ class DataRetriever(ResearchAttributes):
         inputs_tensor = tf.concat(inputs_list, axis=0)
         return inputs_tensor
 
-    def _retrieve_input_output_data(self):
+    def _retrieve_test_input_output_data(self):
         """
         Retrieves the input and output data of test dataset.
 
         Returns:
-            - (Tuple): (x, y_true, y_pred, class_names)
+            - (Tuple): (x, y_true, y_pred)
         """
         for dataset_name in ["complete_dataset", "test_dataset"]:
             if (
@@ -116,9 +131,7 @@ class DataRetriever(ResearchAttributes):
                 try:
                     x = self._retrieve_input_data_by_name(dataset_name)
                     output_name = dataset_name.replace("dataset", "output")
-                    y_true, y_pred, class_names = self._retrieve_output_data_by_name(
-                        output_name
-                    )
+                    y_true, y_pred = self._retrieve_output_data_by_name(output_name)
                     break
                 except ValueError:
                     pass
@@ -129,4 +142,4 @@ class DataRetriever(ResearchAttributes):
             msg += "data synced with the dataset found in outputs container."
             raise ValueError(msg)
 
-        return x, y_true, y_pred, class_names
+        return x, y_true, y_pred
