@@ -1,10 +1,7 @@
 import tensorflow as tf
 
 from src.research.attributes.research_attributes import ResearchAttributes
-from src.training.evaluating.compute_classification_metrics import (
-    compute_classification_metrics,
-)
-from src.utils import unbatch_dataset_if_batched
+from src.training.evaluating.evaluate import get_evaluation_function
 
 
 class Trainer(ResearchAttributes):
@@ -45,20 +42,11 @@ class Trainer(ResearchAttributes):
                 msg = f"Dataset '{name}' must be batched and have 4 dimensions."
                 raise ValueError(msg)
 
-    def _evaluate(self):
-        """
-        Evaluates the model using the predictions and true labels from the
-        outputs and datasets containers. Uses 'test_dataset' if available, else
-        'complete_dataset'.
-        """
-        if self.label_manager.label_type not in [
-            "binary",
-            "multi_class",
-            "multi_label",
-        ]:
-            msg = f"Label type '{self.label_manager.label_type}' is not"
-            msg += "supported for evaluation."
-            raise ValueError(msg)
+    def _evaluate_outputs(self):
+        """ Evaluates the outputs of the model using the appropriate evaluation
+        function based on the label type. """
+        label_type = self.label_manager.label_type
+        eval_func = get_evaluation_function(label_type)
 
         if (
             not "complete_output" in self._outputs_container
@@ -72,11 +60,8 @@ class Trainer(ResearchAttributes):
         if outputs is None:
             outputs = self._outputs_container.get("complete_output")
         y_true, y_pred = outputs
-        class_names = self.label_manager.class_names
-        classification_metrics = compute_classification_metrics(
-            y_true, y_pred, class_names
-        )
-        self._evaluation_metrics.update(classification_metrics)
+        evaluation_metrics = eval_func(y_true, y_pred)
+        self._evaluation_metrics.update(evaluation_metrics)
 
     def _get_labels_tensor(self, dataset_name):
         """
@@ -90,7 +75,7 @@ class Trainer(ResearchAttributes):
             - tf.Tensor: Labels from the dataset.
         """
         dataset = self._datasets_container[dataset_name]
-        
+
         labels = dataset.map(lambda x, y: y)
         labels_tensor = tf.concat(list(labels), axis=0)
         return labels_tensor
@@ -149,4 +134,4 @@ class Trainer(ResearchAttributes):
                 y_true = self._get_labels_tensor(dataset_name)
                 outputs = (y_true, y_pred)
                 self._outputs_container[output_name] = outputs
-        self._evaluate()
+        self._evaluate_outputs()

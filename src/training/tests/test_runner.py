@@ -3,8 +3,8 @@ import unittest
 from unittest import defaultTestLoader as Loader
 
 from src.testing.helpers.test_result_logger import TestResultLogger
-from src.training.tests.compute_classification_metrics_test import (
-    TestComputeClassificationMetrics,
+from src.training.tests.evaluate_test import (
+    TestEvaluate,
 )
 from src.training.tests.trainer_test import TestTrainer
 
@@ -14,7 +14,7 @@ LOG_FILE = os.path.join(OUTPUT_DIR, "test_results.log")
 
 
 def load_tests(test_suite):
-    test_suite.addTest(Loader.loadTestsFromTestCase(TestComputeClassificationMetrics))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestEvaluate))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestTrainer))
     return test_suite
 

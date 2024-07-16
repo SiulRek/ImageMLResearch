@@ -59,7 +59,6 @@ class TestTrainer(BaseTestCase):
             "precision": float,
             "recall": float,
             "f1": float,
-            "classification_report": str,
         }
 
         for metric, expected_type in expected_metrics.items():
