@@ -28,12 +28,16 @@ class DataHandler(ResearchAttributes):
     def load_dataset(self, data):
         """
         Load a dataset from the given data and stores it in the
-        'datasets_container' under 'complete_dataset'.
+        'datasets_container' under 'complete_dataset'. Note, when passing a
+        tf.data.Dataset it is recommended to provide a dataset where no Keras
+        operation, like shuffling, batching, etc., has been applied. This
+        operation can than be applied in the 'enhance_datasets' method.
 
         Args:
             - data (tf.data.Dataset, dict, pandas.DataFrame): The data to
-                load, can be a TensorFlow dataset or a dictionary/pandas
-                DataFrame, with key/column is 'image' and 'label'.
+                load, can be a TensorFlow dataset consisting of Tuples of the
+                form (image, label) or a dictionary/pandas DataFrame, with
+                key/column is 'image' and 'label'.
         """
         # 2 possible methods to load dataset:
         # 1. Is already of format tensorflow.data.Dataset
