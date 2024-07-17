@@ -1,5 +1,6 @@
 import json
 import os
+from time import sleep
 import unittest
 from unittest.mock import patch
 from unittest.mock import MagicMock
@@ -91,7 +92,7 @@ class TestExperiment(BaseTestCase):
             self.assertTrue(e.__traceback__)
         self.assertTrue(experiment_exception_raised)
 
-    def _run_trials_and_verify(self, trial_definitions):
+    def _run_trials_and_verify(self, trial_definitions, sleep_time=None):
         with self.call_test_experiment() as experiment:
             for i, (name, trial_description, hyperparameters) in enumerate(
                 trial_definitions
@@ -110,6 +111,9 @@ class TestExperiment(BaseTestCase):
                     experiment._evaluation_metrics.update({"accuracy": 0.9 + i * 0.1})
 
             self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
+
+            if sleep_time is not None:
+                sleep(sleep_time)
 
         return experiment
 
@@ -152,6 +156,35 @@ class TestExperiment(BaseTestCase):
         reloaded_trials_data = reloaded_experiment.experiment_data["trials"]
 
         self.assertEqual(trials_data, reloaded_trials_data)
+
+    def test_resume_experiment(self):
+        def get_experiment_duration(experiment):
+            duration = experiment.experiment_data["duration"]
+            duration = float(duration.replace(":", ""))
+            return duration
+        
+        trial_definitions = [
+            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
+        ]
+        initial_experiment = self._run_trials_and_verify(
+            trial_definitions, sleep_time=0.01
+        )
+        initial_duration = get_experiment_duration(initial_experiment)
+
+        del initial_experiment
+
+        new_trial_definitions = [
+            ("trial3", "This is trial 3", {"lr": 0.001, "batch_size": 32}),
+            ("trial4", "This is trial 4", {"lr": 0.001, "batch_size": 32}),
+        ]
+        resumed_experiment = self._run_trials_and_verify(
+            new_trial_definitions, sleep_time=0.01
+        )
+        total_duration = get_experiment_duration(resumed_experiment)
+
+        self.assertEqual(len(resumed_experiment.experiment_data["trials"]), 4)
+        self.assertGreater(total_duration, initial_duration)
 
 
 if __name__ == "__main__":
