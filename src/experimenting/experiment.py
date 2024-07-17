@@ -7,7 +7,11 @@ from src.experimenting.helpers.experiment_data import (
     load_experiment_data,
 )
 from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
-from src.experimenting.helpers.time_utils import get_datetime, get_duration
+from src.experimenting.helpers.time_utils import (
+    get_datetime,
+    get_duration,
+    add_durations,
+)
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -100,8 +104,23 @@ class Experiment(ResearchAttributes):
         Returns:
             - self: The Experiment instance.
         """
-        self.experiment_data["start_time"] = get_datetime()
+        datetime = get_datetime()
+        if self.experiment_data["start_time"] is None:
+            self.experiment_data["start_time"] = datetime
+        self.experiment_data["resume_time"] = datetime
         return self
+
+    def _calculate_total_duration(self):
+        """ Calculates the total duration of the experiment. """
+        duration = get_duration(self.experiment_data["resume_time"])
+        previous_duration = self.experiment_data["duration"] or "0"
+        duration = add_durations(previous_duration, duration)
+        self.experiment_data["duration"] = duration
+
+    def _raise_exception_if_any(self, exc_type, exc_value, traceback):
+        """ Raises an exception if an exception occurred during the experiment. """
+        if exc_type is not None:
+            raise
 
     def _sort_trials(self):
         """ Sorts the trials by the accuracy in descending order. """
@@ -110,10 +129,6 @@ class Experiment(ResearchAttributes):
         self.experiment_data["trials"].sort(
             key=lambda x: x["evaluation_metrics"]["accuracy"], reverse=True
         )
-
-    def _raise_exception_if_any(self, exc_type, exc_value, traceback):
-        if exc_type is not None:
-            raise
 
     def _write_experiment_data(self):
         """ Writes the experiment data to a JSON file. """
@@ -145,10 +160,7 @@ class Experiment(ResearchAttributes):
             - ExperimentError: If an exception occurred during the
                 experiment.
         """
-        duration = get_duration(self.experiment_data["start_time"])
-        # duration = get_duration(self.experiment_data["resume_time"])
-        # duration = add_duration(duration, self.experiment_data["duration"])
-        self.experiment_data["duration"] = duration
+        self._calculate_total_duration()
 
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
