@@ -5,7 +5,10 @@ from unittest import defaultTestLoader as Loader
 from src.plotting.tests.binary_plotter_test import TestBinaryPlotter
 from src.plotting.tests.multi_class_plotter_test import TestMultiClassPlotter
 from src.plotting.tests.plot_confusion_matrix_test import TestPlotConfusionMatrix
+from src.plotting.tests.plot_decorator_test import TestPlotDecorator
 from src.plotting.tests.plot_images_test import TestPlotImages
+from src.plotting.tests.plot_model_summary_test import TestPlotModelSummary
+import src.plotting.tests.plot_results_test as plot_results_test
 from src.plotting.tests.plot_text_test import TestPlotText
 from src.plotting.tests.plot_training_history_test import TestPlotTrainingHistory
 from src.plotting.tests.plotter_test import TestPlotter
@@ -35,6 +38,9 @@ def load_tests(test_suite):
     test_suite.addTest(Loader.loadTestsFromTestCase(TestBinaryPlotter))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestMultiClassPlotter))
     test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotTrainingHistory))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotDecorator))
+    test_suite.addTest(Loader.loadTestsFromTestCase(TestPlotModelSummary))
+    test_suite.addTest(Loader.loadTestsFromModule(plot_results_test))
     return test_suite
 
 
