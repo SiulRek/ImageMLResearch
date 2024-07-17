@@ -2,6 +2,10 @@ import json
 import os
 
 from src.experimenting.helpers.create_experiment_report import create_experiment_report
+from src.experimenting.helpers.experiment_data import (
+    get_default_experiment_data,
+    load_experiment_data,
+)
 from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
 from src.experimenting.helpers.time_utils import get_datetime, get_duration
 from src.experimenting.helpers.trial import Trial
@@ -36,7 +40,7 @@ class Experiment(ResearchAttributes):
                 `research_attributes` during initialization, as it simplifies
                 the usage within a context manager.
         """
-        # Not initializing ResearchAttributes here, 
+        # Not initializing ResearchAttributes here,
         # prefer call synchronize_research_attributes explicitly.
         # super().__init__()
 
@@ -47,7 +51,6 @@ class Experiment(ResearchAttributes):
         self._evaluation_metrics = {
             # Metric: Value
         }  # Read only
-
         self._init_experiment_data(directory, name, description)
         self.synchronize_research_attributes(research_attributes)
         self.report_kwargs = report_kwargs or {}
@@ -63,15 +66,15 @@ class Experiment(ResearchAttributes):
             - description (str): The description of the experiment.
         """
         experiment_directory = self._make_experiment_directory(directory, name)
-        self.experiment_data = {
-            "name": name,
-            "description": description,
-            "start_time": None,
-            "duration": None,
-            "directory": experiment_directory,
-            "figures": {},
-            "trials": [],
-        }
+        try:
+            # Try loading existing experiment data to resume the experiment.
+            experiment_data = load_experiment_data(experiment_directory)
+        except FileNotFoundError:
+            experiment_data = get_default_experiment_data()
+        experiment_data["description"] = description
+        experiment_data["directory"] = experiment_directory
+        experiment_data["name"] = name
+        self.experiment_data = experiment_data
 
     def _make_experiment_directory(self, directory, name):
         """
@@ -143,6 +146,8 @@ class Experiment(ResearchAttributes):
                 experiment.
         """
         duration = get_duration(self.experiment_data["start_time"])
+        # duration = get_duration(self.experiment_data["resume_time"])
+        # duration = add_duration(duration, self.experiment_data["duration"])
         self.experiment_data["duration"] = duration
 
         self._raise_exception_if_any(exc_type, exc_value, traceback)

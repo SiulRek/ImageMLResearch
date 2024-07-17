@@ -91,11 +91,7 @@ class TestExperiment(BaseTestCase):
             self.assertTrue(e.__traceback__)
         self.assertTrue(experiment_exception_raised)
 
-    def test_trials_creation(self):
-        trial_definitions = [
-            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
-            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
-        ]
+    def _run_trials_and_verify(self, trial_definitions):
         with self.call_test_experiment() as experiment:
             for i, (name, trial_description, hyperparameters) in enumerate(
                 trial_definitions
@@ -114,6 +110,16 @@ class TestExperiment(BaseTestCase):
                     experiment._evaluation_metrics.update({"accuracy": 0.9 + i * 0.1})
 
             self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
+
+        return experiment
+
+    def test_trials_creation(self):
+        trial_definitions = [
+            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
+        ]
+        experiment = self._run_trials_and_verify(trial_definitions)
+
         self.assertEqual(len(experiment.experiment_data["trials"]), 2)
 
         # Assert if trials are sorted by accuracy
@@ -124,6 +130,28 @@ class TestExperiment(BaseTestCase):
             experiment.experiment_data["trials"][1]["evaluation_metrics"]["accuracy"],
             0.9,
         )
+
+    def test_load_experiment_data(self):
+        trial_definitions = [
+            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
+        ]
+
+        experiment = self._run_trials_and_verify(trial_definitions)
+        reloaded_experiment = Experiment(
+            research_attributes=self.research_attributes,
+            directory=self.directory,
+            name=self.name,
+            description=self.description,
+        )
+        # Check if the trials are loaded correctly
+        trials_data = experiment.experiment_data["trials"]
+        # No reloading supported currently for training_history
+        for trials in trials_data:
+            trials.pop("training_history", None)
+        reloaded_trials_data = reloaded_experiment.experiment_data["trials"]
+
+        self.assertEqual(trials_data, reloaded_trials_data)
 
 
 if __name__ == "__main__":
