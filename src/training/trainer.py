@@ -1,3 +1,5 @@
+import warnings
+
 import tensorflow as tf
 
 from src.research.attributes.research_attributes import ResearchAttributes
@@ -23,7 +25,7 @@ class Trainer(ResearchAttributes):
         }  # Read and write
         self._training_history = None  # Write
         self._evaluation_metrics = {
-            # Metric name: Metric value
+            # Set Name: Metrics -> {Metric: Value}
         }  # Write
 
     def set_compiled_model(self, model):
@@ -45,22 +47,23 @@ class Trainer(ResearchAttributes):
     def _evaluate_outputs(self):
         """ Evaluates the outputs of the model using the appropriate evaluation
         function based on the label type. """
-        label_type = self.label_manager.label_type
-        eval_func = get_evaluation_function(label_type)
-
         if (
             not "complete_output" in self._outputs_container
             and not "test_output" in self._outputs_container
         ):
-            msg = "Neither 'complete_output' nor 'test_output' found"
+            msg = "Neither 'complete_output' nor 'test_output' found\n"
             msg += "in outputs container to evaluate."
-            raise ValueError(msg)
+            warnings.warn(msg)
 
-        outputs = self._outputs_container.get("test_output")
-        if outputs is None:
-            outputs = self._outputs_container.get("complete_output")
-        y_true, y_pred = outputs
-        evaluation_metrics = eval_func(y_true, y_pred)
+        label_type = self.label_manager.label_type
+        eval_func = get_evaluation_function(label_type)
+        evaluation_metrics = {}
+        self._evaluation_metrics.clear()
+        for output_name, outputs in self._outputs_container.items():
+            if outputs:
+                name = output_name.replace("_output", "")
+                y_true, y_pred = outputs
+                evaluation_metrics[name] = eval_func(y_true, y_pred)
         self._evaluation_metrics.update(evaluation_metrics)
 
     def _get_labels_tensor(self, dataset_name):
@@ -109,10 +112,6 @@ class Trainer(ResearchAttributes):
             msg = "Neither 'train_dataset' nor 'complete_dataset' found in"
             msg += "dataset container for training."
             raise ValueError(msg)
-        if test_dataset is None and complete_dataset is None:
-            msg = "Neither 'test_dataset' nor 'complete_dataset' found in"
-            msg += "dataset container for evaluation."
-            raise ValueError(msg)
 
         if val_dataset:
             kwargs["validation_data"] = val_dataset  # Add to fit kwargs.
@@ -134,4 +133,5 @@ class Trainer(ResearchAttributes):
                 y_true = self._get_labels_tensor(dataset_name)
                 outputs = (y_true, y_pred)
                 self._outputs_container[output_name] = outputs
+
         self._evaluate_outputs()

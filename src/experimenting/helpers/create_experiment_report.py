@@ -3,7 +3,7 @@ import os
 from src.experimenting.helpers.markdown_file_writer import MarkdownFileWriter
 
 
-def get_summary_table(experiment_data):
+def _get_summary_table(experiment_data):
     """
     Generate a summary table for the experiment report.
 
@@ -21,14 +21,12 @@ def get_summary_table(experiment_data):
     summary_table = dict()
     chapters = dict()
     trials = from_exp_get("trials", [])
+
     for trial in trials:
-
-        def from_trial_get(key, default=None):
-            return trial.get(key, default)
-
-        name = from_trial_get("name")
+        name = trial.get("name", "No Name")
         chapters[name] = f"[Chapter](#{name.lower().replace(' ', '-')})"
-        metrics = from_trial_get("evaluation_metrics", {})
+        metrics = trial.get("evaluation_metrics", {})
+        metrics = metrics.get("test", metrics.get("complete", {}))
         for key, value in metrics.items():
             if isinstance(value, str):
                 continue
@@ -37,6 +35,28 @@ def get_summary_table(experiment_data):
             summary_table[key][name] = f"{value:.4f}"
     summary_table["Chapters"] = chapters
     return summary_table
+
+
+def _create_evaluation_metrics_table(trial):
+    """
+    Creates a table of evaluation metrics for a given trial.
+
+    Args:
+        - trial: A dictionary representing the trial object.
+
+    Returns:
+        - evaluation_metrics_table: A dictionary containing the evaluation
+            metrics table.
+    """
+    evaluation_metrics = trial.get("evaluation_metrics", {})
+    evaluation_metrics_table = {}
+    for set_name, metrics_set in evaluation_metrics.items():
+        for metric, value in metrics_set.items():
+            if isinstance(value, (int, float)):
+                if not set_name in evaluation_metrics_table:
+                    evaluation_metrics_table[set_name] = {}
+                evaluation_metrics_table[set_name][metric] = f"{value:.4f}"
+    return evaluation_metrics_table
 
 
 def create_experiment_report(experiment_data):
@@ -80,8 +100,8 @@ def create_experiment_report(experiment_data):
             pass
 
     # Write Results Summary
-    writer.write_title("Results", level=3)
-    summary_table = get_summary_table(experiment_data)
+    writer.write_title("Test Results", level=3)
+    summary_table = _get_summary_table(experiment_data)
     writer.write_nested_table(summary_table)
 
     # Write Trials
@@ -94,7 +114,7 @@ def create_experiment_report(experiment_data):
         writer.write_title(from_trial_get("name"), level=2)
         writer.write_key_value("Description", from_trial_get("description"))
         start_time = from_trial_get("start_time").split(".")[0]
-        writer.write_key_value("Start Time",start_time)
+        writer.write_key_value("Start Time", start_time)
         writer.write_key_value("Duration", from_trial_get("duration"))
         trial_directory_link = writer.create_link(from_trial_get("directory"), "Link")
         writer.write_key_value("Directory", trial_directory_link)
@@ -114,14 +134,8 @@ def create_experiment_report(experiment_data):
 
         if "evaluation_metrics" in trial and trial["evaluation_metrics"]:
             writer.write_title("Evaluation Metrics:", level=3)
-            evaluation_metrics_table = {
-                metric: f"{value:.4f}"
-                for metric, value in trial["evaluation_metrics"].items()
-                if isinstance(value, (int, float))
-            }
-            writer.write_key_value_table(
-                evaluation_metrics_table, key_label="Metric", value_label="Value"
-            )
+            evaluation_metrics_table = _create_evaluation_metrics_table(trial)
+            writer.write_nested_table(evaluation_metrics_table)
 
     # Save the report
     writer.save_file()

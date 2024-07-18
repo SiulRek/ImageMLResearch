@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 import tensorflow as tf
 
@@ -52,7 +53,7 @@ class TestTrainer(BaseTestCase):
         )
         return model
 
-    def _verify_metrics_dict(self, metrics):
+    def _verify_metrics_dict(self, metrics, set_len=3):
         """ Verify that the metrics dictionary contains expected keys and types. """
         expected_metrics = {
             "accuracy": float,
@@ -61,9 +62,12 @@ class TestTrainer(BaseTestCase):
             "f1": float,
         }
 
-        for metric, expected_type in expected_metrics.items():
-            self.assertIn(metric, metrics)
-            self.assertIsInstance(metrics[metric], expected_type)
+        self.assertEqual(len(metrics), set_len)
+        for metrics_set in metrics.values():
+            self.assertEqual(len(metrics_set), len(expected_metrics))
+            for metric, expected_type in expected_metrics.items():
+                self.assertIn(metric, metrics_set)
+                self.assertIsInstance(metrics_set[metric], expected_type)
 
     def test_set_compiled_model(self):
         model = self._create_compiled_model()
@@ -71,7 +75,7 @@ class TestTrainer(BaseTestCase):
         self.assertIs(self.trainer.model, model)
 
     def test_get_labels_tensor(self):
-        label_tensor = self.trainer._get_labels_tensor('train_dataset')
+        label_tensor = self.trainer._get_labels_tensor("train_dataset")
         self.assertIsInstance(label_tensor, tf.Tensor)
         self.assertEqual(label_tensor.shape[1], 10)
 
@@ -102,7 +106,7 @@ class TestTrainer(BaseTestCase):
         self.assertIn("train_output", self.trainer.outputs_container)
         self.assertIn("test_output", self.trainer.outputs_container)
         self.assertIsNotNone(self.trainer.evaluation_metrics)
-        self._verify_metrics_dict(self.trainer.evaluation_metrics)
+        self._verify_metrics_dict(self.trainer.evaluation_metrics, set_len=2)
 
     def test_fit_predict_evaluate_no_dataset_for_training(self):
         self.trainer._datasets_container.pop("train_dataset")
@@ -111,12 +115,17 @@ class TestTrainer(BaseTestCase):
         with self.assertRaises(ValueError):
             self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
 
-    def test_fit_predict_evaluate_no_dataset_for_evaluation(self):
+    def test_fit_predict_evaluate_no_test_dataset(self):
         self.trainer._datasets_container.pop("test_dataset")
         model = self._create_compiled_model()
         self.trainer.set_compiled_model(model)
-        with self.assertRaises(ValueError):
+        with self.assertWarns(UserWarning):
             self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
+        self.assertIsNotNone(self.trainer.training_history)
+        self.assertIn("train_output", self.trainer.outputs_container)
+        self.assertIn("val_output", self.trainer.outputs_container)
+        self.assertIsNotNone(self.trainer.evaluation_metrics)
+        self._verify_metrics_dict(self.trainer.evaluation_metrics, set_len=2)
 
     def test_contents_of_output_container_after_fit_predict_evaluate(self):
         model = self._create_compiled_model()

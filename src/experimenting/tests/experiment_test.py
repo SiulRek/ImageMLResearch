@@ -108,7 +108,9 @@ class TestExperiment(BaseTestCase):
                     )
                     self.assertTrue("start_time" in trial.trial_data)
                     # Simulate accuracy
-                    experiment._evaluation_metrics.update({"accuracy": 0.9 + i * 0.1})
+                    accuracy = float(1 - i * 0.1)
+                    metrics_set = {"test": {"accuracy": accuracy}}
+                    experiment._evaluation_metrics.update(metrics_set)
 
             self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
 
@@ -118,6 +120,12 @@ class TestExperiment(BaseTestCase):
         return experiment
 
     def test_trials_creation(self):
+
+        def get_accuracy(trial_num):
+            trial = experiment.experiment_data["trials"][trial_num]
+            metrics_set = trial["evaluation_metrics"]["test"]
+            return metrics_set["accuracy"]
+
         trial_definitions = [
             ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
             ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
@@ -127,13 +135,8 @@ class TestExperiment(BaseTestCase):
         self.assertEqual(len(experiment.experiment_data["trials"]), 2)
 
         # Assert if trials are sorted by accuracy
-        self.assertEqual(
-            experiment.experiment_data["trials"][0]["evaluation_metrics"]["accuracy"], 1
-        )
-        self.assertEqual(
-            experiment.experiment_data["trials"][1]["evaluation_metrics"]["accuracy"],
-            0.9,
-        )
+        self.assertEqual(get_accuracy(trial_num=0), 1)
+        self.assertEqual(get_accuracy(trial_num=1), 0.9)
 
     def test_load_experiment_data(self):
         trial_definitions = [
@@ -162,7 +165,7 @@ class TestExperiment(BaseTestCase):
             duration = experiment.experiment_data["duration"]
             duration = float(duration.replace(":", ""))
             return duration
-        
+
         trial_definitions = [
             ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
             ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),

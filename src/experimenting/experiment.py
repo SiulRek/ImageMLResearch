@@ -53,7 +53,7 @@ class Experiment(ResearchAttributes):
             # Name: Figure
         }  # Read only
         self._evaluation_metrics = {
-            # Metric: Value
+            # Set Name: Metrics -> {Metric: Value}
         }  # Read only
         self._init_experiment_data(directory, name, description)
         self.synchronize_research_attributes(research_attributes)
@@ -126,9 +126,20 @@ class Experiment(ResearchAttributes):
         """ Sorts the trials by the accuracy in descending order. """
         if self.experiment_data["trials"] == []:
             return
-        self.experiment_data["trials"].sort(
-            key=lambda x: x["evaluation_metrics"]["accuracy"], reverse=True
-        )
+
+        def get_accuracy(trial):
+            evaluation_metrics = trial["evaluation_metrics"]
+            metrics_set = evaluation_metrics.get("test", {}) or evaluation_metrics.get(
+                "complete", {}
+            )
+            accuracy = metrics_set.get("accuracy", None)
+            if accuracy is None:
+                msg = "Accuracy not found in evaluation metrics for Trial"
+                msg += f"{trial['name']}"
+                raise ExperimentError(msg)
+            return accuracy
+
+        self.experiment_data["trials"].sort(key=lambda x: get_accuracy(x), reverse=True)
 
     def _write_experiment_data(self):
         """ Writes the experiment data to a JSON file. """
