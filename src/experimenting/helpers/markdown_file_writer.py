@@ -81,14 +81,17 @@ class MarkdownFileWriter:
         inner_dict = nested_table_data[headers[0]]
         row_labels = list(inner_dict.keys())
 
-        max_elem_len = max_elem_length(headers + row_labels)
+        max_elem_len = 0
         for inner_dict in nested_table_data.values():
-            previous_max_elem_len = max_elem_len
-            assert set(inner_dict.keys()) == set(row_labels), (
-                "All inner dictionaries must have the same keys."
-            )
-            max_elem_len = max_elem_length(inner_dict.values())
+            previous_max_elem_len = max_elem_len 
+            if set(inner_dict.keys()) != set(
+                row_labels
+            ):
+                for label in inner_dict.keys():
+                    if label not in row_labels:
+                        row_labels.append(label)
             max_elem_len = max(max_elem_len, previous_max_elem_len)
+        max_elem_len = max(max_elem_len, max_elem_length(headers + row_labels))
 
         header_row = (
             f"| {' ' * max_elem_len} | "
@@ -106,7 +109,7 @@ class MarkdownFileWriter:
             label = f"{label}"
             row = f"| {label.ljust(max_elem_len)} | "
             for header in headers:
-                value = nested_table_data[header].get(label, "").ljust(max_elem_len)
+                value = nested_table_data[header].get(label, "N/A").ljust(max_elem_len)
                 row += f"{value} | "
             self.file_lines.append(row)
         self.file_lines.append("\n")
@@ -158,3 +161,24 @@ class MarkdownFileWriter:
     def clear_file(self):
         """ Clears all the content of the current file. """
         self.file_lines = []
+
+if __name__ == "__main__":
+    nested_table_data = {
+        "Model 1": {
+            "Metric 1": "0.9",
+            "Metric 2": "0.8",
+            "Metric 3": "0.7",
+        },
+        "Model 2": {
+            "Metric 1": "0.85",
+            "Metric 2": "0.75",
+            "Metric 3": "0.65",
+            "Metric 4": "0.95",
+        },
+    }
+
+    writer = MarkdownFileWriter("example.md")
+    writer.write_title("Example Markdown File")
+    writer.write_text("This is an example Markdown file.")
+    writer.write_nested_table(nested_table_data)
+    writer.save_file()
