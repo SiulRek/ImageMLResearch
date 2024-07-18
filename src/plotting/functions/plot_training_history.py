@@ -13,7 +13,7 @@ def plot_training_history(history):
             history plot.
     """
     # Configuration
-    axes_size = (10, 6)
+    default_fig_size = (10, 6) # Assumes a single metric.
     font_size = 12
 
     history_dict = history
@@ -25,8 +25,9 @@ def plot_training_history(history):
         if any(key.startswith("val_") for key in history_dict)
         else len(history_dict)
     )
+    fig_size = (default_fig_size[0], default_fig_size[1] * num_metrics)
     fig, axes = plt.subplots(
-        num_metrics, 1, figsize=(axes_size[0], axes_size[1] * num_metrics)
+        num_metrics, 1, figsize=(fig_size[0], fig_size[1])
     )
 
     if num_metrics == 1:
@@ -50,6 +51,7 @@ def plot_training_history(history):
             ax.tick_params(axis="x", labelsize=font_size)
             ax.tick_params(axis="y", labelsize=font_size)
             ax.legend(loc="best", fontsize=font_size)
+            ax.grid(True)
 
     plt.tight_layout()
     return fig
