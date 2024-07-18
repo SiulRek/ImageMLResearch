@@ -95,7 +95,7 @@ class TestPlotter(BaseTestCase):
     def test_plot_training_history(self):
         """ Test the plot_training_history method. """
         self.plotter._training_history = MagicMock()
-        self.plotter._training_history.history = {
+        self.plotter._training_history = {
             "loss": [0.25, 0.15, 0.1],
             "val_loss": [0.3, 0.2, 0.15],
             "accuracy": [0.9, 0.95, 0.97],

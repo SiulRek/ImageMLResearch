@@ -6,8 +6,7 @@ def plot_training_history(history):
     Plots the training and validation history of a Keras model.
 
     Args:
-        - history: History object returned by the fit method of a Keras
-            model.
+        - history: History dictionary containing the training and validation
 
     Returns:
         - fig: The Matplotlib figure containing the training and validation
@@ -17,7 +16,7 @@ def plot_training_history(history):
     axes_size = (10, 6)
     font_size = 12
 
-    history_dict = history.history
+    history_dict = history
     epochs = range(1, len(history_dict[next(iter(history_dict))]) + 1)
 
     # Calculate the number of metrics and adjust the figure size accordingly

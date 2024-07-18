@@ -117,7 +117,8 @@ class Trainer(ResearchAttributes):
             kwargs["validation_data"] = val_dataset  # Add to fit kwargs.
 
         fit_dataset = train_dataset if train_dataset else complete_dataset
-        self._training_history = self._model.fit(fit_dataset, **kwargs)
+        history = self._model.fit(fit_dataset, **kwargs)
+        self._training_history = history.history
 
         outputs_mapping = {
             "train_output": train_dataset,

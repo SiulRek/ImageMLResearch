@@ -39,8 +39,10 @@ class TestPlotTrainingHistory(BaseTestCase):
         # Generate training history with and without validation data
         cls.history_with_val = cls.model.fit(
             cls.train_dataset, epochs=5, validation_data=cls.val_dataset, verbose=0
-        )
-        cls.history_without_val = cls.model.fit(cls.train_dataset, epochs=5, verbose=0)
+        ).history
+        cls.history_without_val = cls.model.fit(
+            cls.train_dataset, epochs=5, verbose=0
+        ).history
 
     @classmethod
     def load_mnist_data(cls):
@@ -92,7 +94,7 @@ class TestPlotTrainingHistory(BaseTestCase):
         )
         history_multiple_metrics = self.model.fit(
             self.train_dataset, epochs=5, validation_data=self.val_dataset, verbose=0
-        )
+        ).history
 
         fig = plot_training_history(history_multiple_metrics)
         fig.savefig(

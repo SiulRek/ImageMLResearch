@@ -17,13 +17,13 @@ class ResearchAttributes:
             corresponds to the dataset name replacing 'dataset' with 'outputs',
             e.g. 'train_dataset' -> 'train_outputs'.
         - model (tf.keras.Model): The Keras model instance.
-        - training_history (tf.keras.callbacks.History): The tracked
-            training history of the model after fitting.
+        - training_history (dict): The tracked training history of the model
+            after fitting (Attribute 'history' of the return value).
         - evaluation_metrics (dict): The tracked evaluation metrics dicts of
             the model after evaluating. Can be set from outside.
-            Format {Set_Name: Metrics ({Metric: Value})}
+        - Format {Set_Name: Metrics ({Metric: Value})}
         - figures (dict): Dictionary containing the tracked figures. Format
-            {figure_name: figure}. Can be set from outside.
+        - {figure_name: figure}. Can be set from outside.
     """
 
     def __init__(self, label_type=None, class_names=None):
