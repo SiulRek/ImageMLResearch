@@ -35,19 +35,52 @@ class MarkdownFileWriter:
         """
         self.file_lines.append(f"{text}\n")
 
+    def _stringify_elements(self, iterable):
+        """
+        Recursively converts the elements in an iterable to strings.
+
+        Args:
+            - iterable: The iterable to be converted.
+
+        Returns:
+            - The converted iterable with all elements as strings.
+        """
+        if isinstance(iterable, dict):
+            return {
+                key: self._stringify_elements(elem) for key, elem in iterable.items()
+            }
+        if isinstance(iterable, list):
+            return [self._stringify_elements(elem) for elem in iterable]
+        if isinstance(iterable, tuple):
+            return tuple(self._stringify_elements(elem) for elem in iterable)
+        if isinstance(iterable, set):
+            return {self._stringify_elements(elem) for elem in iterable}
+        if isinstance(iterable, str):
+            return iterable
+        if isinstance(iterable, (int, bool)):
+            return str(iterable)
+        if isinstance(iterable, float):
+            return f"{iterable:.4f}"
+        msg = f"Values of Type {type(iterable)} cannot be converted to string."
+        raise ValueError(msg)
+
     def write_key_value_table(self, table_data, key_label="Key", value_label="Value"):
         """
         Writes a table with key-value pairs, where each row contains a key and a
         value.
 
         Args:
-            - table_data (dict[str, str]): Dictionary containing key-value
-                pairs.
+            - table_data (dict[str, (int|float|bool|str)]): Dictionary
+                containing key-value pairs.
             - key_label (str, optional): Label of the key column. Defaults
                 to "Key".
             - value_label (str, optional): Label of the value column.
                 Defaults to "Value".
         """
+        if not table_data:
+            return
+
+        table_data = self._stringify_elements(table_data)
         elements = list(table_data.keys()) + list(table_data.values())
         max_elem_len = max(len(elem) for elem in elements)
 
@@ -68,25 +101,25 @@ class MarkdownFileWriter:
         as row headers.
 
         Args:
-            - nested_table_data (dict[str, dict[str, str]]): Dictionary of
-                dictionaries.
+            - nested_table_data (dict[str, dict[str,(int|float|bool|str)]]):
+                Dictionary of dictionaries.
         """
+        if not nested_table_data:
+            return
+
+        nested_table_data = self._stringify_elements(nested_table_data)
 
         def max_elem_length(elements):
             return max(len(elem) for elem in elements)
 
-        if not nested_table_data:
-            return
         headers = list(nested_table_data.keys())
         inner_dict = nested_table_data[headers[0]]
         row_labels = list(inner_dict.keys())
 
         max_elem_len = 0
         for inner_dict in nested_table_data.values():
-            previous_max_elem_len = max_elem_len 
-            if set(inner_dict.keys()) != set(
-                row_labels
-            ):
+            previous_max_elem_len = max_elem_len
+            if set(inner_dict.keys()) != set(row_labels):
                 for label in inner_dict.keys():
                     if label not in row_labels:
                         row_labels.append(label)
@@ -162,12 +195,13 @@ class MarkdownFileWriter:
         """ Clears all the content of the current file. """
         self.file_lines = []
 
+
 if __name__ == "__main__":
     nested_table_data = {
         "Model 1": {
-            "Metric 1": "0.9",
-            "Metric 2": "0.8",
-            "Metric 3": "0.7",
+            "Metric 1": 10.30303,
+            "Metric 2": 10.30303,
+            "Metric 3": 10.30303,
         },
         "Model 2": {
             "Metric 1": "0.85",
