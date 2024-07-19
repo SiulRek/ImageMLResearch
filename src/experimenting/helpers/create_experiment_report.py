@@ -15,48 +15,22 @@ def _get_summary_table(experiment_data):
             and trial names as sub-keys.
     """
 
-    def from_exp_get(key, default=None):
-        return experiment_data.get(key, default)
-
     summary_table = dict()
     chapters = dict()
-    trials = from_exp_get("trials", [])
+    trials = experiment_data.get("trials", [])
 
+    # Rows correspond to trials, columns correspond to metrics.
     for trial in trials:
-        name = trial.get("name", "No Name")
-        chapters[name] = f"[Chapter](#{name.lower().replace(' ', '-')})"
+        row = trial.get("name", "No Name")
+        chapters[row] = f"[Chapter](#{row.lower().replace(' ', '-')})"
         metrics = trial.get("evaluation_metrics", {})
         metrics = metrics.get("test", metrics.get("complete", {}))
-        for key, value in metrics.items():
-            if isinstance(value, str):
-                continue
-            if key not in summary_table:
-                summary_table[key] = {}
-            summary_table[key][name] = f"{value:.4f}"
+        for col, value in metrics.items():
+            if col not in summary_table:
+                summary_table[col] = {}
+            summary_table[col][row] = value
     summary_table["Chapters"] = chapters
     return summary_table
-
-
-def _create_evaluation_metrics_table(trial):
-    """
-    Creates a table of evaluation metrics for a given trial.
-
-    Args:
-        - trial: A dictionary representing the trial object.
-
-    Returns:
-        - evaluation_metrics_table: A dictionary containing the evaluation
-            metrics table.
-    """
-    evaluation_metrics = trial.get("evaluation_metrics", {})
-    evaluation_metrics_table = {}
-    for set_name, metrics_set in evaluation_metrics.items():
-        for metric, value in metrics_set.items():
-            if isinstance(value, (int, float)):
-                if not set_name in evaluation_metrics_table:
-                    evaluation_metrics_table[set_name] = {}
-                evaluation_metrics_table[set_name][metric] = f"{value:.4f}"
-    return evaluation_metrics_table
 
 
 def create_experiment_report(experiment_data):
@@ -134,7 +108,7 @@ def create_experiment_report(experiment_data):
 
         if "evaluation_metrics" in trial and trial["evaluation_metrics"]:
             writer.write_title("Evaluation Metrics:", level=3)
-            evaluation_metrics_table = _create_evaluation_metrics_table(trial)
+            evaluation_metrics_table = from_trial_get("evaluation_metrics", {})
             writer.write_nested_table(evaluation_metrics_table)
 
     # Save the report
