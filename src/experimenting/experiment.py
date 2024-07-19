@@ -207,7 +207,8 @@ class Experiment(ResearchAttributes):
             )
 
     def _plot_history_of_best_3_trials(self):
-        """ Plots the best of 3 trials for the experiment. """
+        """ Plots the best of 3 trials for the experiment. Skipps plotting if there
+        are less than 3 trials or if any of the histories are empty. """
         if len(self.experiment_data["trials"]) < 3:
             return
 
@@ -217,6 +218,9 @@ class Experiment(ResearchAttributes):
         for trial in trials:
             name = trial["name"]
             history = deepcopy(trial["training_history"])
+            if not history:
+                # If at least one history is empty, skip plotting.
+                return
             histories[name] = history
 
         fig = plot_training_histories(histories)
@@ -243,6 +247,7 @@ class Experiment(ResearchAttributes):
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         self._sort_trials()
+
         self._plot_history_of_best_3_trials()
         self._write_experiment_data()
         create_experiment_report(self.experiment_data, **self.report_kwargs)
