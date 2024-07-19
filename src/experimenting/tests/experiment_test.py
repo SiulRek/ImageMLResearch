@@ -153,9 +153,6 @@ class TestExperiment(BaseTestCase):
         )
         # Check if the trials are loaded correctly
         trials_data = experiment.experiment_data["trials"]
-        # No reloading supported currently for training_history
-        for trials in trials_data:
-            trials.pop("training_history", None)
         reloaded_trials_data = reloaded_experiment.experiment_data["trials"]
 
         self.assertEqual(trials_data, reloaded_trials_data)

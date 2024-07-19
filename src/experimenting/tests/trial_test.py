@@ -20,6 +20,7 @@ class TestTrial(BaseTestCase):
         self.mock_experiment.get_results.return_value = {
             "figures": {},
             "evaluation_metrics": {},
+            "training_history": {},
         }
 
         self.name = "test_trial"
@@ -78,9 +79,11 @@ class TestTrial(BaseTestCase):
                 "confusion_matrix": plt.figure(),
             }
             evaluation_metrics = {"accuracy": 0.9, "f1_score": 0.8}
+            training_history = {"loss": [0.1, 0.2, 0.3]}
             self.mock_experiment.get_results.return_value = {
                 "figures": figures,
                 "evaluation_metrics": evaluation_metrics,
+                "training_history": {"loss": training_history},
             }  # Simulates the generation of trial results.
             trial_data = trial.trial_data
 
@@ -92,7 +95,6 @@ class TestTrial(BaseTestCase):
             evaluation_metrics,
         )
         read_data = self._read_trial_info(trial)
-        trial_data.pop("training_history")
         self.assertEqual(read_data, trial_data)
 
     def test_trial_exit_with_exception(self):
