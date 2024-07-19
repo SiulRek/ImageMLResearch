@@ -47,7 +47,7 @@ class Trial:
         self.experiment_trials = experiment.experiment_data[
             "trials"
         ]  # Keep reference to track trials in experiment.
-        self.get_trial_results = (
+        self.fetch_trial_results = (
             experiment.get_results
         )  # Keep reference to retrieve results from trial.
 
@@ -165,7 +165,7 @@ class Trial:
 
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
-        trial_results = self.get_trial_results()
+        trial_results = self.fetch_trial_results()
 
         self.trial_data["figures"] = map_figures_to_paths(
             trial_results["figures"], self.trial_data["directory"]
