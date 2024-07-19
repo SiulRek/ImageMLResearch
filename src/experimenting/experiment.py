@@ -1,3 +1,4 @@
+from contextlib import AbstractContextManager
 from copy import deepcopy
 import json
 import os
@@ -22,7 +23,7 @@ class ExperimentError(Exception):
     """ Exception raised for errors that occur during the experiment. """
 
 
-class Experiment(ResearchAttributes):
+class Experiment(AbstractContextManager, ResearchAttributes):
     """ A class to manage experiments and trials, inheriting from
     ResearchAttributes. """
 

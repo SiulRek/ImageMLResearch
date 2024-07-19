@@ -1,3 +1,4 @@
+from contextlib import AbstractContextManager
 from copy import copy
 import json
 import os
@@ -13,7 +14,7 @@ class TrialError(Exception):
     """ Exception raised for errors that occur during a trial. """
 
 
-class Trial:
+class Trial(AbstractContextManager):
     """
     A class to manage individual trials within an experiment.
 
