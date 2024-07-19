@@ -137,7 +137,6 @@ class Trial:
         trial_info_json = os.path.join(self.trial_data["directory"], "trial_info.json")
         # Remove history
         trial_data = self.trial_data.copy()
-        trial_data.pop("training_history")
         try:
             # Hyperparameters may not be JSON serializable.
             with open(trial_info_json, "w", encoding="utf-8") as f:
@@ -174,11 +173,8 @@ class Trial:
         self.trial_data["evaluation_metrics"] = copy(
             trial_results["evaluation_metrics"]
         )  # Copy as the source trial_results might be modified later (e.g. in next Trial)
+        self.trial_data["training_history"] = copy(trial_results["training_history"])
 
         self._write_trial_data()
 
-        if self.research_attributes.training_history:
-            self.trial_data["training_history"] = (
-                self.research_attributes.training_history
-            )
         self.experiment_trials.append(self.trial_data)

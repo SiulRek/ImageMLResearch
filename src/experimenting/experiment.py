@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import os
 
@@ -13,6 +14,7 @@ from src.experimenting.helpers.time_utils import (
     add_durations,
 )
 from src.experimenting.helpers.trial import Trial
+from src.plotting.functions.plot_training_histories import plot_training_histories
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
@@ -48,12 +50,17 @@ class Experiment(ResearchAttributes):
         # prefer call synchronize_research_attributes explicitly.
         # super().__init__()
 
-        # Initialize research attributes used in the Experiment
+        # Initialize research attributes used in the Experiment.
+        # Note, each time a Trial starts the research attributes are reset
+        # (except datasets) to avoid conflicts between trials.
         self._figures = {
             # Name: Figure
         }  # Read only
         self._evaluation_metrics = {
             # Set Name: Metrics -> {Metric: Value}
+        }  # Read only
+        self._training_history = {
+            # Metric: List of values
         }  # Read only
         self._init_experiment_data(directory, name, description)
         self.synchronize_research_attributes(research_attributes)
@@ -110,6 +117,47 @@ class Experiment(ResearchAttributes):
         self.experiment_data["resume_time"] = datetime
         return self
 
+    def get_results(self):
+        """
+        Gets the current results (figures and evaluation_metrics) recorded in
+        experiment.
+
+        Returns:
+            - dict: A dictionary containing the figures and
+                evaluation_metrics.
+        """
+        return {
+            "figures": self._figures,
+            "evaluation_metrics": self._evaluation_metrics,
+            "training_history": self._training_history,
+        }
+
+    def run_trial(self, name, description, hyperparameters):
+        """
+        Runs a trial context manager within the experiment context manager.
+
+        Args:
+            - name (str): Name of the trial.
+            - description (str): Description of the trial.
+            - hyperparameters (dict): Dictionary containing the
+                hyperparameters.
+
+        Returns:
+            - Trial: A Trial context manager instance.
+        """
+        if self._no_trial_executed:
+            # Allow for figures outside of trials.
+            figures = self._figures
+            experiment_dir = self.experiment_data["directory"]
+            figures = map_figures_to_paths(figures, experiment_dir)
+            self.experiment_data["figures"] = figures
+            self._no_trial_executed = False
+
+        # Avoids conflicts between trials.
+        self.reset_research_attributes(except_datasets=True)
+
+        return Trial(self, name, description, hyperparameters)
+
     def _calculate_total_duration(self):
         """ Calculates the total duration of the experiment. """
         duration = get_duration(self.experiment_data["resume_time"])
@@ -158,6 +206,25 @@ class Experiment(ResearchAttributes):
                 indent=4,
             )
 
+    def _plot_history_of_best_3_trials(self):
+        """ Plots the best of 3 trials for the experiment. """
+        if len(self.experiment_data["trials"]) < 3:
+            return
+
+        trials = self.experiment_data["trials"][:3]
+
+        histories = {}
+        for trial in trials:
+            name = trial["name"]
+            history = deepcopy(trial["training_history"])
+            histories[name] = history
+
+        fig = plot_training_histories(histories)
+        figures = map_figures_to_paths(
+            {"history_of_best_3_trials": fig}, self.experiment_data["directory"]
+        )
+        self.experiment_data["figures"].update(figures)
+
     def __exit__(self, exc_type, exc_value, traceback):
         """
         Cleans up the experiment and saves the report.
@@ -176,45 +243,6 @@ class Experiment(ResearchAttributes):
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         self._sort_trials()
+        self._plot_history_of_best_3_trials()
         self._write_experiment_data()
         create_experiment_report(self.experiment_data, **self.report_kwargs)
-
-    def get_results(self):
-        """
-        Gets the current results (figures and evaluation_metrics) recorded in
-        experiment.
-
-        Returns:
-            - dict: A dictionary containing the figures and
-                evaluation_metrics.
-        """
-        return {
-            "figures": self._figures,
-            "evaluation_metrics": self._evaluation_metrics,
-        }
-
-    def run_trial(self, name, description, hyperparameters):
-        """
-        Runs a trial context manager within the experiment context manager.
-
-        Args:
-            - name (str): Name of the trial.
-            - description (str): Description of the trial.
-            - hyperparameters (dict): Dictionary containing the
-                hyperparameters.
-
-        Returns:
-            - Trial: A Trial context manager instance.
-        """
-        if self._no_trial_executed:
-            # Allow for figures outside of trials.
-            figures = self._figures
-            experiment_dir = self.experiment_data["directory"]
-            figures = map_figures_to_paths(figures, experiment_dir)
-            self.experiment_data["figures"] = figures
-            self._no_trial_executed = False
-
-        # Avoids conflicts between trials.
-        self.reset_research_attributes(except_datasets=True)
-
-        return Trial(self, name, description, hyperparameters)

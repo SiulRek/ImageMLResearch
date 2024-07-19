@@ -44,7 +44,7 @@ class ResearchAttributes:
         )
         self._outputs_container = {}
         self._model = None
-        self._training_history = None
+        self._training_history = {}
         self._evaluation_metrics = {}
         self._figures = {}
 
@@ -110,6 +110,6 @@ class ResearchAttributes:
             self._datasets_container.clear()
         self._outputs_container.clear()
         self._model = None
-        self._training_history = None
+        self._training_history.clear()
         self._evaluation_metrics.clear()
         self._figures.clear()

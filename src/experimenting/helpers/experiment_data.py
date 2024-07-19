@@ -69,13 +69,14 @@ def assert_trial_data(trial_data):
             "hyperparameters",
             "figures",
             "evaluation_metrics",
+            "training_history",
         ]
     )
     actual_keys = set(trial_data.keys())
     if expected_keys != actual_keys:
         missing_keys = expected_keys - actual_keys
         extra_keys = actual_keys - expected_keys
-        msg = "Trial data does not have the expected keys: "
+        msg = "Trial data does not have the expected keys:\n "
         if missing_keys:
             msg += f"Missing keys: {missing_keys}."
         if extra_keys:

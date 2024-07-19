@@ -23,7 +23,9 @@ class Trainer(ResearchAttributes):
         self._outputs_container = {
             # Output name: Tuple -> (y_true, y_pred)
         }  # Read and write
-        self._training_history = None  # Write
+        self._training_history = {
+            # Metric: List of values
+        }  # Write
         self._evaluation_metrics = {
             # Set Name: Metrics -> {Metric: Value}
         }  # Write
@@ -118,7 +120,7 @@ class Trainer(ResearchAttributes):
 
         fit_dataset = train_dataset if train_dataset else complete_dataset
         history = self._model.fit(fit_dataset, **kwargs)
-        self._training_history = history.history
+        self._training_history.update(history.history)
 
         outputs_mapping = {
             "train_output": train_dataset,
