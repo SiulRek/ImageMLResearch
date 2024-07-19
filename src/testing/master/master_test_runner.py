@@ -26,7 +26,8 @@ def run_tests():
 
     # Load tests from test modules
     test_suite = utils_tests.load_tests(test_suite)
-    # test_suite = preprocessing_tests.load_tests(test_suite)
+    # NOTE: preprocessing tests currently disabled for performance reasons.
+    # test_suite = preprocessing_tests.load_tests(test_suite)    
     test_suite = data_handling_tests.load_tests(test_suite)
     test_suite = plotting_tests.load_tests(test_suite)
     test_suite = utils_tests.load_tests(test_suite)
