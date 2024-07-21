@@ -1,8 +1,3 @@
-import os
-import unittest
-from unittest import defaultTestLoader as Loader
-
-from src.preprocessing.tests.for_steps import step_base_test
 from src.preprocessing.tests.for_helpers import copy_json_exclude_entries_test
 from src.preprocessing.tests.for_helpers import recursive_type_conversion_test
 from src.preprocessing.tests.for_helpers import randomly_select_sequential_keys_test
@@ -12,6 +7,7 @@ from src.preprocessing.tests.for_preprocessor import image_preprocessor_test
 from src.preprocessing.tests.for_preprocessor.long_pipeline_test import (
     load_long_pipeline_tests,
 )
+from src.preprocessing.tests.for_steps import step_base_test
 from src.preprocessing.tests.for_steps.channel_conversions_steps_test import (
     load_channel_conversion_steps_tests,
 )
@@ -24,51 +20,37 @@ from src.preprocessing.tests.for_steps.multiple_steps_test import (
 from src.preprocessing.tests.for_steps.resize_operations_steps_test import (
     load_resize_operations_steps_tests,
 )
-from src.testing.helpers.test_result_logger import TestResultLogger
-
-ROOT_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."
-)
-OUTPUT_DIR = os.path.join(ROOT_DIR, r"src/preprocessing/tests/outputs")
-LOG_FILE = os.path.join(OUTPUT_DIR, "test_results.log")
+from src.testing.helpers.test_runner_base import TestRunnerBase
 
 
-def load_tests(test_suite):
-    """
-    Populates the given test suite with a series of test cases from the image
-    preprocessing testing framework.
+class PreprocessingTestRunner(TestRunnerBase):
+    """ A test runner for image preprocessing tests. This runner aggregates tests
+    from different modules and adds them to the test suite. """
 
-    This function aggregates tests from different aspects of the image
-    preprocessing pipeline. It includes basic tests, tests for multiple steps,
-    specific channel conversion tests, and general image preprocessing tests.
+    def load_tests(self):
+        """
+        Populates the test suite with a series of test cases from the image
+        preprocessing testing framework.
 
-    Args:
-        - test_suite (unittest.TestSuite): The test suite to which the tests
-            will be added.
-
-    Returns:
-        - unittest.TestSuite: The test suite populated with a range of tests
-            from different modules.
-    """
-    test_suite.addTest(Loader.loadTestsFromModule(copy_json_exclude_entries_test))
-    test_suite.addTest(Loader.loadTestsFromModule(recursive_type_conversion_test))
-    test_suite.addTest(Loader.loadTestsFromModule(randomly_select_sequential_keys_test))
-    test_suite.addTest(Loader.loadTestsFromModule(json_instances_serializer_test))
-    test_suite.addTest(Loader.loadTestsFromModule(parse_and_repeat_test))
-    test_suite.addTest(Loader.loadTestsFromModule(step_base_test))
-    test_suite.addTest(Loader.loadTestsFromModule(image_preprocessor_test))
-    test_suite.addTest(load_multiple_steps_tests())
-    test_suite.addTest(load_channel_conversion_steps_tests())
-    test_suite.addTest(load_resize_operations_steps_tests())
-    test_suite.addTest(load_data_augmentation_steps_tests())
-    test_suite.addTest(load_long_pipeline_tests(1))
-    return test_suite
+        This function aggregates tests from different aspects of the image
+        preprocessing pipeline. It includes basic tests, tests for multiple
+        steps, specific channel conversion tests, and general image
+        preprocessing tests.
+        """
+        self.load_test_module(copy_json_exclude_entries_test)
+        self.load_test_module(recursive_type_conversion_test)
+        self.load_test_module(randomly_select_sequential_keys_test)
+        self.load_test_module(json_instances_serializer_test)
+        self.load_test_module(parse_and_repeat_test)
+        self.load_test_module(step_base_test)
+        self.load_test_module(image_preprocessor_test)
+        self.test_suite.addTest(load_multiple_steps_tests())
+        self.test_suite.addTest(load_channel_conversion_steps_tests())
+        self.test_suite.addTest(load_resize_operations_steps_tests())
+        self.test_suite.addTest(load_data_augmentation_steps_tests())
+        self.test_suite.addTest(load_long_pipeline_tests(1))
 
 
 if __name__ == "__main__":
-    """ Main execution block for running the aggregated test suite. """
-
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    TestResultLogger(LOG_FILE)  # Initialize Test Result Logger.
-    test_suite = unittest.TestSuite()
-    unittest.TextTestRunner().run(load_tests(test_suite))
+    runner = PreprocessingTestRunner()
+    runner.run_tests()

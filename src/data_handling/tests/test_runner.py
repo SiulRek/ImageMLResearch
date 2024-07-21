@@ -1,38 +1,30 @@
-import os
-import unittest
-from unittest import defaultTestLoader as Loader
-
-from src.data_handling.tests import shuffle_dataset_test
-from src.data_handling.tests import save_images_test
-from src.data_handling.tests import label_manager_test
-from src.data_handling.tests import create_dataset_test
-from src.data_handling.tests import split_dataset_test
-from src.data_handling.tests import enhance_dataset_test
-from src.data_handling.tests import tfrecord_serialization_test
+from src.data_handling.tests import (
+    shuffle_dataset_test,
+    save_images_test,
+    label_manager_test,
+    create_dataset_test,
+    split_dataset_test,
+    enhance_dataset_test,
+    tfrecord_serialization_test,
+)
 from src.data_handling.tests.data_handler_test import TestDataHandler
-from src.testing.helpers.test_result_logger import TestResultLogger
-
-ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
-OUTPUT_DIR = os.path.join(ROOT_DIR, r"src/data_handling/tests/outputs")
-LOG_FILE = os.path.join(OUTPUT_DIR, "test_results.log")
+from src.testing.helpers.test_runner_base import TestRunnerBase
 
 
-def load_tests(test_suite):
-    test_suite.addTest(Loader.loadTestsFromModule(create_dataset_test))
-    test_suite.addTest(Loader.loadTestsFromModule(label_manager_test))
-    test_suite.addTest(Loader.loadTestsFromModule(split_dataset_test))
-    test_suite.addTest(Loader.loadTestsFromModule(enhance_dataset_test))
-    test_suite.addTest(Loader.loadTestsFromModule(tfrecord_serialization_test))
-    test_suite.addTest(Loader.loadTestsFromTestCase(TestDataHandler))
-    test_suite.addTest(Loader.loadTestsFromModule(shuffle_dataset_test))
-    test_suite.addTest(Loader.loadTestsFromModule(save_images_test))
-    return test_suite
+class DataHandlingTestRunner(TestRunnerBase):
+    """ Test Runner for the Data Handling Module. """
+    
+    def load_tests(self):
+        self.load_test_module(create_dataset_test)
+        self.load_test_module(label_manager_test)
+        self.load_test_module(split_dataset_test)
+        self.load_test_module(enhance_dataset_test)
+        self.load_test_module(tfrecord_serialization_test)
+        self.load_test_case(TestDataHandler)
+        self.load_test_module(shuffle_dataset_test)
+        self.load_test_module(save_images_test)
 
 
 if __name__ == "__main__":
-
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    TestResultLogger(LOG_FILE)  # Initialize Test Result Logger.
-
-    test_suite = unittest.TestSuite()
-    unittest.TextTestRunner().run(load_tests(test_suite))
+    runner = DataHandlingTestRunner()
+    runner.run_tests()
