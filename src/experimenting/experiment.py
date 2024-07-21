@@ -133,13 +133,12 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             "training_history": self._training_history,
         }
 
-    def run_trial(self, name, description, hyperparameters):
+    def run_trial(self, name, hyperparameters):
         """
         Runs a trial context manager within the experiment context manager.
 
         Args:
             - name (str): Name of the trial.
-            - description (str): Description of the trial.
             - hyperparameters (dict): Dictionary containing the
                 hyperparameters.
 
@@ -157,7 +156,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         # Avoids conflicts between trials.
         self.reset_research_attributes(except_datasets=True)
 
-        return Trial(self, name, description, hyperparameters)
+        return Trial(self, name, hyperparameters)
 
     def _calculate_total_duration(self):
         """ Calculates the total duration of the experiment. """

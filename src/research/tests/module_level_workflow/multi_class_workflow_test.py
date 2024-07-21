@@ -100,12 +100,10 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         trial_definitions = [
             {
                 "name": "Trial 1",
-                "description": "Description of the first trial",
                 "hyperparameters": {"units": 128},
             },
             {
                 "name": "Trial 2",
-                "description": "Description of the second trial",
                 "hyperparameters": {"units": 256},
             },
         ]

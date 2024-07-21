@@ -94,15 +94,10 @@ class TestExperiment(BaseTestCase):
 
     def _run_trials_and_verify(self, trial_definitions, sleep_time=None):
         with self.call_test_experiment() as experiment:
-            for i, (name, trial_description, hyperparameters) in enumerate(
-                trial_definitions
-            ):
-                with experiment.run_trial(
-                    name, trial_description, hyperparameters
-                ) as trial:
+            for i, (name, hyperparameters) in enumerate(trial_definitions):
+                with experiment.run_trial(name, hyperparameters) as trial:
                     self.assertIsInstance(trial, Trial)
                     self.assertEqual(trial.trial_data["name"], name)
-                    self.assertEqual(trial.trial_data["description"], trial_description)
                     self.assertEqual(
                         trial.trial_data["hyperparameters"], hyperparameters
                     )
@@ -127,8 +122,8 @@ class TestExperiment(BaseTestCase):
             return metrics_set["accuracy"]
 
         trial_definitions = [
-            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
-            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
+            ("trial1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", {"lr": 0.001, "batch_size": 32}),
         ]
         experiment = self._run_trials_and_verify(trial_definitions)
 
@@ -140,8 +135,8 @@ class TestExperiment(BaseTestCase):
 
     def test_load_experiment_data(self):
         trial_definitions = [
-            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
-            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
+            ("trial1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", {"lr": 0.001, "batch_size": 32}),
         ]
 
         experiment = self._run_trials_and_verify(trial_definitions)
@@ -164,8 +159,8 @@ class TestExperiment(BaseTestCase):
             return duration
 
         trial_definitions = [
-            ("trial1", "This is trial 1", {"lr": 0.01, "batch_size": 16}),
-            ("trial2", "This is trial 2", {"lr": 0.001, "batch_size": 32}),
+            ("trial1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", {"lr": 0.001, "batch_size": 32}),
         ]
         initial_experiment = self._run_trials_and_verify(
             trial_definitions, sleep_time=0.01
@@ -175,8 +170,8 @@ class TestExperiment(BaseTestCase):
         del initial_experiment
 
         new_trial_definitions = [
-            ("trial3", "This is trial 3", {"lr": 0.001, "batch_size": 32}),
-            ("trial4", "This is trial 4", {"lr": 0.001, "batch_size": 32}),
+            ("trial3", {"lr": 0.001, "batch_size": 32}),
+            ("trial4", {"lr": 0.001, "batch_size": 32}),
         ]
         resumed_experiment = self._run_trials_and_verify(
             new_trial_definitions, sleep_time=0.01

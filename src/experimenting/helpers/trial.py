@@ -31,20 +31,19 @@ class Trial(AbstractContextManager):
             experiment, used to append the trial data.
     """
 
-    def __init__(self, experiment, name, description, hyperparameters):
+    def __init__(self, experiment, name, hyperparameters):
         """
         Initializes the Trial with the given parameters.
 
         Args:
             - experiment (Experiment): The experiment instance this trial
                 belongs to.
-            - description (str): The description of the trial.
             - hyperparameters (dict): Dictionary containing the
                 hyperparameters.
         """
         self._assert_required_experiment_attributes(experiment)
         self._init_research_attributes(experiment)
-        self._init_trial_data(name, description, hyperparameters, experiment)
+        self._init_trial_data(name, hyperparameters, experiment)
         self.experiment_trials = experiment.experiment_data[
             "trials"
         ]  # Keep reference to track trials in experiment.
@@ -74,13 +73,12 @@ class Trial(AbstractContextManager):
         self.research_attributes = ResearchAttributes()
         copy_public_properties(experiment, self.research_attributes)
 
-    def _init_trial_data(self, name, description, hyperparameters, experiment):
+    def _init_trial_data(self, name, hyperparameters, experiment):
         """
         Initialize the trial data dictionary to store trial information.
 
         Args:
             - name (str): The name of the trial.
-            - description (str): The description of the trial.
             - hyperparameters (dict): The hyperparameters for the trial.
             - experiment (Experiment): The experiment instance.
             - dict: Initialized trial data dictionary.
@@ -90,7 +88,6 @@ class Trial(AbstractContextManager):
         )
         self.trial_data = {
             "name": name,
-            "description": description,
             "start_time": None,
             "duration": None,
             "directory": trial_directory,

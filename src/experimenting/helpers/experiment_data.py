@@ -62,7 +62,6 @@ def assert_trial_data(trial_data):
     expected_keys = set(
         [
             "name",
-            "description",
             "start_time",
             "duration",
             "directory",

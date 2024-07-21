@@ -29,7 +29,6 @@ class TestTrial(BaseTestCase):
         self.call_test_trial = lambda: Trial(
             experiment=self.mock_experiment,
             name=self.name,
-            description=self.description,
             hyperparameters=self.hyperparameters,
         )
 
@@ -43,7 +42,6 @@ class TestTrial(BaseTestCase):
         with self.call_test_trial() as trial:
             self.assertIsInstance(trial, Trial)
             self.assertEqual(trial.trial_data["name"], self.name)
-            self.assertEqual(trial.trial_data["description"], self.description)
             self.assertEqual(trial.trial_data["hyperparameters"], self.hyperparameters)
             self.assertTrue(os.path.exists(trial.trial_data["directory"]))
             self.assertIsInstance(trial.trial_data["start_time"], str)
@@ -62,7 +60,6 @@ class TestTrial(BaseTestCase):
         data = self._read_trial_info(trial)
 
         self.assertEqual(data["name"], self.name)
-        self.assertEqual(data["description"], self.description)
         self.assertEqual(data["hyperparameters"], self.hyperparameters)
         self.assertTrue("start_time" in data)
         self.assertTrue("duration" in data)
@@ -126,7 +123,6 @@ class TestTrial(BaseTestCase):
         with Trial(
             experiment=self.mock_experiment,
             name="non_serializable_trial",
-            description="Trial with non-serializable hyperparameters",
             hyperparameters=non_serializable_params,
         ) as trial:
             pass
