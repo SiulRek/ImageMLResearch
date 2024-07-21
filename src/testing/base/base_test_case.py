@@ -42,8 +42,8 @@ class BaseTestCase(unittest.TestCase):
             return sys.modules[module].__file__
         # 2. Attempt: infer file path from sys.argv, for the case called from Command Line
         if len(sys.argv) > 1:
-            # 1st arg expected is the executor file
-            # 2nd arg expected is the actual test file
+            # 1st arg expected is the actual test file
+            # 2nd arg expected is the executor file
             return sys.argv[1]
         msg = "Cannot infer test file path."
         raise FileNotFoundError(msg)
