@@ -11,10 +11,12 @@ import unittest
 import src.data_handling.tests.test_runner as data_handling_tests
 import src.experimenting.tests.test_runner as experimenting_tests
 import src.plotting.tests.test_runner as plotting_tests
-import src.preprocessing.tests.test_runner as preprocessing_tests
+import src.research.tests.test_runner as research_tests
+from src.testing.helpers.generate_test_results_message import (
+    generate_test_result_message,
+)
 from src.testing.helpers.test_result_logger import TestResultLogger
 import src.training.tests.test_runner as training_tests
-import src.research.tests.test_runner as research_tests
 import src.utils.tests.test_runner as utils_tests
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +29,7 @@ def run_tests():
     # Load tests from test modules
     test_suite = utils_tests.load_tests(test_suite)
     # NOTE: preprocessing tests currently disabled for performance reasons.
-    # test_suite = preprocessing_tests.load_tests(test_suite)    
+    # test_suite = preprocessing_tests.load_tests(test_suite)
     test_suite = data_handling_tests.load_tests(test_suite)
     test_suite = plotting_tests.load_tests(test_suite)
     test_suite = utils_tests.load_tests(test_suite)
@@ -37,24 +39,9 @@ def run_tests():
 
     result = unittest.TextTestRunner(verbosity=2).run(test_suite)
 
-    num_passed_tests = (
-        result.testsRun
-        - len(result.errors)
-        - len(result.failures)
-        - len(result.skipped)
-    )
-    runned_tests = result.testsRun - len(result.skipped)
+    msg = generate_test_result_message(result)
 
-    if num_passed_tests == runned_tests:
-        message = f"All tests passed! ({num_passed_tests}/{runned_tests})"
-    else:
-        message = (
-            f"{num_passed_tests} out of {runned_tests} tests passed.\n"
-            f"Failures: {len(result.failures)}\n"
-            f"Errors: {len(result.errors)}"
-        )
-
-    return message
+    return msg
 
 
 if __name__ == "__main__":
