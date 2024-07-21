@@ -5,7 +5,7 @@ import unittest
 from unittest import defaultTestLoader as Loader
 
 from src.testing.helpers.generate_test_results_message import (
-    generate_test_result_message,
+    generate_test_results_message,
 )
 from src.testing.helpers.test_result_logger import TestResultLogger
 
@@ -110,5 +110,5 @@ class TestRunnerBase(ABC):
         self.load_tests()
         test_result = unittest.TextTestRunner().run(self.test_suite)
         print("\n" + "*" * 35 + "\n")
-        msg = generate_test_result_message(test_result)
+        msg = generate_test_results_message(test_result)
         print(msg)

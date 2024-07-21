@@ -14,7 +14,7 @@ from src.plotting.tests.test_runner import PlottingTestRunner
 from src.preprocessing.tests.test_runner import PreprocessingTestRunner
 from src.research.tests.test_runner import ResearchTestRunner
 from src.testing.helpers.generate_test_results_message import (
-    generate_test_result_message,
+    generate_test_results_message,
 )
 from src.testing.helpers.test_result_logger import TestResultLogger
 from src.training.tests.test_runner import TrainingTestRunner
@@ -51,7 +51,7 @@ def run_tests():
 
     result = unittest.TextTestRunner(verbosity=2).run(test_suite)
 
-    msg = generate_test_result_message(result)
+    msg = generate_test_results_message(result)
 
     return msg
 

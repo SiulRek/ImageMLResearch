@@ -1,4 +1,4 @@
-def generate_test_result_message(result):
+def generate_test_results_message(result):
     """
     Generates a test result message based on the given test result object.
 
