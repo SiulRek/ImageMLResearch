@@ -6,6 +6,7 @@ from src.plotting.tests.plot_images_test import TestPlotImages
 from src.plotting.tests.plot_model_summary_test import TestPlotModelSummary
 import src.plotting.tests.plot_results_test as plot_results_test
 from src.plotting.tests.plot_text_test import TestPlotText
+from src.plotting.tests.plot_training_histories_test import TestPlotTrainingHistories
 from src.plotting.tests.plot_training_history_test import TestPlotTrainingHistory
 from src.plotting.tests.plotter_test import TestPlotter
 from src.testing.helpers.test_runner_base import TestRunnerBase
@@ -22,6 +23,7 @@ class PlottingTestRunner(TestRunnerBase):
         self.load_test_case(TestBinaryPlotter)
         self.load_test_case(TestMultiClassPlotter)
         self.load_test_case(TestPlotTrainingHistory)
+        self.load_test_case(TestPlotTrainingHistories)
         self.load_test_case(TestPlotDecorator)
         self.load_test_case(TestPlotModelSummary)
         self.load_test_module(plot_results_test)
