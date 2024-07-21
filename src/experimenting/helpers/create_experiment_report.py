@@ -3,9 +3,9 @@ import os
 from src.experimenting.helpers.markdown_file_writer import MarkdownFileWriter
 
 
-def _get_summary_table(experiment_data):
+def _get_results_summary_table(experiment_data):
     """
-    Generate a summary table for the experiment report.
+    Generate a summary table for the experiment results of all trials.
 
     Args:
         - experiment_data (dict): Dictionary containing experiment data.
@@ -15,7 +15,7 @@ def _get_summary_table(experiment_data):
             and trial names as sub-keys.
     """
 
-    summary_table = dict()
+    results_table = dict()
     chapters = dict()
     trials = experiment_data.get("trials", [])
 
@@ -26,11 +26,40 @@ def _get_summary_table(experiment_data):
         metrics = trial.get("evaluation_metrics", {})
         metrics = metrics.get("test", metrics.get("complete", {}))
         for col, value in metrics.items():
-            if col not in summary_table:
-                summary_table[col] = {}
-            summary_table[col][row] = value
-    summary_table["Chapters"] = chapters
-    return summary_table
+            if col not in results_table:
+                results_table[col] = {}
+            results_table[col][row] = value
+    results_table["Chapters"] = chapters
+    return results_table
+
+
+def _get_hyperparameters_summary_table(experiment_data):
+    """
+    Generate a hyperaparameters summary table of all trials in the experiment.
+
+    Args:
+        - experiment_data (dict): Dictionary containing experiment data.
+
+    Returns:
+        - dict: Dictionary containing the summary table with metrics as keys
+            and trial names as sub-keys.
+    """
+
+    hparam_table = dict()
+    chapters = dict()
+    trials = experiment_data.get("trials", [])
+
+    # Rows correspond to trials, columns correspond to metrics.
+    for trial in trials:
+        row = trial.get("name", "No Name")
+        chapters[row] = f"[Chapter](#{row.lower().replace(' ', '-')})"
+        hparams = trial.get("hyperparameters", {})
+        for col, value in hparams.items():
+            if col not in hparam_table:
+                hparam_table[col] = {}
+            hparam_table[col][row] = value
+    hparam_table["Chapters"] = chapters
+    return hparam_table
 
 
 def create_experiment_report(experiment_data):
@@ -66,17 +95,14 @@ def create_experiment_report(experiment_data):
 
     # Write Description Summary
     writer.write_title("Summary", level=2)
-    writer.write_title("Trials", level=3)
-    for trial in from_exp_get("trials", []):
-        try:
-            writer.write_key_value(trial["name"], trial["description"])
-        except (KeyError, TypeError):
-            pass
+    writer.write_title("Hyperparameters", level=3)
+    hyperparameter_table = _get_hyperparameters_summary_table(experiment_data)
+    writer.write_nested_table(hyperparameter_table)
 
     # Write Results Summary
     writer.write_title("Test Results", level=3)
-    summary_table = _get_summary_table(experiment_data)
-    writer.write_nested_table(summary_table)
+    results_table = _get_results_summary_table(experiment_data)
+    writer.write_nested_table(results_table)
 
     # Write Trials
     trials = from_exp_get("trials", [])
@@ -86,7 +112,6 @@ def create_experiment_report(experiment_data):
             return trial.get(key, default)
 
         writer.write_title(from_trial_get("name"), level=2)
-        writer.write_key_value("Description", from_trial_get("description"))
         start_time = from_trial_get("start_time").split(".")[0]
         writer.write_key_value("Start Time", start_time)
         writer.write_key_value("Duration", from_trial_get("duration"))
