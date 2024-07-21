@@ -63,14 +63,17 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         self._training_history = {
             # Metric: List of values
         }  # Read only
-        self._init_experiment_data(directory, name, description)
         self.synchronize_research_attributes(research_attributes)
+        self._init_experiment_data(directory, name, description)
         self.report_kwargs = report_kwargs or {}
         self._no_trial_executed = True
 
     def _init_experiment_data(self, directory, name, description):
         """
         Initializes the experiment data to store the experiment information.
+        Note: 'directory' 'name' and 'description' are only used when the
+        experiment is created for the first time and not when the experiment is
+        resumed.
 
         Args:
             - directory (str): The directory to save the experiment data.
@@ -83,9 +86,9 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             experiment_data = load_experiment_data(experiment_directory)
         except FileNotFoundError:
             experiment_data = get_default_experiment_data()
-        experiment_data["description"] = description
-        experiment_data["directory"] = experiment_directory
-        experiment_data["name"] = name
+            experiment_data["description"] = description
+            experiment_data["directory"] = experiment_directory
+            experiment_data["name"] = name
         self.experiment_data = experiment_data
 
     def _make_experiment_directory(self, directory, name):
