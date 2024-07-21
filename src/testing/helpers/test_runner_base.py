@@ -43,18 +43,13 @@ class TestRunnerBase(ABC):
         Returns:
             - str: The inferred file path.
         """
-        # 1. Attempt: infer file path from sys.modules
         module = cls.__module__
         if module in sys.modules:
             return sys.modules[module].__file__
-        # 2. Attempt: infer file path from sys.argv, for the case called from Command Line
-        if len(sys.argv) > 1:
-            # 1st arg expected is the actual test file loader
-            # 2nd arg expected is the executor file
-            return sys.argv[1]
         msg = "Cannot infer test file path."
         raise FileNotFoundError(msg)
 
+    # ------ Duplicated Method from BaseTestCase ----------------------
     @classmethod
     def _compute_output_dir(cls, parent_folder="tests"):
         """
@@ -82,6 +77,8 @@ class TestRunnerBase(ABC):
                 raise NotADirectoryError(msg)
 
         return os.path.join(current_dir, parent_folder, "outputs")
+
+    # ------------------------------------------------------------------
 
     @abstractmethod
     def load_tests(self):
@@ -112,8 +109,6 @@ class TestRunnerBase(ABC):
         the command line. """
         self.load_tests()
         test_result = unittest.TextTestRunner().run(self.test_suite)
-        if (
-            len(sys.argv) > 1
-        ):  # If called from Command Line, print test results explicitly.
-            msg = generate_test_result_message(test_result)
-            print(msg)
+        print("\n" + "*" * 35 + "\n")
+        msg = generate_test_result_message(test_result)
+        print(msg)
