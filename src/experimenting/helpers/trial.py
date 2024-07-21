@@ -95,8 +95,8 @@ class Trial(AbstractContextManager):
             "duration": None,
             "directory": trial_directory,
             "hyperparameters": hyperparameters,
-            "figures": {},
-            "evaluation_metrics": {},
+            "figures": None,
+            "evaluation_metrics": None,
             "training_history": None,
         }
 

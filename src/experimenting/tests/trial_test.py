@@ -46,6 +46,12 @@ class TestTrial(BaseTestCase):
             self.assertEqual(trial.trial_data["description"], self.description)
             self.assertEqual(trial.trial_data["hyperparameters"], self.hyperparameters)
             self.assertTrue(os.path.exists(trial.trial_data["directory"]))
+            self.assertIsInstance(trial.trial_data["start_time"], str)
+            self.assertIsNone(trial.trial_data["duration"])
+            self.assertIsNone(trial.trial_data["figures"])
+            self.assertIsNone(trial.trial_data["evaluation_metrics"])
+            self.assertIsNone(trial.trial_data["training_history"])
+        self.assertIsInstance(trial.trial_data["duration"], str)
 
     def test_trial_info_written_to_json(self):
         with self.call_test_trial() as trial:
@@ -62,7 +68,7 @@ class TestTrial(BaseTestCase):
         self.assertTrue("duration" in data)
         self.assertTrue("figures" in data)
         self.assertTrue("evaluation_metrics" in data)
-        # self.assertTrue("training_history" in data)
+        self.assertTrue("training_history" in data)
 
     def test_add_trial_to_experiment_data(self):
         with self.call_test_trial() as trial:
