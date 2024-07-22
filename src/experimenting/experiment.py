@@ -17,6 +17,7 @@ from src.experimenting.helpers.time_utils import (
 from src.experimenting.helpers.trial import Trial
 from src.plotting.functions.plot_training_histories import plot_training_histories
 from src.research.attributes.research_attributes import ResearchAttributes
+from src.utils import Logger
 
 
 class ExperimentError(Exception):
@@ -48,13 +49,10 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 `research_attributes` during initialization, as it simplifies
                 the usage within a context manager.
         """
-        # Not initializing ResearchAttributes here,
-        # prefer call synchronize_research_attributes explicitly.
-        # super().__init__()
+        exp_dir = self._make_experiment_directory(directory, name)
+        self._init_logger(exp_dir, name)
 
-        # Initialize research attributes used in the Experiment.
-        # Note, each time a Trial starts the research attributes are reset
-        # (except datasets) to avoid conflicts between trials.
+        # ResearchAttributes required for the experiment.
         self._figures = {
             # Name: Figure
         }  # Read only
@@ -65,10 +63,17 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             # Metric: List of values
         }  # Read only
         self.synchronize_research_attributes(research_attributes)
-        self._init_experiment_data(directory, name, description, sort_metric)
+
+        self._init_experiment_data(exp_dir, name, description, sort_metric)
+        
         self._no_trial_executed = True
 
-    def _init_experiment_data(self, directory, name, description, sort_metric):
+
+    def _init_logger(self, directory, name):
+        log_file = os.path.join(directory, f"execution.log")
+        self.logger = Logger(log_file)
+
+    def _init_experiment_data(self, exp_dir, name, description, sort_metric):
         """
         Initializes the experiment data to store the experiment information.
         Note: 'directory' 'name' and 'description' are only used when the
@@ -76,21 +81,22 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         resumed.
 
         Args:
-            - directory (str): The directory to save the experiment data.
+            - exp_dir (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment.
             - sort_metric (str): The metric to sort the trials by.
         """
-        experiment_directory = self._make_experiment_directory(directory, name)
         try:
             # Try loading existing experiment data to resume the experiment.
-            experiment_data = load_experiment_data(experiment_directory)
+            experiment_data = load_experiment_data(exp_dir)
+            self.logger.info(f"Resuming experiment: {name}")
         except FileNotFoundError:
             experiment_data = get_default_experiment_data()
             experiment_data["description"] = description
-            experiment_data["directory"] = experiment_directory
+            experiment_data["directory"] = exp_dir
             experiment_data["name"] = name
             experiment_data["sort_metric"] = sort_metric
+            self.logger.info(f"Starting new experiment: {name}")
         self.experiment_data = experiment_data
 
     def _make_experiment_directory(self, directory, name):
@@ -150,6 +156,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         Returns:
             - Trial: A Trial context manager instance.
         """
+        self.logger.info(f"Starting trial: {name}")
         if self._no_trial_executed:
             # Allow for figures outside of trials.
             figures = self._figures
@@ -173,6 +180,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
         """ Raises an exception if an exception occurred during the experiment. """
         if exc_type is not None:
+            self.logger.error(f"Exception occurred: {exc_value}")
             raise
 
     def _sort_trials(self):
@@ -191,6 +199,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             if value is None:
                 msg = f"{sort_metric} not found in evaluation metrics for\n"
                 msg += f"Trial: {trial['name']}"
+                self.logger.error(msg)
                 raise ExperimentError(msg)
             return value
 
@@ -247,10 +256,13 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         """
         self._calculate_total_duration()
 
+        self.logger.info("Finalizing experiment")
+
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         self._sort_trials()
-
         self._plot_history_of_best_3_trials()
         self._write_experiment_data()
         create_experiment_report(self.experiment_data)
+
+        self.logger.close_logger()
