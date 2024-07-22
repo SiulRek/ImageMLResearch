@@ -26,7 +26,7 @@ def _prettify_duration(duration):
         - str: The formatted duration string.
     """
     if duration.startswith("0:00:"):  # Zero hours and minutes
-        duration = duration.split(":")[-1]  # Keep seconds
+        duration = duration.removeprefix("0:00:")
         duration += " s"
     elif not duration.startswith("0:"):  # Non-zero hours
         duration = duration.split(".")[0]  # Remove milliseconds

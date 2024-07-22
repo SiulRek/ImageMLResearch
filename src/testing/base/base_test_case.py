@@ -81,8 +81,7 @@ class BaseTestCase(unittest.TestCase):
             - str: The formatted test case name.
         """
         name = cls.__name__
-        if name.startswith("Test"):
-            name = name[4:]
+        name = name.removeprefix("Test")
         name = [letter if not letter.isupper() else f" {letter}" for letter in name]
         name = "".join(name).strip()
         name = name.replace("_", " ")
@@ -98,15 +97,13 @@ class BaseTestCase(unittest.TestCase):
             - str: The formatted test case name.
         """
         name = cls.__name__
-        if name.startswith("Test"):
-            name = name[4:]
+        name = name.removeprefix("Test")
         name = [
             letter if not letter.isupper() else f"_{letter.lower()}" for letter in name
         ]
         name = "".join(name).strip()
         name = name.replace(" ", "")
-        if name.startswith("_"):
-            name = name[1:]
+        name = name.removeprefix("_")
         return name + "_test"
 
     @classmethod
