@@ -62,7 +62,9 @@ class Logger:
 
 if __name__ == "__main__":
     # Example usage:
-    logger = Logger(r".\logfile.log")
+    log_file = os.path.join(os.path.curdir, "logfile.log")
+    logger = Logger(log_file)
     logger.info("This is an info message")
     logger.warning("This is a warning message")
     logger.error("This is an error message")
+    print(f"Log file saved to {log_file}")
