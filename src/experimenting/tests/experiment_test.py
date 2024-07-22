@@ -52,6 +52,10 @@ class TestExperiment(BaseTestCase):
                 experiment.experiment_data["description"], self.description
             )
             self.assertTrue(os.path.exists(experiment.experiment_data["directory"]))
+            log_file = os.path.join(
+                experiment.experiment_data["directory"], "execution.log"
+            )
+            self.assertTrue(os.path.exists(log_file))
 
     def test_experiment_data_written_to_json(self):
         with self.call_test_experiment() as experiment:
