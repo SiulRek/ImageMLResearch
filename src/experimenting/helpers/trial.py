@@ -50,7 +50,7 @@ class Trial(AbstractContextManager):
         self.fetch_trial_results = (
             experiment.get_results
         )  # Keep reference to retrieve results from trial.
-
+        self.logger = experiment.logger
         self.already_runned = self._check_if_already_runned()
 
     def _assert_required_experiment_attributes(self, experiment):
@@ -158,6 +158,7 @@ class Trial(AbstractContextManager):
             msg = "Hyperparameters are not JSON serializable for trial"
             msg += f"{trial_data['name']}. Saving None instead."
             warnings.warn(msg)
+            self.logger.warning(msg)
             trial_data["hyperparameters"] = None
             with open(trial_info_json, "w", encoding="utf-8") as f:
                 json.dump(trial_data, f, indent=4)
@@ -186,12 +187,14 @@ class Trial(AbstractContextManager):
             msg = f"Trial {self.trial_data['name']} did not return any results."
             msg += " Trial will not be saved."
             warnings.warn(msg)
+            self.logger.warning(msg)
             return
 
         if self.already_runned:
             msg = f"Trial {self.trial_data['name']} was already runned."
             msg += " Overwriting the results."
             warnings.warn(msg)
+            self.logger.warning(msg)
             self._remove_trial(self.trial_data["name"])
 
         self.trial_data["figures"] = map_figures_to_paths(
