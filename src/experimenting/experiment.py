@@ -189,8 +189,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             )
             value = metrics_set.get(sort_metric, None)
             if value is None:
-                msg = "Accuracy not found in evaluation metrics for Trial"
-                msg += f"{trial['name']}"
+                msg = f"{sort_metric} not found in evaluation metrics for\n"
+                msg += f"Trial: {trial['name']}"
                 raise ExperimentError(msg)
             return value
 

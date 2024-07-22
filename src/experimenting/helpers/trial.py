@@ -10,6 +10,10 @@ from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
+class ResultsEmptyError(ValueError):
+    """ Raised when trial results are empty and the trial was never runned before. """
+
+
 class Trial(AbstractContextManager):
     """
     A class to manage individual trials within an experiment.
@@ -46,6 +50,8 @@ class Trial(AbstractContextManager):
         self.fetch_trial_results = (
             experiment.get_results
         )  # Keep reference to retrieve results from trial.
+
+        self.already_runned = self._check_if_already_runned()
 
     def _assert_required_experiment_attributes(self, experiment):
         """
@@ -111,6 +117,11 @@ class Trial(AbstractContextManager):
         os.makedirs(trial_directory, exist_ok=True)
         return trial_directory
 
+    def _check_if_already_runned(self):
+        trial = self.trial_data["name"]
+        experiment_trials = [trial["name"] for trial in self.experiment_trials]
+        return trial in experiment_trials
+
     def __enter__(self):
         """
         Sets up the trial by creating the necessary directories.
@@ -118,13 +129,21 @@ class Trial(AbstractContextManager):
         Returns:
             - self: The Trial instance.
         """
-        os.makedirs(self.trial_data["directory"], exist_ok=True)
+
         self.trial_data["start_time"] = get_datetime()
         return self
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
         if exc_type is not None:
             raise
+
+    def _remove_trial(self, trial_name):
+        names = [trial["name"] for trial in self.experiment_trials]
+        if trial_name not in names:
+            msg = f"Trial {trial_name} not found in experiment trials."
+            raise ValueError(msg)
+        index = names.index(trial_name)
+        self.experiment_trials.pop(index)
 
     def _write_trial_data(self):
         """ Writes the trial data to a JSON file. """
@@ -159,12 +178,28 @@ class Trial(AbstractContextManager):
 
         trial_results = self.fetch_trial_results()
 
+        results_empty = all(value == {} for value in trial_results.values())
+        if results_empty and self.already_runned:
+            # Keep the old results if the trial was already runned.
+            return
+        if results_empty:
+            msg = f"Trial {self.trial_data['name']} did not return any results."
+            msg += " Trial will not be saved."
+            warnings.warn(msg)
+            return
+
+        if self.already_runned:
+            msg = f"Trial {self.trial_data['name']} was already runned."
+            msg += " Overwriting the results."
+            warnings.warn(msg)
+            self._remove_trial(self.trial_data["name"])
+
         self.trial_data["figures"] = map_figures_to_paths(
             trial_results["figures"], self.trial_data["directory"]
         )
         self.trial_data["evaluation_metrics"] = copy(
             trial_results["evaluation_metrics"]
-        )  # Copy as the source trial_results might be modified later (e.g. in next Trial)
+        )
         self.trial_data["training_history"] = copy(trial_results["training_history"])
 
         self._write_trial_data()

@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 
 import matplotlib.pyplot as plt
 
-from src.experimenting.helpers.trial import Trial
+from src.experimenting.helpers.trial import Trial, ResultsEmptyError
 from src.testing.base.base_test_case import BaseTestCase
 
 
@@ -18,9 +18,11 @@ class TestTrial(BaseTestCase):
             "trials": [],
         }
         self.mock_experiment.get_results.return_value = {
+            # Experiment requires at least one value in dict
+            # to be not empty for the trial to be saved.
             "figures": {},
             "evaluation_metrics": {},
-            "training_history": {},
+            "training_history": {"loss": [0.1, 0.2, 0.3]},
         }
 
         self.name = "test_trial"
@@ -117,6 +119,64 @@ class TestTrial(BaseTestCase):
             self.assertTrue(e.__traceback__)
         self.assertTrue(trial_exception_raised)
         self.assertEqual(len(self.mock_experiment.experiment_data["trials"]), 0)
+
+    def test_trial_already_runned(self):
+        with self.call_test_trial() as trial:
+            self.assertFalse(trial.already_runned)
+            pass
+
+        with self.call_test_trial() as trial:
+            self.assertTrue(trial.already_runned)
+
+    def test_trial_execution_in_four_cases(self):
+        def get_trials():
+            return self.mock_experiment.experiment_data["trials"]
+
+        empty_results = {
+            "figures": {},
+            "evaluation_metrics": {},
+            "training_history": {},
+        }
+        non_empty_results = {
+            "figures": {},
+            "evaluation_metrics": {},
+            "training_history": {"loss": [0.1, 0.2, 0.3]},
+        }
+
+        # Case 1: Trial never runned, actual results are empty.
+        # Trial is not saved therefore we consider it as never runned.
+        self.mock_experiment.get_results.return_value = empty_results
+        with self.assertWarns(UserWarning):
+            with self.call_test_trial():
+                pass
+        self.assertEqual(len(get_trials()), 0)
+
+        # Case 2: Trial never runned, actual results are not empty.
+        # Normal case.
+        self.mock_experiment.get_results.return_value = non_empty_results
+        with self.call_test_trial():
+            pass
+        self.assertEqual(len(get_trials()), 1)
+        prev_trial_data = get_trials()[0]
+
+        # Case 3: Trial already runned, actual results are empty.
+        # Nothing new is saved.
+        self.mock_experiment.get_results.return_value = empty_results
+        with self.call_test_trial():
+            pass
+        self.assertEqual(len(get_trials()), 1)
+        new_trial_data = get_trials()[0]
+        # Trial data should be the same as the previous trial, as
+        # the results are empty and therefore the old trial 
+        # data should be kept.
+        self.assertEqual(prev_trial_data, new_trial_data)
+
+        # Case 4: Trial already runned, actual results are not empty.
+        # Old results are overwritten.
+        self.mock_experiment.get_results.return_value = non_empty_results
+        with self.assertWarns(UserWarning):
+            with self.call_test_trial():
+                pass
 
     def test_non_serializable_hyperparameters(self):
         non_serializable_params = {"lr": MagicMock(), "model": MagicMock()}
