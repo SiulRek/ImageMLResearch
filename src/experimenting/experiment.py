@@ -27,7 +27,9 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     """ A class to manage experiments and trials, inheriting from
     ResearchAttributes. """
 
-    def __init__(self, research_attributes, directory, name, description):
+    def __init__(
+        self, research_attributes, directory, name, description, sort_metric="accuracy"
+    ):
         """
         Initializes the Experiment with the given parameters.
 
@@ -38,6 +40,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             - name (str): The name of the experiment.
             - description (str): The description of the experiment. for the
                 report.
+            - sort_metric (str): The metric to sort the trials by. Default
+                is "accuracy".
 
         Note:
             - `Experiment` is the only research module that requires
@@ -61,10 +65,10 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             # Metric: List of values
         }  # Read only
         self.synchronize_research_attributes(research_attributes)
-        self._init_experiment_data(directory, name, description)
+        self._init_experiment_data(directory, name, description, sort_metric)
         self._no_trial_executed = True
 
-    def _init_experiment_data(self, directory, name, description):
+    def _init_experiment_data(self, directory, name, description, sort_metric):
         """
         Initializes the experiment data to store the experiment information.
         Note: 'directory' 'name' and 'description' are only used when the
@@ -75,6 +79,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             - directory (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment.
+            - sort_metric (str): The metric to sort the trials by.
         """
         experiment_directory = self._make_experiment_directory(directory, name)
         try:
@@ -85,6 +90,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             experiment_data["description"] = description
             experiment_data["directory"] = experiment_directory
             experiment_data["name"] = name
+            experiment_data["sort_metric"] = sort_metric
         self.experiment_data = experiment_data
 
     def _make_experiment_directory(self, directory, name):
@@ -171,22 +177,24 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def _sort_trials(self):
         """ Sorts the trials by the accuracy in descending order. """
-        if self.experiment_data["trials"] == []:
+        if len(self.experiment_data["trials"]) <= 1:
             return
 
-        def get_accuracy(trial):
+        sort_metric = self.experiment_data["sort_metric"]
+
+        def metric_val(trial):
             evaluation_metrics = trial["evaluation_metrics"]
             metrics_set = evaluation_metrics.get("test", {}) or evaluation_metrics.get(
                 "complete", {}
             )
-            accuracy = metrics_set.get("accuracy", None)
-            if accuracy is None:
+            value = metrics_set.get(sort_metric, None)
+            if value is None:
                 msg = "Accuracy not found in evaluation metrics for Trial"
                 msg += f"{trial['name']}"
                 raise ExperimentError(msg)
-            return accuracy
+            return value
 
-        self.experiment_data["trials"].sort(key=lambda x: get_accuracy(x), reverse=True)
+        self.experiment_data["trials"].sort(key=lambda x: metric_val(x), reverse=True)
 
     def _write_experiment_data(self):
         """ Writes the experiment data to a JSON file. """
@@ -236,10 +244,6 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
             - traceback: The traceback if an exception occurred.
-
-        Raises:
-            - ExperimentError: If an exception occurred during the
-                experiment.
         """
         self._calculate_total_duration()
 

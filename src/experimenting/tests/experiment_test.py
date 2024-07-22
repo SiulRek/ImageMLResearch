@@ -29,13 +29,18 @@ class TestExperiment(BaseTestCase):
 
         self.directory = self.temp_dir
         self.name = "test_experiment"
+        self.experiment_json = os.path.join(
+            self.directory, self.name, "experiment_info.json"
+        )
         self.description = "This is a test experiment"
-
+        self.sort_metric = "accuracy"
+        self.sort_metric_inv = "accuracy_inv"
         self.call_test_experiment = lambda: Experiment(
             research_attributes=self.research_attributes,
             directory=self.directory,
             name=self.name,
             description=self.description,
+            sort_metric=self.sort_metric,
         )
 
     def test_experiment_initialization(self):
@@ -51,13 +56,9 @@ class TestExperiment(BaseTestCase):
     def test_experiment_data_written_to_json(self):
         with self.call_test_experiment() as experiment:
             pass
-        experiment_info_json = os.path.join(
-            experiment.experiment_data["directory"],
-            "experiment_info.json",
-        )
-        self.assertTrue(os.path.exists(experiment_info_json))
+        self.assertTrue(os.path.exists(self.experiment_json))
 
-        with open(experiment_info_json, "r", encoding="utf-8") as f:
+        with open(self.experiment_json, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         self.assertEqual(data["name"], self.name)
@@ -92,8 +93,9 @@ class TestExperiment(BaseTestCase):
             self.assertTrue(e.__traceback__)
         self.assertTrue(experiment_exception_raised)
 
-    def _run_trials_and_verify(self, trial_definitions, sleep_time=None):
+    def _run_trials_in_experiment(self, trial_definitions, sleep_time=None):
         with self.call_test_experiment() as experiment:
+            trial_runned = False
             for i, (name, hyperparameters) in enumerate(trial_definitions):
                 with experiment.run_trial(name, hyperparameters) as trial:
                     self.assertIsInstance(trial, Trial)
@@ -103,11 +105,17 @@ class TestExperiment(BaseTestCase):
                     )
                     self.assertTrue("start_time" in trial.trial_data)
                     # Simulate accuracy
-                    accuracy = float(1 - i * 0.1)
-                    metrics_set = {"test": {"accuracy": accuracy}}
+                    metric_val = float(1 - i * 0.1)
+                    metric_inv_val = float(1 - metric_val)
+                    metric_kw = {
+                        self.sort_metric: metric_val,
+                        self.sort_metric_inv: metric_inv_val,
+                    }
+                    metrics_set = {"test": metric_kw}
                     experiment._evaluation_metrics.update(metrics_set)
-
-            self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
+                    trial_runned = True
+            if trial_runned:
+                self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
 
             if sleep_time is not None:
                 sleep(sleep_time)
@@ -116,22 +124,13 @@ class TestExperiment(BaseTestCase):
 
     def test_trials_creation(self):
 
-        def get_accuracy(trial_num):
-            trial = experiment.experiment_data["trials"][trial_num]
-            metrics_set = trial["evaluation_metrics"]["test"]
-            return metrics_set["accuracy"]
-
         trial_definitions = [
             ("trial1", {"lr": 0.01, "batch_size": 16}),
             ("trial2", {"lr": 0.001, "batch_size": 32}),
         ]
-        experiment = self._run_trials_and_verify(trial_definitions)
+        experiment = self._run_trials_in_experiment(trial_definitions)
 
         self.assertEqual(len(experiment.experiment_data["trials"]), 2)
-
-        # Assert if trials are sorted by accuracy
-        self.assertEqual(get_accuracy(trial_num=0), 1)
-        self.assertEqual(get_accuracy(trial_num=1), 0.9)
 
     def test_load_experiment_data(self):
         trial_definitions = [
@@ -139,7 +138,7 @@ class TestExperiment(BaseTestCase):
             ("trial2", {"lr": 0.001, "batch_size": 32}),
         ]
 
-        experiment = self._run_trials_and_verify(trial_definitions)
+        experiment = self._run_trials_in_experiment(trial_definitions)
         reloaded_experiment = Experiment(
             research_attributes=self.research_attributes,
             directory=self.directory,
@@ -152,6 +151,42 @@ class TestExperiment(BaseTestCase):
 
         self.assertEqual(trials_data, reloaded_trials_data)
 
+    def test_trials_order(self):
+
+        def metric_val(trial_num, metric):
+            trial = experiment.experiment_data["trials"][trial_num]
+            metrics_set = trial["evaluation_metrics"]["test"]
+            return metrics_set[metric]
+
+        trial_definitions = [
+            ("trial1", {"lr": 0.01, "batch_size": 16}),
+            ("trial2", {"lr": 0.001, "batch_size": 32}),
+        ]
+        experiment = self._run_trials_in_experiment(trial_definitions)
+
+        # Ordered by accuracy
+        metric_1st_trial = metric_val(0, self.sort_metric)
+        metric_2nd_trial = metric_val(1, self.sort_metric)
+        self.assertGreater(metric_1st_trial, metric_2nd_trial)
+
+        # Modify the experiment to sort by accuracy_inv
+        metric_kw = {"sort_metric": self.sort_metric_inv}
+        self._modify_experiment_json(metric_kw)
+
+        reloaded_experiment = self._run_trials_in_experiment([])
+        # Ordered by accuracy_inv
+        metric_1st_trial = metric_val(0, self.sort_metric_inv)
+        metric_2nd_trial = metric_val(1, self.sort_metric_inv)
+        self.assertLess(metric_1st_trial, metric_2nd_trial)
+
+    def _modify_experiment_json(self, kwargs):
+        with open(self.experiment_json, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for key, value in kwargs.items():
+            data[key] = value
+        with open(self.experiment_json, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+
     def test_resume_experiment(self):
         def get_experiment_duration(experiment):
             duration = experiment.experiment_data["duration"]
@@ -162,7 +197,7 @@ class TestExperiment(BaseTestCase):
             ("trial1", {"lr": 0.01, "batch_size": 16}),
             ("trial2", {"lr": 0.001, "batch_size": 32}),
         ]
-        initial_experiment = self._run_trials_and_verify(
+        initial_experiment = self._run_trials_in_experiment(
             trial_definitions, sleep_time=0.01
         )
         initial_duration = get_experiment_duration(initial_experiment)
@@ -173,7 +208,7 @@ class TestExperiment(BaseTestCase):
             ("trial3", {"lr": 0.001, "batch_size": 32}),
             ("trial4", {"lr": 0.001, "batch_size": 32}),
         ]
-        resumed_experiment = self._run_trials_and_verify(
+        resumed_experiment = self._run_trials_in_experiment(
             new_trial_definitions, sleep_time=0.01
         )
         total_duration = get_experiment_duration(resumed_experiment)

@@ -6,10 +6,11 @@ import warnings
 _DEFAULT_EXPERIMENT_DATA = {
     "name": None,
     "description": None,
+    "directory": None,
+    "sort_metric": "accuracy",
     "start_time": None,
     "resume_time": None,
     "duration": None,
-    "directory": None,
     "figures": {},
     "trials": [],
 }
