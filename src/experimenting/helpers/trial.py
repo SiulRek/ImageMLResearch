@@ -10,10 +10,6 @@ from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 
 
-class TrialError(Exception):
-    """ Exception raised for errors that occur during a trial. """
-
-
 class Trial(AbstractContextManager):
     """
     A class to manage individual trials within an experiment.
@@ -155,8 +151,6 @@ class Trial(AbstractContextManager):
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
             - traceback: The traceback if an exception occurred. C
-            - Raises:
-            - TrialError: If an exception occurred during the trial.
         """
         duration = get_duration(self.trial_data["start_time"])
         self.trial_data["duration"] = duration
