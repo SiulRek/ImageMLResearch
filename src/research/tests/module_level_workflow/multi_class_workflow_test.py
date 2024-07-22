@@ -113,7 +113,6 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             directory=self.results_dir,
             name="test_experiment",
             description="A test experiment",
-            report_kwargs={},
         ) as experiment:
             self._assert_datasets_container(experiment)
             self.assertTrue(

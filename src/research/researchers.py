@@ -28,7 +28,7 @@ class _ResearcherBase(DataHandler, Trainer):
         DataHandler.__init__(self)
         Trainer.__init__(self)
 
-    def run_experiment(self, directory, name, description, report_kwargs):
+    def run_experiment(self, directory, name, description):
         """
         Sets up and runs an experiment within a context manager.
 
@@ -36,13 +36,12 @@ class _ResearcherBase(DataHandler, Trainer):
             - directory (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment.
-            - report_kwargs (dict, optional): Additional keyword arguments
                 for the report.
 
         Returns:
             - Experiment: The Experiment context manager instance.
         """
-        return Experiment(self, directory, name, description, report_kwargs)
+        return Experiment(self, directory, name, description)
 
 
 class BinaryResearcher(_ResearcherBase, BinaryPlotter):

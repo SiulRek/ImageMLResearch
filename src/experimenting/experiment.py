@@ -27,9 +27,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     """ A class to manage experiments and trials, inheriting from
     ResearchAttributes. """
 
-    def __init__(
-        self, research_attributes, directory, name, description, report_kwargs=None
-    ):
+    def __init__(self, research_attributes, directory, name, description):
         """
         Initializes the Experiment with the given parameters.
 
@@ -38,9 +36,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 attributes for the experiment.
             - directory (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
-            - description (str): The description of the experiment.
-            - report_kwargs (dict, optional): Additional keyword arguments
-                for the report.
+            - description (str): The description of the experiment. for the
+                report.
 
         Note:
             - `Experiment` is the only research module that requires
@@ -65,7 +62,6 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         }  # Read only
         self.synchronize_research_attributes(research_attributes)
         self._init_experiment_data(directory, name, description)
-        self.report_kwargs = report_kwargs or {}
         self._no_trial_executed = True
 
     def _init_experiment_data(self, directory, name, description):
@@ -253,4 +249,4 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
         self._plot_history_of_best_3_trials()
         self._write_experiment_data()
-        create_experiment_report(self.experiment_data, **self.report_kwargs)
+        create_experiment_report(self.experiment_data)
