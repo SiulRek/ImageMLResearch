@@ -30,8 +30,8 @@ class TestRunnerBase(ABC):
     def _init_logger(self):
         """ Initializes the test result logger, creating a log file in the output
         directory. """
-        log_file = os.path.join(self.output_dir, "test_results.log")
-        TestResultLogger(log_file)  # Initialize Test Result Logger.
+        self.log_file = os.path.join(self.output_dir, "test_results.log")
+        TestResultLogger(self.log_file)  # Initialize Test Result Logger.
 
     @classmethod
     def _infere_test_file_path(cls):
@@ -112,3 +112,5 @@ class TestRunnerBase(ABC):
         print("\n" + "*" * 35 + "\n")
         msg = generate_test_results_message(test_result)
         print(msg)
+        print()
+        print("Test results logged to:", self.log_file)

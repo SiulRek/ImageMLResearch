@@ -64,3 +64,4 @@ if __name__ == "__main__":
 
     message = run_tests()
     print(message)
+    print(f"Test results logged to {LOG_FILE}")
