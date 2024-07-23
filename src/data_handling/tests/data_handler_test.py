@@ -59,7 +59,7 @@ class TestDataHandler(BaseTestCase):
         original_dataset = list(
             self.data_handler.datasets_container["complete_dataset"]
         )
-        self.data_handler.enhance_datasets(batch_size=2, shuffle_seed=42)
+        self.data_handler.prepare_datasets(batch_size=2, shuffle_seed=42)
         self.assertIn("complete_dataset", self.data_handler.datasets_container)
         enhanced_dataset = self.data_handler.datasets_container["complete_dataset"]
 

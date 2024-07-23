@@ -85,7 +85,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         self.data_handler.load_dataset(dataset)
         self.data_handler.split_dataset(train_size=0.7, val_size=0.15, test_size=0.15)
         self._assert_datasets_container(self.data_handler)
-        self.data_handler.enhance_datasets(
+        self.data_handler.prepare_datasets(
             ["train_dataset", "val_dataset", "test_dataset"],
             batch_size=32,
             shuffle_seed=42,

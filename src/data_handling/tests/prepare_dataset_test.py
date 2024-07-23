@@ -2,12 +2,12 @@ import unittest
 
 import tensorflow as tf
 
-from src.data_handling.manipulation.enhance_dataset import enhance_dataset
+from src.data_handling.manipulation.prepare_dataset import prepare_dataset
 from src.testing.base.base_test_case import BaseTestCase
 
 
-class TestEnhanceDataset(BaseTestCase):
-    """ Test suite for the enhance_dataset function. """
+class TestPrepareDataset(BaseTestCase):
+    """ Test suite for the prepare_dataset function. """
 
     def setUp(self):
         super().setUp()
@@ -15,7 +15,7 @@ class TestEnhanceDataset(BaseTestCase):
 
     def test_shuffling(self):
         original_first_element = next(iter(self.dataset)).numpy()
-        enhanced = enhance_dataset(self.dataset, shuffle_seed=42)
+        enhanced = prepare_dataset(self.dataset, shuffle_seed=42)
         enhanced_first_element = next(iter(enhanced)).numpy()
         self.assertFalse(
             tf.reduce_all(tf.equal(original_first_element, enhanced_first_element)),
@@ -23,7 +23,7 @@ class TestEnhanceDataset(BaseTestCase):
         )
 
     def test_batching(self):
-        enhanced = enhance_dataset(self.dataset, batch_size=10)
+        enhanced = prepare_dataset(self.dataset, batch_size=10)
         self.assertEqual(
             enhanced.cardinality().numpy(),
             10,
@@ -31,7 +31,7 @@ class TestEnhanceDataset(BaseTestCase):
         )
 
     def test_repeating(self):
-        repeated = enhance_dataset(self.dataset, repeat_num=3)
+        repeated = prepare_dataset(self.dataset, repeat_num=3)
         self.assertEqual(
             repeated.cardinality().numpy(),
             300,

@@ -3,7 +3,7 @@ import tensorflow as tf
 from src.data_handling.io.create_dataset import create_dataset
 from src.data_handling.io.save_images import save_images
 from src.data_handling.labelling.label_utils import reverse_one_hot
-from src.data_handling.manipulation.enhance_dataset import enhance_dataset
+from src.data_handling.manipulation.prepare_dataset import prepare_dataset
 from src.data_handling.manipulation.split_dataset import split_dataset
 from src.research.attributes.research_attributes import ResearchAttributes
 
@@ -69,7 +69,7 @@ class DataHandler(ResearchAttributes):
             msg = f"Dataset {dataset_name} not found in the dataset container."
             raise ValueError(msg)
 
-    def enhance_datasets(
+    def prepare_datasets(
         self,
         dataset_names=None,
         batch_size=None,
@@ -78,8 +78,8 @@ class DataHandler(ResearchAttributes):
         repeat_num=None,
     ):
         """
-        Enhances the dataset by applying transformations and stores the enhanced
-        dataset back in the 'datasets_container'.
+        Prepares the dataset for further training by applying transformations
+        and stores the enhanced dataset back in the 'datasets_container'.
 
         Args:
             - dataset_names (list): The names of the dataset to enhance. Can
@@ -99,7 +99,7 @@ class DataHandler(ResearchAttributes):
         for dataset_name in dataset_names:
             self._assert_dataset_exists(dataset_name)
             dataset = self._datasets_container[dataset_name]
-            enhanced_dataset = enhance_dataset(
+            enhanced_dataset = prepare_dataset(
                 dataset,
                 batch_size=batch_size,
                 shuffle_seed=shuffle_seed,

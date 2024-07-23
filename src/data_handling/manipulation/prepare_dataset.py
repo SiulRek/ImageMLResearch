@@ -3,7 +3,7 @@ import tensorflow as tf
 from src.data_handling.manipulation.shuffle_dataset import shuffle_dataset
 
 
-def enhance_dataset(
+def prepare_dataset(
     dataset,
     batch_size=None,
     shuffle_seed=None,
@@ -11,7 +11,7 @@ def enhance_dataset(
     repeat_num=None,
 ):
     """
-    Enhances a TensorFlow dataset by applying shuffling, batching, prefetching,
+    Prepares a TensorFlow dataset by applying shuffling, batching, prefetching,
     and repeating a number of times. If a parameter is None, the corresponding
     operation is not applied.
 
@@ -25,7 +25,7 @@ def enhance_dataset(
         - repeat_num (int, optional): Number of times to repeat the dataset.
 
     Returns:
-        - tf.data.Dataset: The enhanced TensorFlow dataset.
+        - tf.data.Dataset: The prepared TensorFlow dataset.
     """
     if shuffle_seed is not None:
         dataset = shuffle_dataset(dataset, random_seed=shuffle_seed)
