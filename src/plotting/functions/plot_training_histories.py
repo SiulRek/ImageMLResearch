@@ -7,11 +7,12 @@ def _sanitize_histories(histories):
 
     Args:
         - histories: Dictionary containing multiple histories in the format
-            {Name: history}.
+        - {Name: history}.
 
     Returns:
-        - sanitized_histories: Dictionary containing multiple histories in the
-            format - {Name: history}
+        - sanitized_histories: Dictionary containing multiple histories in
+            the
+        - format - {Name: history}
         - known_metrics: List of known metrics in the histories.
     """
     sanitized_histories = {}
@@ -47,8 +48,6 @@ def plot_training_histories(histories):
     # Sanitize all histories to have same metrics.
     histories, known_metrics = _sanitize_histories(histories)
 
-    epochs = range(1, len(next(iter(histories.values()))[known_metrics[0]]) + 1)
-
     num_metrics = (
         len(known_metrics) // 2
         if any(key.startswith("val_") for key in known_metrics)
@@ -69,6 +68,7 @@ def plot_training_histories(histories):
             if history_dict[metric] != [] and not metric.startswith("val_"):
                 ax = axes[i]
                 i += 1
+                epochs = range(1, len(history_dict[metric]) + 1)
                 ax.plot(
                     epochs,
                     history_dict[metric],
@@ -76,8 +76,9 @@ def plot_training_histories(histories):
                     color=color,
                 )
                 if f"val_{metric}" in history_dict:
+                    val_epochs = range(1, len(history_dict[f"val_{metric}"]) + 1)
                     ax.plot(
-                        epochs,
+                        val_epochs,
                         history_dict[f"val_{metric}"],
                         "--",
                         label=f"{history_name} Validation {metric}",

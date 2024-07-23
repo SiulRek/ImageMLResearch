@@ -91,6 +91,31 @@ class TestPlotTrainingHistories(BaseTestCase):
             )
         )
 
+    def test_plot_training_histories_with_different_epoch_lengths(self):
+        """ Test plotting training histories with different epoch lengths. """
+        # Create a new history with a different epoch length
+        history3 = self.model.fit(
+            self.train_dataset, epochs=7, validation_data=self.val_dataset, verbose=0
+        ).history
+        histories = self.histories.copy()
+        histories["Model 3"] = history3
+
+        fig = plot_training_histories(histories)
+        fig.savefig(
+            os.path.join(
+                self.results_dir, "plot_training_histories_different_epochs.png"
+            )
+        )
+        plt.close(fig)
+        self.assertTrue(
+            os.path.exists(
+                os.path.join(
+                    self.results_dir, "plot_training_histories_different_epochs.png"
+                )
+            ),
+            "Combined plot for training histories with different epoch lengths was not saved.",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
