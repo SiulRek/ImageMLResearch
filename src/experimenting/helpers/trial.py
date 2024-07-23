@@ -134,6 +134,8 @@ class Trial(AbstractContextManager):
         return self
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
+        # No need to log the exception as the exception logging is handled
+        # by the Experiment class.
         if exc_type is not None:
             raise
 
