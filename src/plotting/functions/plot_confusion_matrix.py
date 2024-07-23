@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
 
@@ -19,9 +20,12 @@ def plot_confusion_matrix(y_true, y_pred, class_names):
     figsize = (len(class_names) + 2, len(class_names) + 2)
     fontsize = 12
     cmap = "Blues"
-    fmt = "d"
+    normalize = True
+    fmt = ".2" if normalize else "d"
 
     cm = confusion_matrix(y_true, y_pred)
+    if normalize:
+        cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
 
     fig, ax = plt.subplots(figsize=figsize)
     sns.heatmap(
