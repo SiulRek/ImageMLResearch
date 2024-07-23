@@ -16,10 +16,12 @@ batch_scripts/
 **/temp/
 **/temp.*
 **/test.*
+**/_*
 
 # Test and Log Files
 **/test_results.log
 **/test_results_simple.log
+**/test_results_errors.log
 source/utils/test_result_logger.py
 **/tests/outputs/
 
