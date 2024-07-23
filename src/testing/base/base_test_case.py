@@ -125,7 +125,8 @@ class BaseTestCase(unittest.TestCase):
         os.makedirs(cls.visualizations_dir, exist_ok=True)
 
         cls.log_file = os.path.join(cls.output_dir, "test_results.log")
-        cls.logger = TestResultLogger(cls.log_file, cls._get_test_case_title())
+        cls.logger = TestResultLogger(cls.log_file)
+        cls.logger.log_title(cls._get_test_case_title())
 
     @classmethod
     def tearDownClass(cls):
