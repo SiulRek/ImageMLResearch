@@ -1,9 +1,10 @@
 import warnings
 
+import pandas as pd
 import tensorflow as tf
 
-from src.data_handling.labelling.label_manager import LabelManager
 from src.data_handling.io.decode_image import decode_image
+from src.data_handling.labelling.label_manager import LabelManager
 
 
 def create_dataset(data, label_type=None, class_names=None):
@@ -20,8 +21,8 @@ def create_dataset(data, label_type=None, class_names=None):
         - label_type (str, optional): Specifies the label encoding strategy
             ('binary', 'multi_class', 'multi_label', 'multi_class_multi_label',
             'object_detection'). Default is None.
-        - class_names (list, optional): The existing class names for
-            label encoding if 'label_type' is not None. Default is None.
+        - class_names (list, optional): The existing class names for label
+            encoding if 'label_type' is not None. Default is None.
 
     Returns:
         - tf.data.Dataset: A TensorFlow Dataset containing tuples of (image,
@@ -29,14 +30,7 @@ def create_dataset(data, label_type=None, class_names=None):
             label' is processed by LabelManager. If no labels are provided,
             returns a dataset of images only.
     """
-    try:
-        import pandas as pd
-
-        pandas_installed = True
-    except ImportError:
-        pandas_installed = False
-
-    if pandas_installed and isinstance(data, pd.DataFrame):
+    if isinstance(data, pd.DataFrame):
         paths = data["path"].tolist()
         labels = data["label"].tolist() if "label" in data.columns else None
     elif isinstance(data, list) and all(isinstance(item, dict) for item in data):
