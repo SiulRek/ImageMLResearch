@@ -1,7 +1,11 @@
 import unittest
 
 import numpy as np
-import pandas as pd
+try:
+    import pandas as pd
+    pandas_installed = True
+except ImportError:
+    pandas_installed = False
 import tensorflow as tf
 
 from src.data_handling.io.create_dataset import create_dataset
@@ -68,6 +72,7 @@ class TestCreateDataset(BaseTestCase):
             self.assertIsInstance(label, tf.Tensor)
             self._assert_label(label, data["label"][i])
 
+    @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_create_dataset_from_dataframe_jpg(self):
         """ Test create_dataset with a pandas DataFrame containing JPG images. """
         data = pd.DataFrame(self.jpg_dict)
@@ -78,6 +83,7 @@ class TestCreateDataset(BaseTestCase):
             self.assertIsInstance(label, tf.Tensor)
             self._assert_label(label, self.jpg_dict["label"][i])
 
+    @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_create_dataset_from_dataframe_png(self):
         """ Test create_dataset with a pandas DataFrame containing PNG images. """
         data = pd.DataFrame(self.png_dict)
@@ -101,6 +107,7 @@ class TestCreateDataset(BaseTestCase):
             self.assertIsInstance(label, tf.Tensor)
             self._assert_label(label, data[i]["label"])
 
+    @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_one_hot_encoding(self):
         """ Test one-hot encoding for class codes. """
         data = pd.DataFrame(self.jpg_dict)
@@ -113,6 +120,7 @@ class TestCreateDataset(BaseTestCase):
             expected_label = self._expected_one_hot_label(self.jpg_dict["label"][i])
             self.assertTrue(np.array_equal(label.numpy(), expected_label))
 
+    @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_no_label(self):
         """ Test dataset creation without label. """
         data = pd.DataFrame(self.jpg_dict)
