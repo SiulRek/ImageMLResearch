@@ -84,6 +84,16 @@ class MarkdownFileWriter:
         """
         self.file_lines.append(f"{text}\n")
 
+    def write_key_value(self, key, value):
+        """
+        Writes a key-value pair in bullet point format to the file.
+
+        Args:
+            - key (str): The key text.
+            - value (str): The value text.
+        """
+        self.file_lines.append(f"*    *{key}*: {value}\n")
+
     def write_key_value_table(self, table_data, key_label="Key", value_label="Value"):
         """
         Writes a table with key-value pairs, where each row contains a key and a
@@ -127,7 +137,7 @@ class MarkdownFileWriter:
         """
         if not nested_table_data:
             return
-        
+
         if transpose:
             nested_table_data = _transpose_nested_dicts(nested_table_data)
 
@@ -171,27 +181,6 @@ class MarkdownFileWriter:
             self.file_lines.append(row)
         self.file_lines.append("\n")
 
-    def write_figure(self, figure_name, path):
-        """
-        Writes a Markdown image link to the file.
-
-        Args:
-            - figure_name (str): The alt text for the figure.
-            - path (str): The file path to the figure.
-        """
-        figure_link = self.create_link(path, figure_name)
-        self.file_lines.append(f"!{figure_link}\n")
-
-    def write_key_value(self, key, value):
-        """
-        Writes a key-value pair in bullet point format to the file.
-
-        Args:
-            - key (str): The key text.
-            - value (str): The value text.
-        """
-        self.file_lines.append(f"*    {key}: {value}\n")
-
     def create_link(self, path, hyperlink_text=None):
         """
         Creates a Markdown hyperlink to a given path.
@@ -209,6 +198,17 @@ class MarkdownFileWriter:
         link = f"./{markdown_path}"
         hyperlink_text = hyperlink_text or "[Link]"
         return f"[{hyperlink_text}]({link})"
+
+    def write_figure(self, figure_name, path):
+        """
+        Writes a Markdown image link to the file.
+
+        Args:
+            - figure_name (str): The alt text for the figure.
+            - path (str): The file path to the figure.
+        """
+        figure_link = self.create_link(path, figure_name)
+        self.file_lines.append(f"!{figure_link}\n")
 
     def save_file(self):
         """ Saves the file to the specified file path. """
