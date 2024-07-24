@@ -26,6 +26,8 @@ def _get_results_summary_table(experiment_data):
         metrics = trial.get("evaluation_metrics", {})
         metrics = metrics.get("test", metrics.get("complete", {}))
         for col, value in metrics.items():
+            if col == "classification_report":
+                continue
             if col not in results_table:
                 results_table[col] = {}
             results_table[col][row] = value
@@ -53,6 +55,7 @@ def _get_hyperparameters_summary_table(experiment_data):
     for trial in trials:
         row = trial.get("name", "No Name")
         chapters[row] = f"[Chapter](#{row.lower().replace(' ', '-')})"
+        # TODO: Get sort metric value here.
         hparams = trial.get("hyperparameters", {})
         for col, value in hparams.items():
             if col not in hparam_table:
@@ -60,6 +63,30 @@ def _get_hyperparameters_summary_table(experiment_data):
             hparam_table[col][row] = value
     hparam_table["Chapters"] = chapters
     return hparam_table
+
+
+def _pop_classification_reports(trial):
+    """
+    Pop the classification reports from the evaluation metrics of a trial.
+
+    Args:
+        - trial (dict): Dictionary containing trial data.
+
+    Returns:
+        - list: List of classification reports mantaining the order of the
+            metrics sets in the evaluation metrics dictionary.
+
+    NOTE: This function pops the classification reports from the original
+    evaluation metrics dictionary.
+    """
+    classification_reports = []
+    for metrics_set in trial.get("evaluation_metrics", {}).values():
+        if "classification_report" in metrics_set:
+            classification_report = metrics_set.pop("classification_report")
+            classification_reports.append(classification_report)
+        else:
+            classification_reports.append({})
+    return classification_reports
 
 
 def create_experiment_report(experiment_data):
@@ -111,6 +138,7 @@ def create_experiment_report(experiment_data):
         def from_trial_get(key, default="N/A"):
             return trial.get(key, default)
 
+        # Write Trial Metadata
         writer.write_title(from_trial_get("name"), level=2)
         start_time = from_trial_get("start_time").split(".")[0]
         writer.write_key_value("Start Time", start_time)
@@ -126,15 +154,21 @@ def create_experiment_report(experiment_data):
             hyperparameter_table, key_label="Hyperparameter", value_label="Value"
         )
 
-        if "figures" in trial and trial["figures"]:
-            writer.write_title("Figures:", level=3)
-            for fig_name, fig_path in trial["figures"].items():
-                writer.write_figure(fig_name, fig_path)
+        # Show Plots
+        writer.write_title("Figures:", level=3)
+        for fig_name, fig_path in trial["figures"].items():
+            writer.write_figure(fig_name, fig_path)
 
-        if "evaluation_metrics" in trial and trial["evaluation_metrics"]:
-            writer.write_title("Evaluation Metrics:", level=3)
-            evaluation_metrics_table = from_trial_get("evaluation_metrics", {})
-            writer.write_nested_table(evaluation_metrics_table)
+        # The last classification report is the test set report.
+        classification_report = _pop_classification_reports(trial)[-1]
 
-    # Save the report
+        # Write Evaluation Metrics
+        writer.write_title("Evaluation Metrics:", level=3)
+        evaluation_metrics_table = from_trial_get("evaluation_metrics", {})
+        writer.write_nested_table(evaluation_metrics_table)
+
+        # Write Classification Report
+        writer.write_title("Detailed Report of Test Set:", level=3)
+        writer.write_nested_table(classification_report, transpose=True)
+
     writer.save_file()
