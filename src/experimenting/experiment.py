@@ -71,7 +71,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def _init_logger(self, directory, name):
         log_file = os.path.join(directory, f"execution.log")
-        self.logger = Logger(log_file)
+        mode = "a" if os.path.exists(log_file) else "w"
+        self.logger = Logger(log_file, mode=mode)
 
     def _init_experiment_data(self, exp_dir, name, description, sort_metric):
         """
