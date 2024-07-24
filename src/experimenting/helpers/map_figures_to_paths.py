@@ -1,14 +1,17 @@
 import os
 
 
-def map_figures_to_paths(figures, directory):
+def map_figures_to_paths(figures, directory, close_figures=True):
     """
     Converts the key-figure pairs to key-path pairs and saves the figures. It
-    does not modify the input dictionary, instead it creates a new one.
+    does not modify the input dictionary, instead it creates a new one. After
+    saving the figures, it closes them if close_figures is set to True.
 
     Args:
         - figures (dict): The dictionary of figures.
         - directory (str): The directory to save the figures.
+        - close_figures (bool, optional): Whether to close the figures after
+            saving them. Defaults to True.
 
     Returns:
         - dict: The dictionary of file paths for the figures.
@@ -18,4 +21,6 @@ def map_figures_to_paths(figures, directory):
         figure_path = os.path.join(directory, f"{name}.png")
         figure_paths[name] = figure_path
         figure.savefig(figure_path)
+        if close_figures:
+            figure.close()
     return figure_paths
