@@ -1,6 +1,55 @@
 import os
 
 
+def _stringify_elements(iterable):
+    """
+    Recursively converts the elements in an iterable to strings.
+
+    Args:
+        - iterable: The iterable to be converted.
+
+    Returns:
+        - The converted iterable with all elements as strings.
+    """
+    if isinstance(iterable, dict):
+        return {key: _stringify_elements(elem) for key, elem in iterable.items()}
+    if isinstance(iterable, list):
+        return [_stringify_elements(elem) for elem in iterable]
+    if isinstance(iterable, tuple):
+        return tuple(_stringify_elements(elem) for elem in iterable)
+    if isinstance(iterable, set):
+        return {_stringify_elements(elem) for elem in iterable}
+    if isinstance(iterable, str):
+        return iterable
+    if isinstance(iterable, (int, bool)):
+        return str(iterable)
+    if isinstance(iterable, float):
+        return f"{iterable:.4f}"
+    msg = f"Values of Type {type(iterable)} cannot be converted to string."
+    raise ValueError(msg)
+
+
+def _transpose_nested_dicts(nested_dict):
+    """
+    Transposes a nested dictionary.
+
+    Args:
+        - nested_dict (dict[str, dict[str, (int|float|bool|str)]]): The
+            nested dictionary to transpose.
+
+    Returns:
+        - dict[str, dict[str, (int|float|bool|str)]]: The transposed nested
+            dictionary.
+    """
+    transposed_dict = {}
+    for outer_key, inner_dict in nested_dict.items():
+        for inner_key, value in inner_dict.items():
+            if inner_key not in transposed_dict:
+                transposed_dict[inner_key] = {}
+            transposed_dict[inner_key][outer_key] = value
+    return transposed_dict
+
+
 class MarkdownFileWriter:
     """
     A helper class to write to a Markdown file.
@@ -35,35 +84,6 @@ class MarkdownFileWriter:
         """
         self.file_lines.append(f"{text}\n")
 
-    def _stringify_elements(self, iterable):
-        """
-        Recursively converts the elements in an iterable to strings.
-
-        Args:
-            - iterable: The iterable to be converted.
-
-        Returns:
-            - The converted iterable with all elements as strings.
-        """
-        if isinstance(iterable, dict):
-            return {
-                key: self._stringify_elements(elem) for key, elem in iterable.items()
-            }
-        if isinstance(iterable, list):
-            return [self._stringify_elements(elem) for elem in iterable]
-        if isinstance(iterable, tuple):
-            return tuple(self._stringify_elements(elem) for elem in iterable)
-        if isinstance(iterable, set):
-            return {self._stringify_elements(elem) for elem in iterable}
-        if isinstance(iterable, str):
-            return iterable
-        if isinstance(iterable, (int, bool)):
-            return str(iterable)
-        if isinstance(iterable, float):
-            return f"{iterable:.4f}"
-        msg = f"Values of Type {type(iterable)} cannot be converted to string."
-        raise ValueError(msg)
-
     def write_key_value_table(self, table_data, key_label="Key", value_label="Value"):
         """
         Writes a table with key-value pairs, where each row contains a key and a
@@ -80,7 +100,7 @@ class MarkdownFileWriter:
         if not table_data:
             return
 
-        table_data = self._stringify_elements(table_data)
+        table_data = _stringify_elements(table_data)
         elements = list(table_data.keys()) + list(table_data.values())
         max_elem_len = max(len(elem) for elem in elements)
 
@@ -95,7 +115,7 @@ class MarkdownFileWriter:
             self.file_lines.append(f"| {padded_key} | {padded_value} |")
         self.file_lines.append("\n")
 
-    def write_nested_table(self, nested_table_data):
+    def write_nested_table(self, nested_table_data, transpose=False):
         """
         Writes a nested table with outer keys as column headers and inner keys
         as row headers.
@@ -103,11 +123,15 @@ class MarkdownFileWriter:
         Args:
             - nested_table_data (dict[str, dict[str,(int|float|bool|str)]]):
                 Dictionary of dictionaries.
+            - transpose (bool, optional): Whether to transpose the table.
         """
         if not nested_table_data:
             return
+        
+        if transpose:
+            nested_table_data = _transpose_nested_dicts(nested_table_data)
 
-        nested_table_data = self._stringify_elements(nested_table_data)
+        nested_table_data = _stringify_elements(nested_table_data)
 
         def max_elem_length(elements):
             return max(len(elem) for elem in elements)
