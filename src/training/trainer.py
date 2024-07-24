@@ -58,6 +58,7 @@ class Trainer(ResearchAttributes):
             warnings.warn(msg)
 
         label_type = self.label_manager.label_type
+        class_names = self.label_manager.class_names
         eval_func = get_evaluation_function(label_type)
         evaluation_metrics = {}
         self._evaluation_metrics.clear()
@@ -65,7 +66,8 @@ class Trainer(ResearchAttributes):
             if outputs:
                 name = output_name.replace("_output", "")
                 y_true, y_pred = outputs
-                evaluation_metrics[name] = eval_func(y_true, y_pred)
+                cn_kwarg = {"class_names": class_names} if class_names else {}
+                evaluation_metrics[name] = eval_func(y_true, y_pred, **cn_kwarg)
         self._evaluation_metrics.update(evaluation_metrics)
 
     def _get_labels_tensor(self, dataset_name):

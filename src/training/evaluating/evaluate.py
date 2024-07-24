@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.metrics import classification_report
 
 from src.training.evaluating.calculate_metrics import (
     calc_accuracy,
@@ -8,7 +9,7 @@ from src.training.evaluating.calculate_metrics import (
 )
 
 
-def evaluate_multi_class_classification(y_true, y_pred):
+def evaluate_multi_class_classification(y_true, y_pred, class_names=None):
     """
     Computes classification metrics from true and predicted labels for
     evaluation. Calculates metrics for multi-class classification.
@@ -16,13 +17,16 @@ def evaluate_multi_class_classification(y_true, y_pred):
     Args:
         - y_true (arrayLike): True labels.
         - y_pred (arrayLike): Predicted labels.
+        - class_names (list, optional): List of class names. If provided,
+            the classification report will be returned with the class names.
 
     Returns:
         - dict: Evaluation metrics. Dictionary with the following keys:
-        - 'accuracy'
-        - 'precision'
-        - 'recall'
-        - 'f1'
+        - 'accuracy' -> float
+        - 'precision' -> float
+        - 'recall' -> float
+        - 'f1' -> float
+        - 'classification_report' -> dict
     """
 
     y_pred_one_hot = np.zeros_like(y_pred)
@@ -32,13 +36,19 @@ def evaluate_multi_class_classification(y_true, y_pred):
     precision = calc_precision(y_true, y_pred)
     recall = calc_recall(y_true, y_pred)
     f1_score = calc_f1_score(y_true, y_pred)
+    cn_kwarg = {"target_names": class_names} if class_names else {}
+    report = classification_report(
+        y_true, y_pred_one_hot, output_dict=True, zero_division=0, **cn_kwarg
+    )
     eval_metrics = {
         "accuracy": accuracy,
         "precision": precision,
         "recall": recall,
         "f1": f1_score,
+        "classification_report": report,
     }
     return eval_metrics
+
 
 def get_evaluation_function(label_type):
     """
@@ -52,6 +62,5 @@ def get_evaluation_function(label_type):
     """
     if label_type == "multi_class":
         return evaluate_multi_class_classification
-    else:
-        msg = f"Label type '{label_type}' is not supported for evaluation."
-        raise ValueError(msg)
+    msg = f"Label type '{label_type}' is not supported for evaluation."
+    raise ValueError(msg)

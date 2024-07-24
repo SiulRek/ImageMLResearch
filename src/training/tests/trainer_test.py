@@ -25,8 +25,9 @@ class TestTrainer(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.trainer = Trainer()
+        self.class_names = [str(i) for i in range(10)]
         research_attributes = ResearchAttributes(
-            label_type="multi_class", class_names=[str(i) for i in range(10)]
+            label_type="multi_class", class_names=self.class_names
         )
         # To skip loading of datasets with DataHandler,
         # the attribute is set directly to private attribute of Trainer.
@@ -53,12 +54,17 @@ class TestTrainer(BaseTestCase):
         return model
 
     def _verify_metrics_dict(self, metrics, set_len=3):
-        """ Verify that the metrics dictionary contains expected keys and types. """
+        """
+        Verify that the metrics dictionary contains expected keys and types.
+        Additionally, verify that the classification report contains all class
+        names.
+        """
         expected_metrics = {
             "accuracy": float,
             "precision": float,
             "recall": float,
             "f1": float,
+            "classification_report": dict,
         }
 
         self.assertEqual(len(metrics), set_len)
@@ -67,6 +73,11 @@ class TestTrainer(BaseTestCase):
             for metric, expected_type in expected_metrics.items():
                 self.assertIn(metric, metrics_set)
                 self.assertIsInstance(metrics_set[metric], expected_type)
+
+            # Verify classification report
+            report = metrics_set["classification_report"]
+            for class_name in self.class_names:
+                self.assertIn(class_name, report)
 
     def test_set_compiled_model(self):
         model = self._create_compiled_model()
