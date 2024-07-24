@@ -1,5 +1,7 @@
 import os
 
+import matplotlib.pyplot as plt
+
 
 def map_figures_to_paths(figures, directory, close_figures=True):
     """
@@ -22,5 +24,6 @@ def map_figures_to_paths(figures, directory, close_figures=True):
         figure_paths[name] = figure_path
         figure.savefig(figure_path)
         if close_figures:
-            figure.close()
+            plt.close(figure)
+            del figure
     return figure_paths
