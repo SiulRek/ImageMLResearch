@@ -3,7 +3,7 @@ import os
 
 
 class Logger:
-    def __init__(self, log_file, log_level=logging.INFO):
+    def __init__(self, log_file, log_level=logging.INFO, mode="w"):
         """
         Initializes the Logger class with basic configuration.
 
@@ -11,22 +11,26 @@ class Logger:
             - log_file_path (str): Path to the log file.
             - log_level (logging.level): Level of logging. Default is
                 logging.INFO.
+            - mode (str): The mode to open the log file. Default is "w".
         """
         self.log_file = log_file
         self.log_level = log_level
         os.makedirs(os.path.dirname(self.log_file), exist_ok=True)
-        self.setup_logger()
+        self.setup_logger(mode)
 
-    def setup_logger(self):
+    def setup_logger(self, mode):
         """
         Set up the logger with a file handler and a standard logging format.
+
+        Args:
+            - mode (str): The mode to open the log file. Default is "w".
 
         This method configures the logger to write to the log file specified in
         the `log_file` attribute.
         """
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(self.log_level)
-        handler = logging.FileHandler(self.log_file, mode="w")
+        handler = logging.FileHandler(self.log_file, mode=mode)
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
