@@ -182,22 +182,28 @@ class Trial(AbstractContextManager):
         trial_results = self.fetch_trial_results()
 
         results_empty = all(value == {} for value in trial_results.values())
+        trial_name = self.trial_data["name"]
         if results_empty and self.already_runned:
-            # Keep the old results if the trial was already runned.
-            return
-        if results_empty:
-            msg = f"Trial {self.trial_data['name']} did not return any results."
-            msg += " Trial will not be saved."
+            msg = f"Skipping '{trial_name}'. Already run, no new\n"
+            msg += "results. Keeping old results."
             warnings.warn(msg)
-            self.logger.warning(msg)
+            self.logger.warning(f"Skipping {trial_name}")
             return
 
-        if self.already_runned:
-            msg = f"Trial {self.trial_data['name']} was already runned."
-            msg += " Overwriting the results."
+        self.logger.info(f"Finalizing trial: {trial_name}")
+
+        if results_empty:
+            msg = f"'{trial_name}' produced no results. Nothing\n"
+            msg += "saved."
             warnings.warn(msg)
-            self.logger.warning(msg)
-            self._remove_trial(self.trial_data["name"])
+            self.logger.warning(f"{trial_name} produced no results")
+            return
+        if self.already_runned:
+            msg = f"'{trial_name}' already run. Overwriting old\n"
+            msg += "results."
+            warnings.warn(msg)
+            self.logger.warning(f"Overwriting old results for {trial_name}")
+            self._remove_trial(trial_name)
 
         self.trial_data["figures"] = map_figures_to_paths(
             trial_results["figures"], self.trial_data["directory"]

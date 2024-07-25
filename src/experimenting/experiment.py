@@ -92,12 +92,12 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             experiment_data = load_experiment_data(exp_dir)
             self.logger.info(f"Resuming experiment: {name}")
         except FileNotFoundError:
+            self.logger.info(f"Creating new experiment: {name}")
             experiment_data = get_default_experiment_data()
             experiment_data["description"] = description
             experiment_data["directory"] = exp_dir
             experiment_data["name"] = name
             experiment_data["sort_metric"] = sort_metric
-            self.logger.info(f"Starting new experiment: {name}")
         self.experiment_data = experiment_data
 
     def _make_experiment_directory(self, directory, name):
@@ -181,7 +181,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
         """ Raises an exception if an exception occurred during the experiment. """
         if exc_type is not None:
-            self.logger.error(f"Exception occurred: {exc_value}")
+            self.logger.error(f"Exception occurred:\n {exc_value}")
             raise
 
     def _sort_trials(self):
@@ -257,9 +257,11 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         """
         self._calculate_total_duration()
 
-        self.logger.info("Finalizing experiment")
 
         self._raise_exception_if_any(exc_type, exc_value, traceback)
+
+        msg = f"Finalizing experiment: {self.experiment_data['name']}"
+        self.logger.info(msg)
 
         self._sort_trials()
         self._plot_history_of_best_3_trials()
