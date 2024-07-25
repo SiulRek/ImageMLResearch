@@ -65,12 +65,12 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         self.synchronize_research_attributes(research_attributes)
 
         self._init_experiment_data(exp_dir, name, description, sort_metric)
-        
+
         self._no_trial_executed = True
+        self._initial_trial_num = len(self.experiment_data["trials"])
 
-
-    def _init_logger(self, directory, name):
-        log_file = os.path.join(directory, f"execution.log")
+    def _init_logger(self, directory):
+        log_file = os.path.join(directory, "execution.log")
         mode = "a" if os.path.exists(log_file) else "w"
         self.logger = Logger(log_file, mode=mode)
 
@@ -178,14 +178,24 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         duration = add_durations(previous_duration, duration)
         self.experiment_data["duration"] = duration
 
-    def _raise_exception_if_any(self, exc_type, exc_value, traceback):
+    def _raise_exception_if_any(self, exc_type, exc_value, exc_traceback):
         """ Raises an exception if an exception occurred during the experiment. """
         if exc_type is not None:
             self.logger.error(f"Exception occurred:\n {exc_value}")
+            # XXX: In case of an exception and at least one trial runned successfully
+            # before, should an attempt to write the experiment data be done?
+            # if self._initial_trial_num > len(self.experiment_data["trials"]):
+            #     try:
+            #         self._sort_trials()
+            #         self._write_experiment_data()
+            #         msg = "Experiment data is updated with available trials."
+            #         self.logger.info(msg)
+            #     except Exception as e:
+            #         pass
             raise
 
     def _sort_trials(self):
-        """ Sorts the trials by the accuracy in descending order. """
+        """ Sorts the trials by the specified sort metric in descending order. """
         if len(self.experiment_data["trials"]) <= 1:
             return
 
@@ -204,7 +214,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 raise ExperimentError(msg)
             return value
 
-        self.experiment_data["trials"].sort(key=lambda x: metric_val(x), reverse=True)
+        self.experiment_data["trials"].sort(key=metric_val, reverse=True)
 
     def _write_experiment_data(self):
         """ Writes the experiment data to a JSON file. """
@@ -256,7 +266,6 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             - traceback: The traceback if an exception occurred.
         """
         self._calculate_total_duration()
-
 
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
