@@ -51,7 +51,12 @@ class Trial(AbstractContextManager):
             experiment.get_results
         )  # Keep reference to retrieve results from trial.
         self.logger = experiment.logger
-        self.already_runned = self._check_if_already_runned()
+        self._already_runned = self._check_if_already_runned()
+
+    @property
+    def already_runned(self):
+        """ Returns True if the trial has already been run, False otherwise. """
+        return self._already_runned
 
     def _assert_required_experiment_attributes(self, experiment):
         """
@@ -129,7 +134,6 @@ class Trial(AbstractContextManager):
         Returns:
             - self: The Trial instance.
         """
-
         self.trial_data["start_time"] = get_datetime()
         return self
 
@@ -157,8 +161,7 @@ class Trial(AbstractContextManager):
             with open(trial_info_json, "w", encoding="utf-8") as f:
                 json.dump(trial_data, f, indent=4)
         except TypeError:
-            msg = "Hyperparameters are not JSON serializable for trial"
-            msg += f"{trial_data['name']}. Saving None instead."
+            msg = f"Hyperparameters are not JSON serializable for trial {trial_data['name']}. Saving None instead."
             warnings.warn(msg)
             self.logger.warning(msg)
             trial_data["hyperparameters"] = None
@@ -172,7 +175,7 @@ class Trial(AbstractContextManager):
         Args:
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
-            - traceback: The traceback if an exception occurred. C
+            - traceback: The traceback if an exception occurred.
         """
         duration = get_duration(self.trial_data["start_time"])
         self.trial_data["duration"] = duration
@@ -184,25 +187,19 @@ class Trial(AbstractContextManager):
         results_empty = all(value == {} for value in trial_results.values())
         trial_name = self.trial_data["name"]
         if results_empty and self.already_runned:
-            msg = f"Skipping '{trial_name}'. Already run, no new\n"
-            msg += "results. Keeping old results."
+            msg = f"Skipping '{trial_name}'. Already run, no new results. Keeping old results."
             warnings.warn(msg)
-            self.logger.warning(f"Skipping {trial_name}")
+            self.logger.warning(msg)
             return
-
-        self.logger.info(f"Finalizing trial: {trial_name}")
-
         if results_empty:
-            msg = f"'{trial_name}' produced no results. Nothing\n"
-            msg += "saved."
+            msg = f"'{trial_name}' produced no results. Nothing saved."
             warnings.warn(msg)
-            self.logger.warning(f"{trial_name} produced no results")
+            self.logger.warning(msg)
             return
         if self.already_runned:
-            msg = f"'{trial_name}' already run. Overwriting old\n"
-            msg += "results."
+            msg = f"'{trial_name}' already run. Overwriting old results."
             warnings.warn(msg)
-            self.logger.warning(f"Overwriting old results for {trial_name}")
+            self.logger.warning(msg)
             self._remove_trial(trial_name)
 
         self.trial_data["figures"] = map_figures_to_paths(
