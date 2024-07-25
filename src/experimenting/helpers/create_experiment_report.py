@@ -110,7 +110,10 @@ def create_experiment_report(experiment_data):
     writer.write_key_value("Description", from_exp_get("description"))
     start_time = from_exp_get("start_time").split(".")[0]
     writer.write_key_value("Start Time", start_time)
-    writer.write_key_value("Duration", from_exp_get("duration"))
+    resume_time = from_exp_get("resume_time").split(".")[0]
+    if resume_time != start_time:
+        writer.write_key_value("Last Resume Time", resume_time)
+    writer.write_key_value("Total Duration", from_exp_get("duration"))
     experiment_directory_link = writer.create_link(from_exp_get("directory"), "Link")
     writer.write_key_value("Directory", experiment_directory_link)
 
