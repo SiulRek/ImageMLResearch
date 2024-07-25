@@ -163,8 +163,8 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
             os.path.exists(images_plot),
             "The images plot does not exist.",
         )
-        for trail in experiment.experiment_data["trials"]:
-            trial_directory = trail["directory"]
+        for trial in experiment.experiment_data["trials"]:
+            trial_directory = trial["directory"]
             figures_exist = all(
                 [
                     os.path.exists(os.path.join(trial_directory, figure_name + ".png"))
@@ -173,14 +173,14 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
             )
             self.assertTrue(
                 figures_exist,
-                f"Not all figures exist for the trial {trail['name']}.",
+                f"Not all figures exist for the trial {trial['name']}.",
             )
             trial_info_exist = os.path.exists(
                 os.path.join(trial_directory, "trial_info.json")
             )
             self.assertTrue(
                 trial_info_exist,
-                f"The trial info does not exist for the trial {trail['name']}.",
+                f"The trial info does not exist for the trial {trial['name']}.",
             )
 
         experiment_directory = experiment.experiment_data["directory"]
