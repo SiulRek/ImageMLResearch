@@ -34,6 +34,14 @@ def _prettify_duration(duration):
         after_decimal = duration.split(".")[1]
         if len(after_decimal) > 3:
             duration = duration.split(".")[0] + "." + after_decimal[:3]
+    
+    # Add leading zeros to the minutes and seconds if needed.
+    parts = duration.split(":")
+    for i in range(1, len(parts)):
+        digits = parts[i].split(".")[0]
+        if len(digits) < 2:
+            parts[i] = "0" + parts[i]
+    duration = ":".join(parts)
     return duration
 
 
