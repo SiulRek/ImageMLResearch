@@ -50,7 +50,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 the usage within a context manager.
         """
         exp_dir = self._make_experiment_directory(directory, name)
-        self._init_logger(exp_dir, name)
+        self._init_logger(exp_dir)
 
         # ResearchAttributes required for the experiment.
         self._figures = {
