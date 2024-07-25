@@ -35,9 +35,11 @@ class DataHandler(ResearchAttributes):
 
         Args:
             - data (tf.data.Dataset, dict, pandas.DataFrame): The data to
-                load, can be a TensorFlow dataset consisting of Tuples of the
-                form (image, label) or a dictionary/pandas DataFrame, with
-                key/column is 'image' and 'label'.
+                load, can be: 
+                1. A TensorFlow dataset consisting of Tuples of the form 
+                (image, label) where image shape is (height, width,1|3) 
+                2. a dictionary/pandas DataFrame, with key/column is
+                'image' and 'label'.
         """
         # 2 possible methods to load dataset:
         # 1. Is already of format tensorflow.data.Dataset
