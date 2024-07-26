@@ -42,6 +42,8 @@ class DataHandler(ResearchAttributes):
                 2. a dictionary/pandas DataFrame, with key/column is
                 'image' and 'label'.
         """
+        #TODO: Check if label is provided to restrict user to provide label
+        
         # 2 possible methods to load dataset:
         # 1. Is already of format tensorflow.data.Dataset
         if isinstance(data, tf.data.Dataset):
