@@ -78,8 +78,8 @@ class LabelManager:
             )
             raise ValueError(msg)
         if not class_names and self._label_type == "binary":
-            self.num_classes = 2
             self.class_names = ["0", "1"]
+            self.num_classes = 2
         elif class_names:
             self.class_names = class_names
             self.num_classes = len(class_names)
@@ -188,9 +188,11 @@ class LabelManager:
         during initialization to a tensor format.
 
         Args:
-            - label (int): The label to encode.
+            - label (int|str): The label to encode. Can be an integer or a
+                string in case class_names are specified.
 
-        Returns: - tf.Tensor: A TensorFlow constant of the encoded label.
+        Returns:
+            - tf.Tensor: A TensorFlow constant of the encoded label.
         """
         return self._encode_label_func(label)
 
