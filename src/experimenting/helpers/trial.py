@@ -16,7 +16,7 @@ class ResultsEmptyError(ValueError):
 
 class Trial(AbstractContextManager):
     """
-    A class to manage individual trials within an experiment.
+    A context manager class to manage individual trials within an experiment.
 
     Attributes:
         - experiment (Experiment): The experiment instance this trial
@@ -38,12 +38,13 @@ class Trial(AbstractContextManager):
         Args:
             - experiment (Experiment): The experiment instance this trial
                 belongs to.
+            - name (str): The name of the trial.
             - hyperparameters (dict): Dictionary containing the
                 hyperparameters.
         """
         self._assert_required_experiment_attributes(experiment)
         self._init_research_attributes(experiment)
-        self._init_trial_data(name, hyperparameters, experiment)
+        self._init_trial_data(experiment, name, hyperparameters)
         self.experiment_trials = experiment.experiment_data[
             "trials"
         ]  # Keep reference to track trials in experiment.
@@ -80,15 +81,14 @@ class Trial(AbstractContextManager):
         self.research_attributes = ResearchAttributes()
         copy_public_properties(experiment, self.research_attributes)
 
-    def _init_trial_data(self, name, hyperparameters, experiment):
+    def _init_trial_data(self, experiment, name, hyperparameters):
         """
         Initialize the trial data dictionary to store trial information.
 
         Args:
+            - experiment (Experiment): The experiment instance.
             - name (str): The name of the trial.
             - hyperparameters (dict): The hyperparameters for the trial.
-            - experiment (Experiment): The experiment instance.
-            - dict: Initialized trial data dictionary.
         """
         trial_directory = self._make_trial_directory(
             experiment.experiment_data["directory"], name
@@ -106,7 +106,7 @@ class Trial(AbstractContextManager):
 
     def _make_trial_directory(self, experiment_directory, name):
         """
-        Makes the directory for the trial.
+        Creates the directory path, makes the directory and returns the path.
 
         Args:
             - experiment_directory (str): The directory of the experiment.
@@ -134,6 +134,7 @@ class Trial(AbstractContextManager):
         Returns:
             - self: The Trial instance.
         """
+
         self.trial_data["start_time"] = get_datetime()
         return self
 
@@ -161,9 +162,10 @@ class Trial(AbstractContextManager):
             with open(trial_info_json, "w", encoding="utf-8") as f:
                 json.dump(trial_data, f, indent=4)
         except TypeError:
-            msg = f"Hyperparameters are not JSON serializable for trial {trial_data['name']}. Saving None instead."
+            msg = "Hyperparameters are not JSON serializable for trial"
+            msg += f"{trial_data['name']}. Saving None instead."
             warnings.warn(msg)
-            self.logger.warning(msg)
+            self.logger.warning("Hyperparameters are not JSON serializable")
             trial_data["hyperparameters"] = None
             with open(trial_info_json, "w", encoding="utf-8") as f:
                 json.dump(trial_data, f, indent=4)
@@ -175,7 +177,7 @@ class Trial(AbstractContextManager):
         Args:
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
-            - traceback: The traceback if an exception occurred.
+            - traceback: The traceback if an exception occurred. C
         """
         duration = get_duration(self.trial_data["start_time"])
         self.trial_data["duration"] = duration
@@ -187,19 +189,25 @@ class Trial(AbstractContextManager):
         results_empty = all(value == {} for value in trial_results.values())
         trial_name = self.trial_data["name"]
         if results_empty and self.already_runned:
-            msg = f"Skipping '{trial_name}'. Already run, no new results. Keeping old results."
+            msg = f"Skipping '{trial_name}'. Already run, no new\n"
+            msg += "results. Keeping old results."
             warnings.warn(msg)
-            self.logger.warning(msg)
+            self.logger.warning(f"Skipping {trial_name}")
             return
+
+        self.logger.info(f"Finalizing trial: {trial_name}")
+
         if results_empty:
-            msg = f"'{trial_name}' produced no results. Nothing saved."
+            msg = f"'{trial_name}' produced no results. Nothing\n"
+            msg += "saved."
             warnings.warn(msg)
-            self.logger.warning(msg)
+            self.logger.warning(f"{trial_name} produced no results")
             return
         if self.already_runned:
-            msg = f"'{trial_name}' already run. Overwriting old results."
+            msg = f"'{trial_name}' already run. Overwriting old\n"
+            msg += "results."
             warnings.warn(msg)
-            self.logger.warning(msg)
+            self.logger.warning(f"Overwriting old results for {trial_name}")
             self._remove_trial(trial_name)
 
         self.trial_data["figures"] = map_figures_to_paths(
