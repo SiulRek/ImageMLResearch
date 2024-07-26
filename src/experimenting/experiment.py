@@ -8,11 +8,13 @@ from src.experimenting.helpers.experiment_data import (
     get_default_experiment_data,
     load_experiment_data,
 )
-from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
 from src.experimenting.helpers.time_utils import (
     get_datetime,
     get_duration,
     add_durations,
+)
+from src.experimenting.helpers.transform_figures_to_files import (
+    transform_figures_to_files,
 )
 from src.experimenting.helpers.trial import Trial
 from src.plotting.functions.plot_training_histories import plot_training_histories
@@ -44,7 +46,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             - sort_metric (str): The metric to sort the trials by. Default
                 is "accuracy".
 
-        Note:
+        NOTE:
             - `Experiment` is the only research module that requires
                 `research_attributes` during initialization, as it simplifies
                 the usage within a context manager.
@@ -94,15 +96,16 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     def _init_experiment_data(self, exp_dir, name, description, sort_metric):
         """
         Initializes the experiment data to store the experiment information.
-        Note: 'directory' 'name' and 'description' are only used when the
-        experiment is created for the first time and not when the experiment is
-        resumed.
 
         Args:
             - exp_dir (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment.
             - sort_metric (str): The metric to sort the trials by.
+
+        NOTE: 'directory' 'name' and 'description' are only used when the
+        experiment is created for the first time and not when the experiment is
+        resumed.
         """
         try:
             # Try loading existing experiment data to resume the experiment.
@@ -162,7 +165,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             # Allow for figures outside of trials to be stored.
             figures = self._figures
             experiment_dir = self.experiment_data["directory"]
-            figures = map_figures_to_paths(figures, experiment_dir)
+            figures = transform_figures_to_files(figures, experiment_dir)
             self.experiment_data["figures"] = figures
             self._no_trial_executed = False
 
@@ -254,7 +257,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             histories[name] = history
 
         fig = plot_training_histories(histories)
-        figures = map_figures_to_paths(
+        figures = transform_figures_to_files(
             {"history_of_best_3_trials": fig}, self.experiment_data["directory"]
         )
         self.experiment_data["figures"].update(figures)

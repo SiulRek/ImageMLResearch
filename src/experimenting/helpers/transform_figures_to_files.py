@@ -3,11 +3,11 @@ import os
 import matplotlib.pyplot as plt
 
 
-def map_figures_to_paths(figures, directory, close_figures=True):
+def transform_figures_to_files(figures, directory, close_figures=True):
     """
-    Converts the key-figure pairs to key-path pairs and saves the figures. It
-    does not modify the input dictionary, instead it creates a new one. After
-    saving the figures, it closes them if close_figures is set to True.
+    Transforms the key-figure pairs to key-path pairs. It does not modify the
+    input dictionary, instead it creates a new one. After saving the figures, it
+    closes them if close_figures is set to True.
 
     Args:
         - figures (dict): The dictionary of figures.

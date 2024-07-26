@@ -4,7 +4,7 @@ import json
 import os
 import warnings
 
-from src.experimenting.helpers.map_figures_to_paths import map_figures_to_paths
+from src.experimenting.helpers.transform_figures_to_files import transform_figures_to_files
 from src.experimenting.helpers.time_utils import get_datetime, get_duration
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
@@ -210,7 +210,7 @@ class Trial(AbstractContextManager):
             self.logger.warning(f"Overwriting old results for {trial_name}")
             self._remove_trial(trial_name)
 
-        self.trial_data["figures"] = map_figures_to_paths(
+        self.trial_data["figures"] = transform_figures_to_files(
             trial_results["figures"], self.trial_data["directory"]
         )
         self.trial_data["evaluation_metrics"] = copy(
