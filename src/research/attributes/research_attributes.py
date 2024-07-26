@@ -86,8 +86,8 @@ class ResearchAttributes:
 
     def synchronize_research_attributes(self, research_attributes):
         """
-        Synchronizes the attributes of the instance with the attributes of the
-        ResearchAttributes instance named `research_attributes`.
+        Synchronizes the research attributes with another ResearchAttributes
+        instance.
 
         Args:
             - instance: The class instance to insert attributes into.
