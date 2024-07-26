@@ -19,10 +19,11 @@ class DataHandler(ResearchAttributes):
         # super().__init__()
 
         # Initialize research attributes used in the DataHandler
+        self._label_manager = None  # Read
         self._datasets_container = {
             # Dataset Name: Dataset
         }  # Read/write
-
+        
         self._backuped_datasets_container = {}
 
     def load_dataset(self, data):
@@ -49,7 +50,7 @@ class DataHandler(ResearchAttributes):
         # 2. data is type dictslist of dicts or pandas.DataFrame
         try:
             self._datasets_container["complete_dataset"] = create_dataset(
-                data, self.label_manager.label_type, self.label_manager.class_names
+                data, self._label_manager.label_type, self._label_manager.class_names
             )
             return
         except ValueError as exc:
@@ -153,7 +154,7 @@ class DataHandler(ResearchAttributes):
                 prefix = "image"
                 try:
                     label = reverse_one_hot(label)
-                    prefix += f"_{self.label_manager.get_class(label)}"
+                    prefix += f"_{self._label_manager.get_class(label)}"
                 except ValueError:
                     pass
                 return prefix

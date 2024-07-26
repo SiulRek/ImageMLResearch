@@ -19,6 +19,7 @@ class Trainer(ResearchAttributes):
         self._datasets_container = {
             # Dataset name: Dataset
         }  # Read
+        self._label_manager = None  # Read
         self._model = None  # Read and write
         self._outputs_container = {
             # Output name: Tuple -> (y_true, y_pred)
@@ -57,8 +58,8 @@ class Trainer(ResearchAttributes):
             msg += "in outputs container to evaluate."
             warnings.warn(msg)
 
-        label_type = self.label_manager.label_type
-        class_names = self.label_manager.class_names
+        label_type = self._label_manager.label_type
+        class_names = self._label_manager.class_names
         eval_func = get_evaluation_function(label_type)
         evaluation_metrics = {}
         self._evaluation_metrics.clear()
