@@ -25,7 +25,7 @@ class ExperimentError(Exception):
 
 
 class Experiment(AbstractContextManager, ResearchAttributes):
-    """ A class to manage experiments and trials, inheriting from
+    """ A context manager class to manage experiments and trials, inheriting from
     ResearchAttributes. """
 
     def __init__(
@@ -69,10 +69,27 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         self._no_trial_executed = True
         self._initial_trial_num = len(self.experiment_data["trials"])
 
+    def _make_experiment_directory(self, directory, name):
+        """
+        Creates the experiment directory path, makes the directory, and returns
+        the path.
+
+        Args:
+            - directory (str): The directory to save the experiment data.
+            - name (str): The name of the experiment.
+
+        Returns:
+            - str: The path to the experiment directory.
+        """
+        directory = os.path.abspath(os.path.normpath(directory))
+        name = name.replace(" ", "_")
+        experiment_dir = os.path.join(directory, name)
+        os.makedirs(experiment_dir, exist_ok=True)
+        return experiment_dir
+
     def _init_logger(self, directory):
         log_file = os.path.join(directory, "execution.log")
-        mode = "a" if os.path.exists(log_file) else "w"
-        self.logger = Logger(log_file, mode=mode)
+        self.logger = Logger(log_file, mode="a")
 
     def _init_experiment_data(self, exp_dir, name, description, sort_metric):
         """
@@ -100,23 +117,6 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             experiment_data["sort_metric"] = sort_metric
         self.experiment_data = experiment_data
 
-    def _make_experiment_directory(self, directory, name):
-        """
-        Creates the experiment directory.
-
-        Args:
-            - directory (str): The directory to save the experiment data.
-            - name (str): The name of the experiment.
-
-        Returns:
-            - str: The path to the experiment directory.
-        """
-        directory = os.path.abspath(os.path.normpath(directory))
-        name = name.replace(" ", "_")
-        experiment_dir = os.path.join(directory, name)
-        os.makedirs(experiment_dir, exist_ok=True)
-        return experiment_dir
-
     def __enter__(self):
         """
         Sets up the experiment by creating the necessary directories and files.
@@ -132,8 +132,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def get_results(self):
         """
-        Gets the current results (figures and evaluation_metrics) recorded in
-        experiment.
+        Gets the current results (figures, evaluation_metrics, training_history)
+        recorded in experiment.
 
         Returns:
             - dict: A dictionary containing the figures and
@@ -159,14 +159,14 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         """
         self.logger.info(f"Starting trial: {name}")
         if self._no_trial_executed:
-            # Allow for figures outside of trials.
+            # Allow for figures outside of trials to be stored.
             figures = self._figures
             experiment_dir = self.experiment_data["directory"]
             figures = map_figures_to_paths(figures, experiment_dir)
             self.experiment_data["figures"] = figures
             self._no_trial_executed = False
 
-        # Avoids conflicts between trials.
+        # Avoids conflicts between trials, as the ResearchAttributes are shared.
         self.reset_research_attributes(except_datasets=True)
 
         return Trial(self, name, hyperparameters)
@@ -201,7 +201,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
         sort_metric = self.experiment_data["sort_metric"]
 
-        def metric_val(trial):
+        def sort_metric_val(trial):
             evaluation_metrics = trial["evaluation_metrics"]
             metrics_set = evaluation_metrics.get("test", {}) or evaluation_metrics.get(
                 "complete", {}
@@ -214,7 +214,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 raise ExperimentError(msg)
             return value
 
-        self.experiment_data["trials"].sort(key=metric_val, reverse=True)
+        self.experiment_data["trials"].sort(key=sort_metric_val, reverse=True)
 
     def _write_experiment_data(self):
         """ Writes the experiment data to a JSON file. """
@@ -222,6 +222,9 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             self.experiment_data["directory"], "experiment_info.json"
         )
         experiment_data = self.experiment_data.copy()
+        # Only store the trial names in the experiment data
+        # as the trial data is stored in separate files in the
+        # trial directories.
         experiment_data["trials"] = [
             trial["name"] for trial in experiment_data["trials"]
         ]

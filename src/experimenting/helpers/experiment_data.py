@@ -4,15 +4,31 @@ import os
 import warnings
 
 _DEFAULT_EXPERIMENT_DATA = {
-    "name": None,
-    "description": None,
-    "directory": None,
-    "sort_metric": "accuracy",
-    "start_time": None,
-    "resume_time": None,
-    "duration": None,
-    "figures": {},
-    "trials": [],
+    "name": None,  # Name of the experiment
+    "description": None,  # Description of the experiment
+    "directory": None,  # Directory where experiment data is stored
+    "sort_metric": "accuracy",  # Metric used for sorting results
+    # (default is 'accuracy')
+    "start_time": None,  # Time when the experiment started
+    # (set at the end of __enter__)
+    "resume_time": None,  # Time when the experiment was resumed
+    "duration": None,  # Total duration of the experiment
+    # (calculated at the beginning of __exit__)
+    "figures": {},  # Dictionary to store figures generated during the experiment
+    "trials": [],  # List to store individual trial data
+}
+
+_TRIAL_KEYS = {
+    "name",  # Name of the trial
+    "start_time",  # Time when the trial started
+    # (set at the end of __enter__)
+    "duration",  # Duration of the trial
+    # (calculated at the beginning of __exit__)
+    "directory",  # Directory where trial data is stored
+    "hyperparameters",  # Dictionary containing the hyperparameters
+    "figures",  # Dictionary to store figures generated during the trial
+    "evaluation_metrics",  # Dictionary to store evaluation metrics
+    "training_history",  # Dictionary to store training history
 }
 
 
@@ -60,18 +76,7 @@ def assert_trial_data(trial_data):
     Raises:
         - ValueError: If the trial data does not have the expected keys.
     """
-    expected_keys = set(
-        [
-            "name",
-            "start_time",
-            "duration",
-            "directory",
-            "hyperparameters",
-            "figures",
-            "evaluation_metrics",
-            "training_history",
-        ]
-    )
+    expected_keys = _TRIAL_KEYS
     actual_keys = set(trial_data.keys())
     if expected_keys != actual_keys:
         missing_keys = expected_keys - actual_keys
@@ -86,8 +91,8 @@ def assert_trial_data(trial_data):
 
 def load_experiment_data(experiment_dir):
     """
-    Loads the experiment data from the given directory if it is not empty,
-    otherwise initializes the experiment data with the default values.
+    Loads the experiment data from the given directory. Raises FileNotFoundError
+    if the experiment data file is not found.
 
     Args:
         - experiment_dir (str): The directory to load the experiment data
