@@ -24,9 +24,12 @@ class _ResearcherBase(DataHandler, Trainer):
             - class_names (list): The class names for the research
                 attributes.
         """
-        ResearchAttributes.__init__(self, label_type, class_names)
-        DataHandler.__init__(self)
+        # Last one to be initialized overwrites the previous ones,
+        # in case of conflicts. This should only occur in the case of
+        # label_manager.
         Trainer.__init__(self)
+        DataHandler.__init__(self)
+        ResearchAttributes.__init__(self, label_type, class_names)
 
     def run_experiment(self, directory, name, description):
         """
@@ -42,6 +45,17 @@ class _ResearcherBase(DataHandler, Trainer):
             - Experiment: The Experiment context manager instance.
         """
         return Experiment(self, directory, name, description)
+    
+    # TODO: Implement the following method
+    # def apply_preprocessing_pipeline(self, pipeline, dataset_names=None):
+    #     """
+    #     Applies a preprocessing pipeline to the datasets.
+
+    #     Args:
+    #         - pipeline (tf.data.Dataset): The preprocessing pipeline to apply.
+    #         - dataset_names (list, optional): The dataset names to apply the
+    #             pipeline to. Defaults to None.
+    #     """
 
 
 class BinaryResearcher(_ResearcherBase, BinaryPlotter):
@@ -57,8 +71,8 @@ class BinaryResearcher(_ResearcherBase, BinaryPlotter):
             - class_names (list): The class names for the research
                 attributes.
         """
-        _ResearcherBase.__init__(self, "binary", class_names)
         BinaryPlotter.__init__(self)
+        _ResearcherBase.__init__(self, "binary", class_names)
 
 
 class MultiClassResearcher(_ResearcherBase, MultiClassPlotter):
@@ -77,5 +91,5 @@ class MultiClassResearcher(_ResearcherBase, MultiClassPlotter):
             - class_names (list): The class names for the research
                 attributes.
         """
-        _ResearcherBase.__init__(self, "multi_class", class_names)
         MultiClassPlotter.__init__(self)
+        _ResearcherBase.__init__(self, "multi_class", class_names)
