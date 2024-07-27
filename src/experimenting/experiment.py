@@ -2,6 +2,7 @@ from contextlib import AbstractContextManager
 from copy import deepcopy
 import json
 import os
+import warnings
 
 from src.experimenting.helpers.create_experiment_report import create_experiment_report
 from src.experimenting.helpers.experiment_data import (
@@ -114,10 +115,24 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         except FileNotFoundError:
             self.logger.info(f"Creating new experiment: {name}")
             experiment_data = get_default_experiment_data()
-            experiment_data["description"] = description
+            # Assign directory and name only when creating a new experiment.
             experiment_data["directory"] = exp_dir
             experiment_data["name"] = name
-            experiment_data["sort_metric"] = sort_metric
+        else:
+            if exp_dir or name:
+                msg = "Directory and name parameters are ignored when resuming"
+                msg += "an experiment."
+                warnings.warn(msg)
+                msg = "Ignoring directory and/or name parameters"
+                self.logger.warning(msg)
+
+        # In any case, description and sort_metric are updated with
+        # the given instanciation parameters. However, it is not
+        # supported to change the directory or name of
+        # the experiment after it is created.
+        experiment_data["description"] = description
+        experiment_data["sort_metric"] = sort_metric
+
         self.experiment_data = experiment_data
 
     def __enter__(self):
