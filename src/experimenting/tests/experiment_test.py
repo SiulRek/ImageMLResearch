@@ -141,19 +141,45 @@ class TestExperiment(BaseTestCase):
             ("trial1", {"lr": 0.01, "batch_size": 16}),
             ("trial2", {"lr": 0.001, "batch_size": 32}),
         ]
+        new_description = "This is a new description"
+        new_sort_metric = "accuracy_inv"
 
         experiment = self._run_trials_in_experiment(trial_definitions)
         reloaded_experiment = Experiment(
             research_attributes=self.research_attributes,
             directory=self.directory,
             name=self.name,
-            description=self.description,
+            description=new_description,
+            sort_metric=new_sort_metric,
         )
+        # Check if experiment_data is updated correctly.
+        description = reloaded_experiment.experiment_data["description"]
+        sort_metric = reloaded_experiment.experiment_data["sort_metric"]
+        self.assertEqual(description, new_description)
+        self.assertEqual(sort_metric, new_sort_metric)
         # Check if the trials are loaded correctly
         trials_data = experiment.experiment_data["trials"]
         reloaded_trials_data = reloaded_experiment.experiment_data["trials"]
 
         self.assertEqual(trials_data, reloaded_trials_data)
+
+    # def test_load_experiment_data_with_warnings(self):
+    #     trial_definitions = [
+    #         ("trial1", {"lr": 0.01, "batch_size": 16}),
+    #         ("trial2", {"lr": 0.001, "batch_size": 32}),
+    #     ]
+    #     self._run_trials_in_experiment(trial_definitions)
+
+    #     new_name = "new_experiment"
+    #     # XXX: Warning is not being caught even when issued.
+    #     with self.assertWarns(UserWarning):
+    #         Experiment(
+    #             research_attributes=self.research_attributes,
+    #             directory=self.directory,
+    #             name=new_name,
+    #             description=self.description,
+    #             sort_metric=self.sort_metric,
+    #         )
 
     def test_trials_order(self):
 
@@ -177,7 +203,7 @@ class TestExperiment(BaseTestCase):
         metric_kw = {"sort_metric": self.sort_metric_inv}
         self._modify_experiment_json(metric_kw)
 
-        reloaded_experiment = self._run_trials_in_experiment([])
+        self._run_trials_in_experiment([])
         # Ordered by accuracy_inv
         metric_1st_trial = metric_val(0, self.sort_metric_inv)
         metric_2nd_trial = metric_val(1, self.sort_metric_inv)
