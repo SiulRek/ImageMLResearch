@@ -116,6 +116,26 @@ class TestBinaryPlotter(BaseTestCase):
             "ROC curve figure was not saved.",
         )
 
+    def test_plot_pr_curve(self):
+        """ Test the plot_pr_curve method. """
+        fig = self.binary_plotter.plot_pr_curve(title="Test PR Curve", show=False)
+        self.assertEqual(
+            len(self.binary_plotter._figures), 1, "The figure was not added."
+        )
+        self.assertIn(
+            "test_pr_curve",
+            self.binary_plotter._figures,
+            "The figure name is incorrect.",
+        )
+        fig.savefig(os.path.join(self.results_dir, "binary_plotter_plot_pr_curve.png"))
+        plt.close(fig)
+        self.assertTrue(
+            os.path.exists(
+                os.path.join(self.results_dir, "binary_plotter_plot_pr_curve.png")
+            ),
+            "PR curve figure was not saved.",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
