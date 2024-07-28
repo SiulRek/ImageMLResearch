@@ -1,3 +1,5 @@
+from contextlib import suppress
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -65,6 +67,60 @@ def plot_multi_class_classification_results(
             bar_ax.set_xticks(range(len(class_names)))
             bar_ax.set_xticklabels(class_names, rotation=90)
             bar_ax.set_ylim(0, 1)
+
+    plt.tight_layout()
+    return fig
+
+
+def plot_binary_classification_results(
+    x, y_true, y_pred, class_names, grid_size=(2, 2)
+):
+    """
+    Plots a grid of images with their true and predicted labels for binary
+    classification. The title of each plot shows the true label, predicted
+    label, and predicted probability.
+
+    Args:
+        - x (array-like): Input data (images, can be grayscale or RGB).
+        - y_true (array-like): True labels.
+        - y_pred (array-like): Predicted probabilities.
+        - class_names (List): List of class names.
+        - grid_size (Tuple): Tuple containing the grid size (rows, columns).
+            Defaults to (2, 2).
+    """
+    # Configuration
+    n_rows, n_cols = grid_size
+    fig_size = (n_cols * 3, n_rows * 4)
+    font_size = 12
+    sample_num = n_rows * n_cols
+
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=fig_size)
+    axes = axes.ravel()
+
+    for i in range(sample_num):
+        img_ax = axes[i]
+
+        image = x[i]
+        true_label = y_true[i]
+        raw_prediction = y_pred[i]
+        with suppress(IndexError):
+            raw_prediction = raw_prediction[0]
+
+        true_label_name = class_names[true_label]
+        predicted_label = int(raw_prediction >= 0.5)
+        predicted_prob = max(raw_prediction, 1 - raw_prediction)
+        predicted_label_name = class_names[predicted_label]
+
+        cmap = {"cmap": "gray"} if image.shape[-1] == 1 else {}
+        img_ax.imshow(image, **cmap)
+        img_ax.axis("off")
+
+        title_color = "green" if predicted_label == true_label else "red"
+        img_ax.set_title(
+            f"True: {true_label_name}\nPredicted: {predicted_label_name} ({predicted_prob*100:.2f}%)",
+            fontsize=font_size,
+            color=title_color,
+        )
 
     plt.tight_layout()
     return fig
