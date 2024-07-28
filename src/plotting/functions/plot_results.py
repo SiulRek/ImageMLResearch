@@ -1,5 +1,3 @@
-from contextlib import suppress
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -103,8 +101,11 @@ def plot_binary_classification_results(
         image = x[i]
         true_label = y_true[i]
         raw_prediction = y_pred[i]
-        with suppress(IndexError):
+        try:
+            # For the case the prediction is returned as a 1-dimensional array
             raw_prediction = raw_prediction[0]
+        except:
+            pass
 
         true_label_name = class_names[true_label]
         predicted_label = int(raw_prediction >= 0.5)
