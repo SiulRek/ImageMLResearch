@@ -74,3 +74,32 @@ class BinaryPlotter(Plotter):
         y_true, y_pred = self._retrieve_test_output_data()
         fig = plot_pr_curve(y_true, y_pred)
         return fig
+
+    @plot_decorator(default_title="Results", default_show=True)
+    def plot_results(self, grid_size=(2, 2)):
+        """
+        Plots the results of a binary classification model.
+
+        Args:
+            - grid_size (Tuple): Tuple containing the grid size (rows,
+                columns). Defaults to (2, 2).
+
+        Returns:
+            - The figure containing the results.
+        """
+        from src.plotting.functions.plot_results import (
+            plot_binary_classification_results,
+        )
+
+        data = self._retrieve_test_input_output_data()
+        x, y_true, y_pred = data
+        class_names = self._retrieve_class_names()
+        x = self._to_numpy_array(x)
+        fig = plot_binary_classification_results(
+            x=x,
+            y_true=y_true,
+            y_pred=y_pred,
+            class_names=class_names,
+            grid_size=grid_size,
+        )
+        return fig

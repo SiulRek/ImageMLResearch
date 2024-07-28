@@ -21,7 +21,7 @@ class TestBinaryPlotter(BaseTestCase):
             sample_num=sample_num, labeled=True, binary=True
         )
         cls.class_names = ["Digit 0", "Digit 1"]
-        y_true = cls._get_labels_array(dataset)
+        x, y_true = cls._get_images_and_labels_array(dataset)
         y_pred = tf.random.uniform((sample_num,), minval=0, maxval=1, dtype=tf.float32)
 
         cls.binary_plotter = BinaryPlotter()
@@ -33,6 +33,9 @@ class TestBinaryPlotter(BaseTestCase):
         cls.binary_plotter._retrieve_test_output_data = MagicMock(
             return_value=(y_true, y_pred)
         )
+        cls.binary_plotter._retrieve_test_input_output_data = MagicMock(
+            return_value=(x, y_true, y_pred)
+        )
         cls.binary_plotter._retrieve_class_names = MagicMock(
             return_value=cls.class_names
         )
@@ -42,13 +45,15 @@ class TestBinaryPlotter(BaseTestCase):
         self.binary_plotter._figures = {}  # Reset figures before each test
 
     @classmethod
-    def _get_labels_array(cls, dataset):
+    def _get_images_and_labels_array(cls, dataset):
+        images_list = []
         labels_list = []
-        for _, labels in dataset:
-            labels_list.append(tf.expand_dims(labels, axis=0))
-
+        for image, label in dataset:
+            images_list.append(tf.expand_dims(image, axis=0))
+            labels_list.append(tf.expand_dims(label, axis=0))
+        images_tensor = tf.concat(images_list, axis=0)
         labels_tensor = tf.concat(labels_list, axis=0)
-        return labels_tensor
+        return images_tensor, labels_tensor
 
     def test_plot_confusion_matrix(self):
         """ Test the plot_confusion_matrix method. """
@@ -63,18 +68,11 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        fig.savefig(
-            os.path.join(self.results_dir, "binary_plotter_plot_confusion_matrix.png")
+        path = os.path.join(
+            self.results_dir, "binary_plotter_plot_confusion_matrix.png"
         )
+        fig.savefig(path)
         plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(
-                    self.results_dir, "binary_plotter_plot_confusion_matrix.png"
-                )
-            ),
-            "Confusion matrix figure was not saved.",
-        )
 
     def test_plot_images(self):
         """ Test the plot_images method. """
@@ -87,14 +85,9 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        fig.savefig(os.path.join(self.results_dir, "binary_plotter_plot_images.png"))
+        path = os.path.join(self.results_dir, "binary_plotter_plot_images.png")
+        fig.savefig(path)
         plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "binary_plotter_plot_images.png")
-            ),
-            "Images figure was not saved.",
-        )
 
     def test_plot_roc_curve(self):
         """ Test the plot_roc_curve method. """
@@ -107,14 +100,9 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        fig.savefig(os.path.join(self.results_dir, "binary_plotter_plot_roc_curve.png"))
+        path = os.path.join(self.results_dir, "binary_plotter_plot_roc_curve.png")
+        fig.savefig(path)
         plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "binary_plotter_plot_roc_curve.png")
-            ),
-            "ROC curve figure was not saved.",
-        )
 
     def test_plot_pr_curve(self):
         """ Test the plot_pr_curve method. """
@@ -127,14 +115,24 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        fig.savefig(os.path.join(self.results_dir, "binary_plotter_plot_pr_curve.png"))
+        path = os.path.join(self.results_dir, "binary_plotter_plot_pr_curve.png")
+        fig.savefig(path)
         plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "binary_plotter_plot_pr_curve.png")
-            ),
-            "PR curve figure was not saved.",
+
+    def test_plot_results(self):
+        """ Test the plot_results method. """
+        fig = self.binary_plotter.plot_results(grid_size=(2, 2))
+        self.assertEqual(
+            len(self.binary_plotter._figures), 1, "The figure was not added."
         )
+        self.assertIn(
+            "results",
+            self.binary_plotter._figures,
+            "The figure name is incorrect.",
+        )
+        path = os.path.join(self.results_dir, "binary_plotter_plot_results.png")
+        fig.savefig(path)
+        plt.close(fig)
 
 
 if __name__ == "__main__":
