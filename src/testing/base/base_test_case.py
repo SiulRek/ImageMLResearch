@@ -162,27 +162,46 @@ class BaseTestCase(unittest.TestCase):
         return load_dataset_from_tf_records(tf_records_path)
 
     @classmethod
-    def load_mnist_digits_dataset(cls, sample_num=5, labeled=False):
+    def load_mnist_digits_dataset(cls, sample_num=None, labeled=False, binary=False):
         """
         Load the MNIST digits dataset used for testing. This method is intended
         to be overridden by derived test classes to return the appropriate
         dataset.
 
-        Returns:
+        Args:
+            - sample_num (int, optional): The number of samples to load from
+                the dataset. If not provided, the entire dataset is loaded.
+            - labeled (bool, optional): Indicates whether the dataset should
+                be returned with labels. If set to True, the dataset is returned
+                as a tuple of images and labels. If set to False, only the
+                images are returned.
+            - binary (bool, optional): Indicates whether the labels should
+                be binary. If set to True, the labels are converted to binary
+                format.
+            - Returns:
             - tf.data.Dataset: The MNIST digits dataset to be used for
                 testing.
         """
         dataset = tf.keras.datasets.mnist.load_data()
 
-        (X_train, Y_train), _ = dataset
-        X_train = np.stack([X_train] * 3, axis=-1)
-        if sample_num:
-            X_train = X_train[:sample_num]
-            Y_train = Y_train[:sample_num]
+        (X_train, Y_train), (X_test, Y_test) = dataset
+        # Splitting is expected to be done outside of this method.
+        X = np.concatenate([X_train, X_test], axis=0)
+        Y = np.concatenate([Y_train, Y_test], axis=0)
+        X = np.stack([X] * 3, axis=-1)
+        
+        if binary:
+            mask = (Y == 0) | (Y == 1)
+            X = X[mask]
+            Y = Y[mask]
+        if sample_num and sample_num < len(X):
+            X = X[:sample_num]
+            Y = Y[:sample_num]
         if labeled:
-            Y_train = tf.one_hot(Y_train, 10)
-            return tf.data.Dataset.from_tensor_slices((X_train, Y_train))
-        return tf.data.Dataset.from_tensor_slices(X_train)
+            if not binary:
+                Y = tf.one_hot(Y, 10)
+            return tf.data.Dataset.from_tensor_slices((X, Y))
+        return tf.data.Dataset.from_tensor_slices(X)
 
     @classmethod
     def load_mnist_digits_dicts(cls):
