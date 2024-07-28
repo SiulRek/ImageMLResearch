@@ -17,11 +17,12 @@ class TestBinaryPlotter(BaseTestCase):
     def setUpClass(cls):
         super().setUpClass()
         sample_num = 100
-        dataset = cls.load_mnist_digits_dataset(sample_num=sample_num, labeled=True)
-        dataset = dataset.map(lambda x, y: (x, cls._map_even_odd_label(y)))
-        cls.class_names = ["Odd", "Even"]
-        y_true = cls._get_labels_tensor(dataset)
-        y_pred = tf.random.uniform((sample_num,), minval=0, maxval=2, dtype=tf.int32)
+        dataset = cls.load_mnist_digits_dataset(
+            sample_num=sample_num, labeled=True, binary=True
+        )
+        cls.class_names = ["Digit 0", "Digit 1"]
+        y_true = cls._get_labels_array(dataset)
+        y_pred = tf.random.uniform((sample_num,), minval=0, maxval=1, dtype=tf.float32)
 
         cls.binary_plotter = BinaryPlotter()
         research_attributes = ResearchAttributes(
@@ -32,26 +33,22 @@ class TestBinaryPlotter(BaseTestCase):
         cls.binary_plotter._retrieve_test_output_data = MagicMock(
             return_value=(y_true, y_pred)
         )
-        cls.binary_plotter._retrieve_class_names = MagicMock(return_value=cls.class_names)
+        cls.binary_plotter._retrieve_class_names = MagicMock(
+            return_value=cls.class_names
+        )
 
     def setUp(self):
         super().setUp()
         self.binary_plotter._figures = {}  # Reset figures before each test
 
     @classmethod
-    def _get_labels_tensor(cls, dataset):
+    def _get_labels_array(cls, dataset):
         labels_list = []
         for _, labels in dataset:
             labels_list.append(tf.expand_dims(labels, axis=0))
+
         labels_tensor = tf.concat(labels_list, axis=0)
         return labels_tensor
-
-    @classmethod
-    def _map_even_odd_label(cls, label):
-        """ Process labels from one-hot to binary (even=0, odd=1). """
-        label = tf.argmax(label, axis=0)
-        label = tf.where(label % 2 == 0, 1, 0)  # Even=1, Odd=0
-        return label
 
     def test_plot_confusion_matrix(self):
         """ Test the plot_confusion_matrix method. """
@@ -97,6 +94,26 @@ class TestBinaryPlotter(BaseTestCase):
                 os.path.join(self.results_dir, "binary_plotter_plot_images.png")
             ),
             "Images figure was not saved.",
+        )
+
+    def test_plot_roc_curve(self):
+        """ Test the plot_roc_curve method. """
+        fig = self.binary_plotter.plot_roc_curve(title="Test ROC Curve", show=False)
+        self.assertEqual(
+            len(self.binary_plotter._figures), 1, "The figure was not added."
+        )
+        self.assertIn(
+            "test_roc_curve",
+            self.binary_plotter._figures,
+            "The figure name is incorrect.",
+        )
+        fig.savefig(os.path.join(self.results_dir, "binary_plotter_plot_roc_curve.png"))
+        plt.close(fig)
+        self.assertTrue(
+            os.path.exists(
+                os.path.join(self.results_dir, "binary_plotter_plot_roc_curve.png")
+            ),
+            "ROC curve figure was not saved.",
         )
 
 

@@ -1,4 +1,7 @@
+import numpy as np
+
 from src.plotting.functions.plot_confusion_matrix import plot_confusion_matrix
+from src.plotting.functions.plot_roc_curve import plot_roc_curve
 from src.plotting.plotters.plotter import Plotter, plot_decorator
 
 
@@ -20,7 +23,25 @@ class BinaryPlotter(Plotter):
         """
         y_true, y_pred = self._retrieve_test_output_data()
         class_names = self._retrieve_class_names()
-        fig = plot_confusion_matrix(y_true, y_pred, class_names)
+        y_pred_rounded = [np.round(pred) for pred in y_pred]
+        fig = plot_confusion_matrix(y_true, y_pred_rounded, class_names)
+        return fig
+
+    @plot_decorator(default_title="ROC Curve", default_show=True)
+    def plot_roc_curve(self, **general_plot_kwargs):
+        """
+        Plots the ROC curve for binary classification.
+
+        General plot keyword arguments:
+            - title: Optional title for the plot. Defaults to 'ROC Curve'.
+            - show: Whether to show the plot. Defaults to True.
+
+        Returns:
+            - The figure containing the ROC curve.
+        """
+        y_true, y_pred = self._retrieve_test_output_data()
+        class_names = self._retrieve_class_names()
+        fig = plot_roc_curve(y_true, y_pred, class_names)
         return fig
 
     def plot_images(self, grid_size=(2, 2)):
