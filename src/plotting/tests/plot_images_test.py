@@ -2,7 +2,6 @@ import os
 import unittest
 
 import matplotlib.pyplot as plt
-import tensorflow as tf
 
 from src.plotting.functions.plot_images import plot_images
 from src.testing.base.base_test_case import BaseTestCase
