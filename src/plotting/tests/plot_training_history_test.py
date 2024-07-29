@@ -1,14 +1,13 @@
 import os
 import unittest
 
-import matplotlib.pyplot as plt
 import tensorflow as tf
 
 from src.plotting.functions.plot_training_history import plot_training_history
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotTrainingHistory(BaseTestCase):
+class TestPlotTrainingHistory(PlottingTestCase):
     """ Test suite for the plot_training_history function. """
 
     @classmethod
@@ -59,30 +58,12 @@ class TestPlotTrainingHistory(BaseTestCase):
     def test_plot_training_history_with_validation(self):
         """ Test plotting training history with validation data. """
         fig = plot_training_history(self.history_with_val)
-        fig.savefig(
-            os.path.join(self.results_dir, "plot_training_history_with_val.png")
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "plot_training_history_with_val.png")
-            ),
-            "Plot with validation data was not saved.",
-        )
+        self._save_and_close_figure(fig, "plot_training_history_with_val.png")
 
     def test_plot_training_history_without_validation(self):
         """ Test plotting training history without validation data. """
         fig = plot_training_history(self.history_without_val)
-        fig.savefig(
-            os.path.join(self.results_dir, "plot_training_history_without_val.png")
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "plot_training_history_without_val.png")
-            ),
-            "Plot without validation data was not saved.",
-        )
+        self._save_and_close_figure(fig, "plot_training_history_without_val.png")
 
     def test_plot_training_history_with_multiple_metrics(self):
         """ Test plotting training history with multiple metrics. """
@@ -97,18 +78,7 @@ class TestPlotTrainingHistory(BaseTestCase):
         ).history
 
         fig = plot_training_history(history_multiple_metrics)
-        fig.savefig(
-            os.path.join(self.results_dir, "plot_training_history_multiple_metrics.png")
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(
-                    self.results_dir, "plot_training_history_multiple_metrics.png"
-                )
-            ),
-            "Plot with multiple metrics was not saved.",
-        )
+        self._save_and_close_figure(fig, "plot_training_history_multiple_metrics.png")
 
 
 if __name__ == "__main__":

@@ -3,13 +3,12 @@ import unittest
 
 from keras.layers import Dense
 from keras.models import Sequential
-import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_model_summary import plot_model_summary
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotModelSummary(BaseTestCase):
+class TestPlotModelSummary(PlottingTestCase):
     """ Test suite for the plot_model_summary function. """
 
     @classmethod
@@ -30,12 +29,7 @@ class TestPlotModelSummary(BaseTestCase):
     def test_plot_model_summary(self):
         """ Test plotting the model summary. """
         fig = plot_model_summary(self.model)
-        fig.savefig(os.path.join(self.results_dir, "plot_model_summary.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(os.path.join(self.results_dir, "plot_model_summary.png")),
-            "Model summary plot was not saved.",
-        )
+        self._save_and_close_figure(fig, "model_summary.png")
 
 
 if __name__ == "__main__":

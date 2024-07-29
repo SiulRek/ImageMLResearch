@@ -7,11 +7,11 @@ from keras.models import Sequential
 import matplotlib.pyplot as plt
 
 from src.plotting.plotters.plotter import Plotter
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 from src.research.attributes.research_attributes import ResearchAttributes
-from src.testing.base.base_test_case import BaseTestCase
 
 
-class TestPlotter(BaseTestCase):
+class TestPlotter(PlottingTestCase):
     """ Test suite for the Plotter class. """
 
     @classmethod
@@ -72,25 +72,15 @@ class TestPlotter(BaseTestCase):
             show=False,
         )
         self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
-        fig.savefig(os.path.join(self.results_dir, "plotter_plot_images.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(os.path.join(self.results_dir, "plotter_plot_images.png")),
-            "Plot images figure was not saved.",
-        )
+        self._save_and_close_figure(fig, "plotter_plot_images.png")
 
     def test_plot_text(self):
         """ Test the plot_text method. """
         fig = self.plotter.plot_text(
             self.text_sample, title="Sample Text Plot", show=False
         )
-        fig.savefig(os.path.join(self.results_dir, "plotter_plot_text.png"))
         self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(os.path.join(self.results_dir, "plotter_plot_text.png")),
-            "Plot text figure was not saved.",
-        )
+        self._save_and_close_figure(fig, "plotter_plot_text.png")
 
     def test_plot_training_history(self):
         """ Test the plot_training_history method. """
@@ -106,30 +96,18 @@ class TestPlotter(BaseTestCase):
         )
         fig.savefig(os.path.join(self.results_dir, "plotter_plot_training_history.png"))
         self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "plotter_plot_training_history.png")
-            ),
-            "Plot training history figure was not saved.",
-        )
+        self._save_and_close_figure(fig, "plotter_plot_training_history.png")
 
     def test_plot_model_summary(self):
         """ Test the plot_model_summary method. """
         fig = self.plotter.plot_model_summary(title="Test Model Summary", show=False)
-        fig.savefig(os.path.join(self.results_dir, "plotter_plot_model_summary.png"))
         self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
         self.assertIn(
             "test_model_summary",
             self.plotter._figures,
             "The figure name is incorrect.",
         )
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "plotter_plot_model_summary.png")
-            ),
-            "Model summary figure was not saved.",
-        )
+        self._save_and_close_figure(fig, "plotter_plot_model_summary.png")
 
 
 if __name__ == "__main__":

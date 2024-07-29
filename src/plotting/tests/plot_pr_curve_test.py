@@ -1,13 +1,12 @@
 import os
 import unittest
 
-import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_pr_curve import plot_pr_curve
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotPRCurve(BaseTestCase):
+class TestPlotPRCurve(PlottingTestCase):
     """ Test suite for the plot_pr_curve function. """
 
     @classmethod
@@ -20,14 +19,7 @@ class TestPlotPRCurve(BaseTestCase):
     def test_plot_pr_curve(self):
         """ Test plotting Precision-Recall curve. """
         fig = plot_pr_curve(self.y_true, self.y_pred)
-        fig.savefig(os.path.join(self.results_dir, "precision_recall_curve.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "precision_recall_curve.png")
-            ),
-            "Precision-Recall curve plot was not saved.",
-        )
+        self._save_and_close_figure(fig, "pr_curve.png")
 
 
 if __name__ == "__main__":

@@ -4,10 +4,10 @@ from unittest.mock import MagicMock, patch
 import matplotlib.pyplot as plt
 
 from src.plotting.plotters.plotter import plot_decorator, Plotter
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotDecorator(BaseTestCase):
+class TestPlotDecorator(PlottingTestCase):
     """ Test suite for the plot_decorator function. """
 
     def setUp(self):

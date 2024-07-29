@@ -4,10 +4,10 @@ import unittest
 import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_confusion_matrix import plot_confusion_matrix
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotConfusionMatrix(BaseTestCase):
+class TestPlotConfusionMatrix(PlottingTestCase):
     """ Test suite for the plot_confusion_matrix function. """
 
     @classmethod
@@ -23,12 +23,7 @@ class TestPlotConfusionMatrix(BaseTestCase):
     def test_plot_confusion_matrix(self):
         """ Test plotting confusion matrix. """
         fig = plot_confusion_matrix(self.y_true, self.y_pred, self.class_names)
-        fig.savefig(os.path.join(self.results_dir, "confusion_matrix.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(os.path.join(self.results_dir, "confusion_matrix.png")),
-            "Confusion matrix plot was not saved.",
-        )
+        self._save_and_close_figure(fig, "confusion_matrix.png")
 
 
 if __name__ == "__main__":

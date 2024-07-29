@@ -1,16 +1,14 @@
-import os
 import unittest
 from unittest.mock import MagicMock
 
-import matplotlib.pyplot as plt
 import tensorflow as tf
 
 from src.plotting.plotters.binary_plotter import BinaryPlotter
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 from src.research.attributes.research_attributes import ResearchAttributes
-from src.testing.base.base_test_case import BaseTestCase
 
 
-class TestBinaryPlotter(BaseTestCase):
+class TestBinaryPlotter(PlottingTestCase):
     """ Test suite for the BinaryPlotter class. """
 
     @classmethod
@@ -68,11 +66,7 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        path = os.path.join(
-            self.results_dir, "binary_plotter_plot_confusion_matrix.png"
-        )
-        fig.savefig(path)
-        plt.close(fig)
+        self._save_and_close_figure(fig, "binary_plotter_plot_confusion_matrix.png")
 
     def test_plot_images(self):
         """ Test the plot_images method. """
@@ -85,9 +79,7 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        path = os.path.join(self.results_dir, "binary_plotter_plot_images.png")
-        fig.savefig(path)
-        plt.close(fig)
+        self._save_and_close_figure(fig, "binary_plotter_plot_images.png")
 
     def test_plot_roc_curve(self):
         """ Test the plot_roc_curve method. """
@@ -100,9 +92,7 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        path = os.path.join(self.results_dir, "binary_plotter_plot_roc_curve.png")
-        fig.savefig(path)
-        plt.close(fig)
+        self._save_and_close_figure(fig, "binary_plotter_plot_roc_curve.png")
 
     def test_plot_pr_curve(self):
         """ Test the plot_pr_curve method. """
@@ -115,9 +105,7 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        path = os.path.join(self.results_dir, "binary_plotter_plot_pr_curve.png")
-        fig.savefig(path)
-        plt.close(fig)
+        self._save_and_close_figure(fig, "binary_plotter_plot_pr_curve.png")
 
     def test_plot_results(self):
         """ Test the plot_results method. """
@@ -130,9 +118,7 @@ class TestBinaryPlotter(BaseTestCase):
             self.binary_plotter._figures,
             "The figure name is incorrect.",
         )
-        path = os.path.join(self.results_dir, "binary_plotter_plot_results.png")
-        fig.savefig(path)
-        plt.close(fig)
+        self._save_and_close_figure(fig, "binary_plotter_plot_results.png")
 
 
 if __name__ == "__main__":

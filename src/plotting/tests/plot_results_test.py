@@ -6,10 +6,10 @@ import numpy as np
 
 from src.plotting.functions.plot_results import plot_multi_class_classification_results
 from src.plotting.functions.plot_results import plot_binary_classification_results
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotMultiClassClassificationResults(BaseTestCase):
+class TestPlotMultiClassClassificationResults(PlottingTestCase):
     """ Test suite for the plot_multi_class_classification_results function. """
 
     @classmethod
@@ -38,9 +38,7 @@ class TestPlotMultiClassClassificationResults(BaseTestCase):
             grid_size=(2, 4),
             prediction_bar=False,
         )
-        path = os.path.join(self.results_dir, "without_prediction_bar.png")
-        fig.savefig(path)
-        plt.close(fig)
+        self._save_and_close_figure(fig, "without_prediction_bar.png")
 
     def test_plot_results_with_prediction_bar(self):
         """ Test plotting multi-class classification results with prediction bars. """
@@ -52,12 +50,10 @@ class TestPlotMultiClassClassificationResults(BaseTestCase):
             grid_size=(2, 4),
             prediction_bar=False,
         )
-        path = os.path.join(self.results_dir, "with_prediction_bar.png")
-        fig.savefig(path)
-        plt.close(fig)
+        self._save_and_close_figure(fig, "with_prediction_bar.png")
 
 
-class TestPlotBinaryClassificationResults(BaseTestCase):
+class TestPlotBinaryClassificationResults(PlottingTestCase):
     """ Test suite for the plot_binary_classification_results function. """
 
     @classmethod

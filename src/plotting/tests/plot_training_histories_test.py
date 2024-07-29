@@ -1,14 +1,13 @@
 import os
 import unittest
 
-import matplotlib.pyplot as plt
 import tensorflow as tf
 
 from src.plotting.functions.plot_training_histories import plot_training_histories
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotTrainingHistories(BaseTestCase):
+class TestPlotTrainingHistories(PlottingTestCase):
     """ Test suite for the plot_training_histories function. """
 
     @classmethod
@@ -61,14 +60,7 @@ class TestPlotTrainingHistories(BaseTestCase):
     def test_plot_training_histories(self):
         """ Test plotting training histories for multiple models. """
         fig = plot_training_histories(self.histories)
-        fig.savefig(os.path.join(self.results_dir, "plot_training_histories.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "plot_training_histories.png")
-            ),
-            "Combined plot for multiple training histories was not saved.",
-        )
+        self._save_and_close_figure(fig, "plot_training_histories.png")
 
     def test_plot_training_histories_with_missing_metrics(self):
         """ Test plotting training histories with missing metrics. """
@@ -77,19 +69,7 @@ class TestPlotTrainingHistories(BaseTestCase):
         self.histories["Model 1"].pop("val_accuracy")
 
         fig = plot_training_histories(self.histories)
-        fig.savefig(
-            os.path.join(
-                self.results_dir, "plot_training_histories_missing_metrics.png"
-            )
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(
-                    self.results_dir, "plot_training_histories_missing_metrics.png"
-                )
-            )
-        )
+        self._save_and_close_figure(fig, "plot_training_histories_missing_metrics.png")
 
     def test_plot_training_histories_with_different_epoch_lengths(self):
         """ Test plotting training histories with different epoch lengths. """
@@ -101,19 +81,8 @@ class TestPlotTrainingHistories(BaseTestCase):
         histories["Model 3"] = history3
 
         fig = plot_training_histories(histories)
-        fig.savefig(
-            os.path.join(
-                self.results_dir, "plot_training_histories_different_epochs.png"
-            )
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(
-                    self.results_dir, "plot_training_histories_different_epochs.png"
-                )
-            ),
-            "Combined plot for training histories with different epoch lengths was not saved.",
+        self._save_and_close_figure(
+            fig, "plot_training_histories_different_epoch_lengths.png"
         )
 
 

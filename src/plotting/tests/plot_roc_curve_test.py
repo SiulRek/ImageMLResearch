@@ -1,13 +1,12 @@
 import os
 import unittest
 
-import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_roc_curve import plot_roc_curve
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotRocCurve(BaseTestCase):
+class TestPlotRocCurve(PlottingTestCase):
     """ Test suite for the plot_roc_curve function. """
 
     @classmethod
@@ -23,12 +22,7 @@ class TestPlotRocCurve(BaseTestCase):
     def test_plot_roc_curve(self):
         """ Test plotting ROC curve. """
         fig = plot_roc_curve(self.y_true, self.y_pred_proba, self.class_names)
-        fig.savefig(os.path.join(self.results_dir, "roc_curve.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(os.path.join(self.results_dir, "roc_curve.png")),
-            "ROC curve plot was not saved.",
-        )
+        self._save_and_close_figure(fig, "roc_curve.png")
 
 
 if __name__ == "__main__":

@@ -1,17 +1,15 @@
-import os
 import unittest
 from unittest.mock import MagicMock
 
-import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
 from src.plotting.plotters.multi_class_plotter import MultiClassPlotter
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 from src.research.attributes.research_attributes import ResearchAttributes
-from src.testing.base.base_test_case import BaseTestCase
 
 
-class TestMultiClassPlotter(BaseTestCase):
+class TestMultiClassPlotter(PlottingTestCase):
     """ Test suite for the MultiClassPlotter class. """
 
     @classmethod
@@ -75,16 +73,7 @@ class TestMultiClassPlotter(BaseTestCase):
             self.multi_class_plotter.figures,
             "The figure name is incorrect.",
         )
-        fig.savefig(
-            os.path.join(self.results_dir, "multi_class_plotter_plot_images.png")
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "multi_class_plotter_plot_images.png")
-            ),
-            "Images figure was not saved.",
-        )
+        self._save_and_close_figure(fig, "multi_class_plotter_plot_images.png")
 
     def test_plot_confusion_matrix(self):
         """ Test the plot_confusion_matrix method. """
@@ -99,19 +88,8 @@ class TestMultiClassPlotter(BaseTestCase):
             self.multi_class_plotter.figures,
             "The figure name is incorrect.",
         )
-        fig.savefig(
-            os.path.join(
-                self.results_dir, "multi_class_plotter_plot_confusion_matrix.png"
-            )
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(
-                    self.results_dir, "multi_class_plotter_plot_confusion_matrix.png"
-                )
-            ),
-            "Confusion matrix figure was not saved.",
+        self._save_and_close_figure(
+            fig, "multi_class_plotter_plot_confusion_matrix.png"
         )
 
     def test_plot_results(self):
@@ -127,16 +105,7 @@ class TestMultiClassPlotter(BaseTestCase):
             self.multi_class_plotter.figures,
             "The figure name is incorrect.",
         )
-        fig.savefig(
-            os.path.join(self.results_dir, "multi_class_plotter_plot_results.png")
-        )
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "multi_class_plotter_plot_results.png")
-            ),
-            "Results figure was not saved.",
-        )
+        self._save_and_close_figure(fig, "multi_class_plotter_plot_results.png")
 
 
 if __name__ == "__main__":

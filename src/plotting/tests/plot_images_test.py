@@ -1,13 +1,12 @@
 import os
 import unittest
 
-import matplotlib.pyplot as plt
 
 from src.plotting.functions.plot_images import plot_images
-from src.testing.base.base_test_case import BaseTestCase
+from src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
-class TestPlotImages(BaseTestCase):
+class TestPlotImages(PlottingTestCase):
     """ Test suite for the plot_images function. """
 
     @classmethod
@@ -20,14 +19,7 @@ class TestPlotImages(BaseTestCase):
     def test_plot_images_without_labels(self):
         """ Test plotting images without labels. """
         fig = plot_images(self.image_dataset, grid_size=(2, 2))
-        fig.savefig(os.path.join(self.results_dir, "plot_images_without_labels.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "plot_images_without_labels.png")
-            ),
-            "Plot without labels was not saved.",
-        )
+        self._save_and_close_figure(fig, "plot_images_without_labels.png")
 
     def test_plot_images_with_labels(self):
         """ Test plotting images with labels. """
@@ -38,14 +30,7 @@ class TestPlotImages(BaseTestCase):
         fig = plot_images(
             self.labeled_dataset, grid_size=(2, 2), label_to_title_func=label_to_title
         )
-        fig.savefig(os.path.join(self.results_dir, "plot_images_with_labels.png"))
-        plt.close(fig)
-        self.assertTrue(
-            os.path.exists(
-                os.path.join(self.results_dir, "plot_images_with_labels.png")
-            ),
-            "Plot with labels was not saved.",
-        )
+        self._save_and_close_figure(fig, "plot_images_with_labels.png")
 
     def test_plot_images_with_invalid_label_to_title_func(self):
         """ Test plotting images with an invalid label_to_title_func. """
