@@ -1,0 +1,59 @@
+{
+    "experiment_definition": {
+        "directory": "demo/shoe_vs_ankle_boot_experiment",
+        "name": "Shoe vs Ankle Boot Experiment",
+        "description": "Binary classification on Fashion MNIST dataset (Sneaker vs Ankle Boot)"
+    },
+    "trial_definitions": [
+        {
+            "name": "Trial 1",
+            "hyperparameters": {
+                "units1": 128,
+                "dropout1": 0.2,
+                "units2": 64,
+                "dropout2": 0.2,
+                "learning_rate": 0.001
+            }
+        },
+        {
+            "name": "Trial 2",
+            "hyperparameters": {
+                "units1": 256,
+                "dropout1": 0.3,
+                "units2": 128,
+                "dropout2": 0.3,
+                "learning_rate": 0.001
+            }
+        },
+        {
+            "name": "Trial 3",
+            "hyperparameters": {
+                "units1": 64,
+                "dropout1": 0.1,
+                "units2": 32,
+                "dropout2": 0.1,
+                "learning_rate": 0.001
+            }
+        },
+        {
+            "name": "Trial 4",
+            "hyperparameters": {
+                "units1": 128,
+                "dropout1": 0.2,
+                "units2": 128,
+                "dropout2": 0.2,
+                "learning_rate": 0.0005
+            }
+        },
+        {
+            "name": "Trial 5",
+            "hyperparameters": {
+                "units1": 256,
+                "dropout1": 0.4,
+                "units2": 128,
+                "dropout2": 0.4,
+                "learning_rate": 0.0001
+            }
+        }
+    ]
+}
