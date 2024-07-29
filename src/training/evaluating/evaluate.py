@@ -8,6 +8,12 @@ from src.training.evaluating.calculate_metrics import (
     calc_f1_score,
 )
 
+def _convert_support_key_to_int(classification_report):
+    for metrics in classification_report.values():
+        value = metrics.get("support")
+        if value is not None:
+            value = int(value)
+            metrics.update({"support": value})
 
 def evaluate_multi_class_classification(y_true, y_pred, class_names=None):
     """
@@ -39,6 +45,7 @@ def evaluate_multi_class_classification(y_true, y_pred, class_names=None):
     report = classification_report(
         y_true, y_pred_one_hot, output_dict=True, zero_division=0, **cn_kwarg
     )
+    _convert_support_key_to_int(report)
     eval_metrics = {
         "accuracy": accuracy,
         "precision": precision,
@@ -80,6 +87,7 @@ def evaluate_binary_classification(y_true, y_pred, class_names=None):
         y_true, y_pred_rounded, output_dict=True, zero_division=0, **cn_kwarg
     )
     report.pop("accuracy", None)
+    _convert_support_key_to_int(report)
     eval_metrics = {
         "accuracy": accuracy,
         "precision": precision,
