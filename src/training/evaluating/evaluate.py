@@ -69,7 +69,8 @@ def evaluate_binary_classification(y_true, y_pred, class_names=None):
         - 'f1' -> float
         - 'classification_report' -> dict
     """
-    accuracy = calc_accuracy(y_true, y_pred)
+    y_pred_rounded = np.round(y_pred).astype(int)
+    accuracy = calc_accuracy(y_true, y_pred_rounded)
     precision = calc_precision(y_true, y_pred)
     recall = calc_recall(y_true, y_pred)
     f1_score = calc_f1_score(y_true, y_pred)
