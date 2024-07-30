@@ -41,6 +41,7 @@ def plot_pr_curve(y_true, y_pred):
     ax.set_ylabel("Precision", fontsize=int(fontsize * 1.3))
     ax.legend(loc="lower left", fontsize=fontsize)
     ax.tick_params(axis="both", which="major", labelsize=fontsize)
-
+    ax.grid(True)
+    
     plt.tight_layout()
     return fig
