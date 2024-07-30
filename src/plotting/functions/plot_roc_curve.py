@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 
 
-def plot_roc_curve(y_true, y_pred, class_names):
+def plot_roc_curve(y_true, y_pred):
     """
     Plots a ROC curve using Matplotlib.
 
@@ -10,7 +10,6 @@ def plot_roc_curve(y_true, y_pred, class_names):
         - y_true (array-like): True labels.
         - y_pred_proba (array-like): Predicted probabilities for the
             positive class.
-        - class_names (List): List of class names.
 
     Returns:
         - fig: The Matplotlib figure containing the ROC curve plot.
@@ -35,6 +34,6 @@ def plot_roc_curve(y_true, y_pred, class_names):
     ax.legend(loc="lower right", fontsize=fontsize)
     ax.tick_params(axis="both", which="major", labelsize=fontsize)
     ax.grid(True)
-    
+
     plt.tight_layout()
     return fig

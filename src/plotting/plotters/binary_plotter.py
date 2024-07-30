@@ -55,8 +55,7 @@ class BinaryPlotter(Plotter):
             - The figure containing the ROC curve.
         """
         y_true, y_pred = self._retrieve_test_output_data()
-        class_names = self._retrieve_class_names()
-        fig = plot_roc_curve(y_true, y_pred, class_names)
+        fig = plot_roc_curve(y_true, y_pred)
         return fig
 
     @plot_decorator(default_title="Precision-Recall Curve", default_show=True)
