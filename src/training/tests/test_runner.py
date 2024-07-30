@@ -1,4 +1,4 @@
-from src.testing.helpers.test_runner_base import TestRunnerBase
+from src.testing.base.test_runner_base import TestRunnerBase
 from src.training.tests.evaluate_test import TestEvaluate
 from src.training.tests.trainer_test import TestTrainer
 

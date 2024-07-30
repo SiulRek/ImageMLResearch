@@ -8,7 +8,7 @@ from src.data_handling.tests import (
     tfrecord_serialization_test,
 )
 from src.data_handling.tests.data_handler_test import TestDataHandler
-from src.testing.helpers.test_runner_base import TestRunnerBase
+from src.testing.base.test_runner_base import TestRunnerBase
 
 
 class DataHandlingTestRunner(TestRunnerBase):

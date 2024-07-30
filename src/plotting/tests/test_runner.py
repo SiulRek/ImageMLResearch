@@ -11,7 +11,7 @@ from src.plotting.tests.plot_text_test import TestPlotText
 from src.plotting.tests.plot_training_histories_test import TestPlotTrainingHistories
 from src.plotting.tests.plot_training_history_test import TestPlotTrainingHistory
 from src.plotting.tests.plotter_test import TestPlotter
-from src.testing.helpers.test_runner_base import TestRunnerBase
+from src.testing.base.test_runner_base import TestRunnerBase
 
 
 class PlottingTestRunner(TestRunnerBase):
