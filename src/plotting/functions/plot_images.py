@@ -44,7 +44,6 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
         else:
             axes[i].imshow(image.numpy())
 
-        axes[i].axis("off")
         if label_to_title_func is not None:
             try:
                 label = label_to_title_func(label)
@@ -52,4 +51,5 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
                 msg = "Converting Label to Title failed with error"
                 raise ValueError(msg) from e
             axes[i].set_title(label, fontsize=font_size)
+
     return fig

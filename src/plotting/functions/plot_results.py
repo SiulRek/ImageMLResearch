@@ -42,7 +42,6 @@ def plot_multi_class_classification_results(
         predicted_label_index = np.argmax(predicted_probs)
         cmap = {"cmap": "gray"} if image.shape[-1] == 1 else {}
         img_ax.imshow(image, **cmap)
-        img_ax.axis("off")
 
         title_color = "green" if predicted_label_index == true_label_index else "red"
         true_label_name = class_names[true_label_index]
@@ -114,7 +113,6 @@ def plot_binary_classification_results(
 
         cmap = {"cmap": "gray"} if image.shape[-1] == 1 else {}
         img_ax.imshow(image, **cmap)
-        img_ax.axis("off")
 
         title_color = "green" if predicted_label == true_label else "red"
         img_ax.set_title(
