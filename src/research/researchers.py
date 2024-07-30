@@ -24,6 +24,8 @@ class _ResearcherBase(DataHandler, Trainer):
             - class_names (list): The class names for the research
                 attributes.
         """
+        assert class_names is not None, "It is recommended to provide class names."
+        
         # Last one to be initialized overwrites the previous ones,
         # in case of conflicts. This should only occur in the case of
         # label_manager.
@@ -38,14 +40,14 @@ class _ResearcherBase(DataHandler, Trainer):
         Args:
             - directory (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
-            - description (str): The description of the experiment.
-                for the report.
+            - description (str): The description of the experiment. for the
+                report.
 
         Returns:
             - Experiment: The Experiment context manager instance.
         """
         return Experiment(self, directory, name, description)
-    
+
     # TODO: Implement the following method
     # def apply_preprocessing_pipeline(self, pipeline, dataset_names=None):
     #     """
