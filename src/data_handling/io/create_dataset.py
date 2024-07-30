@@ -15,7 +15,7 @@ def create_dataset(data, label_type=None, class_names=None):
 
     Args:
         - data (dicts, list of dicts or pandas.DataFrame): Data containing
-            'path' and labels. 'path' should contain the relative file paths and
+            'path' and 'label'. 'path' should contain the relative file paths and
             labels should contain the corresponding labels for the specified
             'label_type'.
         - label_type (str, optional): Specifies the label encoding strategy
