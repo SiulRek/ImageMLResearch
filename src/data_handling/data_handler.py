@@ -58,7 +58,7 @@ class DataHandler(ResearchAttributes):
             - data (tf.data.Dataset, dict, pandas.DataFrame): The data to
             - load, can be: 1. A TensorFlow dataset consisting of Tuples of
                 the form (image, label) where image shape is (height, width,1|3)
-                2. a dictionary/pandas DataFrame, with key/column is 'image' and
+                2. a dictionary/pandas DataFrame, with key/column is 'path' and
                 'label'.
 
         NOTE: when passing a tf.data.Dataset it is recommended to provide a
