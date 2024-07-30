@@ -26,18 +26,18 @@ class DataHandler(ResearchAttributes):
 
         self._backuped_datasets_container = {}
 
-    def _assert_dataset_format(self, data):
+    def _assert_dataset_format(self, dataset):
         """
         Checks if the dataset is of the form (image, label) and if the image
         shape is (height, width, 1|3).
 
         Args:
-            - data (tf.data.Dataset): The dataset to check.
+            - dataset (tf.data.Dataset): The dataset to check.
 
         Raises:
             - ValueError: If the dataset is not of the required format.
         """
-        for sample in data.take(1):
+        for sample in dataset.take(1):
             if not isinstance(sample, tuple) or len(sample) != 2:
                 msg = "Dataset must be of form (image, label)."
                 raise ValueError(msg)
