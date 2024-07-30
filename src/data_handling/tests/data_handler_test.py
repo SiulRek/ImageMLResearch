@@ -33,6 +33,40 @@ class TestDataHandler(BaseTestCase):
             self.assertIn(image.shape, [(28, 28, 1), (28, 28, 3)])
             self.assertEqual(label.shape, (10,))
 
+    def _create_dataset(self, image_shape, label_shape=None):
+        """ Creates a dataset with random images and labels. """
+        images = tf.random.normal(image_shape)
+        if label_shape is None:
+            return tf.data.Dataset.from_tensor_slices(images)
+        labels = tf.random.normal(label_shape)
+        return tf.data.Dataset.from_tensor_slices((images, labels))
+
+    def test_assert_dataset_format_passes(self):
+        """ Test assertion of dataset format passes. """
+        shapes_parameters = [
+            ((10, 28, 28, 1), (10,)),
+            ((10, 28, 28, 3), (10,)),
+            ((10, 28, 28, 1), (10, 10)),
+            ((10, 28, 28, 3), (10, 10)),
+        ]
+        for image_shape, label_shape in shapes_parameters:
+            with self.subTest(image_shape=image_shape, label_shape=label_shape):
+                dataset = self._create_dataset(image_shape, label_shape)
+                self.data_handler._assert_dataset_format(dataset)
+
+    def test_assert_dataset_format_fails(self):
+        """ Test assertion of dataset format fails. """
+        shapes_parameters = [
+            ((10, 28, 28, 2), (10,)),
+            ((10, 28, 28, 28, 3), (10,)),
+            ((10, 10, 1), (10, 10)),
+        ]
+        for image_shape, label_shape in shapes_parameters:
+            with self.subTest(image_shape=image_shape, label_shape=label_shape):
+                dataset = self._create_dataset(image_shape, label_shape)
+                with self.assertRaises(ValueError):
+                    self.data_handler._assert_dataset_format(dataset)
+
     def test_load_dataset_from_dict(self):
         """ Test creation of dataset and storage in the dataset container. """
         self.data_handler.load_dataset(self.jpg_dict)

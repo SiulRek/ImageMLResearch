@@ -23,37 +23,63 @@ class DataHandler(ResearchAttributes):
         self._datasets_container = {
             # Dataset Name: Dataset
         }  # Read/write
-        
+
         self._backuped_datasets_container = {}
+
+    def _assert_dataset_format(self, data):
+        """
+        Checks if the dataset is of the form (image, label) and if the image
+        shape is (height, width, 1|3).
+
+        Args:
+            - data (tf.data.Dataset): The dataset to check.
+
+        Raises:
+            - ValueError: If the dataset is not of the required format.
+        """
+        for sample in data.take(1):
+            if not isinstance(sample, tuple) or len(sample) != 2:
+                msg = "Dataset must be of form (image, label)."
+                raise ValueError(msg)
+            img, _ = sample
+            if img.shape.ndims != 3:
+                msg = "Image must have 3 dimensions."
+                raise ValueError(msg)
+            if img.shape[2] not in [1, 3]:
+                msg = "Image must have 1 or 3 channels."
+                raise ValueError(msg)
 
     def load_dataset(self, data):
         """
         Load a dataset from the given data and stores it in the
-        'datasets_container' under 'complete_dataset'. Note, when passing a
-        tf.data.Dataset it is recommended to provide a dataset where no Keras
-        operation, like shuffling, batching, etc., has been applied. This
-        operation can than be applied in the 'enhance_datasets' method.
+        'datasets_container' under 'complete_dataset'.
 
         Args:
             - data (tf.data.Dataset, dict, pandas.DataFrame): The data to
-                load, can be: 
-                1. A TensorFlow dataset consisting of Tuples of the form 
-                (image, label) where image shape is (height, width,1|3) 
-                2. a dictionary/pandas DataFrame, with key/column is
-                'image' and 'label'.
+            - load, can be: 1. A TensorFlow dataset consisting of Tuples of
+                the form (image, label) where image shape is (height, width,1|3)
+                2. a dictionary/pandas DataFrame, with key/column is 'image' and
+                'label'.
+
+        NOTE: when passing a tf.data.Dataset it is recommended to provide a
+        dataset where no Keras operation, like shuffling, batching, etc., has
+        been applied (refer to method docstring _assert_dataset_format). The
+        mentioned operations can than be applied in the 'prepare_datasets'
+        method.
         """
-        #TODO: Check if label is provided to restrict user to provide label
-        
         # 2 possible methods to load dataset:
         # 1. Is already of format tensorflow.data.Dataset
         if isinstance(data, tf.data.Dataset):
+            self._assert_dataset_format(data)
             self._datasets_container["complete_dataset"] = data
             return
         # 2. data is type dictslist of dicts or pandas.DataFrame
         try:
-            self._datasets_container["complete_dataset"] = create_dataset(
+            dataset = create_dataset(
                 data, self._label_manager.label_type, self._label_manager.class_names
             )
+            self._assert_dataset_format(dataset)
+            self._datasets_container["complete_dataset"] = dataset
             return
         except ValueError as exc:
             msg = f"Not possible to load dataset from {data}."
