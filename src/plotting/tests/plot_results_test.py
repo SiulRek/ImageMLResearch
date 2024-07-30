@@ -48,7 +48,7 @@ class TestPlotMultiClassClassificationResults(PlottingTestCase):
             y_pred=self.y_pred,
             class_names=self.class_names,
             grid_size=(2, 4),
-            prediction_bar=False,
+            prediction_bar=True,
         )
         self._save_and_close_figure(fig, "with_prediction_bar.png")
 
