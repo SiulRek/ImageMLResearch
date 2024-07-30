@@ -125,6 +125,16 @@ class TestTrainer(BaseTestCase):
         with self.assertRaises(ValueError):
             self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
 
+    def test_fit_predict_evaluate_only_complete_dataset(self):
+        dataset = self.trainer._datasets_container.pop("train_dataset")
+        self.trainer._datasets_container.pop("val_dataset")
+        self.trainer._datasets_container.pop("test_dataset")
+        self.trainer._datasets_container["complete_dataset"] = dataset
+        model = self._create_compiled_model()
+        self.trainer.set_compiled_model(model)
+        with self.assertRaises(ValueError):
+            self.trainer.fit_predict_evaluate(epochs=5, steps_per_epoch=5)
+
     def test_fit_predict_evaluate_no_test_dataset(self):
         self.trainer._datasets_container.pop("test_dataset")
         model = self._create_compiled_model()

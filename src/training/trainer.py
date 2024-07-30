@@ -50,12 +50,8 @@ class Trainer(ResearchAttributes):
     def _evaluate_outputs(self):
         """ Evaluates the outputs of the model using the appropriate evaluation
         function based on the label type. """
-        if (
-            not "complete_output" in self._outputs_container
-            and not "test_output" in self._outputs_container
-        ):
-            msg = "Neither 'complete_output' nor 'test_output' found\n"
-            msg += "in outputs container to evaluate."
+        if not "test_output" in self._outputs_container:
+            msg = "No test output found for evaluation."
             warnings.warn(msg)
 
         label_type = self._label_manager.label_type
@@ -90,14 +86,12 @@ class Trainer(ResearchAttributes):
 
     def fit_predict_evaluate(self, **kwargs):
         """
-        Fits the model to the dataset, saves the training history, calculates
-        predictions, and evaluates the model.
+        Fits the model to the training dataset, saves the training history,
+        calculates predictions, and evaluates the model.
 
-        If a 'train_dataset' is provided, it is used for training. Otherwise, if
-        a 'complete_dataset' is provided, it is used for training. If a
-        'val_dataset' is provided, it is used for validation during training. If
-        a 'test_dataset' is provided, it is used for evaluation. Otherwise, the
-        'complete_dataset' is used for evaluation.
+        The method requires a 'train_dataset' for training. Optionally, a
+        'val_dataset' can be provided for validation during training, and a
+        'test_dataset' can be provided for evaluation.
 
         Args:
             - **kwargs: Keyword arguments for the Keras model's fit method.
@@ -113,11 +107,13 @@ class Trainer(ResearchAttributes):
         complete_dataset = self._datasets_container.get("complete_dataset", None)
         test_dataset = self._datasets_container.get("test_dataset", None)
 
-        if train_dataset is None and complete_dataset is None:
-            msg = "Neither 'train_dataset' nor 'complete_dataset' found in"
-            msg += "dataset container for training."
+        if train_dataset is None and complete_dataset:
+            msg = "No train dataset provided. Probably no split done."
             raise ValueError(msg)
-
+        if train_dataset is None:
+            msg = "No train dataset provided. Consider loading a dataset,"
+            msg += "before fitting."
+            raise ValueError(msg)
         if val_dataset:
             kwargs["validation_data"] = val_dataset  # Add to fit kwargs.
 
@@ -129,7 +125,6 @@ class Trainer(ResearchAttributes):
             "train_output": train_dataset,
             "val_output": val_dataset,
             "test_output": test_dataset,
-            "complete_output": complete_dataset,
         }
 
         for output_name, dataset in outputs_mapping.items():
