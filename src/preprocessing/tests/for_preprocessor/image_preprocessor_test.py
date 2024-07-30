@@ -9,7 +9,7 @@ import tensorflow as tf
 from src.preprocessing.steps.step_base import StepBase
 from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 from src.preprocessing.image_preprocessor import ImagePreprocessor
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 ENABLE_VISUAL_INSPECTION = True
 JSON_TEMPLATE_REL = os.path.join(r"src/preprocessing/definitions/pipeline_template.json")

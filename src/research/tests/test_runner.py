@@ -11,7 +11,7 @@ from src.research.tests.researcher_level_workflow.binary_workflow_test import (
 from src.research.tests.researcher_level_workflow.multi_class_workflow_test import (
     TestMultiClassResearcherLevelWorkflow,
 )
-from src.testing.base.test_runner_base import TestRunnerBase
+from src.testing.bases.test_runner_base import TestRunnerBase
 
 
 class ResearchTestRunner(TestRunnerBase):

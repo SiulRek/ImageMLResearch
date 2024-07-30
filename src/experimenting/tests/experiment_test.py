@@ -9,7 +9,7 @@ from src.experimenting.experiment import Experiment
 import src.experimenting.experiment as experiment_module
 from src.experimenting.helpers.trial import Trial
 from src.research.attributes.research_attributes import ResearchAttributes
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestExperiment(BaseTestCase):

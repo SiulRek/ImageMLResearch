@@ -25,7 +25,7 @@ from src.preprocessing.helpers.copy_json_exclude_entries import (
     copy_json_exclude_entries,
 )
 from src.preprocessing.image_preprocessor import ImagePreprocessor
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 N = 100  # Number of Pipelines Tests to run.
 

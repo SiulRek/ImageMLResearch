@@ -3,7 +3,7 @@ import os
 import unittest
 
 from src.experimenting.helpers.experiment_data import load_experiment_data
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestLoadExperimentData(BaseTestCase):

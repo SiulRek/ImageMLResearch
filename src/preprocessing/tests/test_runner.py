@@ -20,7 +20,7 @@ from src.preprocessing.tests.for_steps.multiple_steps_test import (
 from src.preprocessing.tests.for_steps.resize_operations_steps_test import (
     load_resize_operations_steps_tests,
 )
-from src.testing.base.test_runner_base import TestRunnerBase
+from src.testing.bases.test_runner_base import TestRunnerBase
 
 
 class PreprocessingTestRunner(TestRunnerBase):

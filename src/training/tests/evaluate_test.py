@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 from src.training.evaluating.evaluate import (
     evaluate_binary_classification,
     evaluate_multi_class_classification,

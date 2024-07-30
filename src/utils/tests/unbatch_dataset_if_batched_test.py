@@ -1,7 +1,7 @@
 import unittest
 
 
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 from src.utils import unbatch_dataset_if_batched
 
 

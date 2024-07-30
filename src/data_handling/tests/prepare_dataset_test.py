@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 
 from src.data_handling.manipulation.prepare_dataset import prepare_dataset
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestPrepareDataset(BaseTestCase):

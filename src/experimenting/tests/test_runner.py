@@ -1,7 +1,7 @@
 from src.experimenting.tests.experiment_data_test import TestLoadExperimentData
 from src.experimenting.tests.experiment_test import TestExperiment
 from src.experimenting.tests.trial_test import TestTrial
-from src.testing.base.test_runner_base import TestRunnerBase
+from src.testing.bases.test_runner_base import TestRunnerBase
 
 
 class ExperimentingTestRunner(TestRunnerBase):

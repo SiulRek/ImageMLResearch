@@ -4,7 +4,7 @@ import unittest
 import tensorflow as tf
 
 from src.research.researchers import MultiClassResearcher
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 from src.testing.helpers.empty_directory import empty_directory
 
 

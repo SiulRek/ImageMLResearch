@@ -5,7 +5,7 @@ from src.preprocessing.helpers.randomly_select_sequential_keys import (
     randomly_select_sequential_keys,
     is_sequential,
 )
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestRandomlySelectSequentialKeys(BaseTestCase):

@@ -1,4 +1,4 @@
-from src.testing.base.test_runner_base import TestRunnerBase
+from src.testing.bases.test_runner_base import TestRunnerBase
 from src.utils.tests.get_sample_from_distribution_test import (
     TestGetSampleFromDistribution,
 )

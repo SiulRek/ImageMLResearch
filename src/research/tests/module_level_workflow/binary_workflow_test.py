@@ -7,7 +7,7 @@ from src.data_handling.data_handler import DataHandler
 from src.experimenting.experiment import Experiment
 from src.plotting.plotters.binary_plotter import BinaryPlotter
 from src.research.attributes.research_attributes import ResearchAttributes
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 from src.testing.helpers.empty_directory import empty_directory
 from src.training.trainer import Trainer
 

@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 
 from src.research.helpers.data_retriever import DataRetriever
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestDataRetriever(BaseTestCase):

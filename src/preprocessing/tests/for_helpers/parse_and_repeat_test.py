@@ -4,7 +4,7 @@ import unittest
 from src.preprocessing.helpers.parse_and_repeat import (
     parse_and_repeat,
 )
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestParseAndRepeat(BaseTestCase):

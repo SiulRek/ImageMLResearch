@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 import matplotlib.pyplot as plt
 
 from src.experimenting.helpers.trial import Trial, ResultsEmptyError
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestTrial(BaseTestCase):

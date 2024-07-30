@@ -3,7 +3,7 @@ import os
 
 import matplotlib.pyplot as plt
 
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class PlottingTestCase(ABC, BaseTestCase):

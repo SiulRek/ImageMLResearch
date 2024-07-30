@@ -5,7 +5,7 @@ import unittest
 import tensorflow as tf
 
 from src.data_handling.io.save_images import save_images
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestSaveImages(BaseTestCase):

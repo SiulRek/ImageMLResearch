@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 
 from src.data_handling.manipulation.shuffle_dataset import shuffle_dataset
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestShuffleDataset(BaseTestCase):

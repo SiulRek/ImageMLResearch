@@ -5,7 +5,7 @@ import tensorflow as tf
 
 from src.data_handling.data_handler import DataHandler
 from src.research.attributes.research_attributes import ResearchAttributes
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestDataHandler(BaseTestCase):

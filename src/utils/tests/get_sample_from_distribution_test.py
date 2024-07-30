@@ -1,6 +1,6 @@
 import unittest
 
-from src.testing.base.base_test_case import BaseTestCase
+from src.testing.bases.base_test_case import BaseTestCase
 from src.utils import get_sample_from_distribution
 
 
