@@ -219,7 +219,7 @@ class ImagePreprocessor:
         for _ in tf_dataset.take(1):
             pass
 
-    def _strip_dataset(self, dataset):
+    def _unpack_dataset(self, dataset):
         for element in dataset.take(1):
             if isinstance(element, tuple) and len(element) == 2:
                 return unpack_dataset(dataset)
@@ -241,7 +241,7 @@ class ImagePreprocessor:
             - tf.data.Dataset: The processed dataset after applying all the
                 steps in the pipeline.
         """
-        image_dataset, label_dataset = self._strip_dataset(image_dataset)
+        image_dataset, label_dataset = self._unpack_dataset(image_dataset)
         processed_dataset = image_dataset
         for step in self.pipeline:
             if self._raise_step_process_exception:
