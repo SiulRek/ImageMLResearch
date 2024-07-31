@@ -1,7 +1,10 @@
+import warnings
+
 from src.data_handling.data_handler import DataHandler
 from src.experimenting.experiment import Experiment
 from src.plotting.plotters.binary_plotter import BinaryPlotter
 from src.plotting.plotters.multi_class_plotter import MultiClassPlotter
+from src.preprocessing.image_preprocessor import ImagePreprocessor
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.training.trainer import Trainer
 
@@ -25,13 +28,20 @@ class _ResearcherBase(DataHandler, Trainer):
                 attributes.
         """
         assert class_names is not None, "It is recommended to provide class names."
-        
+
         # Last one to be initialized overwrites the previous ones,
         # in case of conflicts. This should only occur in the case of
         # label_manager.
         Trainer.__init__(self)
         DataHandler.__init__(self)
         ResearchAttributes.__init__(self, label_type, class_names)
+
+        self._preprocessor = ImagePreprocessor()
+
+    @property
+    def preprocessor(self):
+        """ ImagePreprocessor: The image preprocessor instance. """
+        return self._preprocessor
 
     def run_experiment(self, directory, name, description):
         """
@@ -48,16 +58,30 @@ class _ResearcherBase(DataHandler, Trainer):
         """
         return Experiment(self, directory, name, description)
 
-    # TODO: Implement the following method
-    # def apply_preprocessing_pipeline(self, pipeline, dataset_names=None):
-    #     """
-    #     Applies a preprocessing pipeline to the datasets.
+    def apply_preprocessing_pipeline(self, pipeline, dataset_names=None, backup=False):
+        """
+        Applies a preprocessing pipeline to the datasets.
 
-    #     Args:
-    #         - pipeline (tf.data.Dataset): The preprocessing pipeline to apply.
-    #         - dataset_names (list, optional): The dataset names to apply the
-    #             pipeline to. Defaults to None.
-    #     """
+        Args:
+            - pipeline (list[StepBase]): List of preprocessing steps.
+            - dataset_names (list, optional): The dataset names to apply the
+                pipeline to. Defaults to None.
+            - backup (bool, optional): Whether to backup the datasets before
+                applying the pipeline. Defaults to False.
+        """
+        preprocessor = self._preprocessor
+        preprocessor.set_pipe(pipeline)
+        if dataset_names is None:
+            dataset_names = self._datasets_container.keys()
+        if hasattr(self, "backup_datasets") and backup:
+            self.backup_datasets()
+        elif backup:
+            msg = "No backup_datasets method found. Skipping backup."
+            warnings.warn(msg)
+        for dataset_name in dataset_names:
+            dataset = self._datasets_container[dataset_name]
+            preprocessed_dataset = preprocessor.process(dataset)
+            self._datasets_container[dataset_name] = preprocessed_dataset
 
 
 class BinaryResearcher(_ResearcherBase, BinaryPlotter):
