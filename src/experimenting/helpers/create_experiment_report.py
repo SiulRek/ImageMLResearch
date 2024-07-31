@@ -157,11 +157,6 @@ def create_experiment_report(experiment_data):
             hyperparameter_table, key_label="Hyperparameter", value_label="Value"
         )
 
-        # Show Plots
-        writer.write_title("Figures:", level=3)
-        for fig_name, fig_path in trial["figures"].items():
-            writer.write_figure(fig_name, fig_path)
-
         # The last classification report is the test set report.
         classification_report = _pop_classification_reports(trial)[-1]
 
@@ -169,6 +164,11 @@ def create_experiment_report(experiment_data):
         writer.write_title("Evaluation Metrics:", level=3)
         evaluation_metrics_table = from_trial_get("evaluation_metrics", {})
         writer.write_nested_table(evaluation_metrics_table)
+
+        # Show Plots
+        writer.write_title("Figures:", level=3)
+        for fig_name, fig_path in trial["figures"].items():
+            writer.write_figure(fig_name, fig_path)
 
         # Write Classification Report
         writer.write_title("Detailed Report of Test Set:", level=3)
