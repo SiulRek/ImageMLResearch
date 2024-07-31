@@ -7,6 +7,7 @@ from src.plotting.plotters.multi_class_plotter import MultiClassPlotter
 from src.preprocessing.image_preprocessor import ImagePreprocessor
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.training.trainer import Trainer
+from src.utils.general.batch_utils import is_batched
 
 
 class _ResearcherBase(DataHandler, Trainer):
@@ -68,6 +69,9 @@ class _ResearcherBase(DataHandler, Trainer):
                 pipeline to. Defaults to None.
             - backup (bool, optional): Whether to backup the datasets before
                 applying the pipeline. Defaults to False.
+
+        NOTE: It is not supported to apply a preprocessing pipeline on batched
+        datasets.
         """
         preprocessor = self._preprocessor
         preprocessor.set_pipe(pipeline)
@@ -80,6 +84,10 @@ class _ResearcherBase(DataHandler, Trainer):
             warnings.warn(msg)
         for dataset_name in dataset_names:
             dataset = self._datasets_container[dataset_name]
+            if is_batched(dataset):
+                msg = "Applying a preprocessing pipeline on a batched dataset"
+                msg += "is not supported."
+                raise ValueError(msg)
             preprocessed_dataset = preprocessor.process(dataset)
             self._datasets_container[dataset_name] = preprocessed_dataset
 
