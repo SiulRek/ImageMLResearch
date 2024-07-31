@@ -3,6 +3,7 @@ import unittest
 
 import tensorflow as tf
 
+import src.preprocessing.steps as steps
 from src.research.researchers import BinaryResearcher
 from src.testing.bases.base_test_case import BaseTestCase
 from src.testing.helpers.empty_directory import empty_directory
@@ -36,7 +37,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         )
         return model
 
-    def _assert_datasets_container(self, datasets_container=None):
+    def _assert_datasets_container(self, datasets_container=None, batched=True):
         if datasets_container is None:
             has_datasets_container = (
                 hasattr(self.researcher, "datasets_container")
@@ -44,15 +45,33 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
             )
             self.assertTrue(
                 has_datasets_container,
-                "The researcher does not have a datasets container.",
             )
             datasets_container = self.researcher.datasets_container
         for dataset_name in ["train_dataset", "val_dataset", "test_dataset"]:
             self.assertIn(
                 dataset_name,
                 datasets_container,
-                f"{dataset_name} is not in the datasets container.",
             )
+            dataset = datasets_container[dataset_name]
+            for img, label in dataset.take(1):
+                expected_img_shape = (32, 28, 28, 3) if batched else (28, 28, 3)
+                self.assertEqual(
+                    img.shape,
+                    expected_img_shape,
+                )
+                expected_label_shape = (32,) if batched else tf.TensorShape([])
+                self.assertEqual(
+                    label.shape,
+                    expected_label_shape,
+                )
+
+    def _make_preprocessing_pipeline(self):
+        pipeline = [
+            steps.Rotator(90),
+            steps.ReverseScaler(255),
+            steps.TypeCaster(output_dtype="float32"),
+        ]
+        return pipeline
 
     def _assert_outputs_container(self):
         has_outputs_container = (
@@ -61,13 +80,11 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         )
         self.assertTrue(
             has_outputs_container,
-            "The researcher does not have an outputs container.",
         )
         for output_name in ["train_output", "val_output", "test_output"]:
             self.assertIn(
                 output_name,
                 self.researcher.outputs_container,
-                f"{output_name} is not in the outputs container.",
             )
 
     def test_workflow(self):
@@ -77,7 +94,13 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         )
         self.researcher.load_dataset(dataset)
         self.researcher.split_dataset(train_size=0.7, val_size=0.15, test_size=0.15)
-        self._assert_datasets_container()
+        self._assert_datasets_container(batched=False)
+        self.researcher.backup_datasets()
+        self.researcher.restore_datasets()
+        self._assert_datasets_container(batched=False)
+        preprocessing_pipe = self._make_preprocessing_pipeline()
+        self.researcher.apply_preprocessing_pipeline(preprocessing_pipe)
+        self._assert_datasets_container(batched=False)
         self.researcher.prepare_datasets(
             ["train_dataset", "val_dataset", "test_dataset"],
             batch_size=32,
@@ -85,8 +108,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
             prefetch_buffer_size=10,
             repeat_num=1,
         )
-        self.researcher.backup_datasets()
-        self.researcher.restore_datasets()
         self._assert_datasets_container()
 
         #### Experimenting ####
@@ -109,7 +130,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
             self._assert_datasets_container(experiment.datasets_container)
             self.assertTrue(
                 os.path.exists(experiment.experiment_data["directory"]),
-                "The experiment directory does not exist.",
             )
 
             # Initial Visualization
@@ -119,7 +139,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                     # ## Training ##
                     self.assertTrue(
                         os.path.exists(trial.trial_data["directory"]),
-                        "The trial directory does not exist.",
                     )
                     model = self._create_compiled_model(
                         trial_definition["hyperparameters"]["units"]
@@ -133,7 +152,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                     )
                     self.assertTrue(
                         has_evaluation_metrics,
-                        "The researcher does not have evaluation metrics.",
                     )
 
                     # ## Plotting ##
@@ -143,7 +161,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                     )
                     self.assertTrue(
                         has_training_history,
-                        "The researcher does not have a training history.",
                     )
                     self.researcher.plot_training_history(title="Training History")
                     self.researcher.plot_confusion_matrix(title="Confusion Matrix")
@@ -154,15 +171,11 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         self.assertEqual(
             len(experiment.experiment_data["trials"]),
             i + 1,
-            "The number of trials is incorrect.",
         )
         images_plot = os.path.join(
             experiment.experiment_data["directory"], "images.png"
         )
-        self.assertTrue(
-            os.path.exists(images_plot),
-            "The images plot does not exist.",
-        )
+        self.assertTrue(os.path.exists(images_plot))
         for trial in experiment.experiment_data["trials"]:
             trial_directory = trial["directory"]
             figures_exist = all(
@@ -171,17 +184,11 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                     for figure_name in ["training_history", "confusion_matrix"]
                 ]
             )
-            self.assertTrue(
-                figures_exist,
-                f"Not all figures exist for the trial {trial['name']}.",
-            )
+            self.assertTrue(figures_exist)
             trial_info_exist = os.path.exists(
                 os.path.join(trial_directory, "trial_info.json")
             )
-            self.assertTrue(
-                trial_info_exist,
-                f"The trial info does not exist for the trial {trial['name']}.",
-            )
+            self.assertTrue(trial_info_exist)
 
         experiment_directory = experiment.experiment_data["directory"]
         experiment_info_exist = os.path.exists(
@@ -189,7 +196,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         )
         self.assertTrue(
             experiment_info_exist,
-            "The experiment info does not exist.",
         )
 
         experiment_report_files = [
@@ -200,7 +206,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         self.assertEqual(
             len(experiment_report_files),
             1,
-            f"Expected 1 report file, but found {len(experiment_report_files)}.",
         )
 
 
