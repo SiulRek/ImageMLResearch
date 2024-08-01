@@ -35,7 +35,10 @@
 
     "Grayscale To RGB": {},
 
-    "Otsu Thresholding": {},
+    "Otsu Thresholding": {
+        "thresh": 0,
+        "max_val": 255
+    },
 
     "Adaptive Thresholding": {
         "block_size": 15,

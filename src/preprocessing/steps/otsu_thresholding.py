@@ -11,12 +11,20 @@ class OstuThresholder(StepBase):
     Green, Blue) separately.
     """
 
-    arguments_datatype = {}
+    arguments_datatype = {"thresh": float, "max_val": float}
     name = "Otsu Thresholding"
 
-    def __init__(self):
-        """ Initializes the OstuThresholder object that can be integrated in an
-        image preprocessing pipeline. """
+    def __init__(self, thresh=0, max_val=255):
+        """
+        Initializes the OstuThresholder object that can be integrated in an
+        image preprocessing pipeline.
+
+        Args:
+            - thresh (float, optional): The threshold value used for
+                thresholding. Defaults to 0.
+            - max_val (float, optional): The maximum value that a pixel can
+                take after thresholding. Defaults to 255.
+        """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
@@ -24,7 +32,10 @@ class OstuThresholder(StepBase):
 
         if image_nparray.shape[2] == 1:
             _, thresholded_image = cv2.threshold(
-                image_nparray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+                image_nparray,
+                thresh=self.parameters["thresh"],
+                maxval=self.parameters["max_val"],
+                type=cv2.THRESH_BINARY + cv2.THRESH_OTSU,
             )
         else:
             R, G, B = cv2.split(image_nparray)
