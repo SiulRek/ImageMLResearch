@@ -271,7 +271,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 return
             histories[name] = history
 
-        fig = plot_training_histories(histories)
+        fig = plot_training_histories(histories, title="History of Best 3 Trials")
         figures = transform_figures_to_files(
             {"history_of_best_3_trials": fig}, self.experiment_data["directory"]
         )
