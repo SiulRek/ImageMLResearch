@@ -39,7 +39,8 @@
 
     "Adaptive Thresholding": {
         "block_size": 15,
-        "c": -2.0
+        "c": -2.0,
+        "maxval": 255
     },
 
     "Binary Thresholding": {
