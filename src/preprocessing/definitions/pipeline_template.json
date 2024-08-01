@@ -43,7 +43,8 @@
     },
 
     "Binary Thresholding": {
-        "thresh": 128
+        "thresh": 128,
+        "maxval": 255
     },
 
     "Truncated Thresholding": {
