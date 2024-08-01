@@ -52,7 +52,8 @@
     },
 
     "Truncated Thresholding": {
-        "thresh": 128
+        "thresh": 128,
+        "max_val": 255
     },
 
     "Threshold to Zero": {

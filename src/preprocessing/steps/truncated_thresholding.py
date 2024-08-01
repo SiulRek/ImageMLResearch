@@ -11,19 +11,21 @@ class TruncatedThresholder(StepBase):
     Green, Blue) separately.
     """
 
-    arguments_datatype = {"thresh": int}
+    arguments_datatype = {"thresh": float, "max_val": float}
     name = "Truncated Thresholding"
 
-    def __init__(self, thresh=128):
+    def __init__(self, thresh=128, max_val=255):
         """
         Initializes the TruncatedThresholder object that can be integrated into
         an image preprocessing pipeline.
 
         Args:
-            - thresh (int, optional): The threshold value used for truncated
-                thresholding. Pixel values greater than this threshold are set
-                to the threshold value itself, and values less than or equal to
-                the threshold remain unchanged. Defaults to 128.
+            - thresh (float, optional): The threshold value used for
+                truncated thresholding. Pixel values greater than this threshold
+                are set to the threshold value itself, and values less than or
+                equal to the threshold remain unchanged. Defaults to 128.
+            - max_val (float, optional): The maximum value that a pixel can
+                take after thresholding. Defaults to 255.
         """
         super().__init__(locals())
 
@@ -34,7 +36,7 @@ class TruncatedThresholder(StepBase):
             _, thresholded_np_array = cv2.threshold(
                 src=np_array,
                 thresh=self.parameters["thresh"],
-                maxval=255,
+                maxval=self.parameters["max_val"],
                 type=cv2.THRESH_TRUNC,
             )
             return thresholded_np_array
