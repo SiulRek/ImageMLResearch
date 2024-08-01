@@ -114,3 +114,7 @@ class TestRunnerBase(ABC):
         print(msg)
         print()
         print("Test results logged to:", self.log_file)
+        error_log_file = self.log_file.replace(".log", "_errors.log")
+        print("Test errors logged to:", error_log_file)
+        simple_log_file = self.log_file.replace(".log", "_simple.log")
+        print("Simple test results logged to:", simple_log_file)
