@@ -62,6 +62,11 @@ class TestPlotTrainingHistories(PlottingTestCase):
         fig = plot_training_histories(self.histories)
         self._save_and_close_figure(fig, "plot_training_histories.png")
 
+    def test_plot_training_histories_with_title(self):
+        """ Test plotting training histories with a title. """
+        fig = plot_training_histories(self.histories, title="Training Histories")
+        self._save_and_close_figure(fig, "plot_training_histories_with_title.png")
+
     def test_plot_training_histories_with_missing_metrics(self):
         """ Test plotting training histories with missing metrics. """
         # Remove a metric from the history of one model

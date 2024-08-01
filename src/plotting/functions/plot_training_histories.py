@@ -7,7 +7,7 @@ def _sanitize_histories(histories):
 
     Args:
         - histories: Dictionary containing multiple histories in the format
-        - {Name: history}.
+            {Name: history}.
 
     Returns:
         - sanitized_histories: Dictionary containing multiple histories in
@@ -29,13 +29,14 @@ def _sanitize_histories(histories):
     return sanitized_histories, known_metrics
 
 
-def plot_training_histories(histories):
+def plot_training_histories(histories, title=None):
     """
     Plots the training and validation histories of multiple Keras models.
 
     Args:
         - histories: Dictionary containing multiple histories in the format
-        - {Name: history}
+            {Name: history}
+        - title: The title of the plot.
 
     Returns:
         - fig: The Matplotlib figure containing the combined training and
@@ -90,6 +91,9 @@ def plot_training_histories(histories):
                 ax.tick_params(axis="y", labelsize=font_size)
                 ax.legend(loc="best", fontsize=font_size)
                 ax.grid(True)
+
+    if title is not None:
+        fig.suptitle(title, fontsize=font_size+3)
 
     plt.tight_layout()
     return fig
