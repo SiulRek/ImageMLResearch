@@ -11,10 +11,10 @@ class BinaryThresholder(StepBase):
     Green, Blue) separately.
     """
 
-    arguments_datatype = {"thresh": float, "maxval": float}
+    arguments_datatype = {"thresh": float, "max_val": float}
     name = "Binary Thresholding"
 
-    def __init__(self, thresh=128, maxval=255):
+    def __init__(self, thresh=128, max_val=255):
         """
         Initializes the BinaryThresholder object that can be integrated in an
         image preprocessing pipeline.
@@ -24,7 +24,7 @@ class BinaryThresholder(StepBase):
                 thresholding. Pixel values greater than this threshold are set
                 to the maximum value (255, white), and values less than or equal
                 to the threshold are set to 0 (black). Defaults to 128.
-            - maxval (float, optional): The maximum value that a pixel can take
+            - max_val (float, optional): The maximum value that a pixel can take
                 after thresholding. Defaults to 255.
         """
         super().__init__(locals())
@@ -36,7 +36,7 @@ class BinaryThresholder(StepBase):
             _, thresholded_np_array = cv2.threshold(
                 src=np_array,
                 thresh=self.parameters["thresh"],
-                maxval=255,
+                maxval=self.parameters["max_val"],
                 type=cv2.THRESH_BINARY,
             )
             return thresholded_np_array

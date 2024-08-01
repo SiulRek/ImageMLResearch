@@ -11,10 +11,10 @@ class AdaptiveThresholder(StepBase):
     Green, Blue) separately.
     """
 
-    arguments_datatype = {"block_size": int, "c": float, "maxval": float}
+    arguments_datatype = {"block_size": int, "c": float, "max_val": float}
     name = "Adaptive Thresholding"
 
-    def __init__(self, block_size=15, c=-2, maxval=255):
+    def __init__(self, block_size=15, c=-2, max_val=255):
         """
         Initializes the AdaptiveThresholder object that can be integrated in an
         image preprocessing pipeline.
@@ -24,7 +24,7 @@ class AdaptiveThresholder(StepBase):
                 that is used to calculate the threshold value. Defaults to 15.
             - c (float, optional): Constant subtracted from the mean or
                 weighted mean. Defaults to -2.
-            - maxval (float, optional): The maximum value that a pixel can
+            - max_val (float, optional): The maximum value that a pixel can
                 take. Defaults to 255.
         """
         super().__init__(locals())
@@ -35,7 +35,7 @@ class AdaptiveThresholder(StepBase):
         def apply_adaptive_threshold(np_array):
             return cv2.adaptiveThreshold(
                 np_array,
-                maxValue=self.parameters["maxval"],
+                maxValue=self.parameters["max_val"],
                 adaptiveMethod=cv2.ADAPTIVE_THRESH_MEAN_C,
                 thresholdType=cv2.THRESH_BINARY,
                 blockSize=self.parameters["block_size"],  # Block size.

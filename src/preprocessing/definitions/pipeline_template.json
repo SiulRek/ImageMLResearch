@@ -40,12 +40,12 @@
     "Adaptive Thresholding": {
         "block_size": 15,
         "c": -2.0,
-        "maxval": 255
+        "max_val": 255
     },
 
     "Binary Thresholding": {
         "thresh": 128,
-        "maxval": 255
+        "max_val": 255
     },
 
     "Truncated Thresholding": {
