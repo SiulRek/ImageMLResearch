@@ -40,7 +40,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         Args:
             - research_attributes (ResearchAttributes): The research
                 attributes for the experiment.
-            - directory (str): The directory to save the experiment data.
+            - directory (str): The directory of the experiment.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment. for the
                 report.
@@ -52,8 +52,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 `research_attributes` during initialization, as it simplifies
                 the usage within a context manager.
         """
-        exp_dir = self._make_experiment_directory(directory, name)
-        self._init_logger(exp_dir)
+        out_dir = self._make_output_directory(directory)
+        self._init_logger(out_dir)
 
         # ResearchAttributes required for the experiment.
         self._figures = {
@@ -67,39 +67,38 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         }  # Read only
         self.synchronize_research_attributes(research_attributes)
 
-        self._init_experiment_data(exp_dir, name, description, sort_metric)
+        self._init_experiment_data(out_dir, name, description, sort_metric)
 
         self._no_trial_executed = True
         self._initial_trial_num = len(self.experiment_data["trials"])
 
-    def _make_experiment_directory(self, directory, name):
+    def _make_output_directory(self, experiment_dir):
         """
-        Creates the experiment directory path, makes the directory, and returns
-        the path.
+        Creates an output directory of the experiment within the given
+        directory.
 
         Args:
-            - directory (str): The directory to save the experiment data.
-            - name (str): The name of the experiment.
+            - experiment_dir (str): The experiment directory in which to
+                create the output directory.
 
         Returns:
-            - str: The path to the experiment directory.
+            - str: The path to the created output directory.
         """
-        directory = os.path.abspath(os.path.normpath(directory))
-        name = name.replace(" ", "_")
-        experiment_dir = os.path.join(directory, name)
-        os.makedirs(experiment_dir, exist_ok=True)
-        return experiment_dir
+        experiment_dir = os.path.abspath(os.path.normpath(experiment_dir))
+        output_dir = os.path.join(experiment_dir, "outputs")
+        os.makedirs(output_dir, exist_ok=True)
+        return output_dir
 
     def _init_logger(self, directory):
         log_file = os.path.join(directory, "execution.log")
         self.logger = Logger(log_file, mode="a")
 
-    def _init_experiment_data(self, exp_dir, name, description, sort_metric):
+    def _init_experiment_data(self, out_dir, name, description, sort_metric):
         """
         Initializes the experiment data to store the experiment information.
 
         Args:
-            - exp_dir (str): The directory to save the experiment data.
+            - out_dir (str): The directory to save the experiment data.
             - name (str): The name of the experiment.
             - description (str): The description of the experiment.
             - sort_metric (str): The metric to sort the trials by.
@@ -110,16 +109,16 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         """
         try:
             # Try loading existing experiment data to resume the experiment.
-            experiment_data = load_experiment_data(exp_dir)
+            experiment_data = load_experiment_data(out_dir)
             self.logger.info(f"Resuming experiment: {name}")
         except FileNotFoundError:
             self.logger.info(f"Creating new experiment: {name}")
             experiment_data = get_default_experiment_data()
             # Assign directory and name only when creating a new experiment.
-            experiment_data["directory"] = exp_dir
+            experiment_data["directory"] = out_dir
             experiment_data["name"] = name
         else:
-            if exp_dir or name:
+            if out_dir or name:
                 msg = "Directory and name parameters are ignored when resuming"
                 msg += "an experiment."
                 warnings.warn(msg)

@@ -30,7 +30,7 @@ class TestExperiment(BaseTestCase):
         self.directory = self.temp_dir
         self.name = "test_experiment"
         self.experiment_json = os.path.join(
-            self.directory, self.name, "experiment_info.json"
+            self.directory, "outputs", "experiment_info.json"
         )
         self.description = "This is a test experiment"
         self.sort_metric = "accuracy"
