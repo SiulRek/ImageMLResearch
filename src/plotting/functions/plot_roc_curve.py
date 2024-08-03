@@ -1,5 +1,9 @@
+# NOTE: plot_roc_curve is only allowed for binary
+# classification labels.
+
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
+
 
 
 def plot_roc_curve(y_true, y_pred):

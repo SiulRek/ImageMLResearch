@@ -1,3 +1,7 @@
+# NOTE: plot_pr_curve is only allowed for binary
+# classification labels.
+
+
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve, auc
 
