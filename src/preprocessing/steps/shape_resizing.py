@@ -41,7 +41,7 @@ class ShapeResizer(StepBase):
             )
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         channels = image_tensor.shape[2]
         image_tensor_with_batch = tf.expand_dims(image_tensor, axis=0)
         method = self.resize_methods[self.parameters["resize_method"]]

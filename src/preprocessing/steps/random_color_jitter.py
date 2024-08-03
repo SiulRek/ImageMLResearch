@@ -40,7 +40,7 @@ class RandomColorJitterer(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         is_grayscale = tf.shape(image_tensor)[-1] == 1
         image_tensor = tf.image.random_brightness(
             image_tensor,

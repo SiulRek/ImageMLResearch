@@ -25,7 +25,7 @@ class RandomElasticTransformer(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         row, col, _ = image_nparray.shape
 
         np.random.seed(self.parameters["seed"])  # Set the random seed

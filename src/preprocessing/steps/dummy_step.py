@@ -13,7 +13,7 @@ class DummyStep(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         return image_tensor
 
 

@@ -24,7 +24,7 @@ class DilationFilter(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         kernel = np.ones(
             (self.parameters["kernel_size"], self.parameters["kernel_size"]), np.uint8
         )

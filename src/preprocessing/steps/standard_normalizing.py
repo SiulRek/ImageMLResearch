@@ -22,7 +22,7 @@ class StandardNormalizer(StepBase):
         self.output_datatype = tf.float16
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         image_tensor = tf.cast(image_tensor, self.output_datatype)
         mean_val = tf.reduce_mean(image_tensor)
         std_val = reduce_std(image_tensor)

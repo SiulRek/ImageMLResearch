@@ -23,7 +23,7 @@ class RandomCropper(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         image_shape = tf.shape(image_tensor)
         crop_height, crop_width = self.parameters["crop_size"]
 

@@ -27,7 +27,7 @@ class RandomRotator(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         random.seed(self.parameters["seed"])
 
         angle = random.randint(*self.parameters["angle_range"])

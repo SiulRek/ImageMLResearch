@@ -30,7 +30,7 @@ class AdaptiveThresholder(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
 
         def apply_adaptive_threshold(np_array):
             return cv2.adaptiveThreshold(

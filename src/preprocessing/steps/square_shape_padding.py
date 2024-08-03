@@ -22,7 +22,7 @@ class SquareShapePadder(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         shape = tf.shape(image_tensor)
         height, width, channels = shape[0], shape[1], shape[2]
 

@@ -245,10 +245,10 @@ class ImagePreprocessor:
         processed_dataset = image_dataset
         for step in self.pipeline:
             if self._raise_step_process_exception:
-                processed_dataset = step.process_step(processed_dataset)
+                processed_dataset = step(processed_dataset)
             else:
                 try:
-                    processed_dataset = step.process_step(processed_dataset)
+                    processed_dataset = step(processed_dataset)
                     self._consume_tf_dataset(processed_dataset)
                 except Exception as e:
                     msg = f"An error occurred in step {step.name}: {str(e)}"

@@ -31,7 +31,7 @@ class RandomFlipper(StepBase):
         self.seed = seed
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         flip_direction = self.parameters["flip_direction"]
         random.seed(self.seed)  # Set the random seed for reproducibility
         do_flip = random.choice([True, False])

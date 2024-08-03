@@ -81,7 +81,7 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
             Tests if at least one image is processed by the augmentation step.
             """
             image_dataset = self.image_dataset
-            processed_images = self.test_step.process_step(image_dataset)
+            processed_images = self.test_step(image_dataset)
             for _ in processed_images.take(1):
                 pass
             equal_flag = True

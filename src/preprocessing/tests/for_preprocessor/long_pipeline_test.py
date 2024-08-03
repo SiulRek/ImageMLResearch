@@ -42,7 +42,7 @@ class RGBToGrayscale(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         if image_tensor.shape[2] == 3:
             processed_image = tf.image.rgb_to_grayscale(image_tensor)
             return processed_image
@@ -142,7 +142,7 @@ class TestLongPipeline(BaseTestCase):
             )
             self.fail(message)
 
-        grayscaled_dataset = RGBToGrayscale().process_step(processed_dataset)
+        grayscaled_dataset = RGBToGrayscale()(processed_dataset)
         if not self._verify_image_shapes(
             grayscaled_dataset, self.image_dataset, color_channel_expected=1
         ):

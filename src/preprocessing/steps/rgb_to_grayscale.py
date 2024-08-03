@@ -15,7 +15,7 @@ class RGBToGrayscale(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         if image_tensor.shape[2] == 3:
             processed_image = image.rgb_to_grayscale(image_tensor)
             return processed_image

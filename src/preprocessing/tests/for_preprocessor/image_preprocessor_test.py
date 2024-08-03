@@ -23,7 +23,7 @@ class GrayscaleToRGB(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         image_rgb_tensor = tf.image.grayscale_to_rgb(image_tensor)
         image_rgb_tensor = correct_image_tensor_shape(image_rgb_tensor)
         return image_rgb_tensor
@@ -37,7 +37,7 @@ class RGBToGrayscale(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         blurred_image = cv2.GaussianBlur(
             image_nparray, ksize=(5, 5), sigmaX=2
         )  # Randomly chosen action.
@@ -55,7 +55,7 @@ class ErrorStep(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         processed_image = cv2.GaussianBlur(
             image_nparray, oops_unknown_parameter_here="sorry"
         )

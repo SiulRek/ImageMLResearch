@@ -24,7 +24,7 @@ class Clipper(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         image_tensor = tf.cast(image_tensor, self.output_datatype)
         min_value = tf.cast(self.parameters["min_value"], dtype=self.output_datatype)
         max_value = tf.cast(self.parameters["max_value"], dtype=self.output_datatype)

@@ -28,7 +28,7 @@ class ReverseScaler(StepBase):
         self.output_datatype = tf.float16
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         image_tensor = tf.cast(image_tensor, self.output_datatype)
         scale_factor = tf.constant(
             self.parameters["scale_factor"], self.output_datatype

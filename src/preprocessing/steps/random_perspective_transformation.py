@@ -28,7 +28,7 @@ class RandomPerspectiveTransformer(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         height, width, _ = image_nparray.shape
         warp_intensity = int(min(height, width) * self.parameters["warp_scale"])
         random.seed(self.parameters["seed"])

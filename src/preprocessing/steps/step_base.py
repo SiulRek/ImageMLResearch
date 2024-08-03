@@ -14,14 +14,14 @@ class StepBase(ABC):
     Base class for defining preprocessing steps for images in an image
     preprocessing pipeline.
 
-    This abstract class provides a structured approach to implementing various
+    This abstract class provides a structured approach for implementing various
     image preprocessing steps. Each step is characterized by its unique
     parameters and functionality, which are defined in the child classes
     inheriting from StepBase. The class facilitates the integration and
     execution of preprocessing steps within a TensorFlow image processing
     pipeline.
 
-    Child classes should implement the `process_step` method according to their
+    Child classes should implement the `__call__` method according to their
     specific processing requirements and specify the value of the class
     attributes: `arguments_datatype` and `name`.
 
@@ -42,7 +42,7 @@ class StepBase(ABC):
             the preprocessing step.
 
     Public Methods:
-        - process_step(image_tensor: tf.Tensor, tf_target: Any) ->
+        - __call__(image_tensor: tf.Tensor, tf_target: Any) ->
             tf.Tensor: To be implemented by the child class to define the
             specific preprocessing functionality. The method takes an image
             tensor and an optional target, returning the processed image tensor.
@@ -55,7 +55,7 @@ class StepBase(ABC):
         - super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper # or @StepBase._tensor_pyfunc_wrapper def
-    process_step(self, image_tensor): # TODO image_tensor_processed = ... return
+    __call__(self, image_tensor): # TODO image_tensor_processed = ... return
     image_tensor_processed
 
     TODOs when integrating a new preprocessing step in the framework:
@@ -174,7 +174,7 @@ class StepBase(ABC):
         return py_function_dataset_map
 
     @abstractmethod
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         # Child class must implement this method.
         raise NotImplementedError
 

@@ -21,7 +21,7 @@ class GlobalHistogramEqualizer(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
         channels = cv2.split(image_nparray)
         eq_channels = [cv2.equalizeHist(ch) for ch in channels]
         eq_image = cv2.merge(eq_channels)

@@ -47,7 +47,7 @@ class RGBToGrayscale(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         image_grayscale_tensor = tf.image.rgb_to_grayscale(image_tensor)
         image_grayscale_tensor = correct_image_tensor_shape(image_grayscale_tensor)
         return image_grayscale_tensor
@@ -61,7 +61,7 @@ class GrayscaleToRGB(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         image_tensor = tf.image.grayscale_to_rgb(image_tensor)
         image_grayscale_tensor = correct_image_tensor_shape(image_tensor)
         return image_grayscale_tensor
@@ -87,7 +87,7 @@ class TypeCaster(StepBase):
         self.output_datatype = getattr(tf, output_dtype)
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         # image_tensor = tf.cast(image_tensor, self.output_datatype) Line is already going to be accomplished by the wrapper.
         return image_tensor
 
@@ -221,8 +221,8 @@ class TestSingleStep(BaseTestCase):
         checking for changes in content and shape.
         """
         dtype_str = self.test_step.output_datatype.name
-        image_dataset = TypeCaster(dtype_str).process_step(self.image_dataset)
-        processed_images = self.test_step.process_step(image_dataset)
+        image_dataset = TypeCaster(dtype_str)(self.image_dataset)
+        processed_images = self.test_step(image_dataset)
         for _ in processed_images.take(
             1
         ):  # Consumes the dataset to force execution of the step.
@@ -244,7 +244,7 @@ class TestSingleStep(BaseTestCase):
         processed images matches the expected datatype specified in the
         preprocessing step's output datatype configuration.
         """
-        processed_images = self.test_step.process_step(self.image_dataset)
+        processed_images = self.test_step(self.image_dataset)
         for image in processed_images:
             self.assertEqual(image.dtype, self.test_step.output_datatype)
 
@@ -275,7 +275,7 @@ class TestSingleStep(BaseTestCase):
         self._verify_image_shapes(
             processed_images, self.image_dataset, color_channel_expected=1
         )
-        processed_images = GrayscaleToRGB().process_step(processed_images)
+        processed_images = GrayscaleToRGB()(processed_images)
         self._verify_image_shapes(
             processed_images, self.image_dataset, color_channel_expected=3
         )
@@ -344,7 +344,7 @@ class TestSingleStep(BaseTestCase):
         if self.visual_inspection:
             directory = self.step_visualization_dir
             plotter = ImagePlotter(show_plot=False)
-            processed_rgb_dataset = self.test_step.process_step(self.image_dataset)
+            processed_rgb_dataset = self.test_step(self.image_dataset)
             plotter.plot_images(processed_rgb_dataset, "Processed RGB Images")
             figure_name = "processed_rgb_images"
             plotter.save_plot_to_file(os.path.join(directory, figure_name))
@@ -354,8 +354,8 @@ class TestSingleStep(BaseTestCase):
             figure_name = "rgb_images_comparison"
             plotter.save_plot_to_file(os.path.join(directory, figure_name))
 
-            grayscaled_dataset = RGBToGrayscale().process_step(self.image_dataset)
-            processed_grayscaled_dataset = self.test_step.process_step(
+            grayscaled_dataset = RGBToGrayscale()(self.image_dataset)
+            processed_grayscaled_dataset = self.test_step(
                 grayscaled_dataset
             )
             plotter.plot_images(

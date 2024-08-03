@@ -22,7 +22,7 @@ class Mirrorer(StepBase):
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         if self.parameters["mirror_direction"] == "horizontal":
             mirrored_image = tf.image.flip_left_right(image_tensor)
         elif self.parameters["mirror_direction"] == "vertical":

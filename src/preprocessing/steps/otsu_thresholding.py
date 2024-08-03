@@ -28,7 +28,7 @@ class OstuThresholder(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
 
         if image_nparray.shape[2] == 1:
             _, thresholded_image = cv2.threshold(

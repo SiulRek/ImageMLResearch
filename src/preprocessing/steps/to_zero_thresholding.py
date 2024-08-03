@@ -30,7 +30,7 @@ class ZeroThreshold(StepBase):
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
-    def process_step(self, image_nparray):
+    def __call__(self, image_nparray):
 
         def apply_zero_threshold(np_array):
             _, thresholded_np_array = cv2.threshold(

@@ -23,7 +23,7 @@ class TypeCaster(StepBase):
         self.output_datatype = getattr(tf, output_dtype)
 
     @StepBase._tensor_pyfunc_wrapper
-    def process_step(self, image_tensor):
+    def __call__(self, image_tensor):
         # image_tensor = tf.cast(image_tensor, self.output_datatype) Already done by the wrapper.
         return image_tensor
 
