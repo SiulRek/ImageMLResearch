@@ -56,9 +56,7 @@ def _get_suggest_categorical_method(name, config):
 
 
 class HParamsSuggester:
-    """ A class to suggest hyperparameters using Optuna. 
-    TODO: Add a description of
-    the class. """
+    """ A class to suggest hyperparameters using Optuna. """
 
     def __init__(self, hparams_configs: Dict[str, dict]):
         """
@@ -69,6 +67,8 @@ class HParamsSuggester:
             - hparams_configs (Dict[str, dict]): The hyperparameter
                 configurations.
         """
+        # TODO: Think of a way to allow sampler and pruner to be defined by the
+        # user with hparams_configs. Pass them to create_study.
         self.study = optuna.create_study(direction="maximize")
         self.trials = []
         self.hp_names = hparams_configs.keys()
