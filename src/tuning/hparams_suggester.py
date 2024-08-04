@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Dict
 
+from numpy import log2
 import optuna
 from optuna.distributions import (
     CategoricalDistribution,
@@ -9,7 +10,7 @@ from optuna.distributions import (
 )
 
 
-def assert_hparam_configs(
+def _assert_hparam_configs(
     configs, hparam_name, hp_type, required_keys, optional_keys=[]
 ):
     for key in required_keys:
@@ -22,21 +23,32 @@ def assert_hparam_configs(
         assert key in required_keys + optional_keys, msg
 
 
-def get_suggest_float_method(name, config):
+def _get_suggest_float_method(name, config):
     def wrapper(trial):
         return trial.suggest_float(name, **config)
 
     return wrapper
 
 
-def get_suggest_int_method(name, config):
+def _to_nearest_power_of_two(value):
+    return 2 ** round(log2(value))
+
+
+def _get_suggest_int_method(name, config):
+    # nearest_power2 is consumed inside the wrapper, so we can safely remove it
+    # from the config.
+    to_power_2 = config.pop("nearest_power2", False)
+
     def wrapper(trial):
-        return trial.suggest_int(name, **config)
+        suggested = trial.suggest_int(name, **config)
+        if to_power_2:
+            return _to_nearest_power_of_two(suggested)
+        return suggested
 
     return wrapper
 
 
-def get_suggest_categorical_method(name, config):
+def _get_suggest_categorical_method(name, config):
     def wrapper(trial):
         return trial.suggest_categorical(name, **config)
 
@@ -44,7 +56,9 @@ def get_suggest_categorical_method(name, config):
 
 
 class HParamsSuggester:
-    """ A class to suggest hyperparameters using Optuna. """
+    """ A class to suggest hyperparameters using Optuna. 
+    TODO: Add a description of
+    the class. """
 
     def __init__(self, hparams_configs: Dict[str, dict]):
         """
@@ -76,7 +90,7 @@ class HParamsSuggester:
         for name, configs in hparams_configs.items():
             hp_type = configs.pop("type")
             if hp_type == "float":
-                assert_hparam_configs(
+                _assert_hparam_configs(
                     configs,
                     hparam_name=name,
                     hp_type=hp_type,
@@ -84,26 +98,26 @@ class HParamsSuggester:
                     optional_keys=["step", "log"],
                 )
                 self.hparams_distributions[name] = FloatDistribution(**configs)
-                self.suggest_methods[name] = get_suggest_float_method(name, configs)
+                self.suggest_methods[name] = _get_suggest_float_method(name, configs)
             elif hp_type == "int":
-                assert_hparam_configs(
+                _assert_hparam_configs(
                     configs,
                     hparam_name=name,
                     hp_type=hp_type,
                     required_keys=["low", "high"],
-                    optional_keys=["step", "log"],
+                    optional_keys=["step", "log", "nearest_power2"],
                 )
+                self.suggest_methods[name] = _get_suggest_int_method(name, configs)
                 self.hparams_distributions[name] = IntDistribution(**configs)
-                self.suggest_methods[name] = get_suggest_int_method(name, configs)
             elif hp_type == "categorical":
-                assert_hparam_configs(
+                _assert_hparam_configs(
                     configs,
                     hparam_name=name,
                     hp_type=hp_type,
                     required_keys=["choices"],
                 )
                 self.hparams_distributions[name] = CategoricalDistribution(**configs)
-                self.suggest_methods[name] = get_suggest_categorical_method(
+                self.suggest_methods[name] = _get_suggest_categorical_method(
                     name, configs
                 )
             else:

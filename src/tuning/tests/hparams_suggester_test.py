@@ -44,6 +44,24 @@ class TestHParamsSuggester(BaseTestCase):
         self.assert_valid_hyperparams(next_hyperparams)
         self.assertIsNotNone(self.suggester.current_trial)
 
+    def test_to_nearest_power2(self):
+        """ Test if the suggester correctly rounds to the nearest power of two. """
+        hparams_distributions_configs = {
+            "batch_size": {
+                "type": "int",
+                "low": 16,
+                "high": 256,
+                "nearest_power2": True,
+            },
+        }
+        suggester = HParamsSuggester(hparams_distributions_configs)
+        batch_sizes = []
+        for _ in range(5):
+            next_hyperparams = next(suggester)
+            batch_sizes.append(next_hyperparams["batch_size"])
+        for batch_size in batch_sizes:
+            self.assertTrue(np.log2(batch_size).is_integer())
+            
     def test_update_trial(self):
         """ Test if the suggester updates the trial correctly after setting the
         score. """
