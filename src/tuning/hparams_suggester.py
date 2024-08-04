@@ -1,0 +1,153 @@
+from copy import deepcopy
+from typing import Dict
+
+import optuna
+from optuna.distributions import (
+    CategoricalDistribution,
+    FloatDistribution,
+    IntDistribution,
+)
+
+
+def assert_hparam_configs(
+    configs, hparam_name, hp_type, required_keys, optional_keys=[]
+):
+    for key in required_keys:
+        msg = f"Required key '{key}' not found in config "
+        msg += f"for {hp_type} parameter '{hparam_name}'"
+        assert key in configs, msg
+    for key in configs.keys():
+        msg = f"Invalid key '{key}' in config for {hp_type}"
+        msg += f" parameter '{hparam_name}'"
+        assert key in required_keys + optional_keys, msg
+
+
+def get_suggest_float_method(name, config):
+    def wrapper(trial):
+        return trial.suggest_float(name, **config)
+
+    return wrapper
+
+
+def get_suggest_int_method(name, config):
+    def wrapper(trial):
+        return trial.suggest_int(name, **config)
+
+    return wrapper
+
+
+def get_suggest_categorical_method(name, config):
+    def wrapper(trial):
+        return trial.suggest_categorical(name, **config)
+
+    return wrapper
+
+
+class HParamsSuggester:
+    """ A class to suggest hyperparameters using Optuna. """
+
+    def __init__(self, hparams_configs: Dict[str, dict]):
+        """
+        Initializes the HParamsSuggester with the given hyperparameter
+        configurations.
+
+        Args:
+            - hparams_configs (Dict[str, dict]): The hyperparameter
+                configurations.
+        """
+        self.study = optuna.create_study(direction="maximize")
+        self.trials = []
+        self.hp_names = hparams_configs.keys()
+        self.hparams_distributions = {}
+        self.suggest_methods = {}
+        self._compile_hparams_configs(hparams_configs)
+        self.current_trial = None
+
+    def _compile_hparams_configs(self, hparams_configs):
+        """
+        Compiles the hyperparameter configurations into distributions and
+        suggest methods.
+
+        Args:
+            - hparams_configs (Dict[str, dict]): The hyperparameter
+                configurations.
+        """
+        hparams_configs = deepcopy(hparams_configs)
+        for name, configs in hparams_configs.items():
+            hp_type = configs.pop("type")
+            if hp_type == "float":
+                assert_hparam_configs(
+                    configs,
+                    hparam_name=name,
+                    hp_type=hp_type,
+                    required_keys=["low", "high"],
+                    optional_keys=["step", "log"],
+                )
+                self.hparams_distributions[name] = FloatDistribution(**configs)
+                self.suggest_methods[name] = get_suggest_float_method(name, configs)
+            elif hp_type == "int":
+                assert_hparam_configs(
+                    configs,
+                    hparam_name=name,
+                    hp_type=hp_type,
+                    required_keys=["low", "high"],
+                    optional_keys=["step", "log"],
+                )
+                self.hparams_distributions[name] = IntDistribution(**configs)
+                self.suggest_methods[name] = get_suggest_int_method(name, configs)
+            elif hp_type == "categorical":
+                assert_hparam_configs(
+                    configs,
+                    hparam_name=name,
+                    hp_type=hp_type,
+                    required_keys=["choices"],
+                )
+                self.hparams_distributions[name] = CategoricalDistribution(**configs)
+                self.suggest_methods[name] = get_suggest_categorical_method(
+                    name, configs
+                )
+            else:
+                msg += f"Invalid hyperparameter type: {hp_type} "
+                raise ValueError(msg)
+
+    def __iter__(self):
+        """
+        Returns an iterator object.
+
+        Returns:
+            - HParamsSuggester: The HParamsSuggester object.
+        """
+        return self
+
+    def __next__(self):
+        """
+        Returns the next set of hyperparameters to try.
+
+        Returns:
+            - dict: The next set of hyperparameters.
+        """
+        trial = self.study.ask()
+        next_hparams = {}
+        for name in self.hp_names:
+            suggest_method = self.suggest_methods[name]
+            next_hparams[name] = suggest_method(trial)
+
+        self.current_trial = trial
+
+        return next_hparams
+
+    def set_last_score(self, score: float):
+        """
+        Sets the score for the last suggested hyperparameters.
+
+        Args:
+            - score (float): The score for the last suggested
+                hyperparameters.
+        """
+        if self.current_trial is None:
+            msg += "No pending trial to set score for. Consider calling next() "
+            msg = "first."
+            raise ValueError(msg)
+
+        self.study.tell(self.current_trial, score)
+        self.current_trial = None
