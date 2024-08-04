@@ -42,7 +42,9 @@ def _get_suggest_int_method(name, config):
     def wrapper(trial):
         suggested = trial.suggest_int(name, **config)
         if to_power_2:
-            return _to_nearest_power_of_two(suggested)
+            suggested = _to_nearest_power_of_two(suggested)
+            # Overwrite the true suggested value with the nearest power of 2.
+            trial.params[name] = suggested
         return suggested
 
     return wrapper
@@ -64,8 +66,8 @@ class HParamsSuggester:
         configurations.
 
         Args:
-            - hparams_configs (Dict[str, dict]): The hyperparameter
-                configurations.
+                - hparams_configs (Dict[str, dict]): The hyperparameter
+            configurations.
         """
         # TODO: Think of a way to allow sampler and pruner to be defined by the
         # user with hparams_configs. Pass them to create_study.
@@ -83,8 +85,8 @@ class HParamsSuggester:
         suggest methods.
 
         Args:
-            - hparams_configs (Dict[str, dict]): The hyperparameter
-                configurations.
+                - hparams_configs (Dict[str, dict]): The hyperparameter
+            configurations.
         """
         hparams_configs = deepcopy(hparams_configs)
         for name, configs in hparams_configs.items():
@@ -129,7 +131,7 @@ class HParamsSuggester:
         Returns an iterator object.
 
         Returns:
-            - HParamsSuggester: The HParamsSuggester object.
+                - HParamsSuggester: The HParamsSuggester object.
         """
         return self
 
@@ -138,7 +140,7 @@ class HParamsSuggester:
         Returns the next set of hyperparameters to try.
 
         Returns:
-            - dict: The next set of hyperparameters.
+                - dict: The next set of hyperparameters.
         """
         trial = self.study.ask()
         next_hparams = {}
@@ -155,8 +157,8 @@ class HParamsSuggester:
         Sets the score for the last suggested hyperparameters.
 
         Args:
-            - score (float): The score for the last suggested
-                hyperparameters.
+                - score (float): The score for the last suggested
+            hyperparameters.
         """
         if self.current_trial is None:
             msg += "No pending trial to set score for. Consider calling next() "
