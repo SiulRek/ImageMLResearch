@@ -40,7 +40,7 @@ class TestHParamsSuggester(BaseTestCase):
 
     def test_initial_suggestion(self):
         """ Test if the suggester provides a valid set of hyperparameters initially. """
-        next_hyperparams = next(self.suggester)
+        next_hyperparams = self.suggester.suggest_next()
         self.assert_valid_hyperparams(next_hyperparams)
         self.assertIsNotNone(self.suggester.current_trial)
 
@@ -57,20 +57,21 @@ class TestHParamsSuggester(BaseTestCase):
         suggester = HParamsSuggester(hparams_distributions_configs)
         batch_sizes = []
         for _ in range(5):
-            next_hyperparams = next(suggester)
+            next_hyperparams = suggester.suggest_next()
             batch_sizes.append(next_hyperparams["batch_size"])
+            suggester.set_last_score(np.random.uniform(0.8, 0.95))
         for batch_size in batch_sizes:
             self.assertTrue(np.log2(batch_size).is_integer())
-            
+
     def test_update_trial(self):
         """ Test if the suggester updates the trial correctly after setting the
         score. """
-        next_hyperparams = next(self.suggester)
+        next_hyperparams = self.suggester.suggest_next()
         trial_1 = self.suggester.current_trial
         self.assert_valid_hyperparams(next_hyperparams)
         simulated_score = np.random.uniform(8, 0.95)
         self.suggester.set_last_score(simulated_score)
-        next_suggestion = next(self.suggester)
+        next_suggestion = self.suggester.suggest_next()
         trial_2 = self.suggester.current_trial
         self.assert_valid_hyperparams(next_suggestion)
         self.assertNotEqual(trial_1, trial_2)
@@ -92,7 +93,7 @@ class TestHParamsSuggester(BaseTestCase):
     def test_multiple_trials(self):
         """ Test if the suggester correctly handles multiple trials. """
         for _ in range(5):
-            next_hyperparams = next(self.suggester)
+            next_hyperparams = self.suggester.suggest_next()
             self.assert_valid_hyperparams(next_hyperparams)
             simulated_score = np.random.uniform(0.8, 0.95)
             self.suggester.set_last_score(simulated_score)

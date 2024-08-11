@@ -66,8 +66,8 @@ class HParamsSuggester:
         configurations.
 
         Args:
-                - hparams_configs (Dict[str, dict]): The hyperparameter
-            configurations.
+            - hparams_configs (Dict[str, dict]): The hyperparameter
+                configurations.
         """
         # TODO: Think of a way to allow sampler and pruner to be defined by the
         # user with hparams_configs. Pass them to create_study.
@@ -85,8 +85,8 @@ class HParamsSuggester:
         suggest methods.
 
         Args:
-                - hparams_configs (Dict[str, dict]): The hyperparameter
-            configurations.
+            - hparams_configs (Dict[str, dict]): The hyperparameter
+                configurations.
         """
         hparams_configs = deepcopy(hparams_configs)
         for name, configs in hparams_configs.items():
@@ -126,22 +126,17 @@ class HParamsSuggester:
                 msg += f"Invalid hyperparameter type: {hp_type} "
                 raise ValueError(msg)
 
-    def __iter__(self):
-        """
-        Returns an iterator object.
-
-        Returns:
-                - HParamsSuggester: The HParamsSuggester object.
-        """
-        return self
-
-    def __next__(self):
+    def suggest_next(self):
         """
         Returns the next set of hyperparameters to try.
 
         Returns:
-                - dict: The next set of hyperparameters.
+            - dict: The next set of hyperparameters.
         """
+        if self.current_trial is not None:
+            msg = "A trial is still pending. Call set_last_score() "
+            msg += "before calling next() again."
+            raise ValueError(msg)
         trial = self.study.ask()
         next_hparams = {}
         for name in self.hp_names:
@@ -157,8 +152,8 @@ class HParamsSuggester:
         Sets the score for the last suggested hyperparameters.
 
         Args:
-                - score (float): The score for the last suggested
-            hyperparameters.
+            - score (float): The score for the last suggested
+                hyperparameters.
         """
         if self.current_trial is None:
             msg += "No pending trial to set score for. Consider calling next() "
