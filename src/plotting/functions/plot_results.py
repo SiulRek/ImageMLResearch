@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from tensorflow.python.framework.errors_impl import InvalidArgumentError
 
 # NOTE: Currently only plotting of binary classification and multi-class classification
 # results are supported in the same function.
@@ -39,7 +40,7 @@ def plot_binary_classification_results(
         try:
             # For the case the prediction is returned as a 1-dimensional array
             raw_prediction = raw_prediction[0]
-        except IndexError:
+        except (IndexError, InvalidArgumentError):
             pass
 
         true_label_name = class_names[true_label]
