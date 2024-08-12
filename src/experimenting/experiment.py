@@ -9,17 +9,13 @@ from src.experimenting.helpers.experiment_data import (
     get_default_experiment_data,
     load_experiment_data,
 )
-from src.experimenting.helpers.time_utils import (
-    get_datetime,
-    get_duration,
-    add_durations,
-)
 from src.experimenting.helpers.transform_figures_to_files import (
     transform_figures_to_files,
 )
 from src.experimenting.helpers.trial import Trial
 from src.plotting.functions.plot_training_histories import plot_training_histories
 from src.research.attributes.research_attributes import ResearchAttributes
+from src.utils import get_datetime, get_duration, add_durations
 from src.utils import Logger
 
 
@@ -125,10 +121,9 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 msg = "Ignoring directory and/or name parameters"
                 self.logger.warning(msg)
 
-        # In any case, description and sort_metric are updated with
-        # the given instanciation parameters. However, it is not
-        # supported to change the directory or name of
-        # the experiment after it is created.
+        # In any case, description and sort_metric are updated with the given
+        # instanciation parameters. However, it is not supported to change the
+        # directory or name of the experiment after it is created.
         experiment_data["description"] = description
         experiment_data["sort_metric"] = sort_metric
 
@@ -199,16 +194,13 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         """ Raises an exception if an exception occurred during the experiment. """
         if exc_type is not None:
             self.logger.error(f"Exception occurred:\n {exc_value}")
-            # XXX: In case of an exception and at least one trial runned successfully
-            # before, should an attempt to write the experiment data be done?
-            # if self._initial_trial_num > len(self.experiment_data["trials"]):
-            #     try:
-            #         self._sort_trials()
-            #         self._write_experiment_data()
-            #         msg = "Experiment data is updated with available trials."
-            #         self.logger.info(msg)
-            #     except Exception as e:
-            #         pass
+            # XXX: In case of an exception and at least one trial runned
+            # successfully before, should an attempt to write the experiment
+            # data be done? if self._initial_trial_num >
+            # len(self.experiment_data["trials"]): try: self._sort_trials()
+            # self._write_experiment_data() msg = "Experiment data is updated
+            # with available trials." self.logger.info(msg) except Exception as
+            # e: pass
             raise
 
     def _sort_trials(self):
@@ -239,9 +231,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             self.experiment_data["directory"], "experiment_info.json"
         )
         experiment_data = self.experiment_data.copy()
-        # Only store the trial names in the experiment data
-        # as the trial data is stored in separate files in the
-        # trial directories.
+        # Only store the trial names in the experiment data as the trial data is
+        # stored in separate files in the trial directories.
         experiment_data["trials"] = [
             trial["name"] for trial in experiment_data["trials"]
         ]

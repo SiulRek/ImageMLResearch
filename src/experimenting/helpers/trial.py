@@ -4,10 +4,12 @@ import json
 import os
 import warnings
 
-from src.experimenting.helpers.transform_figures_to_files import transform_figures_to_files
-from src.experimenting.helpers.time_utils import get_datetime, get_duration
+from src.experimenting.helpers.transform_figures_to_files import (
+    transform_figures_to_files,
+)
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
+from src.utils import get_datetime, get_duration
 
 
 class ResultsEmptyError(ValueError):
@@ -24,8 +26,8 @@ class Trial(AbstractContextManager):
         - research_attributes (ResearchAttributes): Research attributes from
         - trial_data (dict): Dictionary to store trial data.
         - keys: 'name', 'description', 'start_time', 'directory',
-            'hyperparameters', 'figures', 'evaluation_metrics',
-            'training_history' (optional).
+        'hyperparameters', 'figures', 'evaluation_metrics',
+        'training_history' (optional).
         - trial_directory (str): Directory where the trial data is saved.
         - experiment_trials (list): Reference to the list of trials in the
             experiment, used to append the trial data.
@@ -139,8 +141,8 @@ class Trial(AbstractContextManager):
         return self
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
-        # No need to log the exception as the exception logging is handled
-        # by the Experiment class.
+        # No need to log the exception as the exception logging is handled by
+        # the Experiment class.
         if exc_type is not None:
             raise
 
