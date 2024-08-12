@@ -9,9 +9,7 @@ from src.experimenting.helpers.experiment_data import (
     get_default_experiment_data,
     load_experiment_data,
 )
-from src.experimenting.helpers.transform_figures_to_files import (
-    transform_figures_to_files,
-)
+from src.utils import transform_figures_to_files
 from src.experimenting.helpers.trial import Trial
 from src.plotting.functions.plot_training_histories import plot_training_histories
 from src.research.attributes.research_attributes import ResearchAttributes

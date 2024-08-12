@@ -4,9 +4,7 @@ import json
 import os
 import warnings
 
-from src.experimenting.helpers.transform_figures_to_files import (
-    transform_figures_to_files,
-)
+from src.utils import transform_figures_to_files
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.utils import get_datetime, get_duration
