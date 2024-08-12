@@ -8,27 +8,17 @@ from tiny_defect_project.managing.get_dataframe import (
 )
 
 
-def get_dataset():
-    """
-    Gets the Tiny Defect dataset.
-
-    Returns:
-        - dataset (pandas.DataFrame): The Tiny Defect dataset.
-    """
-    df = get_dataframe()
-    df = df.rename(columns={"category_code": "label"})
-    return create_dataset(df, class_names=CATEGORY_NAMES, label_type="multi_class")
-
-
 def get_binary_dataset(defect_name):
     """
-    Retrieves a binary balanced dataset consisting of defect and no_defect images.
+    Retrieves a binary balanced dataset consisting of defect and no_defect
+    images.
 
     Args:
-        defect_name (str): The name of the defect.
+        - defect_name (str): The name of the defect.
 
     Returns:
-        dataset (tf.data.Dataset): The binary dataset containing defect and no_defect images.
+        - dataset (tf.data.Dataset): The binary dataset containing defect
+            and no_defect images.
     """
     defect_paths = get_paths_by_defect_name(defect_name)
     no_defect_paths = get_paths_by_defect_name("no_defect")
@@ -44,3 +34,15 @@ def get_binary_dataset(defect_name):
     }
     df = pd.DataFrame(dataset)
     return create_dataset(df, class_names=["defect", "no_defect"], label_type="binary")
+
+
+def get_multi_class_dataset():
+    """
+    Gets the Tiny Defect dataset.
+
+    Returns:
+        - dataset (pandas.DataFrame): The Tiny Defect dataset.
+    """
+    df = get_dataframe()
+    df = df.rename(columns={"category_code": "label"})
+    return create_dataset(df, class_names=CATEGORY_NAMES, label_type="multi_class")
