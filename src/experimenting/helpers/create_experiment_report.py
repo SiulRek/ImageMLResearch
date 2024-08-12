@@ -1,6 +1,6 @@
 import os
 
-from src.experimenting.helpers.markdown_file_writer import MarkdownFileWriter
+from src.utils import MarkdownFileWriter
 
 
 def _get_results_summary_table(experiment_data):
