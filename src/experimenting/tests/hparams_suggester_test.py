@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 
 from src.testing.bases.base_test_case import BaseTestCase
-from src.tuning.hparams_suggester import HParamsSuggester
+from src.experimenting.helpers.hparams_suggester import HParamsSuggester
 
 
 class TestHParamsSuggester(BaseTestCase):
