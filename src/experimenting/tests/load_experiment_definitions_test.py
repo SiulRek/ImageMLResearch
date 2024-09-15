@@ -2,13 +2,13 @@ import json
 import os
 import unittest
 
-from src.experimenting.helpers.load_experiment_defintions import (
+from src.experimenting.helpers.load_experiment_definitions import (
     load_experiment_definitions,
 )
 from src.testing.bases.base_test_case import BaseTestCase
 
 
-class TestLoadDefinitionsOfExperiment(BaseTestCase):
+class TestLoadExperimentDefinitions(BaseTestCase):
 
     def setUp(self):
         super().setUp()
