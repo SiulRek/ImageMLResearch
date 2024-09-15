@@ -79,7 +79,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             - str: The path to the created output directory.
         """
         experiment_dir = os.path.abspath(os.path.normpath(experiment_dir))
-        output_dir = os.path.join(experiment_dir, "outputs")
+        output_dir = os.path.join(experiment_dir, "output")
         os.makedirs(output_dir, exist_ok=True)
         return output_dir
 
