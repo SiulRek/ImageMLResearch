@@ -1,0 +1,169 @@
+{
+    "name": "Trial 1",
+    "start_time": "2024-08-01 10:55:04.053",
+    "duration": "03.027",
+    "directory": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/Shoe_vs_Ankle_Boot_Experiment/Trial_1",
+    "hyperparameters": {
+        "units1": 128,
+        "dropout1": 0.2,
+        "units2": 64,
+        "dropout2": 0.2,
+        "learning_rate": 0.001
+    },
+    "figures": {
+        "model_summary": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/Shoe_vs_Ankle_Boot_Experiment/Trial_1/model_summary.png",
+        "training_history": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/Shoe_vs_Ankle_Boot_Experiment/Trial_1/training_history.png",
+        "confusion_matrix": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/Shoe_vs_Ankle_Boot_Experiment/Trial_1/confusion_matrix.png",
+        "roc_curve": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/Shoe_vs_Ankle_Boot_Experiment/Trial_1/roc_curve.png",
+        "pr_curve": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/Shoe_vs_Ankle_Boot_Experiment/Trial_1/pr_curve.png",
+        "results": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/Shoe_vs_Ankle_Boot_Experiment/Trial_1/results.png"
+    },
+    "evaluation_metrics": {
+        "train": {
+            "accuracy": 0.9613392949104309,
+            "precision": 0.959445059299469,
+            "recall": 0.9633862972259521,
+            "f1": 0.9614115890744784,
+            "classification_report": {
+                "Sneaker": {
+                    "precision": 0.9632484761563285,
+                    "recall": 0.9592929833958221,
+                    "f1-score": 0.9612666607031041,
+                    "support": 5601
+                },
+                "Ankle Boot": {
+                    "precision": 0.959445037353255,
+                    "recall": 0.9633863189855332,
+                    "f1-score": 0.9614116388913644,
+                    "support": 5599
+                },
+                "macro avg": {
+                    "precision": 0.9613467567547918,
+                    "recall": 0.9613396511906777,
+                    "f1-score": 0.9613391497972342,
+                    "support": 11200
+                },
+                "weighted avg": {
+                    "precision": 0.9613470963475421,
+                    "recall": 0.9613392857142857,
+                    "f1-score": 0.9613391368527531,
+                    "support": 11200
+                }
+            }
+        },
+        "val": {
+            "accuracy": 0.9542151093482971,
+            "precision": 0.9463768005371094,
+            "recall": 0.9617083668708801,
+            "f1": 0.953980938729637,
+            "classification_report": {
+                "Sneaker": {
+                    "precision": 0.9620991253644315,
+                    "recall": 0.9469153515064562,
+                    "f1-score": 0.9544468546637744,
+                    "support": 697
+                },
+                "Ankle Boot": {
+                    "precision": 0.946376811594203,
+                    "recall": 0.9617083946980854,
+                    "f1-score": 0.9539810080350621,
+                    "support": 679
+                },
+                "macro avg": {
+                    "precision": 0.9542379684793172,
+                    "recall": 0.9543118731022708,
+                    "f1-score": 0.9542139313494182,
+                    "support": 1376
+                },
+                "weighted avg": {
+                    "precision": 0.9543408033804306,
+                    "recall": 0.9542151162790697,
+                    "f1-score": 0.9542169783113792,
+                    "support": 1376
+                }
+            }
+        },
+        "test": {
+            "accuracy": 0.9557584524154663,
+            "precision": 0.9544827342033386,
+            "recall": 0.9584487676620483,
+            "f1": 0.9564615895934876,
+            "classification_report": {
+                "Sneaker": {
+                    "precision": 0.9570815450643777,
+                    "recall": 0.9529914529914529,
+                    "f1-score": 0.9550321199143469,
+                    "support": 702
+                },
+                "Ankle Boot": {
+                    "precision": 0.9544827586206897,
+                    "recall": 0.9584487534626038,
+                    "f1-score": 0.9564616447823082,
+                    "support": 722
+                },
+                "macro avg": {
+                    "precision": 0.9557821518425337,
+                    "recall": 0.9557201032270284,
+                    "f1-score": 0.9557468823483275,
+                    "support": 1424
+                },
+                "weighted avg": {
+                    "precision": 0.9557639019377326,
+                    "recall": 0.9557584269662921,
+                    "f1-score": 0.9557569211465576,
+                    "support": 1424
+                }
+            }
+        }
+    },
+    "training_history": {
+        "loss": [
+            0.2945081293582916,
+            0.22498533129692078,
+            0.17373907566070557,
+            0.16948428750038147,
+            0.18464979529380798,
+            0.1320604532957077,
+            0.15781480073928833,
+            0.13977932929992676,
+            0.16600401699543,
+            0.14903511106967926
+        ],
+        "accuracy": [
+            0.8759765625,
+            0.9130859375,
+            0.9453125,
+            0.9287109375,
+            0.927734375,
+            0.951171875,
+            0.9501953125,
+            0.9501953125,
+            0.9296875,
+            0.9404296875
+        ],
+        "val_loss": [
+            0.16511520743370056,
+            0.1670449674129486,
+            0.13537383079528809,
+            0.13368390500545502,
+            0.1574617624282837,
+            0.1184556782245636,
+            0.11594090610742569,
+            0.12416773289442062,
+            0.12814968824386597,
+            0.11286080628633499
+        ],
+        "val_accuracy": [
+            0.935546875,
+            0.9462890625,
+            0.9453125,
+            0.9453125,
+            0.9375,
+            0.9541015625,
+            0.9541015625,
+            0.9521484375,
+            0.953125,
+            0.9599609375
+        ]
+    }
+}

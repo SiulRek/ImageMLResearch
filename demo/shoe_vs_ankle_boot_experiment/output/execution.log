@@ -1,0 +1,12 @@
+2024-08-01 10:55:04,053 - INFO - Creating new experiment: Shoe vs Ankle Boot Experiment
+2024-08-01 10:55:04,053 - INFO - Starting trial: Trial 1
+2024-08-01 10:55:07,080 - INFO - Finalizing trial: Trial 1
+2024-08-01 10:55:07,525 - INFO - Starting trial: Trial 2
+2024-08-01 10:55:10,568 - INFO - Finalizing trial: Trial 2
+2024-08-01 10:55:11,016 - INFO - Starting trial: Trial 3
+2024-08-01 10:55:13,587 - INFO - Finalizing trial: Trial 3
+2024-08-01 10:55:14,038 - INFO - Starting trial: Trial 4
+2024-08-01 10:55:16,985 - INFO - Finalizing trial: Trial 4
+2024-08-01 10:55:17,435 - INFO - Starting trial: Trial 5
+2024-08-01 10:55:20,580 - INFO - Finalizing trial: Trial 5
+2024-08-01 10:55:21,029 - INFO - Finalizing experiment: Shoe vs Ankle Boot Experiment

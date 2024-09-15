@@ -87,15 +87,11 @@ def _create_annotation_summary():
                         dataset["class"].append(name)
 
                         if name == "missing_hole":
-                            dataset["category_code"].append(
-                                Category.MISSING_HOLE.value
-                            )
+                            dataset["category_code"].append(Category.MISSING_HOLE.value)
                         elif name == "mouse_bite":
                             dataset["category_code"].append(Category.MOUSE_BITE.value)
                         elif name == "open_circuit":
-                            dataset["category_code"].append(
-                                Category.OPEN_CIRCUIT.value
-                            )
+                            dataset["category_code"].append(Category.OPEN_CIRCUIT.value)
                         elif name == "short":
                             dataset["category_code"].append(Category.SHORT.value)
                         elif name == "spur":
@@ -164,7 +160,37 @@ def get_dataframe():
     return pd.read_csv(anno_summary_file, sep=";")
 
 
-if __name__ == "__main__":
-    if os.path.exists(ANNO_SUMMARY_FILE):
-        os.remove(ANNO_SUMMARY_FILE)
-    get_dataframe()
+def _get_no_defects_paths():
+    """
+    Returns the paths of images with no defects.
+
+    Returns:
+        - paths (list): The paths of images with no defects.
+    """
+    paths = []
+    for name in os.listdir(PCB_USED_DIR):
+        if name.endswith(".JPG"):
+            path = os.path.join(PCB_USED_DIR, name)
+            path = _standardize_path(path)
+            paths.append(path)
+    return paths
+
+
+def get_paths_by_defect_name(defect_name):
+    """
+    Retrieves a list of file paths associated with a specific defect name.
+
+    Parameters:
+        - defect_name (str): The name of the defect defined in
+            CATEGORIES_NAMES or can be also 'no_defect'.
+
+    Returns:
+        - list: A list of file paths associated with the specified defect
+            name.
+    """
+    if defect_name == "no_defect":
+        return _get_no_defects_paths()
+    df = get_dataframe()
+    missing_hole_df = df[df["category_code"] == defect_name]
+    paths = missing_hole_df["path"].tolist()
+    return list(set(paths))

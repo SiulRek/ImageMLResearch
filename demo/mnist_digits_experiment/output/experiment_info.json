@@ -1,0 +1,19 @@
+{
+    "name": "MNIST Digits Experiment",
+    "description": "This experiment demonstrates the MultiClassResearcher class using the MNIST digits dataset. It involves a simple feedforward neural network with manually set hyperparameters across multiple trials.",
+    "directory": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits_experiment/outputs",
+    "sort_metric": "accuracy",
+    "start_time": "2024-08-01 15:14:27.790",
+    "resume_time": "2024-08-01 15:14:27.790",
+    "duration": "0:00:37.225",
+    "figures": {
+        "history_of_best_3_trials": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits_experiment/outputs/history_of_best_3_trials.png"
+    },
+    "trials": [
+        "Trial 5",
+        "Trial 3",
+        "Trial 2",
+        "Trial 1",
+        "Trial 4"
+    ]
+}

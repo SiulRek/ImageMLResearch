@@ -5,6 +5,7 @@ import tensorflow as tf
 
 from src.research.researchers import MultiClassResearcher
 
+
 def load_mnist_digits_dataset():
     """
     Loads the MNIST digits dataset from keras.datasets and creates a
@@ -72,14 +73,13 @@ def make_experiment(experiment_definition, trial_definitions):
     dataset = load_mnist_digits_dataset()
 
     researcher.load_dataset(dataset)
-    researcher.prepare_datasets(batch_size=32, shuffle_seed=None)
+    researcher.prepare_datasets(batch_size=32, shuffle_seed=42)
     researcher.split_dataset(train_size=0.8, val_size=0.1, test_size=0.1)
 
     with researcher.run_experiment(**experiment_definition) as experiment:
         for trial_definition in trial_definitions:
             with experiment.run_trial(**trial_definition) as trial:
                 if trial.already_runned:
-                    # trial.throw_skip_trial_as_already_runned_warnings()
                     continue
                 model = make_model(trial_definition["hyperparameters"])
                 researcher.set_compiled_model(model)
