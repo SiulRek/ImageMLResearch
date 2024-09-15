@@ -126,7 +126,7 @@ def _process_trials_definitions(trials_definitions):
     raise ValueError(msg)
 
 
-def load_definitions_of_experiment(definitions_json):
+def load_experiment_definitions(definitions_json):
     """
     Load the experiment definitions and trials definitions from a JSON file.
 

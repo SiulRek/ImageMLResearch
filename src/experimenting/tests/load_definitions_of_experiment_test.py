@@ -2,8 +2,8 @@ import json
 import os
 import unittest
 
-from src.experimenting.helpers.load_definitions_of_experiment import (
-    load_definitions_of_experiment,
+from src.experimenting.helpers.load_experiment_defintions import (
+    load_experiment_definitions,
 )
 from src.testing.bases.base_test_case import BaseTestCase
 
@@ -29,7 +29,7 @@ class TestLoadDefinitionsOfExperiment(BaseTestCase):
             "trials_definitions": [{"name": "trial_1", "hyperparameters": {}}],
         }
         self._write_definitions_to_file(definitions_content)
-        experiment_definitions, trials_definitions = load_definitions_of_experiment(
+        experiment_definitions, trials_definitions = load_experiment_definitions(
             self.definitions_json_path
         )
         self.assertEqual(
@@ -49,7 +49,7 @@ class TestLoadDefinitionsOfExperiment(BaseTestCase):
             },
         }
         self._write_definitions_to_file(definitions_content)
-        experiment_definitions, trials_definitions = load_definitions_of_experiment(
+        experiment_definitions, trials_definitions = load_experiment_definitions(
             self.definitions_json_path
         )
         self.assertEqual(
@@ -66,7 +66,7 @@ class TestLoadDefinitionsOfExperiment(BaseTestCase):
 
     def test_load_definitions_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
-            load_definitions_of_experiment(self.definitions_json_path)
+            load_experiment_definitions(self.definitions_json_path)
 
     def _test_invalid_content(self, invalid_content=None):
         invalid_content = {
@@ -74,7 +74,7 @@ class TestLoadDefinitionsOfExperiment(BaseTestCase):
         }
         self._write_definitions_to_file(invalid_content)
         with self.assertRaises(AssertionError):
-            load_definitions_of_experiment(self.definitions_json_path)
+            load_experiment_definitions(self.definitions_json_path)
 
     def test_invalid_contents(self):
         invalid_contents = [
@@ -99,7 +99,7 @@ class TestLoadDefinitionsOfExperiment(BaseTestCase):
         }
         self._write_definitions_to_file(unused_key)
         with self.assertWarns(UserWarning):
-            load_definitions_of_experiment(self.definitions_json_path)
+            load_experiment_definitions(self.definitions_json_path)
 
 
 if __name__ == "__main__":
