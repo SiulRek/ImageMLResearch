@@ -3,12 +3,12 @@ import os
 from src.utils import MarkdownFileWriter
 
 
-def _get_results_summary_table(experiment_data):
+def _get_results_summary_table(experiment_assets):
     """
     Generate a summary table for the experiment results of all trials.
 
     Args:
-        - experiment_data (dict): Dictionary containing experiment data.
+        - experiment_assets (dict): Dictionary containing experiment assets.
 
     Returns:
         - dict: Dictionary containing the summary table with metrics as keys
@@ -17,7 +17,7 @@ def _get_results_summary_table(experiment_data):
 
     results_table = dict()
     chapters = dict()
-    trials = experiment_data.get("trials", [])
+    trials = experiment_assets.get("trials", [])
 
     # Rows correspond to trials, columns correspond to metrics.
     for trial in trials:
@@ -35,12 +35,12 @@ def _get_results_summary_table(experiment_data):
     return results_table
 
 
-def _get_hyperparameters_summary_table(experiment_data):
+def _get_hyperparameters_summary_table(experiment_assets):
     """
     Generate a hyperaparameters summary table of all trials in the experiment.
 
     Args:
-        - experiment_data (dict): Dictionary containing experiment data.
+        - experiment_assets (dict): Dictionary containing experiment assets.
 
     Returns:
         - dict: Dictionary containing the summary table with metrics as keys
@@ -49,7 +49,7 @@ def _get_hyperparameters_summary_table(experiment_data):
 
     hparam_table = dict()
     chapters = dict()
-    trials = experiment_data.get("trials", [])
+    trials = experiment_assets.get("trials", [])
 
     # Rows correspond to trials, columns correspond to metrics.
     for trial in trials:
@@ -70,7 +70,7 @@ def _pop_classification_reports(trial):
     Pop the classification reports from the evaluation metrics of a trial.
 
     Args:
-        - trial (dict): Dictionary containing trial data.
+        - trial (dict): Dictionary containing trial assets.
 
     Returns:
         - list: List of classification reports mantaining the order of the
@@ -89,17 +89,17 @@ def _pop_classification_reports(trial):
     return classification_reports
 
 
-def create_experiment_report(experiment_data):
+def create_experiment_report(experiment_assets):
     """
     Generate a comprehensive experiment report in Markdown format and save it to
     a file.
 
     Args:
-        - experiment_data (dict): Dictionary containing experiment data.
+        - experiment_assets (dict): Dictionary containing experiment assets.
     """
 
     def from_exp_get(key, default="N/A"):
-        return experiment_data.get(key, default)
+        return experiment_assets.get(key, default)
 
     report_path = os.path.join(from_exp_get("directory"), "experiment_report.md")
     writer = MarkdownFileWriter(report_path)
@@ -118,20 +118,20 @@ def create_experiment_report(experiment_data):
     writer.write_key_value("Directory", experiment_directory_link)
 
     # Show Initial Visualizations
-    if "figures" in experiment_data and experiment_data["figures"]:
+    if "figures" in experiment_assets and experiment_assets["figures"]:
         writer.write_title("Initial Visualizations", level=2)
-        for fig_name, fig_path in experiment_data["figures"].items():
+        for fig_name, fig_path in experiment_assets["figures"].items():
             writer.write_figure(fig_name, fig_path)
 
     # Write Description Summary
     writer.write_title("Summary", level=2)
     writer.write_title("Hyperparameters", level=3)
-    hyperparameter_table = _get_hyperparameters_summary_table(experiment_data)
+    hyperparameter_table = _get_hyperparameters_summary_table(experiment_assets)
     writer.write_nested_table(hyperparameter_table)
 
     # Write Results Summary
     writer.write_title("Test Results", level=3)
-    results_table = _get_results_summary_table(experiment_data)
+    results_table = _get_results_summary_table(experiment_assets)
     writer.write_nested_table(results_table)
 
     # Write Trials

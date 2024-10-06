@@ -5,10 +5,10 @@ import warnings
 
 from src.experimenting.helpers.trial import normalize_trial_name
 
-_DEFAULT_EXPERIMENT_DATA = {
+_DEFAULT_EXPERIMENT_ASSETS = {
     "name": None,  # Name of the experiment
     "description": None,  # Description of the experiment
-    "directory": None,  # Directory where experiment data is stored
+    "directory": None,  # Directory where experiment assets are stored
     "sort_metric": "accuracy",  # Metric used for sorting results
     # (default is 'accuracy')
     "start_time": None,  # Time when the experiment started
@@ -17,7 +17,7 @@ _DEFAULT_EXPERIMENT_DATA = {
     "duration": None,  # Total duration of the experiment
     # (calculated at the beginning of __exit__)
     "figures": {},  # Dictionary to store figures generated during the experiment
-    "trials": [],  # List to store individual trial data
+    "trials": [],  # List to store individual trial assets
 }
 
 _TRIAL_KEYS = {
@@ -26,7 +26,7 @@ _TRIAL_KEYS = {
     # (set at the end of __enter__)
     "duration",  # Duration of the trial
     # (calculated at the beginning of __exit__)
-    "directory",  # Directory where trial data is stored
+    "directory",  # Directory where trial assets is stored
     "hyperparameters",  # Dictionary containing the hyperparameters
     "figures",  # Dictionary to store figures generated during the trial
     "evaluation_metrics",  # Dictionary to store evaluation metrics
@@ -34,33 +34,33 @@ _TRIAL_KEYS = {
 }
 
 
-def get_default_experiment_data():
+def get_default_experiment_assets():
     """
-    Returns the default experiment data.
+    Returns the default experiment assets.
 
     Returns:
-        - dict: The default experiment data.
+        - dict: The default experiment assets.
     """
-    return deepcopy(_DEFAULT_EXPERIMENT_DATA)
+    return deepcopy(_DEFAULT_EXPERIMENT_ASSETS)
 
 
-def assert_experiment_data(experiment_data):
+def assert_experiment_assets_attribute(experiment_assets):
     """
-    Asserts that the experiment data has the expected keys.
+    Asserts that the experiment assets attribute has the expected keys.
 
     Args:
-        - experiment_data (dict): The experiment data to assert.
+        - experiment_assets (dict): The experiment assets attribute to assert.
 
     Raises:
-        - ValueError: If the experiment data does not have the expected
+        - ValueError: If the experiment assets attribute does not have the expected
             keys.
     """
-    expected_keys = set(get_default_experiment_data().keys())
-    actual_keys = set(experiment_data.keys())
+    expected_keys = set(get_default_experiment_assets().keys())
+    actual_keys = set(experiment_assets.keys())
     if expected_keys != actual_keys:
         missing_keys = expected_keys - actual_keys
         extra_keys = actual_keys - expected_keys
-        msg = "Experiment data does not have the expected keys: "
+        msg = "experiment assets attribute does not have the expected keys: "
         if missing_keys:
             msg += f"Missing keys: {missing_keys}."
         if extra_keys:
@@ -68,42 +68,44 @@ def assert_experiment_data(experiment_data):
         raise ValueError(msg)
 
 
-def assert_trial_data(trial_data):
+def assert_trial_assets_attribute(trial_assets):
     """
-    Asserts that the trial data has the expected keys.
+    Asserts that the trial assets attribute has the expected keys.
 
     Args:
-        - trial_data (dict): The trial data to assert.
+        - trial_assets (dict): The trial assets attribute to assert.
 
     Raises:
-        - ValueError: If the trial data does not have the expected keys.
+        - ValueError: If the trial assets attribute does not have the expected keys.
     """
     expected_keys = _TRIAL_KEYS
-    actual_keys = set(trial_data.keys())
+    actual_keys = set(trial_assets.keys())
     if expected_keys != actual_keys:
         missing_keys = expected_keys - actual_keys
         extra_keys = actual_keys - expected_keys
-        msg = "Trial data does not have the expected keys:\n "
+        msg = "Trial assets attribute does not have the expected keys:\n "
         if missing_keys:
-            msg += f"Missing keys: {missing_keys}."
+            missing_keys = ", ".join(missing_keys)
+            msg += f"Missing keys: {missing_keys}\n"
         if extra_keys:
+            extra_keys = ", ".join(extra_keys)
             msg += f"Extra keys: {extra_keys}."
         raise ValueError(msg)
 
 
-def load_experiment_data(experiment_dir):
+def load_experiment_assets(experiment_dir):
     """
-    Loads the experiment data from the given directory. Raises FileNotFoundError
-    if the experiment data file is not found.
+    Loads the experiment assets from the given directory. Raises
+    FileNotFoundError if the experiment assets file is not found.
 
     Args:
-        - experiment_dir (str): The directory to load the experiment data
+        - experiment_dir (str): The directory to load the experiment assets
             from.
-        - default_experiment_data (dict): The default experiment data to
+        - default_experiment_assets (dict): The default experiment assets to
             initialize if the directory is empty.
 
     Returns:
-        - dict: The loaded or initialized experiment data.
+        - dict: The loaded or initialized experiment assets.
     """
     experiment_info_path = os.path.join(experiment_dir, "experiment_info.json")
     if not os.path.exists(experiment_info_path):
@@ -111,22 +113,22 @@ def load_experiment_data(experiment_dir):
         raise FileNotFoundError(msg)
 
     with open(experiment_info_path, "r", encoding="utf-8") as f:
-        experiment_data = json.load(f)
+        experiment_assets = json.load(f)
 
-    assert_experiment_data(experiment_data)
+    assert_experiment_assets_attribute(experiment_assets)
 
     # Load trial dictionaries from their corresponding files
     trials = []
-    for trial_name in experiment_data["trials"]:
+    for trial_name in experiment_assets["trials"]:
         folder_name = normalize_trial_name(trial_name)
         trial_file = os.path.join(experiment_dir, folder_name, "trial_info.json")
         if os.path.exists(trial_file):
             with open(trial_file, "r", encoding="utf-8") as trial_f:
-                trial_data = json.load(trial_f)
-                assert_trial_data(trial_data)
-                trials.append(trial_data)
+                trial_assets = json.load(trial_f)
+                assert_trial_assets_attribute(trial_assets)
+                trials.append(trial_assets)
         else:
             msg = f"No trial_info.json found for trial {trial_name}."
             warnings.warn(msg)
-    experiment_data["trials"] = trials
-    return experiment_data
+    experiment_assets["trials"] = trials
+    return experiment_assets

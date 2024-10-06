@@ -118,7 +118,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         ) as experiment:
             self._assert_datasets_container(experiment)
             self.assertTrue(
-                os.path.exists(experiment.experiment_data["directory"]),
+                os.path.exists(experiment.experiment_assets["directory"]),
                 "The experiment directory does not exist.",
             )
 
@@ -130,7 +130,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                 with experiment.run_trial(**trial_definition) as trial:
                     # ## Training ##
                     self.assertTrue(
-                        os.path.exists(trial.trial_data["directory"]),
+                        os.path.exists(trial.trial_assets["directory"]),
                         "The trial directory does not exist.",
                     )
                     self.trainer.synchronize_research_attributes(experiment)
@@ -170,18 +170,18 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
 
         #### Assertions of experiment files existence ####
         self.assertEqual(
-            len(experiment.experiment_data["trials"]),
+            len(experiment.experiment_assets["trials"]),
             i + 1,
             "The number of trials is incorrect.",
         )
         images_plot = os.path.join(
-            experiment.experiment_data["directory"], "images.png"
+            experiment.experiment_assets["directory"], "images.png"
         )
         self.assertTrue(
             os.path.exists(images_plot),
             "The images plot does not exist.",
         )
-        for trial in experiment.experiment_data["trials"]:
+        for trial in experiment.experiment_assets["trials"]:
             trial_directory = trial["directory"]
             figures_exist = all(
                 [
@@ -201,7 +201,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                 f"The trial info does not exist for the trial {trial['name']}.",
             )
 
-        experiment_directory = experiment.experiment_data["directory"]
+        experiment_directory = experiment.experiment_assets["directory"]
         experiment_info_exist = os.path.exists(
             os.path.join(experiment_directory, "experiment_info.json")
         )

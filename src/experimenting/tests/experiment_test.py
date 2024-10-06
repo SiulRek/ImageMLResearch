@@ -47,13 +47,13 @@ class TestExperiment(BaseTestCase):
         # Check experiment data initialization
         with self.call_test_experiment() as experiment:
             self.assertIsInstance(experiment, Experiment)
-            self.assertEqual(experiment.experiment_data["name"], self.name)
+            self.assertEqual(experiment.experiment_assets["name"], self.name)
             self.assertEqual(
-                experiment.experiment_data["description"], self.description
+                experiment.experiment_assets["description"], self.description
             )
-            self.assertTrue(os.path.exists(experiment.experiment_data["directory"]))
+            self.assertTrue(os.path.exists(experiment.experiment_assets["directory"]))
             log_file = os.path.join(
-                experiment.experiment_data["directory"], "execution.log"
+                experiment.experiment_assets["directory"], "execution.log"
             )
             self.assertTrue(os.path.exists(log_file))
 
@@ -78,7 +78,7 @@ class TestExperiment(BaseTestCase):
             with self.call_test_experiment() as experiment:
                 pass
             mock_create_experiment_report.assert_called_once_with(
-                experiment.experiment_data
+                experiment.experiment_assets
             )
 
     def test_experiment_exit_with_exception(self):
@@ -103,11 +103,11 @@ class TestExperiment(BaseTestCase):
             for i, (name, hyperparameters) in enumerate(trial_definitions):
                 with experiment.run_trial(name, hyperparameters) as trial:
                     self.assertIsInstance(trial, Trial)
-                    self.assertEqual(trial.trial_data["name"], name)
+                    self.assertEqual(trial.trial_assets["name"], name)
                     self.assertEqual(
-                        trial.trial_data["hyperparameters"], hyperparameters
+                        trial.trial_assets["hyperparameters"], hyperparameters
                     )
-                    self.assertTrue("start_time" in trial.trial_data)
+                    self.assertTrue("start_time" in trial.trial_assets)
                     # Simulate accuracy
                     metric_val = float(1 - i * 0.1)
                     metric_inv_val = float(1 - metric_val)
@@ -119,7 +119,7 @@ class TestExperiment(BaseTestCase):
                     experiment._evaluation_metrics.update(metrics_set)
                     trial_runned = True
             if trial_runned:
-                self.assertIn(trial.trial_data, experiment.experiment_data["trials"])
+                self.assertIn(trial.trial_assets, experiment.experiment_assets["trials"])
 
             if sleep_time is not None:
                 sleep(sleep_time)
@@ -134,7 +134,7 @@ class TestExperiment(BaseTestCase):
         ]
         experiment = self._run_trials_in_experiment(trial_definitions)
 
-        self.assertEqual(len(experiment.experiment_data["trials"]), 2)
+        self.assertEqual(len(experiment.experiment_assets["trials"]), 2)
 
     def test_load_experiment_data(self):
         trial_definitions = [
@@ -153,13 +153,13 @@ class TestExperiment(BaseTestCase):
             sort_metric=new_sort_metric,
         )
         # Check if experiment_data is updated correctly.
-        description = reloaded_experiment.experiment_data["description"]
-        sort_metric = reloaded_experiment.experiment_data["sort_metric"]
+        description = reloaded_experiment.experiment_assets["description"]
+        sort_metric = reloaded_experiment.experiment_assets["sort_metric"]
         self.assertEqual(description, new_description)
         self.assertEqual(sort_metric, new_sort_metric)
         # Check if the trials are loaded correctly
-        trials_data = experiment.experiment_data["trials"]
-        reloaded_trials_data = reloaded_experiment.experiment_data["trials"]
+        trials_data = experiment.experiment_assets["trials"]
+        reloaded_trials_data = reloaded_experiment.experiment_assets["trials"]
 
         self.assertEqual(trials_data, reloaded_trials_data)
 
@@ -184,7 +184,7 @@ class TestExperiment(BaseTestCase):
     def test_trials_order(self):
 
         def metric_val(trial_num, metric):
-            trial = experiment.experiment_data["trials"][trial_num]
+            trial = experiment.experiment_assets["trials"][trial_num]
             metrics_set = trial["evaluation_metrics"]["test"]
             return metrics_set[metric]
 
@@ -219,7 +219,7 @@ class TestExperiment(BaseTestCase):
 
     def test_resume_experiment(self):
         def get_experiment_duration(experiment):
-            duration = experiment.experiment_data["duration"]
+            duration = experiment.experiment_assets["duration"]
             duration = float(duration.replace(":", ""))
             return duration
 
@@ -243,7 +243,7 @@ class TestExperiment(BaseTestCase):
         )
         total_duration = get_experiment_duration(resumed_experiment)
 
-        self.assertEqual(len(resumed_experiment.experiment_data["trials"]), 4)
+        self.assertEqual(len(resumed_experiment.experiment_assets["trials"]), 4)
         self.assertGreater(total_duration, initial_duration)
 
 
