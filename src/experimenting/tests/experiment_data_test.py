@@ -26,18 +26,18 @@ class TestLoadExperimentData(BaseTestCase):
             "directory": self.experiment_dir,
             "figures": {},
             "trials": [self.trial_name],
+            "sort_metric": "accuracy",
         }
 
         self.mock_trial_data = {
             "name": self.trial_name,
-            "description": "test_trial_description",
             "start_time": None,
             "duration": None,
             "directory": self.trial_dir,
             "hyperparameters": {},
             "figures": {},
             "evaluation_metrics": {},
-            # "training_history": None,
+            "training_history": {},
         }
 
     def create_experiment_info_file(self, data):
