@@ -3,6 +3,8 @@ import json
 import os
 import warnings
 
+from src.experimenting.helpers.trial import normalize_trial_name
+
 _DEFAULT_EXPERIMENT_DATA = {
     "name": None,  # Name of the experiment
     "description": None,  # Description of the experiment
@@ -116,7 +118,7 @@ def load_experiment_data(experiment_dir):
     # Load trial dictionaries from their corresponding files
     trials = []
     for trial_name in experiment_data["trials"]:
-        folder_name = trial_name.replace(" ", "_")
+        folder_name = normalize_trial_name(trial_name)
         trial_file = os.path.join(experiment_dir, folder_name, "trial_info.json")
         if os.path.exists(trial_file):
             with open(trial_file, "r", encoding="utf-8") as trial_f:

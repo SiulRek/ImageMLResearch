@@ -4,14 +4,20 @@ import json
 import os
 import warnings
 
-from src.utils import transform_figures_to_files
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
+from src.utils import transform_figures_to_files
 from src.utils import get_datetime, get_duration
 
 
 class ResultsEmptyError(ValueError):
     """ Raised when trial results are empty and the trial was never runned before. """
+
+
+def normalize_trial_name(trial_name):
+    """ Normalizes the trial name by converting it to lowercase and replacing spaces
+    with underscores. """
+    return trial_name.replace(" ", "_").lower()
 
 
 class Trial(AbstractContextManager):
@@ -91,7 +97,7 @@ class Trial(AbstractContextManager):
             - hyperparameters (dict): The hyperparameters for the trial.
         """
         trial_directory = self._make_trial_directory(
-            experiment.experiment_data["directory"], name
+            experiment.experiment_data["directory"], normalize_trial_name(name)
         )
         self.trial_data = {
             "name": name,
@@ -117,7 +123,7 @@ class Trial(AbstractContextManager):
         """
         trial_directory = os.path.join(
             experiment_directory,
-            f"{name.replace(' ', '_')}",
+            f"{name.replace(' ', '_')}".lower(),
         )
         os.makedirs(trial_directory, exist_ok=True)
         return trial_directory
