@@ -1,12 +1,6 @@
-2024-08-01 15:14:27,790 - INFO - Creating new experiment: MNIST Digits Experiment
-2024-08-01 15:14:27,790 - INFO - Starting trial: Trial 1
-2024-08-01 15:14:34,726 - INFO - Finalizing trial: Trial 1
-2024-08-01 15:14:35,219 - INFO - Starting trial: Trial 2
-2024-08-01 15:14:42,435 - INFO - Finalizing trial: Trial 2
-2024-08-01 15:14:42,920 - INFO - Starting trial: Trial 3
-2024-08-01 15:14:49,449 - INFO - Finalizing trial: Trial 3
-2024-08-01 15:14:49,930 - INFO - Starting trial: Trial 4
-2024-08-01 15:14:56,762 - INFO - Finalizing trial: Trial 4
-2024-08-01 15:14:57,249 - INFO - Starting trial: Trial 5
-2024-08-01 15:15:04,525 - INFO - Finalizing trial: Trial 5
-2024-08-01 15:15:05,015 - INFO - Finalizing experiment: MNIST Digits Experiment
+2024-10-08 11:54:30,641 - INFO - Creating new experiment: MNIST Digits Experiment
+2024-10-08 11:54:30,641 - INFO - Starting trial: Trial 1
+2024-10-08 11:54:38,835 - INFO - Finalizing trial: Trial 1
+2024-10-08 11:54:39,478 - INFO - Starting trial: Trial 2
+2024-10-08 11:54:47,580 - INFO - Finalizing trial: Trial 2
+2024-10-08 11:54:48,226 - INFO - Finalizing experiment: MNIST Digits Experiment

@@ -1,12 +1,15 @@
-import json
 import os
 
 import tensorflow as tf
 
+from src.experimenting.helpers.load_experiment_definition import (
+    load_experiment_definition,
+)
+from src.preprocessing.steps import ReverseScaler, TypeCaster
 from src.research.researchers import MultiClassResearcher
 
 
-def load_mnist_digits_dataset():
+def load_dataset():
     """
     Loads the MNIST digits dataset from keras.datasets and creates a
     tf.data.Dataset object.
@@ -25,6 +28,10 @@ def load_mnist_digits_dataset():
     return dataset
 
 
+def create_preprocessing_pipeline():
+    return [ReverseScaler(255), TypeCaster(output_dtype="float32")]
+
+
 def make_model(hyperparameters):
     """
     Creates and compiles a model with the given hyperparameters.
@@ -39,11 +46,8 @@ def make_model(hyperparameters):
     model = tf.keras.models.Sequential(
         [
             tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
-            tf.keras.layers.Lambda(lambda x: x / 255.0),
             tf.keras.layers.Dense(hyperparameters["units1"], activation="relu"),
-            tf.keras.layers.Dropout(hyperparameters["dropout1"]),
             tf.keras.layers.Dense(hyperparameters["units2"], activation="relu"),
-            tf.keras.layers.Dropout(hyperparameters["dropout2"]),
             tf.keras.layers.Dense(10, activation="softmax"),
         ]
     )
@@ -52,36 +56,39 @@ def make_model(hyperparameters):
             learning_rate=hyperparameters["learning_rate"]
         ),
         loss="categorical_crossentropy",
-        metrics=["accuracy"],
+        metrics="accuracy",
     )
     return model
 
 
-def make_experiment(experiment_definition, trial_definitions):
+def make_experiment(experimant_metadata, trial_definitions):
     """
     Runs the experiment with the given trial definitions using the researcher
     class.
 
     Args:
-        - experiment_definition (dict): A dictionary containing experiment
+        - experiment_metadata (dict): A dictionary containing experiment
             details.
         - trial_definitions (list): A list of trial definitions.
     """
+    # Experiment Setup
     researcher = MultiClassResearcher(
         class_names=["Digit " + str(i) for i in range(10)]
     )
-    dataset = load_mnist_digits_dataset()
-
+    dataset = load_dataset()
     researcher.load_dataset(dataset)
+    preprocessing_pipe = create_preprocessing_pipeline()
+    researcher.apply_preprocessing_pipeline(preprocessing_pipe)
     researcher.prepare_datasets(batch_size=32, shuffle_seed=42)
     researcher.split_dataset(train_size=0.8, val_size=0.1, test_size=0.1)
 
-    with researcher.run_experiment(**experiment_definition) as experiment:
-        for trial_definition in trial_definitions:
-            with experiment.run_trial(**trial_definition) as trial:
+    # Experiment Execution
+    with researcher.run_experiment(**experimant_metadata) as experiment:
+        for trial_definitions in trial_definitions:
+            with experiment.run_trial(**trial_definitions) as trial:
                 if trial.already_runned:
                     continue
-                model = make_model(trial_definition["hyperparameters"])
+                model = make_model(trial_definitions["hyperparameters"])
                 researcher.set_compiled_model(model)
                 researcher.fit_predict_evaluate(
                     epochs=10, steps_per_epoch=32, validation_steps=32
@@ -89,18 +96,12 @@ def make_experiment(experiment_definition, trial_definitions):
 
                 researcher.plot_model_summary()
                 researcher.plot_training_history(title="Training History")
-                researcher.plot_confusion_matrix(title="Confusion Matrix")
-                researcher.plot_results(grid_size=(3, 2), prediction_bar=True)
+                researcher.plot_results(grid_size=(4, 3), prediction_bar=True)
 
 
 if __name__ == "__main__":
     json_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "definitions.json"
+        os.path.dirname(os.path.abspath(__file__)), "definition.json"
     )
-    with open(json_path, "r", encoding="utf-8") as f:
-        config = json.load(f)
-
-    experiment_definition = config["experiment_definition"]
-    trial_definitions = config["trial_definitions"]
-
-    make_experiment(experiment_definition, trial_definitions)
+    experiment_metadata, trial_definitions = load_experiment_definition(json_path)
+    make_experiment(experiment_metadata, trial_definitions)

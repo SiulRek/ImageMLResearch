@@ -1,60 +1,25 @@
 {
-    "experiment_definition": {
-      "name": "MNIST Digits Experiment",
-      "description": "This experiment demonstrates the MultiClassResearcher class using the MNIST digits dataset. It involves a simple feedforward neural network with manually set hyperparameters across multiple trials.",
-      "directory": "demo/mnist_digits_experiment"
-    },
-    "trial_definitions": [
-      {
-        "name": "Trial 1",
-        "hyperparameters": {
-          "units1": 128,
-          "units2": 64,
-          "dropout1": 0.5,
-          "dropout2": 0.5,
-          "learning_rate": 0.001
-        }
-      },
-      {
-        "name": "Trial 2",
-        "hyperparameters": {
-          "units1": 256,
-          "units2": 128,
-          "dropout1": 0.5,
-          "dropout2": 0.5,
-          "learning_rate": 0.001
-        }
-      },
-      {
-        "name": "Trial 3",
-        "hyperparameters": {
-          "units1": 128,
-          "units2": 64,
-          "dropout1": 0.3,
-          "dropout2": 0.3,
-          "learning_rate": 0.001
-        }
-      },
-      {
-        "name": "Trial 4",
-        "hyperparameters": {
-          "units1": 128,
-          "units2": 64,
-          "dropout1": 0.5,
-          "dropout2": 0.5,
-          "learning_rate": 0.0005
-        }
-      },
-      {
-        "name": "Trial 5",
-        "hyperparameters": {
-          "units1": 256,
-          "units2": 128,
-          "dropout1": 0.3,
-          "dropout2": 0.3,
-          "learning_rate": 0.0005
-        }
+  "experiment_metadata": {
+    "name": "MNIST Digits Experiment",
+    "description": "In this experiment, a neural network is trained with different hyperparameters to classify MNIST digits.",
+    "directory": "demo/mnist_digits_experiment"
+  },
+  "trial_definitions": [
+    {
+      "name": "Trial 1",
+      "hyperparameters": {
+        "units1": 128,
+        "units2": 64,
+        "learning_rate": 0.001
       }
-    ]
-  }
-  
+    },
+    {
+      "name": "Trial 2",
+      "hyperparameters": {
+        "units1": 256,
+        "units2": 128,
+        "learning_rate": 0.001
+      }
+    }
+  ]
+}

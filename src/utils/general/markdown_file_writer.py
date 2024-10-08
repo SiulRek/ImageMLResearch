@@ -64,7 +64,7 @@ class MarkdownFileWriter:
         self.file_dir = os.path.dirname(file_path)
         self.file_lines = []
 
-    def write_title(self, title, level=1):
+    def write_title(self, title, level=1, page_break=True):
         """
         Writes a title to the file.
 
@@ -72,8 +72,13 @@ class MarkdownFileWriter:
             - title (str): The text of the title.
             - level (int, optional): The level of the title, where 1 is the
                 highest level. Defaults to 1.
+            - page_break (bool, optional): Whether to insert a page break
         """
-        self.file_lines.append(f"{'#' * level} {title}\n")
+        if page_break:
+            page_break = '\n<div style="page-break-after: always;"></div>\n'
+            self.file_lines.append(page_break)
+        title = f"{'#' * level} <span style=\"color:blue;\">{title}</span>\n"
+        self.file_lines.append(title)
 
     def write_text(self, text):
         """
