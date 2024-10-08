@@ -2,8 +2,9 @@ import unittest
 
 import numpy as np
 
-from src.testing.bases.base_test_case import BaseTestCase
 from src.experimenting.helpers.hparams_suggester import HParamsSuggester
+from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
+from src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestHParamsSuggester(BaseTestCase):
@@ -71,6 +72,17 @@ class TestHParamsSuggester(BaseTestCase):
         self.assert_valid_hyperparams(next_hyperparams)
         simulated_score = np.random.uniform(8, 0.95)
         self.suggester.set_last_score(simulated_score)
+        next_suggestion = self.suggester.suggest_next()
+        trial_2 = self.suggester.current_trial
+        self.assert_valid_hyperparams(next_suggestion)
+        self.assertNotEqual(trial_1, trial_2)
+
+    def test_update_trial_with_last_score_singleton(self):
+        next_hyperparams = self.suggester.suggest_next()
+        trial_1 = self.suggester.current_trial
+        self.assert_valid_hyperparams(next_hyperparams)
+        simulated_score = np.random.uniform(8, 0.95)
+        LastScoreSingleton().set(simulated_score)
         next_suggestion = self.suggester.suggest_next()
         trial_2 = self.suggester.current_trial
         self.assert_valid_hyperparams(next_suggestion)

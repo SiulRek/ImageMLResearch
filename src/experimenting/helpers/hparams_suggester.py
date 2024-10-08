@@ -9,6 +9,8 @@ from optuna.distributions import (
     IntDistribution,
 )
 
+from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
+
 
 def _assert_hparam_configs(
     configs, hparam_name, hp_type, required_keys, optional_keys=[]
@@ -134,9 +136,15 @@ class HParamsSuggester:
             - dict: The next set of hyperparameters.
         """
         if self.current_trial is not None:
-            msg = "A trial is still pending. Call set_last_score() "
-            msg += "before calling next() again."
-            raise ValueError(msg)
+            # If set_last_score() has not been called after the last call to
+            # next(), try to get the last score from the singleton.
+            try:
+                last_score = LastScoreSingleton().take()
+                self.set_last_score(last_score)
+            except ValueError:
+                msg = "A trial is still pending. Call set_last_score() "
+                msg += "before calling next() again."
+                raise ValueError(msg)
         trial = self.study.ask()
         next_hparams = {}
         for name in self.hp_names:
