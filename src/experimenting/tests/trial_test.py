@@ -1,3 +1,4 @@
+from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
 import json
 import os
 import unittest
@@ -88,7 +89,7 @@ class TestTrial(BaseTestCase):
             self.mock_experiment.get_results.return_value = {
                 "figures": figures,
                 "evaluation_metrics": evaluation_metrics,
-                "training_history": {"loss": training_history},
+                "training_history": training_history,
             }  # Simulates the generation of trial results.
             trial_assets = trial.trial_assets
 
@@ -101,6 +102,36 @@ class TestTrial(BaseTestCase):
         )
         read_assets = self._read_trial_info(trial)
         self.assertEqual(read_assets, trial_assets)
+
+    def test_set_last_score(self):
+        return_value = {
+            "figures": {},
+            "evaluation_metrics": {},
+            "training_history": {},
+        }
+
+        # val_loss is present in training history.
+        with self.call_test_trial():
+            return_value["training_history"] = {"loss": [0.1, 0.2, 0.3],
+                                                "val_loss": [0.2, 0.3, 0.4]}
+            self.mock_experiment.get_results.return_value = return_value
+        last_score = LastScoreSingleton().take()
+        self.assertEqual(last_score, 0.4)
+
+        # val_loss is not present in training history.
+        with self.call_test_trial():
+            return_value["training_history"] = {"loss": [0.1, 0.2, 0.3]}
+            self.mock_experiment.get_results.return_value = return_value
+        last_score = LastScoreSingleton().take()
+        self.assertEqual(last_score, 0.3)
+
+        # No training history.
+        LastScoreSingleton().clear()
+        with self.call_test_trial():
+            return_value["training_history"] = {}
+            self.mock_experiment.get_results.return_value = return_value
+        with self.assertRaises(ValueError):
+            LastScoreSingleton().take()
 
     def test_trial_exit_with_exception(self):
 

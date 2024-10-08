@@ -4,6 +4,7 @@ import json
 import os
 import warnings
 
+from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
 from src.research.attributes.attributes_utils import copy_public_properties
 from src.research.attributes.research_attributes import ResearchAttributes
 from src.utils import transform_figures_to_files
@@ -28,13 +29,13 @@ class Trial(AbstractContextManager):
         - experiment (Experiment): The experiment instance this trial
             belongs to.
         - research_attributes (ResearchAttributes): Research attributes from
-        - trial_data (dict): Dictionary to store trial data.
+        - trial_assets (dict): Dictionary to store trial assets.
         - keys: 'name', 'description', 'start_time', 'directory',
         'hyperparameters', 'figures', 'evaluation_metrics',
         'training_history' (optional).
-        - trial_directory (str): Directory where the trial data is saved.
+        - trial_directory (str): Directory where the trial assets is saved.
         - experiment_trials (list): Reference to the list of trials in the
-            experiment, used to append the trial data.
+            experiment, used to append the trial assets.
     """
 
     def __init__(self, experiment, name, hyperparameters):
@@ -50,8 +51,8 @@ class Trial(AbstractContextManager):
         """
         self._assert_required_experiment_attributes(experiment)
         self._init_research_attributes(experiment)
-        self._init_trial_data(experiment, name, hyperparameters)
-        self.experiment_trials = experiment.experiment_data[
+        self._init_trial_assets(experiment, name, hyperparameters)
+        self.experiment_trials = experiment.experiment_assets[
             "trials"
         ]  # Keep reference to track trials in experiment.
         self.fetch_trial_results = (
@@ -87,9 +88,9 @@ class Trial(AbstractContextManager):
         self.research_attributes = ResearchAttributes()
         copy_public_properties(experiment, self.research_attributes)
 
-    def _init_trial_data(self, experiment, name, hyperparameters):
+    def _init_trial_assets(self, experiment, name, hyperparameters):
         """
-        Initialize the trial data dictionary to store trial information.
+        Initialize the trial assets dictionary to store trial information.
 
         Args:
             - experiment (Experiment): The experiment instance.
@@ -97,9 +98,9 @@ class Trial(AbstractContextManager):
             - hyperparameters (dict): The hyperparameters for the trial.
         """
         trial_directory = self._make_trial_directory(
-            experiment.experiment_data["directory"], normalize_trial_name(name)
+            experiment.experiment_assets["directory"], normalize_trial_name(name)
         )
-        self.trial_data = {
+        self.trial_assets = {
             "name": name,
             "start_time": None,
             "duration": None,
@@ -129,7 +130,7 @@ class Trial(AbstractContextManager):
         return trial_directory
 
     def _check_if_already_runned(self):
-        trial = self.trial_data["name"]
+        trial = self.trial_assets["name"]
         experiment_trials = [trial["name"] for trial in self.experiment_trials]
         return trial in experiment_trials
 
@@ -140,8 +141,7 @@ class Trial(AbstractContextManager):
         Returns:
             - self: The Trial instance.
         """
-
-        self.trial_data["start_time"] = get_datetime()
+        self.trial_assets["start_time"] = get_datetime()
         return self
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
@@ -158,42 +158,44 @@ class Trial(AbstractContextManager):
         index = names.index(trial_name)
         self.experiment_trials.pop(index)
 
-    def _write_trial_data(self):
-        """ Writes the trial data to a JSON file. """
-        trial_info_json = os.path.join(self.trial_data["directory"], "trial_info.json")
+    def _write_trial_assets(self):
+        """ Writes the trial assets to a JSON file. """
+        trial_info_json = os.path.join(
+            self.trial_assets["directory"], "trial_info.json"
+        )
         # Remove history
-        trial_data = self.trial_data.copy()
+        trial_assets = self.trial_assets.copy()
         try:
             # Hyperparameters may not be JSON serializable.
             with open(trial_info_json, "w", encoding="utf-8") as f:
-                json.dump(trial_data, f, indent=4)
+                json.dump(trial_assets, f, indent=4)
         except TypeError:
             msg = "Hyperparameters are not JSON serializable for trial"
-            msg += f"{trial_data['name']}. Saving None instead."
+            msg += f"{trial_assets['name']}. Saving None instead."
             warnings.warn(msg)
             self.logger.warning("Hyperparameters are not JSON serializable")
-            trial_data["hyperparameters"] = None
+            trial_assets["hyperparameters"] = None
             with open(trial_info_json, "w", encoding="utf-8") as f:
-                json.dump(trial_data, f, indent=4)
+                json.dump(trial_assets, f, indent=4)
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
-        Saves the trial data and figures and creates experiment report.
+        Saves the trial assets and figures and creates experiment report.
 
         Args:
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
             - traceback: The traceback if an exception occurred. C
         """
-        duration = get_duration(self.trial_data["start_time"])
-        self.trial_data["duration"] = duration
+        duration = get_duration(self.trial_assets["start_time"])
+        self.trial_assets["duration"] = duration
 
         self._raise_exception_if_any(exc_type, exc_value, traceback)
 
         trial_results = self.fetch_trial_results()
 
         results_empty = all(value == {} for value in trial_results.values())
-        trial_name = self.trial_data["name"]
+        trial_name = self.trial_assets["name"]
         if results_empty and self.already_runned:
             msg = f"Skipping '{trial_name}'. Already run, no new\n"
             msg += "results. Keeping old results."
@@ -216,14 +218,23 @@ class Trial(AbstractContextManager):
             self.logger.warning(f"Overwriting old results for {trial_name}")
             self._remove_trial(trial_name)
 
-        self.trial_data["figures"] = transform_figures_to_files(
-            trial_results["figures"], self.trial_data["directory"]
+        self.trial_assets["figures"] = transform_figures_to_files(
+            trial_results["figures"], self.trial_assets["directory"]
         )
-        self.trial_data["evaluation_metrics"] = copy(
+        self.trial_assets["evaluation_metrics"] = copy(
             trial_results["evaluation_metrics"]
         )
-        self.trial_data["training_history"] = copy(trial_results["training_history"])
+        training_history = copy(trial_results["training_history"])
+        self.trial_assets["training_history"] = training_history
 
-        self._write_trial_data()
+        # Save the last validation loss to the LastScoreSingleton.
+        # This allows HParamsSuggester to access the last score and suggest
+        # hyperparameters based on the most recent trial's performance.
+        loss = training_history.get("val_loss") or training_history.get("loss")
+        last_score = loss[-1] if loss else None
+        if last_score is not None:
+            LastScoreSingleton().set(last_score)
 
-        self.experiment_trials.append(self.trial_data)
+        self._write_trial_assets()
+
+        self.experiment_trials.append(self.trial_assets)
