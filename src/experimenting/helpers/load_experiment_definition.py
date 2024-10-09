@@ -71,9 +71,7 @@ def _load_definitions(definitions_json):
 def _assert_experiment_metadata(experiment_metadata):
     expected_keys = ["name", "description", "directory"]
     for key in expected_keys:
-        assert (
-            key in experiment_metadata
-        ), f"{key} is not found in experiment_metadata."
+        assert key in experiment_metadata, f"{key} is not found in experiment_metadata."
 
 
 def _process_trial_definitions(trial_definitions):
@@ -81,8 +79,8 @@ def _process_trial_definitions(trial_definitions):
     Process the trial definitions to include the trial names.
 
     Args:
-        - trial_definitions (list or dict): The trial definitions. It can
-            be a list of dicts or a dict containing the hyperparameters
+        - trial_definitions (list or dict): The trial definitions. It can be
+            a list of dicts or a dict containing the hyperparameters
             configurations to be passed to HParamsSuggester class.
 
     Returns:
