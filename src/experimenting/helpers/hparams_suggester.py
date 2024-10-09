@@ -73,7 +73,7 @@ class HParamsSuggester:
         """
         # TODO: Think of a way to allow sampler and pruner to be defined by the
         # user with hparams_configs. Pass them to create_study.
-        self.study = optuna.create_study(direction="maximize")
+        self.study = optuna.create_study(direction="minimize")
         self.trials = []
         self.hp_names = hparams_configs.keys()
         self.hparams_distributions = {}
