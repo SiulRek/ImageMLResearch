@@ -24,7 +24,8 @@ def _stringify_elements(iterable):
     if isinstance(iterable, (int, bool)):
         return str(iterable)
     if isinstance(iterable, float):
-        return f"{iterable:.4f}"
+        value = f"{iterable:.4f}" if iterable > 1e-3 else f"{iterable:.4e}"
+        return value
     msg = f"Values of Type {type(iterable)} cannot be converted to string."
     raise ValueError(msg)
 
@@ -64,7 +65,11 @@ class MarkdownFileWriter:
         self.file_dir = os.path.dirname(file_path)
         self.file_lines = []
 
-    def write_title(self, title, level=1, page_break=True):
+    def page_break(self):
+        """ Inserts a page break in the file. """
+        self.file_lines.append('\n<div style="page-break-after: always;"></div>\n')
+
+    def write_title(self, title, level=1, page_break=False):
         """
         Writes a title to the file.
 
@@ -72,12 +77,14 @@ class MarkdownFileWriter:
             - title (str): The text of the title.
             - level (int, optional): The level of the title, where 1 is the
                 highest level. Defaults to 1.
-            - page_break (bool, optional): Whether to insert a page break
+            - page_break (bool, optional): Whether to insert a page break or
+                not.
         """
         if page_break:
-            page_break = '\n<div style="page-break-after: always;"></div>\n'
-            self.file_lines.append(page_break)
-        title = f"{'#' * level} <span style=\"color:blue;\">{title}</span>\n"
+            self.page_break()
+        title = (
+            f"{'#' * level} <span style=\"color:rgb(105, 169, 201);\">{title}</span>\n"
+        )
         self.file_lines.append(title)
 
     def write_text(self, text):
