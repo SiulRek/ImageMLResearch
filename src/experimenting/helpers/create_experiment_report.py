@@ -119,7 +119,7 @@ def create_experiment_report(experiment_assets):
 
     # Show Initial Visualizations
     if "figures" in experiment_assets and experiment_assets["figures"]:
-        writer.write_title("Initial Visualizations", level=2)
+        writer.write_title("Initial Visualizations", level=2, page_break=True)
         for fig_name, fig_path in experiment_assets["figures"].items():
             writer.write_figure(fig_name, fig_path)
 
@@ -142,7 +142,7 @@ def create_experiment_report(experiment_assets):
             return trial.get(key, default)
 
         # Write Trial Metadata
-        writer.write_title(from_trial_get("name"), level=2)
+        writer.write_title(from_trial_get("name"), level=2, page_break=True)
         start_time = from_trial_get("start_time").split(".")[0]
         writer.write_key_value("Start Time", start_time)
         writer.write_key_value("Duration", from_trial_get("duration"))
@@ -166,12 +166,12 @@ def create_experiment_report(experiment_assets):
         writer.write_nested_table(evaluation_metrics_table)
 
         # Show Plots
-        writer.write_title("Figures:", level=3)
+        writer.write_title("Figures:", level=3, page_break=True)
         for fig_name, fig_path in trial["figures"].items():
             writer.write_figure(fig_name, fig_path)
 
         # Write Classification Report
-        writer.write_title("Detailed Report of Test Set:", level=3)
+        writer.write_title("Detailed Report of Test Set:", level=3, page_break=True)
         writer.write_nested_table(classification_report, transpose=True)
 
     writer.save_file()
