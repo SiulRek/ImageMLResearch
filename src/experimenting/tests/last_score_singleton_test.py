@@ -11,6 +11,11 @@ class TestLastScoreSingleton(BaseTestCase):
         if LastScoreSingleton._instance:
             LastScoreSingleton._instance = None
 
+    def test_set_score_none(self):
+        """ Test if set() method works correctly with None values. """
+        score_instance = LastScoreSingleton()
+        score_instance.set(None)
+
     def test_set_score_numeric(self):
         """ Test if set() method works correctly with numeric values. """
         numeric_values = [-2, 0.85, 0, -0.85, 2]
@@ -21,7 +26,7 @@ class TestLastScoreSingleton(BaseTestCase):
     def test_set_score_non_numeric(self):
         """ Test if set() method raises an AssertionError when non-numeric values
         are provided. """
-        non_numeric_values = ["string", None, True, False, [], {}]
+        non_numeric_values = ["string", True, False, [], {}]
         score_instance = LastScoreSingleton()
         for value in non_numeric_values:
             with self.assertRaises(AssertionError, msg=f"Value: {value}"):

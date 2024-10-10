@@ -12,7 +12,7 @@ class LastScoreSingleton:
 
     def set(self, score):
         """ Set the last score of ML training. """
-        assert isinstance(score, (int, float)), "Score must be a number!"
+        assert isinstance(score, (int, float, type(None))), "Score must be a number or None!"
         assert not isinstance(score, bool), "Score must not be a boolean"
         self._last_score = score
         self._no_score_set = False
