@@ -74,7 +74,7 @@ def _assert_experiment_metadata(experiment_metadata):
         assert key in experiment_metadata, f"{key} is not found in experiment_metadata."
 
 
-def _process_trial_definitions(trial_definitions):
+def _process_trial_definitions(trial_definitions, experiment_dir):
     """
     Process the trial definitions to include the trial names.
 
@@ -82,6 +82,7 @@ def _process_trial_definitions(trial_definitions):
         - trial_definitions (list or dict): The trial definitions. It can be
             a list of dicts or a dict containing the hyperparameters
             configurations to be passed to HParamsSuggester class.
+        - experiment_dir (str): The directory of the experiment.
 
     Returns:
         - iterator: An iterator of the trial definition.
@@ -114,7 +115,7 @@ def _process_trial_definitions(trial_definitions):
                 msg = f"Ignoring key '{key}' in trial_definitions."
                 warnings.warn(msg)
         try:
-            suggester = HParamsSuggester(hparams_configs)
+            suggester = HParamsSuggester(hparams_configs, storage_dir=experiment_dir)
         except AssertionError as e:
             msg = "Invalid hparams_configs in trial_definitions."
             raise AssertionError(msg) from e
@@ -146,6 +147,7 @@ def load_experiment_definition(definition_json):
     ), "trial_definitions is not found in the definition file."
     experiment_metadata = exp_def["experiment_metadata"]
     _assert_experiment_metadata(experiment_metadata)
+    experiment_dir = experiment_metadata["directory"]
     trial_definitions = exp_def["trial_definitions"]
-    trial_definitions = _process_trial_definitions(trial_definitions)
+    trial_definitions = _process_trial_definitions(trial_definitions, experiment_dir)
     return experiment_metadata, trial_definitions
