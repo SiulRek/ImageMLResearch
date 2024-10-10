@@ -49,11 +49,12 @@ def assert_experiment_assets_attribute(experiment_assets):
     Asserts that the experiment assets attribute has the expected keys.
 
     Args:
-        - experiment_assets (dict): The experiment assets attribute to assert.
+        - experiment_assets (dict): The experiment assets attribute to
+            assert.
 
     Raises:
-        - ValueError: If the experiment assets attribute does not have the expected
-            keys.
+        - ValueError: If the experiment assets attribute does not have the
+            expected keys.
     """
     expected_keys = set(get_default_experiment_assets().keys())
     actual_keys = set(experiment_assets.keys())
@@ -76,7 +77,8 @@ def assert_trial_assets_attribute(trial_assets):
         - trial_assets (dict): The trial assets attribute to assert.
 
     Raises:
-        - ValueError: If the trial assets attribute does not have the expected keys.
+        - ValueError: If the trial assets attribute does not have the
+            expected keys.
     """
     expected_keys = _TRIAL_KEYS
     actual_keys = set(trial_assets.keys())
@@ -91,6 +93,35 @@ def assert_trial_assets_attribute(trial_assets):
             extra_keys = ", ".join(extra_keys)
             msg += f"Extra keys: {extra_keys}."
         raise ValueError(msg)
+
+
+def load_trials(experiment_assets, experiment_dir):
+    """
+    Loads the trial assets from the given experiment directory and the
+    experiment assets.
+
+    Args:
+        - experiment_assets (dict): The experiment assets containing trial
+            names.
+        - experiment_dir (str): The directory to load the trial assets from.
+
+    Returns:
+        - list: The loaded trial assets.
+    """
+    # Load trial dictionaries from their corresponding files
+    trials = []
+    for trial_name in experiment_assets["trials"]:
+        trial_name = normalize_trial_name(trial_name)
+        trial_file = os.path.join(experiment_dir, trial_name, "trial_info.json")
+        if os.path.exists(trial_file):
+            with open(trial_file, "r", encoding="utf-8") as trial_f:
+                trial_assets = json.load(trial_f)
+                assert_trial_assets_attribute(trial_assets)
+                trials.append(trial_assets)
+        else:
+            msg = f"No trial_info.json found for trial {trial_name}."
+            warnings.warn(msg)
+    experiment_assets.update({"trials": trials})
 
 
 def load_experiment_assets(experiment_dir):
@@ -117,18 +148,5 @@ def load_experiment_assets(experiment_dir):
 
     assert_experiment_assets_attribute(experiment_assets)
 
-    # Load trial dictionaries from their corresponding files
-    trials = []
-    for trial_name in experiment_assets["trials"]:
-        folder_name = normalize_trial_name(trial_name)
-        trial_file = os.path.join(experiment_dir, folder_name, "trial_info.json")
-        if os.path.exists(trial_file):
-            with open(trial_file, "r", encoding="utf-8") as trial_f:
-                trial_assets = json.load(trial_f)
-                assert_trial_assets_attribute(trial_assets)
-                trials.append(trial_assets)
-        else:
-            msg = f"No trial_info.json found for trial {trial_name}."
-            warnings.warn(msg)
-    experiment_assets["trials"] = trials
+    load_trials(experiment_assets, experiment_dir)
     return experiment_assets
