@@ -1,5 +1,6 @@
 from copy import deepcopy
 from typing import Dict
+import warnings
 
 from numpy import log2
 import optuna
@@ -79,7 +80,7 @@ class HParamsSuggester:
         self.hparams_distributions = {}
         self.suggest_methods = {}
         self._compile_hparams_configs(hparams_configs)
-        self.current_trial = None
+        self.pending_trial = None
 
     def _compile_hparams_configs(self, hparams_configs):
         """
@@ -135,7 +136,7 @@ class HParamsSuggester:
         Returns:
             - dict: The next set of hyperparameters.
         """
-        if self.current_trial is not None:
+        if self.pending_trial is not None:
             # If set_last_score() has not been called after the last call to
             # next(), try to get the last score from the singleton.
             try:
@@ -151,7 +152,7 @@ class HParamsSuggester:
             suggest_method = self.suggest_methods[name]
             next_hparams[name] = suggest_method(trial)
 
-        self.current_trial = trial
+        self.pending_trial = trial
 
         return next_hparams
 
@@ -161,12 +162,18 @@ class HParamsSuggester:
 
         Args:
             - score (float): The score for the last suggested
-                hyperparameters.
+                hyperparameters. If None, the last trial will be dropped from
+                the study.
         """
-        if self.current_trial is None:
+        if self.pending_trial is None:
             msg += "No pending trial to set score for. Consider calling next() "
             msg = "first."
             raise ValueError(msg)
 
-        self.study.tell(self.current_trial, score)
-        self.current_trial = None
+        if score is not None:
+            self.study.tell(self.pending_trial, score)
+        else:
+            msg = "Dropping the last trial as the score is None."
+            warnings.warn(msg)
+
+        self.pending_trial = None
