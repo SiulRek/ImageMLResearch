@@ -9,10 +9,10 @@ from src.experimenting.helpers.experiment_assets import (
     get_default_experiment_assets,
     load_experiment_assets,
 )
-from src.utils import transform_figures_to_files
 from src.experimenting.helpers.trial import Trial
 from src.plotting.functions.plot_training_histories import plot_training_histories
 from src.research.attributes.research_attributes import ResearchAttributes
+from src.utils import transform_figures_to_files
 from src.utils import get_datetime, get_duration, add_durations
 from src.utils import Logger
 
@@ -196,9 +196,10 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             # successfully before, should an attempt to write the experiment
             # assets be done? if self._initial_trial_num >
             # len(self.experiment_assets["trials"]): try: self._sort_trials()
-            # self._write_experiment_assets() msg = "Experiment assets is updated
-            # with available trials." self.logger.info(msg) except Exception as
-            # e: pass
+            # self._write_experiment_assets() msg = "Experiment assets is
+            # updated with available trials." self.logger.info(msg) except
+            # Exception as e: pass
+            self._write_experiment_assets()  # Store assets, as might get recovered.
             raise
 
     def _sort_trials(self):
@@ -229,8 +230,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             self.experiment_assets["directory"], "experiment_info.json"
         )
         experiment_assets = self.experiment_assets.copy()
-        # Only store the trial names in the experiment assets as the trial assets is
-        # stored in separate files in the trial directories.
+        # Only store the trial names in the experiment assets as the trial
+        # assets is stored in separate files in the trial directories.
         experiment_assets["trials"] = [
             trial["name"] for trial in experiment_assets["trials"]
         ]

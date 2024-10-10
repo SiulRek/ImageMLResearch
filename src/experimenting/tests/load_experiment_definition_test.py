@@ -23,7 +23,7 @@ class TestLoadExperimentDefinition(BaseTestCase):
         with open(self.definitions_json_path, "w", encoding="utf-8") as f:
             json.dump(definitions_content, f)
 
-    def test_load_definitions_of_experiment_1(self):
+    def test_load_definitions_of_experiment_manual(self):
         definitions_content = {
             "experiment_metadata": self.experiment_metadata,
             "trial_definitions": [{"name": "trial_1", "hyperparameters": {}}],
@@ -39,7 +39,7 @@ class TestLoadExperimentDefinition(BaseTestCase):
         self.assertEqual(trial_def["name"], "trial_1")
         self.assertEqual(trial_def["hyperparameters"], {})
 
-    def test_load_definitions_of_experiment_2(self):
+    def test_load_definitions_of_experiment_automatic(self):
         definitions_content = {
             "experiment_metadata": self.experiment_metadata,
             "trial_definitions": {
@@ -63,6 +63,7 @@ class TestLoadExperimentDefinition(BaseTestCase):
             trial_definitions.suggester.set_last_score(1)
         with self.assertRaises(StopIteration):
             next(trial_definitions)
+            
 
     def test_load_definitions_file_not_found(self):
         with self.assertRaises(FileNotFoundError):

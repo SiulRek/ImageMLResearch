@@ -74,20 +74,21 @@ class HParamsSuggester:
         study_name=DEFAULT_STUDY_NAME,
     ):
         """
-        Initializes the HParamsSuggester with the given hyperparameter
+        Initializes the HParamsSuggester with the provided hyperparameter
         configurations.
 
         Args:
             - hparams_configs (Dict[str, dict]): The hyperparameter
                 configurations.
-            - study_name (str): The name of the study. Defaults to
+            - direction (str): The optimization direction, either "minimize"
+                or "maximize". Defaults to "minimize".
+            - storage_dir (str, optional): The directory to save the study.
+                Defaults to None.
+            - load_if_exists (bool): Whether to load an existing study if it
+                exists in the specified storage directory. Ignored if no
+                storage_dir is provided. Defaults to True.
+            - study_name (str, optional): The name of the study. Defaults to
                 DEFAULT_STUDY_NAME.
-            - direction (str): The direction to optimize the objective.
-                Defaults to "minimize".
-            - storage_dir (str): The directory to save the study. Defaults
-                to None.
-            - load_if_exists (bool): If true loads the study if exists in.
-                Defaults to True. storage_dir.
         """
         # TODO: Think of a way to allow sampler and pruner to be defined by the
         # user with hparams_configs. Pass them to create_study.
