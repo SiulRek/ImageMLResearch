@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Dict
+import os
 import warnings
 
 from numpy import log2
@@ -11,6 +11,8 @@ from optuna.distributions import (
 )
 
 from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
+
+DEFAULT_STUDY_NAME = "hparams_suggester_study"
 
 
 def _assert_hparam_configs(
@@ -63,7 +65,14 @@ def _get_suggest_categorical_method(name, config):
 class HParamsSuggester:
     """ A class to suggest hyperparameters using Optuna. """
 
-    def __init__(self, hparams_configs: Dict[str, dict]):
+    def __init__(
+        self,
+        hparams_configs,
+        direction="minimize",
+        storage_dir=None,
+        load_if_exists=True,
+        study_name=DEFAULT_STUDY_NAME,
+    ):
         """
         Initializes the HParamsSuggester with the given hyperparameter
         configurations.
@@ -71,16 +80,49 @@ class HParamsSuggester:
         Args:
             - hparams_configs (Dict[str, dict]): The hyperparameter
                 configurations.
+            - study_name (str): The name of the study. Defaults to
+                DEFAULT_STUDY_NAME.
+            - direction (str): The direction to optimize the objective.
+                Defaults to "minimize".
+            - storage_dir (str): The directory to save the study. Defaults
+                to None.
+            - load_if_exists (bool): If true loads the study if exists in.
+                Defaults to True. storage_dir.
         """
         # TODO: Think of a way to allow sampler and pruner to be defined by the
         # user with hparams_configs. Pass them to create_study.
-        self.study = optuna.create_study(direction="minimize")
+
+        study_kwargs = {"study_name": study_name, "direction": direction}
+        if storage_dir is not None:
+            study_kwargs["storage"] = self._process_storage_path(
+                storage_dir, study_name
+            )
+            study_kwargs["load_if_exists"] = load_if_exists
+
+        self.study = optuna.create_study(**study_kwargs)
         self.trials = []
         self.hp_names = hparams_configs.keys()
-        self.hparams_distributions = {}
+        self.hparams_distributions = {}  # TODO: Remove, as not used.
         self.suggest_methods = {}
         self._compile_hparams_configs(hparams_configs)
         self.pending_trial = None
+
+    def _process_storage_path(self, storage_dir, study_name):
+        """
+        Processes the storage path to be used by Optuna.
+
+        Args:
+            - storage_dir (str): The directory to save the study.
+            - study_name (str): The name of the study.
+        """
+        if os.path.isdir:
+            os.makedirs(storage_dir, exist_ok=True)
+            file_name = f"{study_name}.db"
+            storage_file = os.path.join(storage_dir, file_name)
+        storage_file = os.path.normpath(storage_file)
+        storage_file = storage_file.replace(os.sep, "/")
+        storage_file = f"sqlite:///{storage_file}"
+        return storage_file
 
     def _compile_hparams_configs(self, hparams_configs):
         """

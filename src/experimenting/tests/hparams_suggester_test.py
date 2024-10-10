@@ -83,7 +83,7 @@ class TestHParamsSuggester(BaseTestCase):
         self.assert_valid_hyperparams(next_hyperparams)
         with self.assertWarns(UserWarning):
             self.suggester.set_last_score(None)
-        self.suggester.suggest_next()  # Works without error
+        self.suggester.suggest_next()
 
     def test_update_trial_with_last_score_singleton(self):
         next_hyperparams = self.suggester.suggest_next()
@@ -121,10 +121,33 @@ class TestHParamsSuggester(BaseTestCase):
         trials = self.suggester.study.trials
         self.assertEqual(len(trials), 5)
 
-        # Check if all trials are unique
         for i, trial in enumerate(trials):
             for j in range(i + 1, len(trials)):
                 self.assertNotEqual(trial, trials[j])
+
+    def test_study_persistence(self):
+        """
+        Test if the storage file is saved after suggesting a combination and if
+        a new HParamsSuggester instance with the same storage directory and
+        load_if_exists=True loads the previous study.
+        """
+        suggester = HParamsSuggester(
+            self.hparams_distributions_configs,
+            storage_dir=self.temp_dir,
+            load_if_exists=True,
+        )
+        suggester.suggest_next()
+        suggester.set_last_score(0.8)
+
+        suggester_new = HParamsSuggester(
+            self.hparams_distributions_configs,
+            storage_dir=self.temp_dir,
+            load_if_exists=True,
+        )
+        self.assertEqual(len(suggester_new.study.trials), 1)
+        loaded_trial = suggester_new.study.trials[0]
+        self.assertEqual(loaded_trial.value, 0.8)
+        self.assertIsNotNone(loaded_trial.params)
 
 
 if __name__ == "__main__":
