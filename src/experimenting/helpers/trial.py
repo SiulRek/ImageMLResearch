@@ -2,6 +2,7 @@ from contextlib import AbstractContextManager
 from copy import copy
 import json
 import os
+import shutil
 import warnings
 
 from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
@@ -156,7 +157,10 @@ class Trial(AbstractContextManager):
             msg = f"Trial {trial_name} not found in experiment trials."
             raise ValueError(msg)
         index = names.index(trial_name)
-        self.experiment_trials.pop(index)
+        trial = self.experiment_trials.pop(index)
+        trial_dir = trial["directory"]
+        shutil.rmtree(trial_dir)
+        os.makedirs(trial_dir)
 
     def _write_trial_assets(self):
         """ Writes the trial assets to a JSON file. """

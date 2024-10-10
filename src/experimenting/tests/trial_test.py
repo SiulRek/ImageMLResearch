@@ -1,4 +1,3 @@
-from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
 import json
 import os
 import unittest
@@ -6,7 +5,8 @@ from unittest.mock import MagicMock
 
 import matplotlib.pyplot as plt
 
-from src.experimenting.helpers.trial import Trial, ResultsEmptyError
+from src.experimenting.helpers.last_score_singleton import LastScoreSingleton
+from src.experimenting.helpers.trial import Trial
 from src.testing.bases.base_test_case import BaseTestCase
 
 
@@ -19,8 +19,8 @@ class TestTrial(BaseTestCase):
             "trials": [],
         }
         self.mock_experiment.get_results.return_value = {
-            # Experiment requires at least one value in dict
-            # to be not empty for the trial to be saved.
+            # Experiment requires at least one value in dict to be not empty for
+            # the trial to be saved.
             "figures": {},
             "evaluation_metrics": {},
             "training_history": {"loss": [0.1, 0.2, 0.3]},
@@ -36,7 +36,9 @@ class TestTrial(BaseTestCase):
         )
 
     def _read_trial_info(self, trial):
-        trial_info_json = os.path.join(trial.trial_assets["directory"], "trial_info.json")
+        trial_info_json = os.path.join(
+            trial.trial_assets["directory"], "trial_info.json"
+        )
         with open(trial_info_json, "r", encoding="utf-8") as f:
             assets = json.load(f)
         return assets
@@ -45,7 +47,9 @@ class TestTrial(BaseTestCase):
         with self.call_test_trial() as trial:
             self.assertIsInstance(trial, Trial)
             self.assertEqual(trial.trial_assets["name"], self.name)
-            self.assertEqual(trial.trial_assets["hyperparameters"], self.hyperparameters)
+            self.assertEqual(
+                trial.trial_assets["hyperparameters"], self.hyperparameters
+            )
             self.assertTrue(os.path.exists(trial.trial_assets["directory"]))
             self.assertIsInstance(trial.trial_assets["start_time"], str)
             self.assertIsNone(trial.trial_assets["duration"])
@@ -57,7 +61,9 @@ class TestTrial(BaseTestCase):
     def test_trial_info_written_to_json(self):
         with self.call_test_trial() as trial:
             pass
-        trial_info_json = os.path.join(trial.trial_assets["directory"], "trial_info.json")
+        trial_info_json = os.path.join(
+            trial.trial_assets["directory"], "trial_info.json"
+        )
         self.assertTrue(os.path.exists(trial_info_json))
 
         assets = self._read_trial_info(trial)
@@ -112,8 +118,10 @@ class TestTrial(BaseTestCase):
 
         # val_loss is present in training history.
         with self.call_test_trial():
-            return_value["training_history"] = {"loss": [0.1, 0.2, 0.3],
-                                                "val_loss": [0.2, 0.3, 0.4]}
+            return_value["training_history"] = {
+                "loss": [0.1, 0.2, 0.3],
+                "val_loss": [0.2, 0.3, 0.4],
+            }
             self.mock_experiment.get_results.return_value = return_value
         last_score = LastScoreSingleton().take()
         self.assertEqual(last_score, 0.4)
@@ -125,13 +133,23 @@ class TestTrial(BaseTestCase):
         last_score = LastScoreSingleton().take()
         self.assertEqual(last_score, 0.3)
 
-        # No training history.
+        # Non empty results but training_history is empty ...
         LastScoreSingleton().clear()
         with self.call_test_trial():
+            return_value["evaluation_metrics"] = {"accuracy": 0.9}
             return_value["training_history"] = {}
             self.mock_experiment.get_results.return_value = return_value
+        # ... should raise an exception as no score was set.
         with self.assertRaises(ValueError):
             LastScoreSingleton().take()
+
+        # Empty results sets last score to None.
+        LastScoreSingleton().clear()
+        with self.call_test_trial():
+            return_value["evaluation_metrics"] = {}
+            return_value["training_history"] = {}
+            self.mock_experiment.get_results.return_value = return_value
+        self.assertIsNone(LastScoreSingleton().take())
 
     def test_trial_exit_with_exception(self):
 
@@ -174,36 +192,34 @@ class TestTrial(BaseTestCase):
             "training_history": {"loss": [0.1, 0.2, 0.3]},
         }
 
-        # Case 1: Trial never runned, actual results are empty.
-        # Trial is not saved therefore we consider it as never runned.
+        # Case 1: Trial never runned, actual results are empty. Trial is not
+        # saved therefore we consider it as never runned.
         self.mock_experiment.get_results.return_value = empty_results
         with self.assertWarns(UserWarning):
             with self.call_test_trial():
                 pass
         self.assertEqual(len(get_trials()), 0)
 
-        # Case 2: Trial never runned, actual results are not empty.
-        # Normal case.
+        # Case 2: Trial never runned, actual results are not empty. Normal case.
         self.mock_experiment.get_results.return_value = non_empty_results
         with self.call_test_trial():
             pass
         self.assertEqual(len(get_trials()), 1)
         prev_trial_assets = get_trials()[0]
 
-        # Case 3: Trial already runned, actual results are empty.
-        # Nothing new is saved.
+        # Case 3: Trial already runned, actual results are empty. Nothing new is
+        # saved.
         self.mock_experiment.get_results.return_value = empty_results
         with self.call_test_trial():
             pass
         self.assertEqual(len(get_trials()), 1)
         new_trial_assets = get_trials()[0]
-        # Trial assets should be the same as the previous trial, as
-        # the results are empty and therefore the old trial 
-        # assets should be kept.
+        # Trial assets should be the same as the previous trial, as the results
+        # are empty and therefore the old trial assets should be kept.
         self.assertEqual(prev_trial_assets, new_trial_assets)
 
-        # Case 4: Trial already runned, actual results are not empty.
-        # Old results are overwritten.
+        # Case 4: Trial already runned, actual results are not empty. Old
+        # results are overwritten.
         self.mock_experiment.get_results.return_value = non_empty_results
         with self.assertWarns(UserWarning):
             with self.call_test_trial():
