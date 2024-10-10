@@ -201,6 +201,9 @@ class Trial(AbstractContextManager):
             msg += "results. Keeping old results."
             warnings.warn(msg)
             self.logger.warning(f"Skipping {trial_name}")
+            # In case Hyperparameter study is done in the background, this trial
+            # is going to be skipped.
+            LastScoreSingleton().set(None)
             return
 
         self.logger.info(f"Finalizing trial: {trial_name}")
@@ -227,9 +230,9 @@ class Trial(AbstractContextManager):
         training_history = copy(trial_results["training_history"])
         self.trial_assets["training_history"] = training_history
 
-        # Save the last validation loss to the LastScoreSingleton.
-        # This allows HParamsSuggester to access the last score and suggest
-        # hyperparameters based on the most recent trial's performance.
+        # Save the last validation loss to the LastScoreSingleton. This allows
+        # HParamsSuggester to access the last score and suggest hyperparameters
+        # based on the most recent trial's performance.
         loss = training_history.get("val_loss") or training_history.get("loss")
         last_score = loss[-1] if loss else None
         if last_score is not None:
