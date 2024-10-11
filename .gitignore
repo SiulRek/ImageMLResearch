@@ -36,4 +36,6 @@ source/preprocessing/notebooks/related/pipeline.json
 # Private References
 references/private/*
 
-tiny_defect_project/*
+# Temporary ignore
+demo/chihuahua_vs_muffin
+tiny_defect_project/
