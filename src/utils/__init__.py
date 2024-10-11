@@ -9,3 +9,4 @@ from src.utils.general.markdown_file_writer import MarkdownFileWriter
 from src.utils.general.search_files_with_name import search_files_with_name
 from src.utils.general.time_utils import get_datetime, get_duration, add_durations
 from src.utils.general.transform_figures_to_files import transform_figures_to_files
+from src.utils.general.send_chatgpt_prompt import send_chatgpt_prompt
