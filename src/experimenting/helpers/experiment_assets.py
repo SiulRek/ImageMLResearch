@@ -108,19 +108,34 @@ def load_trials(experiment_assets, experiment_dir):
     Returns:
         - list: The loaded trial assets.
     """
+    experiment_dir = experiment_dir
+
+    # Load existing trials from two sources
+    # 1. from experiment_assets
+    tracked_names = experiment_assets["trials"]
+    tracked_names = [normalize_trial_name(name) for name in tracked_names]
+
+    # 2. from the experiment output directory
+    paths = [os.path.join(experiment_dir, name) for name in os.listdir(experiment_dir)]
+    dirs = [path for path in paths if os.path.isdir(path)]
+    dir_names = [os.path.basename(d) for d in dirs]
+    dir_names = [normalize_trial_name(name) for name in dir_names]
+
+    trial_names = list(set(tracked_names + dir_names))
+
     # Load trial dictionaries from their corresponding files
     trials = []
-    for trial_name in experiment_assets["trials"]:
-        trial_name = normalize_trial_name(trial_name)
+    for trial_name in trial_names:
         trial_file = os.path.join(experiment_dir, trial_name, "trial_info.json")
         if os.path.exists(trial_file):
             with open(trial_file, "r", encoding="utf-8") as trial_f:
                 trial_assets = json.load(trial_f)
                 assert_trial_assets_attribute(trial_assets)
                 trials.append(trial_assets)
-        else:
+        elif trial_name in tracked_names:
             msg = f"No trial_info.json found for trial {trial_name}."
             warnings.warn(msg)
+        # else trial_name is a not tracked directory, ignore it
     experiment_assets.update({"trials": trials})
 
 
