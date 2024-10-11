@@ -15,7 +15,7 @@ from src.research.attributes.research_attributes import ResearchAttributes
 from src.utils import transform_figures_to_files
 from src.utils import get_datetime, get_duration, add_durations
 from src.utils import Logger
-
+from src.experimenting.helpers.ai_support import ask_for_experiment_analysis
 
 class ExperimentError(Exception):
     """ Exception raised for errors that occur during the experiment. """
@@ -26,7 +26,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     ResearchAttributes. """
 
     def __init__(
-        self, research_attributes, directory, name, description, sort_metric="accuracy"
+        self, research_attributes, directory, name, description, sort_metric="accuracy", ask_for_analysis=False
     ):
         """
         Initializes the Experiment with the given parameters.
@@ -40,6 +40,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 report.
             - sort_metric (str): The metric to sort the trials by. Default
                 is "accuracy".
+            - ask_for_analysis (bool): Whether to ask ChatGPT for an analysis 
+                of the experiment. Default is False.
 
         NOTE:
             - `Experiment` is the only research module that requires
@@ -65,6 +67,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
         self._no_trial_executed = True
         self._initial_trial_num = len(self.experiment_assets["trials"])
+
+        self._ask_for_analysis = ask_for_analysis
 
     def _make_output_directory(self, experiment_dir):
         """
@@ -288,3 +292,6 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         create_experiment_report(self.experiment_assets)
 
         self.logger.close_logger()
+
+        if self._ask_for_analysis:
+            ask_for_experiment_analysis(self.experiment_assets["directory"])
