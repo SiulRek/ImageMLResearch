@@ -26,8 +26,8 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             label_type="multi_class", class_names=["Digit " + str(i) for i in range(10)]
         )
         self.data_handler = DataHandler()
-        # Only synchronize the research attributes for the data handler
-        # as it is the first, the rest will be synchronized later.
+        # Only synchronize the research attributes for the data handler as it is
+        # the first, the rest will be synchronized later.
         self.data_handler.synchronize_research_attributes(self.research_attributes)
         self.trainer = Trainer()
         self.plotter = MultiClassPlotter()
@@ -80,7 +80,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             )
 
     def test_workflow(self):
-        # #### Dataset Handling ####
+        # Dataset Handling
         dataset = self.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         self.data_handler.load_dataset(dataset)
         self.data_handler.split_dataset(train_size=0.7, val_size=0.15, test_size=0.15)
@@ -96,7 +96,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         self.data_handler.restore_datasets()
         self._assert_datasets_container(self.data_handler)
 
-        #### Experimenting ####
+        # Experimenting
         trial_definitions = [
             {
                 "name": "Trial 1",
@@ -126,7 +126,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             experiment.synchronize_research_attributes(self.plotter)
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
-                    # ## Training ##
+                    # Training
                     self.assertTrue(
                         os.path.exists(trial.trial_assets["directory"]),
                         "The trial directory does not exist.",
@@ -137,9 +137,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                         trial_definition["hyperparameters"]["units"]
                     )
                     self.trainer.set_compiled_model(model)
-                    self.trainer.fit_predict_evaluate(
-                        epochs=10, validation_steps=5
-                    )
+                    self.trainer.fit_predict_evaluate(epochs=10, batch_size=32)
                     self._assert_outputs_container(self.trainer)
                     has_evaluation_metrics = (
                         hasattr(self.trainer, "evaluation_metrics")
@@ -150,7 +148,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                         "The trainer does not have evaluation metrics.",
                     )
 
-                    # ## Plotting ##
+                    # Plotting
                     self.plotter.synchronize_research_attributes(self.trainer)
                     self._assert_outputs_container(self.plotter)
                     has_training_history = (
@@ -165,7 +163,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                     self.plotter.plot_confusion_matrix(title="Confusion Matrix")
                     experiment.synchronize_research_attributes(self.plotter)
 
-        #### Assertions of experiment files existence ####
+        # Assertions of experiment files existence
         self.assertEqual(
             len(experiment.experiment_assets["trials"]),
             i + 1,

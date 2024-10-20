@@ -21,7 +21,7 @@ class TestPlotTrainingHistories(PlottingTestCase):
         cls.model = tf.keras.models.Sequential(
             [
                 tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
-                tf.keras.layers.experimental.preprocessing.Rescaling(1.0 / 255),
+                tf.keras.layers.Rescaling(1.0 / 255),
                 tf.keras.layers.Dense(10, activation="relu"),
                 tf.keras.layers.Dense(10, activation="softmax"),
             ]

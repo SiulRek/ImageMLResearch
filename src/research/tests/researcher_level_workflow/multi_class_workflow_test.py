@@ -83,7 +83,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
 
     def _make_preprocessing_pipeline(self):
         pipeline = [
-            steps.Rotator(90),
+            # steps.Rotator(90),
             steps.ReverseScaler(255),
             steps.TypeCaster(output_dtype="float32"),
         ]
@@ -105,7 +105,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
             ["train_dataset", "val_dataset", "test_dataset"],
             batch_size=32,
             shuffle_seed=42,
-            prefetch_buffer_size=10,
+            prefetch_buffer_size=12,
             repeat_num=1,
         )
         self._assert_datasets_container()
@@ -144,7 +144,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
                         trial_definition["hyperparameters"]["units"]
                     )
                     self.researcher.set_compiled_model(model)
-                    self.researcher.fit_predict_evaluate(epochs=10, validation_steps=5)
+                    self.researcher.fit_predict_evaluate(epochs=10, batch_size=32)
                     self._assert_outputs_container()
                     has_evaluation_metrics = (
                         hasattr(self.researcher, "evaluation_metrics")

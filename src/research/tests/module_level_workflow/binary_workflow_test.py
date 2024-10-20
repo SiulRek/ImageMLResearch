@@ -139,7 +139,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                         trial_definition["hyperparameters"]["units"]
                     )
                     self.trainer.set_compiled_model(model)
-                    self.trainer.fit_predict_evaluate(epochs=10, validation_steps=5)
+                    self.trainer.fit_predict_evaluate(epochs=10, batch_size=32)
                     self._assert_outputs_container(self.trainer)
                     has_evaluation_metrics = (
                         hasattr(self.trainer, "evaluation_metrics")
