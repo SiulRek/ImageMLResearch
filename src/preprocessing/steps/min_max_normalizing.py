@@ -18,13 +18,30 @@ class MinMaxNormalizer(StepBase):
         preprocessing pipeline. """
         super().__init__({})
         self.output_datatype = tf.float16
+    def _compute_dataset_statistic(self, dataset):
+        """
+        Computes the minimum and maximum values of the dataset.
+
+        Args:
+            - dataset (tf.data.Dataset): The dataset to compute the
+                statistic on.
+        """
+        min_vals = []
+        max_vals = []
+        for sample in dataset:
+            min_vals.append(tf.reduce_min(sample))
+            max_vals.append(tf.reduce_max(sample))
+        min_val = tf.reduce_min(min_vals)
+        max_val = tf.reduce_max(max_vals)
+        self._min_val = tf.cast(min_val, self.output_datatype)
+        self._max_val = tf.cast(max_val, self.output_datatype)
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         image_tensor = tf.cast(image_tensor, self.output_datatype)
-        min_val = tf.reduce_min(image_tensor)
-        max_val = tf.reduce_max(image_tensor)
-        normalized_image = (image_tensor - min_val) / (max_val - min_val)
+        normalized_image = (image_tensor - self._min_val) / (
+            self._max_val - self._min_val
+        )
         return normalized_image
 
 
