@@ -42,25 +42,21 @@ class StepBase(ABC):
             the preprocessing step.
 
     Public Methods:
-        - __call__(image_tensor: tf.Tensor, tf_target: Any) -> tf.Tensor:
-            To be implemented by the child class to define the specific preprocessing
-            functionality. The method takes an image tensor and an optional target,
-            returning the processed image tensor.
+        - __call__(image_tensor: tf.Tensor, tf_target: Any) -> tf.Tensor: To
+            be implemented by the child class to define the specific
+            preprocessing functionality. The method takes an image tensor and an
+            optional target, returning the processed image tensor.
 
     Child Class Template:
-        - class StepTemplate(StepBase):
-            arguments_datatype = <datatype for arguments>
-            name = <Preprocessing step identifier>
+        - class StepTemplate(StepBase): arguments_datatype = <datatype for
+            arguments> name = <Preprocessing step identifier>
 
-        def __init__(self, **processing_step_specific_args):
-            super().__init__(locals())
+    def __init__(self, **processing_step_specific_args):
+        - super().__init__(locals())
 
-        @StepBase._nparray_pyfunc_wrapper
-        # or @StepBase._tensor_pyfunc_wrapper
-        def __call__(self, image_tensor):
-            # TODO: Implement the preprocessing logic
-            image_tensor_processed = ...
-            return image_tensor_processed
+    @StepBase._nparray_pyfunc_wrapper # or @StepBase._tensor_pyfunc_wrapper def
+    __call__(self, image_tensor): # TODO: Implement the preprocessing logic
+    image_tensor_processed = ... return image_tensor_processed
 
     TODOs when integrating a new preprocessing step in the framework:
         1. Create a preprocessing step class inheriting from `StepBase`
@@ -70,7 +66,7 @@ class StepBase(ABC):
         3. Add a JSON entry of the class to
         .src/preprocessing/definitions/pipeline_template.json.
         4. Execute single_step_test.py over this class.
-    """ 
+    """
 
     default_output_datatype = tf.uint8
     arguments_datatype = None  # Child Classes have to overwrite this attributes
@@ -131,6 +127,18 @@ class StepBase(ABC):
         """
         return get_step_json_representation(self.parameters, self.name)
 
+    def _compute_dataset_statistic(self, dataset):
+        """
+        Placeholder method for computing the statistics of a dataset. Allows the
+        preprocessing step to compute the statistic of the dataset before
+        applying the preprocessing step.
+
+        Args:
+            - dataset (tf.data.Dataset): The dataset to compute the
+                statistic on.
+        """
+        return 
+    
     @staticmethod
     def _tensor_pyfunc_wrapper(function):
         @functools.wraps(function)  # Preserve function metadata
@@ -141,6 +149,7 @@ class StepBase(ABC):
 
         @functools.wraps(function)  # Preserve function metadata
         def dataset_map_function(self, image_dataset):
+            self._compute_dataset_statistic(image_dataset)
             return image_dataset.map(
                 lambda img: tf.py_function(
                     func=lambda i: tensor_to_py_function_wrapper(self, i),
@@ -166,6 +175,7 @@ class StepBase(ABC):
 
         @functools.wraps(function)  # Preserve function metadata
         def py_function_dataset_map(self, image_dataset):
+            self._compute_dataset_statistic(image_dataset)
             return image_dataset.map(
                 lambda img: tf.py_function(
                     func=lambda i: numpy_to_py_function_wrapper(self, i),
