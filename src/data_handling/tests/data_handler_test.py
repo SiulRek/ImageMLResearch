@@ -148,6 +148,40 @@ class TestDataHandler(BaseTestCase):
         self.assertTrue("complete_dataset" in self.data_handler.datasets_container)
         self._assert_dataset(self.data_handler.datasets_container["complete_dataset"])
 
+    def _same_datasets_containers(self, container1, container2):
+        """ Asserts that two datasets containers are equal. """
+        self.assertEqual(len(container1), len(container2))
+        for key, dataset1 in container1.items():
+            dataset2 = container2[key]
+            self.assertEqual(dataset1, dataset2)
+
+    def test_update_datasets_container(self):
+        """ Test correct updating of datasets container dictionary. """
+        images = tf.random.normal((10, 28, 28, 1))
+        labels = tf.constant([i for i in range(10)])
+        dataset = tf.data.Dataset.from_tensor_slices((images, labels))
+
+        reference_container = self.data_handler.datasets_container
+        self.data_handler.load_dataset(dataset)
+        self._same_datasets_containers(
+            reference_container, self.data_handler.datasets_container
+        )
+        self.data_handler.prepare_datasets(batch_size=2)
+        self._same_datasets_containers(
+            reference_container, self.data_handler.datasets_container
+        )
+        self.data_handler.split_dataset(train_size=0.6, val_size=0.2, test_size=0.2)
+        self._same_datasets_containers(
+            reference_container, self.data_handler.datasets_container
+        )
+        self.data_handler.backup_datasets()
+        self.data_handler._backuped_datasets_container.update({"kwarg": "value"})
+        self.data_handler.restore_datasets()
+        self._same_datasets_containers(
+            reference_container, self.data_handler.datasets_container
+        )
+        self.assertIn("kwarg", reference_container)
+
 
 if __name__ == "__main__":
     unittest.main()
