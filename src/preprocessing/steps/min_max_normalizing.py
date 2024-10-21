@@ -18,6 +18,9 @@ class MinMaxNormalizer(StepBase):
         preprocessing pipeline. """
         super().__init__({})
         self.output_datatype = tf.float16
+        self._min_val = None
+        self._max_val = None
+
     def _compute_dataset_statistic(self, dataset):
         """
         Computes the minimum and maximum values of the dataset.
