@@ -61,6 +61,27 @@ class TestDatasetFunctions(BaseTestCase):
         )
         self.assertIsNone(test, "Test set should be None when size is 0.")
 
+    def test_split_with_manual_dataset_size(self):
+        """ Test that the split_dataset function handles the manually provided
+        dataset_size correctly. """
+        train, val, test = split_dataset(self.dataset, dataset_size=100)
+
+        self.assertEqual(
+            train.cardinality().numpy(),
+            80,
+            "Training set size should be 80% of the specified dataset size (40).",
+        )
+        self.assertEqual(
+            val.cardinality().numpy(),
+            10,
+            "Validation set size should be 10% of the specified dataset size (5).",
+        )
+        self.assertEqual(
+            test.cardinality().numpy(),
+            10,
+            "Test set size should be 10% of the specified dataset size (5).",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
