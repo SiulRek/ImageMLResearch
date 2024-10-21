@@ -140,18 +140,18 @@ class DataHandler(ResearchAttributes):
             )
             self._datasets_container.update({dataset_name: enhanced_dataset})
 
-    def split_dataset(self, train_size, val_size, test_size, dataset_size=None):
+    def split_dataset(self, train_split, val_split, test_split, dataset_size=None):
         """
         Splits the 'complete_dataset' into 'train_dataset', 'val_dataset' and
         'test_dataset' and stores them in the 'datasets_container'. Note that
         the complete dataset is removed.
 
         Args:
-            - train_size (float): The proportion of the dataset for
+            - train_split (float): The proportion of the dataset for
                 training.
-            - val_size (float): The proportion of the dataset for
+            - val_split (float): The proportion of the dataset for
                 validation.
-            - test_size (float): The proportion of the dataset for testing.
+            - test_split (float): The proportion of the dataset for testing.
             - dataset_size (int, optional): The size of the dataset. If
                 None, the dataset size is determined by calling the
                 'cardinality' method.
@@ -159,7 +159,7 @@ class DataHandler(ResearchAttributes):
         self._assert_dataset_exists("complete_dataset")
         dataset = self._datasets_container["complete_dataset"]
         train_dataset, val_dataset, test_dataset = split_dataset(
-            dataset, train_size, val_size, test_size, dataset_size
+            dataset, train_split, val_split, test_split, dataset_size
         )
         self._datasets_container.update(
             {

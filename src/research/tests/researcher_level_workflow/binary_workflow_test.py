@@ -93,7 +93,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
             sample_num=1000, labeled=True, binary=True
         )
         self.researcher.load_dataset(dataset)
-        self.researcher.split_dataset(train_size=0.7, val_size=0.15, test_size=0.15)
+        self.researcher.split_dataset(train_split=0.7, val_split=0.15, test_split=0.15)
         self._assert_datasets_container(batched=False)
         self.researcher.backup_datasets()
         self.researcher.restore_datasets()

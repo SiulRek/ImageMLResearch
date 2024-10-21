@@ -115,7 +115,7 @@ class TestDataHandler(BaseTestCase):
         """ Test splitting of dataset and storage of splits in the dataset
         container. """
         self.data_handler.load_dataset(self.jpg_dict)
-        self.data_handler.split_dataset(train_size=0.6, val_size=0.2, test_size=0.2)
+        self.data_handler.split_dataset(train_split=0.6, val_split=0.2, test_split=0.2)
         self.assertIn("train_dataset", self.data_handler.datasets_container)
         self.assertIn("val_dataset", self.data_handler.datasets_container)
         self.assertIn("test_dataset", self.data_handler.datasets_container)
@@ -170,7 +170,7 @@ class TestDataHandler(BaseTestCase):
         self._same_datasets_containers(
             reference_container, self.data_handler.datasets_container
         )
-        self.data_handler.split_dataset(train_size=0.6, val_size=0.2, test_size=0.2)
+        self.data_handler.split_dataset(train_split=0.6, val_split=0.2, test_split=0.2)
         self._same_datasets_containers(
             reference_container, self.data_handler.datasets_container
         )

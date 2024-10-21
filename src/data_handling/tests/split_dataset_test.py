@@ -27,11 +27,11 @@ class TestDatasetFunctions(BaseTestCase):
 
     def test_split_proportions_error(self):
         with self.assertRaises(ValueError):
-            split_dataset(self.dataset, train_size=0.7, val_size=0.2, test_size=0.2)
+            split_dataset(self.dataset, train_split=0.7, val_split=0.2, test_split=0.2)
 
     def test_split_with_zero_size(self):
         train, val, test = split_dataset(
-            self.dataset, train_size=0.0, val_size=0.5, test_size=0.5
+            self.dataset, train_split=0.0, val_split=0.5, test_split=0.5
         )
         self.assertIsNone(train, "Training set should be None when size is 0.")
         self.assertEqual(
@@ -41,7 +41,7 @@ class TestDatasetFunctions(BaseTestCase):
             test.cardinality().numpy(), 50, "Test set size should be 50% of total."
         )
         train, val, test = split_dataset(
-            self.dataset, train_size=0.5, val_size=0.0, test_size=0.5
+            self.dataset, train_split=0.5, val_split=0.0, test_split=0.5
         )
         self.assertEqual(
             train.cardinality().numpy(), 50, "Training set size should be 50% of total."
@@ -51,7 +51,7 @@ class TestDatasetFunctions(BaseTestCase):
             test.cardinality().numpy(), 50, "Test set size should be 50% of total."
         )
         train, val, test = split_dataset(
-            self.dataset, train_size=0.5, val_size=0.5, test_size=0.0
+            self.dataset, train_split=0.5, val_split=0.5, test_split=0.0
         )
         self.assertEqual(
             train.cardinality().numpy(), 50, "Training set size should be 50% of total."

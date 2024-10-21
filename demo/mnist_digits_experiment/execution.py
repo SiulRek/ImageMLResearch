@@ -80,7 +80,7 @@ def make_experiment(experimant_metadata, trial_definitions):
     preprocessing_pipe = create_preprocessing_pipeline()
     researcher.apply_preprocessing_pipeline(preprocessing_pipe)
     researcher.prepare_datasets(batch_size=32, shuffle_seed=42)
-    researcher.split_dataset(train_size=0.8, val_size=0.1, test_size=0.1)
+    researcher.split_dataset(train_split=0.8, val_split=0.1, test_split=0.1)
 
     # Experiment Execution
     with researcher.run_experiment(**experimant_metadata) as experiment:

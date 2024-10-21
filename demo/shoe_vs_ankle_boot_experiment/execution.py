@@ -83,7 +83,7 @@ def make_experiment(experiment_definition, trial_definitions):
 
     researcher.load_dataset(dataset)
     researcher.prepare_datasets(batch_size=32, shuffle_seed=42)
-    researcher.split_dataset(train_size=0.8, val_size=0.1, test_size=0.1)
+    researcher.split_dataset(train_split=0.8, val_split=0.1, test_split=0.1)
 
     with researcher.run_experiment(**experiment_definition) as experiment:
         for trial_definition in trial_definitions:
