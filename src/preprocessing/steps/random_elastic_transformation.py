@@ -24,11 +24,13 @@ class RandomElasticTransformer(StepBase):
         """
         super().__init__(locals())
 
+    def _setup(self, dataset):
+        np.random.seed(self.parameters["seed"])
+        return super()._setup(dataset)
+
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
         row, col, _ = image_nparray.shape
-
-        np.random.seed(self.parameters["seed"])  # Set the random seed
 
         dx = np.random.uniform(-1, 1, size=(row, col)) * self.parameters["alpha"]
         dy = np.random.uniform(-1, 1, size=(row, col)) * self.parameters["alpha"]

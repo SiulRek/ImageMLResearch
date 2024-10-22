@@ -35,6 +35,10 @@ class GaussianNoiseInjector(StepBase):
         """
         super().__init__(locals())
 
+    def _setup(self, dataset):
+        tf.random.set_seed(self.parameters["seed"])
+        return super()._setup(dataset)
+
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         shape = tf.shape(image_tensor)
@@ -42,7 +46,6 @@ class GaussianNoiseInjector(StepBase):
             shape,
             mean=self.parameters["mean"],
             stddev=self.parameters["sigma"],
-            seed=self.parameters["seed"],
         )
         gaussian_noise = tf.cast(gaussian_noise, self.output_datatype)
         noisy_image = image_tensor + gaussian_noise

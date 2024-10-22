@@ -22,6 +22,10 @@ class RandomCropper(StepBase):
         """
         super().__init__(locals())
 
+    def _setup(self, dataset):
+        tf.random.set_seed(self.parameters["seed"])
+        return super()._setup(dataset)
+
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         image_shape = tf.shape(image_tensor)
@@ -34,13 +38,11 @@ class RandomCropper(StepBase):
             shape=(),
             maxval=image_shape[0] - crop_height + 1,
             dtype=tf.int32,
-            seed=self.parameters["seed"],
         )
         random_left = tf.random.uniform(
             shape=(),
             maxval=image_shape[1] - crop_width + 1,
             dtype=tf.int32,
-            seed=self.parameters["seed"],
         )
 
         cropped_image = tf.image.crop_to_bounding_box(

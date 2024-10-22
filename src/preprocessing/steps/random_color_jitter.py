@@ -33,11 +33,15 @@ class RandomColorJitterer(StepBase):
             - saturation (float): Saturation factor range (lower, upper).
                 Must be non-negative.
             - hue (float): Maximum delta for hue adjustment. Must be in [0,
-                0.5].
+            0.5].
             - seed (int): An optional integer seed for random operations.
                 Default is 42.
         """
         super().__init__(locals())
+
+    def _setup(self, dataset):
+        tf.random.set_seed(self.parameters["seed"])
+        return super()._setup(dataset)
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
@@ -51,7 +55,6 @@ class RandomColorJitterer(StepBase):
             image_tensor,
             lower=1 - self.parameters["contrast"],
             upper=1 + self.parameters["contrast"],
-            seed=self.parameters["seed"],
         )
 
         if not is_grayscale:
@@ -59,12 +62,10 @@ class RandomColorJitterer(StepBase):
                 image_tensor,
                 lower=1 - self.parameters["saturation"],
                 upper=1 + self.parameters["saturation"],
-                seed=self.parameters["seed"],
             )
             image_tensor = tf.image.random_hue(
                 image_tensor,
                 max_delta=self.parameters["hue"],
-                seed=self.parameters["seed"],
             )
 
         return image_tensor

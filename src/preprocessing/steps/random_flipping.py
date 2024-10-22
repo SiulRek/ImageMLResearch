@@ -21,7 +21,7 @@ class RandomFlipper(StepBase):
             - flip_direction (str): Direction of the potential flip. Can be
                 'horizontal', 'vertical', or 'both'.
             - seed (int): Random seed for reproducible flipping. Default is
-                42.
+            42.
         """
         super().__init__(locals())
         if flip_direction not in ["horizontal", "vertical", "both"]:
@@ -30,10 +30,13 @@ class RandomFlipper(StepBase):
             )
         self.seed = seed
 
+    def _setup(self, dataset):
+        random.seed(self.seed)
+        return super()._setup(dataset)
+
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
         flip_direction = self.parameters["flip_direction"]
-        random.seed(self.seed)  # Set the random seed for reproducibility
         do_flip = random.choice([True, False])
 
         if do_flip:

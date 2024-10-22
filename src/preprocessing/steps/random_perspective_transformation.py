@@ -4,8 +4,8 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
-from src.preprocessing.steps.step_base import StepBase
 from src.preprocessing.helpers.step_utils import correct_image_tensor_shape
+from src.preprocessing.steps.step_base import StepBase
 
 
 class RandomPerspectiveTransformer(StepBase):
@@ -27,11 +27,14 @@ class RandomPerspectiveTransformer(StepBase):
         """
         super().__init__(locals())
 
+    def _setup(self, dataset):
+        random.seed(self.parameters["seed"])
+        return super()._setup(dataset)
+
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
         height, width, _ = image_nparray.shape
         warp_intensity = int(min(height, width) * self.parameters["warp_scale"])
-        random.seed(self.parameters["seed"])
 
         src_points = np.float32(
             [[0, 0], [width - 1, 0], [0, height - 1], [width - 1, height - 1]]

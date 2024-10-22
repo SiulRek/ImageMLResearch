@@ -22,14 +22,16 @@ class RandomRotator(StepBase):
                 range of angles for rotation. For example, (-90, 90) allows
                 rotations between -90 and 90 degrees.
             - seed (int): Random seed for reproducible rotations. Default is
-                42.
+            42.
         """
         super().__init__(locals())
 
+    def _setup(self, dataset):
+        random.seed(self.parameters["seed"])
+        return super()._setup(dataset)
+
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
-        random.seed(self.parameters["seed"])
-
         angle = random.randint(*self.parameters["angle_range"])
         height, width = image_nparray.shape[:2]
         rotation_matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1)
