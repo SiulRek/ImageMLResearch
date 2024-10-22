@@ -21,7 +21,7 @@ class MeanNormalizer(StepBase):
         self._mean_val = None
         self._range_val = None
 
-    def _compute_dataset_statistic(self, dataset):
+    def _setup(self, dataset):
         """
         Computes the mean and range (max - min) of the dataset.
 

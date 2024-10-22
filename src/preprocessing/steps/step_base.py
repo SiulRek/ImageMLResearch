@@ -127,18 +127,15 @@ class StepBase(ABC):
         """
         return get_step_json_representation(self.parameters, self.name)
 
-    def _compute_dataset_statistic(self, dataset):
+    def _setup(self, dataset):
         """
-        Placeholder method for computing the statistics of a dataset. Allows the
-        preprocessing step to compute the statistic of the dataset before
-        applying the preprocessing step.
+        Sets up the preprocessing step directly before applying it to the
+        dataset. Child classes can override this method to perform any necessary
+        setup operations, such as computing dataset statistics or setting random
+        seeds.
+        """
+        return
 
-        Args:
-            - dataset (tf.data.Dataset): The dataset to compute the
-                statistic on.
-        """
-        return 
-    
     @staticmethod
     def _tensor_pyfunc_wrapper(function):
         @functools.wraps(function)  # Preserve function metadata
@@ -149,7 +146,7 @@ class StepBase(ABC):
 
         @functools.wraps(function)  # Preserve function metadata
         def dataset_map_function(self, image_dataset):
-            self._compute_dataset_statistic(image_dataset)
+            self._setup(image_dataset)
             return image_dataset.map(
                 lambda img: tf.py_function(
                     func=lambda i: tensor_to_py_function_wrapper(self, i),
@@ -175,7 +172,7 @@ class StepBase(ABC):
 
         @functools.wraps(function)  # Preserve function metadata
         def py_function_dataset_map(self, image_dataset):
-            self._compute_dataset_statistic(image_dataset)
+            self._setup(image_dataset)
             return image_dataset.map(
                 lambda img: tf.py_function(
                     func=lambda i: numpy_to_py_function_wrapper(self, i),

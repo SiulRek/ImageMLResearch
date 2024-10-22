@@ -21,7 +21,7 @@ class MinMaxNormalizer(StepBase):
         self._min_val = None
         self._max_val = None
 
-    def _compute_dataset_statistic(self, dataset):
+    def _setup(self, dataset):
         """
         Computes the minimum and maximum values of the dataset.
 

@@ -122,14 +122,14 @@ class TestStepBase(BaseTestCase):
         processed_dataset = self.py_preprocessing_step(self.image_dataset)
         self._verify_image_shapes(processed_dataset, self.image_dataset, 1)
 
-    def test_compute_dataset_statistic_called(self):
-        self.tf_preprocessing_step._compute_dataset_statistic = MagicMock()
+    def test__setup_called(self):
+        self.tf_preprocessing_step._setup = MagicMock()
         self.tf_preprocessing_step(self.image_dataset)
-        self.tf_preprocessing_step._compute_dataset_statistic.assert_called_once()
+        self.tf_preprocessing_step._setup.assert_called_once()
 
-        self.py_preprocessing_step._compute_dataset_statistic = MagicMock()
+        self.py_preprocessing_step._setup = MagicMock()
         self.py_preprocessing_step(self.image_dataset)
-        self.py_preprocessing_step._compute_dataset_statistic.assert_called_once()
+        self.py_preprocessing_step._setup.assert_called_once()
 
     def test_output_datatype_conversion(self):
         self.py_preprocessing_step.output_datatype = tf.uint8

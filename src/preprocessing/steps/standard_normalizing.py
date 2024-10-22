@@ -23,7 +23,7 @@ class StandardNormalizer(StepBase):
         self._mean_val = None
         self._std_val = None
 
-    def _compute_dataset_statistic(self, dataset):
+    def _setup(self, dataset):
         """
         Computes the mean and standard deviation of the dataset.
 
