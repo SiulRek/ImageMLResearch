@@ -95,6 +95,14 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
                     break
             self.assertFalse(equal_flag)
 
+        #TODO
+        # def test_images_augmented_differently(self):
+        #     """
+        #     Test to verify that images are augmented differently.
+
+        #     Tests if the processed images are different from the original
+        #     images.
+
     name = augmentation_class.name.replace(" ", "")
     DynamicDataAugmentationTest.__name__ = f"Test{name}"
 
