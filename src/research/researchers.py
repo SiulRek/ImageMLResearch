@@ -30,9 +30,8 @@ class _ResearcherBase(DataHandler, Trainer):
         """
         assert class_names is not None, "It is recommended to provide class names."
 
-        # Last one to be initialized overwrites the previous ones,
-        # in case of conflicts. This should only occur in the case of
-        # label_manager.
+        # Last one to be initialized overwrites the previous ones, in case of
+        # conflicts. This should only occur in the case of label_manager.
         Trainer.__init__(self)
         DataHandler.__init__(self)
         ResearchAttributes.__init__(self, label_type, class_names)
@@ -67,8 +66,8 @@ class _ResearcherBase(DataHandler, Trainer):
             - pipeline (list[StepBase]): List of preprocessing steps.
             - dataset_names (list, optional): The dataset names to apply the
                 pipeline to. Defaults to None.
-            - backup (bool, optional): Whether to backup the datasets before
-                applying the pipeline. Defaults to False.
+            - backup (bool, optional): Whether to backup all the datasets
+                before applying the pipeline. Defaults to False.
 
         NOTE: It is not supported to apply a preprocessing pipeline on batched
         datasets.
