@@ -43,7 +43,7 @@ class _ResearcherBase(DataHandler, Trainer):
         """ ImagePreprocessor: The image preprocessor instance. """
         return self._preprocessor
 
-    def run_experiment(self, directory, name, description):
+    def run_experiment(self, directory, name, description, ask_for_analysis=False):
         """
         Sets up and runs an experiment within a context manager.
 
@@ -52,11 +52,15 @@ class _ResearcherBase(DataHandler, Trainer):
             - name (str): The name of the experiment.
             - description (str): The description of the experiment. for the
                 report.
+            - ask_for_analysis (bool, optional): Whether to ask AI for
+                analysis. Defaults to False.
 
         Returns:
             - Experiment: The Experiment context manager instance.
         """
-        return Experiment(self, directory, name, description)
+        return Experiment(
+            self, directory, name, description, ask_for_analysis=ask_for_analysis
+        )
 
     def apply_preprocessing_pipeline(self, pipeline, dataset_names=None, backup=False):
         """
