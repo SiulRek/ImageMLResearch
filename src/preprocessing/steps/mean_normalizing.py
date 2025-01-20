@@ -45,7 +45,7 @@ class MeanNormalizer(StepBase):
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         image_tensor = tf.cast(image_tensor, self.output_datatype)
-        normalized_image = (image_tensor - self._mean_val) / (self._range_val + 1e-8)
+        normalized_image = (image_tensor - self._mean_val) / (self._range_val + 1e-4)
         return normalized_image
 
 
