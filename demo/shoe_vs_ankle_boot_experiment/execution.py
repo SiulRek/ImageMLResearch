@@ -106,7 +106,7 @@ def make_experiment(experiment_definition, trial_definitions):
 
 if __name__ == "__main__":
     json_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "definitions.json"
+        os.path.dirname(os.path.abspath(__file__)), "definition.json"
     )
     with open(json_path, "r", encoding="utf-8") as f:
         config = json.load(f)
