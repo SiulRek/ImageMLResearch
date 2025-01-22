@@ -1,0 +1,179 @@
+{
+    "name": "trial_44",
+    "start_time": "2024-10-17 15:55:29.203",
+    "duration": "06.566",
+    "directory": "/home/krakerlu/github/ImageMLResearch/demo/chihuahua_vs_muffin/experiments/experiment_02/output/trial_44",
+    "hyperparameters": {
+        "units1": 64,
+        "kernel_size1": 3,
+        "units2": 128,
+        "kernel_size2": 3,
+        "units3": 256,
+        "learning_rate": 0.00020780660341765685
+    },
+    "figures": {
+        "model_summary": "/home/krakerlu/github/ImageMLResearch/demo/chihuahua_vs_muffin/experiments/experiment_02/output/trial_44/model_summary.png",
+        "confusion_matrix": "/home/krakerlu/github/ImageMLResearch/demo/chihuahua_vs_muffin/experiments/experiment_02/output/trial_44/confusion_matrix.png",
+        "training_history": "/home/krakerlu/github/ImageMLResearch/demo/chihuahua_vs_muffin/experiments/experiment_02/output/trial_44/training_history.png"
+    },
+    "evaluation_metrics": {
+        "train": {
+            "accuracy": 0.7665625214576721,
+            "precision": 0.7665625214576721,
+            "recall": 0.7665625214576721,
+            "f1": 0.7665624714576753,
+            "classification_report": {
+                "chihuahua": {
+                    "precision": 0.7654774396642182,
+                    "recall": 0.8294485503126776,
+                    "f1-score": 0.7961800818553888,
+                    "support": 1759
+                },
+                "muffin": {
+                    "precision": 0.768160741885626,
+                    "recall": 0.6897987508674531,
+                    "f1-score": 0.7268738574040219,
+                    "support": 1441
+                },
+                "micro avg": {
+                    "precision": 0.7665625,
+                    "recall": 0.7665625,
+                    "f1-score": 0.7665625,
+                    "support": 3200
+                },
+                "macro avg": {
+                    "precision": 0.7668190907749222,
+                    "recall": 0.7596236505900653,
+                    "f1-score": 0.7615269696297053,
+                    "support": 3200
+                },
+                "weighted avg": {
+                    "precision": 0.7666857641957958,
+                    "recall": 0.7665625,
+                    "f1-score": 0.7649706226571327,
+                    "support": 3200
+                },
+                "samples avg": {
+                    "precision": 0.7665625,
+                    "recall": 0.7665625,
+                    "f1-score": 0.7665625,
+                    "support": 3200
+                }
+            }
+        },
+        "val": {
+            "accuracy": 0.731249988079071,
+            "precision": 0.731249988079071,
+            "recall": 0.731249988079071,
+            "f1": 0.7312499380790745,
+            "classification_report": {
+                "chihuahua": {
+                    "precision": 0.711484593837535,
+                    "recall": 0.7863777089783281,
+                    "f1-score": 0.7470588235294118,
+                    "support": 323
+                },
+                "muffin": {
+                    "precision": 0.7561837455830389,
+                    "recall": 0.6750788643533123,
+                    "f1-score": 0.7133333333333334,
+                    "support": 317
+                },
+                "micro avg": {
+                    "precision": 0.73125,
+                    "recall": 0.73125,
+                    "f1-score": 0.73125,
+                    "support": 640
+                },
+                "macro avg": {
+                    "precision": 0.733834169710287,
+                    "recall": 0.7307282866658202,
+                    "f1-score": 0.7301960784313726,
+                    "support": 640
+                },
+                "weighted avg": {
+                    "precision": 0.73362464243648,
+                    "recall": 0.73125,
+                    "f1-score": 0.7303541666666667,
+                    "support": 640
+                },
+                "samples avg": {
+                    "precision": 0.73125,
+                    "recall": 0.73125,
+                    "f1-score": 0.73125,
+                    "support": 640
+                }
+            }
+        },
+        "test": {
+            "accuracy": 0.7458006739616394,
+            "precision": 0.7458006739616394,
+            "recall": 0.7458006739616394,
+            "f1": 0.7458006239616427,
+            "classification_report": {
+                "chihuahua": {
+                    "precision": 0.7470355731225297,
+                    "recall": 0.7924528301886793,
+                    "f1-score": 0.7690742624618515,
+                    "support": 477
+                },
+                "muffin": {
+                    "precision": 0.7441860465116279,
+                    "recall": 0.6923076923076923,
+                    "f1-score": 0.7173100871731009,
+                    "support": 416
+                },
+                "micro avg": {
+                    "precision": 0.7458006718924972,
+                    "recall": 0.7458006718924972,
+                    "f1-score": 0.7458006718924972,
+                    "support": 893
+                },
+                "macro avg": {
+                    "precision": 0.7456108098170788,
+                    "recall": 0.7423802612481858,
+                    "f1-score": 0.7431921748174761,
+                    "support": 893
+                },
+                "weighted avg": {
+                    "precision": 0.745708134074226,
+                    "recall": 0.7458006718924972,
+                    "f1-score": 0.7449601561683238,
+                    "support": 893
+                },
+                "samples avg": {
+                    "precision": 0.7458006718924972,
+                    "recall": 0.7458006718924972,
+                    "f1-score": 0.7458006718924972,
+                    "support": 893
+                }
+            }
+        }
+    },
+    "training_history": {
+        "accuracy": [
+            0.6521875262260437,
+            0.7918750047683716,
+            0.8515625,
+            0.8903124928474426
+        ],
+        "loss": [
+            0.7346693277359009,
+            0.4528202414512634,
+            0.3596095144748688,
+            0.29045552015304565
+        ],
+        "val_accuracy": [
+            0.731249988079071,
+            0.7890625,
+            0.862500011920929,
+            0.8671875
+        ],
+        "val_loss": [
+            0.5384957194328308,
+            0.4463312029838562,
+            0.3236638307571411,
+            0.31208860874176025
+        ]
+    }
+}

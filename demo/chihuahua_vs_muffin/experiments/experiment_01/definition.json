@@ -1,0 +1,32 @@
+{
+  "experiment_metadata": {
+    "name": "Chihuahua vs Muffin Test Experiment",
+    "description": "In this experiment, a neural network with dense layers is trained.",
+    "directory": "demo/chihuahua_vs_muffin/experiments/experiment_01"
+  },
+  "trial_definitions": {
+    "hparams_configs": {
+        "units1": {
+          "type": "int",
+          "low": 32,
+          "high": 512,
+          "step": 32,
+          "nearest_power2": true
+      },
+      "units2": {
+          "type": "int",
+          "low": 32,
+          "high": 512,
+          "step": 32,
+          "nearest_power2": true
+      },
+      "learning_rate": {
+          "type": "float",
+          "low": 1e-5,
+          "high": 1e-1,
+          "log": true
+      }
+    },
+    "num_trials": 100
+  }
+}

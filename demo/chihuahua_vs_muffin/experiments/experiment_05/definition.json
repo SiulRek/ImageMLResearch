@@ -1,0 +1,31 @@
+{
+  "experiment_metadata": {
+    "name": "Chihuahua vs Muffin Test Experiment",
+    "description": "In this experiment, transfer learning techniques is used with MobileNetV2 as the base model.",
+    "directory": "demo/chihuahua_vs_muffin/experiments/experiment_05"
+  },
+  "trial_definitions": {
+    "hparams_configs": {
+      "dense_units": {
+        "type": "int",
+        "low": 128,
+        "high": 512,
+        "step": 128,
+        "nearest_power2": true
+      },
+      "dropout_rate": {
+        "type": "float",
+        "low": 0,
+        "high": 0.5
+      },
+      "learning_rate": {
+        "type": "float",
+        "low": 1e-5,
+        "high": 1e-3,
+        "log": true
+      }
+    },
+    "num_trials": 100
+  }
+}
+

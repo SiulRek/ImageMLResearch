@@ -1,0 +1,232 @@
+2024-10-20 11:30:50,400 - INFO - Creating new experiment: Chihuahua vs Muffin Test Experiment
+2024-10-20 11:30:50,430 - INFO - Starting trial: trial_1
+2024-10-20 11:30:50,882 - ERROR - Exception occurred:
+ name 'early_stopping' is not defined
+2024-10-20 11:31:57,453 - INFO - Resuming experiment: Chihuahua vs Muffin Test Experiment
+2024-10-20 11:31:57,453 - WARNING - Ignoring directory and/or name parameters
+2024-10-20 11:31:57,485 - INFO - Starting trial: trial_1
+2024-10-20 11:31:57,938 - ERROR - Exception occurred:
+ name 'early_stopping' is not defined
+2024-10-20 11:33:04,445 - INFO - Resuming experiment: Chihuahua vs Muffin Test Experiment
+2024-10-20 11:33:04,445 - WARNING - Ignoring directory and/or name parameters
+2024-10-20 11:33:04,477 - INFO - Starting trial: trial_1
+2024-10-20 11:33:04,929 - ERROR - Exception occurred:
+ name 'early_stopping' is not defined
+2024-10-20 11:34:10,500 - INFO - Resuming experiment: Chihuahua vs Muffin Test Experiment
+2024-10-20 11:34:10,500 - WARNING - Ignoring directory and/or name parameters
+2024-10-20 11:34:10,533 - INFO - Starting trial: trial_1
+2024-10-20 11:34:10,993 - ERROR - Exception occurred:
+ name 'early_stopping' is not defined
+2024-10-20 11:35:17,833 - INFO - Resuming experiment: Chihuahua vs Muffin Test Experiment
+2024-10-20 11:35:17,833 - WARNING - Ignoring directory and/or name parameters
+2024-10-20 11:35:17,866 - INFO - Starting trial: trial_1
+2024-10-20 11:35:18,319 - ERROR - Exception occurred:
+ name 'early_stopping' is not defined
+2024-10-20 11:36:26,169 - INFO - Resuming experiment: Chihuahua vs Muffin Test Experiment
+2024-10-20 11:36:26,170 - WARNING - Ignoring directory and/or name parameters
+2024-10-20 11:36:26,203 - INFO - Starting trial: trial_1
+2024-10-20 11:36:26,653 - ERROR - Exception occurred:
+ name 'early_stopping' is not defined
+2024-10-20 11:37:59,446 - INFO - Resuming experiment: Chihuahua vs Muffin Test Experiment
+2024-10-20 11:37:59,446 - WARNING - Ignoring directory and/or name parameters
+2024-10-20 11:37:59,479 - INFO - Starting trial: trial_1
+2024-10-20 11:38:38,273 - INFO - Finalizing trial: trial_1
+2024-10-20 11:38:38,652 - INFO - Starting trial: trial_2
+2024-10-20 11:39:15,631 - INFO - Finalizing trial: trial_2
+2024-10-20 11:39:16,043 - INFO - Starting trial: trial_3
+2024-10-20 11:39:45,083 - INFO - Finalizing trial: trial_3
+2024-10-20 11:39:45,506 - INFO - Starting trial: trial_4
+2024-10-20 11:40:16,008 - INFO - Finalizing trial: trial_4
+2024-10-20 11:40:16,435 - INFO - Starting trial: trial_5
+2024-10-20 11:40:52,350 - INFO - Finalizing trial: trial_5
+2024-10-20 11:40:52,797 - INFO - Starting trial: trial_6
+2024-10-20 11:41:23,412 - INFO - Finalizing trial: trial_6
+2024-10-20 11:41:23,864 - INFO - Starting trial: trial_7
+2024-10-20 11:41:55,605 - INFO - Finalizing trial: trial_7
+2024-10-20 11:41:56,074 - INFO - Starting trial: trial_8
+2024-10-20 11:42:25,459 - INFO - Finalizing trial: trial_8
+2024-10-20 11:42:25,939 - INFO - Starting trial: trial_9
+2024-10-20 11:42:53,923 - INFO - Finalizing trial: trial_9
+2024-10-20 11:42:54,413 - INFO - Starting trial: trial_10
+2024-10-20 11:43:18,106 - INFO - Finalizing trial: trial_10
+2024-10-20 11:43:18,615 - INFO - Starting trial: trial_11
+2024-10-20 11:43:42,683 - INFO - Finalizing trial: trial_11
+2024-10-20 11:43:43,211 - INFO - Starting trial: trial_12
+2024-10-20 11:44:02,610 - INFO - Finalizing trial: trial_12
+2024-10-20 11:44:03,155 - INFO - Starting trial: trial_13
+2024-10-20 11:44:21,500 - INFO - Finalizing trial: trial_13
+2024-10-20 11:44:22,048 - INFO - Starting trial: trial_14
+2024-10-20 11:44:41,004 - INFO - Finalizing trial: trial_14
+2024-10-20 11:44:41,560 - INFO - Starting trial: trial_15
+2024-10-20 11:45:05,195 - INFO - Finalizing trial: trial_15
+2024-10-20 11:45:05,758 - INFO - Starting trial: trial_16
+2024-10-20 11:45:28,739 - INFO - Finalizing trial: trial_16
+2024-10-20 11:45:29,316 - INFO - Starting trial: trial_17
+2024-10-20 11:45:51,284 - INFO - Finalizing trial: trial_17
+2024-10-20 11:45:51,868 - INFO - Starting trial: trial_18
+2024-10-20 11:46:17,159 - INFO - Finalizing trial: trial_18
+2024-10-20 11:46:17,751 - INFO - Starting trial: trial_19
+2024-10-20 11:46:42,977 - INFO - Finalizing trial: trial_19
+2024-10-20 11:46:43,575 - INFO - Starting trial: trial_20
+2024-10-20 11:47:03,682 - INFO - Finalizing trial: trial_20
+2024-10-20 11:47:04,303 - INFO - Starting trial: trial_21
+2024-10-20 11:47:29,473 - INFO - Finalizing trial: trial_21
+2024-10-20 11:47:30,091 - INFO - Starting trial: trial_22
+2024-10-20 11:47:53,179 - INFO - Finalizing trial: trial_22
+2024-10-20 11:47:53,831 - INFO - Starting trial: trial_23
+2024-10-20 11:48:19,529 - INFO - Finalizing trial: trial_23
+2024-10-20 11:48:20,166 - INFO - Starting trial: trial_24
+2024-10-20 11:48:45,285 - INFO - Finalizing trial: trial_24
+2024-10-20 11:48:45,932 - INFO - Starting trial: trial_25
+2024-10-20 11:49:11,101 - INFO - Finalizing trial: trial_25
+2024-10-20 11:49:11,761 - INFO - Starting trial: trial_26
+2024-10-20 11:49:37,929 - INFO - Finalizing trial: trial_26
+2024-10-20 11:49:38,592 - INFO - Starting trial: trial_27
+2024-10-20 11:49:59,764 - INFO - Finalizing trial: trial_27
+2024-10-20 11:50:00,454 - INFO - Starting trial: trial_28
+2024-10-20 11:50:25,769 - INFO - Finalizing trial: trial_28
+2024-10-20 11:50:26,466 - INFO - Starting trial: trial_29
+2024-10-20 11:50:52,162 - INFO - Finalizing trial: trial_29
+2024-10-20 11:50:52,876 - INFO - Starting trial: trial_30
+2024-10-20 11:51:22,556 - INFO - Finalizing trial: trial_30
+2024-10-20 11:51:23,272 - INFO - Starting trial: trial_31
+2024-10-20 11:51:52,695 - INFO - Finalizing trial: trial_31
+2024-10-20 11:51:53,431 - INFO - Starting trial: trial_32
+2024-10-20 11:52:18,720 - INFO - Finalizing trial: trial_32
+2024-10-20 11:52:19,469 - INFO - Starting trial: trial_33
+2024-10-20 11:52:48,853 - INFO - Finalizing trial: trial_33
+2024-10-20 11:52:49,591 - INFO - Starting trial: trial_34
+2024-10-20 11:53:19,133 - INFO - Finalizing trial: trial_34
+2024-10-20 11:53:19,891 - INFO - Starting trial: trial_35
+2024-10-20 11:53:58,489 - INFO - Finalizing trial: trial_35
+2024-10-20 11:53:59,257 - INFO - Starting trial: trial_36
+2024-10-20 11:54:28,635 - INFO - Finalizing trial: trial_36
+2024-10-20 11:54:29,405 - INFO - Starting trial: trial_37
+2024-10-20 11:54:58,702 - INFO - Finalizing trial: trial_37
+2024-10-20 11:54:59,491 - INFO - Starting trial: trial_38
+2024-10-20 11:55:32,315 - INFO - Finalizing trial: trial_38
+2024-10-20 11:55:33,112 - INFO - Starting trial: trial_39
+2024-10-20 11:56:02,628 - INFO - Finalizing trial: trial_39
+2024-10-20 11:56:03,441 - INFO - Starting trial: trial_40
+2024-10-20 11:56:33,816 - INFO - Finalizing trial: trial_40
+2024-10-20 11:56:34,635 - INFO - Starting trial: trial_41
+2024-10-20 11:57:03,851 - INFO - Finalizing trial: trial_41
+2024-10-20 11:57:04,691 - INFO - Starting trial: trial_42
+2024-10-20 11:57:37,637 - INFO - Finalizing trial: trial_42
+2024-10-20 11:57:38,477 - INFO - Starting trial: trial_43
+2024-10-20 11:58:11,320 - INFO - Finalizing trial: trial_43
+2024-10-20 11:58:12,179 - INFO - Starting trial: trial_44
+2024-10-20 11:58:45,002 - INFO - Finalizing trial: trial_44
+2024-10-20 11:58:45,859 - INFO - Starting trial: trial_45
+2024-10-20 11:59:18,808 - INFO - Finalizing trial: trial_45
+2024-10-20 11:59:19,670 - INFO - Starting trial: trial_46
+2024-10-20 11:59:52,538 - INFO - Finalizing trial: trial_46
+2024-10-20 11:59:53,406 - INFO - Starting trial: trial_47
+2024-10-20 12:00:26,891 - INFO - Finalizing trial: trial_47
+2024-10-20 12:00:27,775 - INFO - Starting trial: trial_48
+2024-10-20 12:01:07,541 - INFO - Finalizing trial: trial_48
+2024-10-20 12:01:08,427 - INFO - Starting trial: trial_49
+2024-10-20 12:01:41,682 - INFO - Finalizing trial: trial_49
+2024-10-20 12:01:42,581 - INFO - Starting trial: trial_50
+2024-10-20 12:02:15,837 - INFO - Finalizing trial: trial_50
+2024-10-20 12:02:16,748 - INFO - Starting trial: trial_51
+2024-10-20 12:02:50,414 - INFO - Finalizing trial: trial_51
+2024-10-20 12:02:51,342 - INFO - Starting trial: trial_52
+2024-10-20 12:03:24,555 - INFO - Finalizing trial: trial_52
+2024-10-20 12:03:25,484 - INFO - Starting trial: trial_53
+2024-10-20 12:03:58,775 - INFO - Finalizing trial: trial_53
+2024-10-20 12:03:59,720 - INFO - Starting trial: trial_54
+2024-10-20 12:04:32,798 - INFO - Finalizing trial: trial_54
+2024-10-20 12:04:33,744 - INFO - Starting trial: trial_55
+2024-10-20 12:05:07,033 - INFO - Finalizing trial: trial_55
+2024-10-20 12:05:07,997 - INFO - Starting trial: trial_56
+2024-10-20 12:05:41,406 - INFO - Finalizing trial: trial_56
+2024-10-20 12:05:42,380 - INFO - Starting trial: trial_57
+2024-10-20 12:06:15,628 - INFO - Finalizing trial: trial_57
+2024-10-20 12:06:16,603 - INFO - Starting trial: trial_58
+2024-10-20 12:06:50,718 - INFO - Finalizing trial: trial_58
+2024-10-20 12:06:51,703 - INFO - Starting trial: trial_59
+2024-10-20 12:07:24,998 - INFO - Finalizing trial: trial_59
+2024-10-20 12:07:26,003 - INFO - Starting trial: trial_60
+2024-10-20 12:07:58,820 - INFO - Finalizing trial: trial_60
+2024-10-20 12:07:59,838 - INFO - Starting trial: trial_61
+2024-10-20 12:08:32,976 - INFO - Finalizing trial: trial_61
+2024-10-20 12:08:34,005 - INFO - Starting trial: trial_62
+2024-10-20 12:09:03,585 - INFO - Finalizing trial: trial_62
+2024-10-20 12:09:04,613 - INFO - Starting trial: trial_63
+2024-10-20 12:09:33,955 - INFO - Finalizing trial: trial_63
+2024-10-20 12:09:34,990 - INFO - Starting trial: trial_64
+2024-10-20 12:10:02,626 - INFO - Finalizing trial: trial_64
+2024-10-20 12:10:03,669 - INFO - Starting trial: trial_65
+2024-10-20 12:10:32,809 - INFO - Finalizing trial: trial_65
+2024-10-20 12:10:33,868 - INFO - Starting trial: trial_66
+2024-10-20 12:11:03,089 - INFO - Finalizing trial: trial_66
+2024-10-20 12:11:04,169 - INFO - Starting trial: trial_67
+2024-10-20 12:11:37,385 - INFO - Finalizing trial: trial_67
+2024-10-20 12:11:38,449 - INFO - Starting trial: trial_68
+2024-10-20 12:12:07,884 - INFO - Finalizing trial: trial_68
+2024-10-20 12:12:08,976 - INFO - Starting trial: trial_69
+2024-10-20 12:12:42,229 - INFO - Finalizing trial: trial_69
+2024-10-20 12:12:43,323 - INFO - Starting trial: trial_70
+2024-10-20 12:13:12,796 - INFO - Finalizing trial: trial_70
+2024-10-20 12:13:13,919 - INFO - Starting trial: trial_71
+2024-10-20 12:13:36,854 - INFO - Finalizing trial: trial_71
+2024-10-20 12:13:37,972 - INFO - Starting trial: trial_72
+2024-10-20 12:13:59,997 - INFO - Finalizing trial: trial_72
+2024-10-20 12:14:01,129 - INFO - Starting trial: trial_73
+2024-10-20 12:14:23,239 - INFO - Finalizing trial: trial_73
+2024-10-20 12:14:24,360 - INFO - Starting trial: trial_74
+2024-10-20 12:14:46,443 - INFO - Finalizing trial: trial_74
+2024-10-20 12:14:47,589 - INFO - Starting trial: trial_75
+2024-10-20 12:15:09,682 - INFO - Finalizing trial: trial_75
+2024-10-20 12:15:10,839 - INFO - Starting trial: trial_76
+2024-10-20 12:15:43,633 - INFO - Finalizing trial: trial_76
+2024-10-20 12:15:44,802 - INFO - Starting trial: trial_77
+2024-10-20 12:16:18,521 - INFO - Finalizing trial: trial_77
+2024-10-20 12:16:19,690 - INFO - Starting trial: trial_78
+2024-10-20 12:16:53,407 - INFO - Finalizing trial: trial_78
+2024-10-20 12:16:54,604 - INFO - Starting trial: trial_79
+2024-10-20 12:17:29,372 - INFO - Finalizing trial: trial_79
+2024-10-20 12:17:30,562 - INFO - Starting trial: trial_80
+2024-10-20 12:18:04,405 - INFO - Finalizing trial: trial_80
+2024-10-20 12:18:05,615 - INFO - Starting trial: trial_81
+2024-10-20 12:18:46,366 - INFO - Finalizing trial: trial_81
+2024-10-20 12:18:47,583 - INFO - Starting trial: trial_82
+2024-10-20 12:19:20,580 - INFO - Finalizing trial: trial_82
+2024-10-20 12:19:21,804 - INFO - Starting trial: trial_83
+2024-10-20 12:19:54,957 - INFO - Finalizing trial: trial_83
+2024-10-20 12:19:56,194 - INFO - Starting trial: trial_84
+2024-10-20 12:20:31,448 - INFO - Finalizing trial: trial_84
+2024-10-20 12:20:32,691 - INFO - Starting trial: trial_85
+2024-10-20 12:20:57,905 - INFO - Finalizing trial: trial_85
+2024-10-20 12:20:59,167 - INFO - Starting trial: trial_86
+2024-10-20 12:21:29,287 - INFO - Finalizing trial: trial_86
+2024-10-20 12:21:30,541 - INFO - Starting trial: trial_87
+2024-10-20 12:22:03,788 - INFO - Finalizing trial: trial_87
+2024-10-20 12:22:05,071 - INFO - Starting trial: trial_88
+2024-10-20 12:22:37,960 - INFO - Finalizing trial: trial_88
+2024-10-20 12:22:39,248 - INFO - Starting trial: trial_89
+2024-10-20 12:23:09,071 - INFO - Finalizing trial: trial_89
+2024-10-20 12:23:10,364 - INFO - Starting trial: trial_90
+2024-10-20 12:23:43,872 - INFO - Finalizing trial: trial_90
+2024-10-20 12:23:45,175 - INFO - Starting trial: trial_91
+2024-10-20 12:24:18,461 - INFO - Finalizing trial: trial_91
+2024-10-20 12:24:19,766 - INFO - Starting trial: trial_92
+2024-10-20 12:24:41,903 - INFO - Finalizing trial: trial_92
+2024-10-20 12:24:43,216 - INFO - Starting trial: trial_93
+2024-10-20 12:25:16,048 - INFO - Finalizing trial: trial_93
+2024-10-20 12:25:17,379 - INFO - Starting trial: trial_94
+2024-10-20 12:25:50,367 - INFO - Finalizing trial: trial_94
+2024-10-20 12:25:51,716 - INFO - Starting trial: trial_95
+2024-10-20 12:26:24,574 - INFO - Finalizing trial: trial_95
+2024-10-20 12:26:25,905 - INFO - Starting trial: trial_96
+2024-10-20 12:26:58,723 - INFO - Finalizing trial: trial_96
+2024-10-20 12:27:00,081 - INFO - Starting trial: trial_97
+2024-10-20 12:27:33,039 - INFO - Finalizing trial: trial_97
+2024-10-20 12:27:34,415 - INFO - Starting trial: trial_98
+2024-10-20 12:28:02,090 - INFO - Finalizing trial: trial_98
+2024-10-20 12:28:03,485 - INFO - Starting trial: trial_99
+2024-10-20 12:28:36,374 - INFO - Finalizing trial: trial_99
+2024-10-20 12:28:37,762 - INFO - Starting trial: trial_100
+2024-10-20 12:29:10,743 - INFO - Finalizing trial: trial_100
+2024-10-20 12:29:12,122 - INFO - Finalizing experiment: Chihuahua vs Muffin Test Experiment

@@ -1,0 +1,57 @@
+{
+  "experiment_metadata": {
+    "name": "Chihuahua vs Muffin Test Experiment",
+    "description": "In this experiment, a convolutional neural network with increased complexity and dropout is trained.",
+    "directory": "demo/chihuahua_vs_muffin/experiments/experiment_03"
+  },
+  "trial_definitions": {
+    "hparams_configs": {
+      "units1": {
+        "type": "int",
+        "low": 64,
+        "high": 128,
+        "step": 64,
+        "nearest_power2": true
+      },
+      "kernel_size1": {
+        "type": "int",
+        "low": 3,
+        "high": 7,
+        "step": 2
+      },
+      "units2": {
+        "type": "int",
+        "low": 16,
+        "high": 64,
+        "step": 16,
+        "nearest_power2": true
+      },
+      "kernel_size2": {
+        "type": "int",
+        "low": 3,
+        "high": 7,
+        "step": 2
+      },
+      "dense_units": {
+        "type": "int",
+        "low": 128,
+        "high": 512,
+        "step": 128,
+        "nearest_power2": true
+      },
+      "dropout_rate": {
+        "type": "float",
+        "low": 0,
+        "high": 0.5
+      },
+      "learning_rate": {
+        "type": "float",
+        "low": 1e-5,
+        "high": 1e-3,
+        "log": true
+      }
+    },
+    "num_trials": 100
+  }
+}
+

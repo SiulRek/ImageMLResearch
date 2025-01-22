@@ -1,0 +1,30 @@
+{
+  "experiment_metadata": {
+    "name": "Chihuahua vs Muffin Test Experiment",
+    "description": "In this experiment, the best model from the previous experiment is trained with different preprocessing configurations.",
+    "directory": "demo/chihuahua_vs_muffin/experiments/experiment_04"
+  },
+  "trial_definitions": {
+    "hparams_configs": {
+      "normalization": {
+        "type": "categorical",
+        "choices": ["min_max", "mean", "standard"]
+      },
+      "batch_size": {
+        "type": "int",
+        "low": 16,
+        "high": 256,
+        "step": 16,
+        "nearest_power2": true
+      },
+      "learning_rate": {
+        "type": "float",
+        "low": 5e-5,
+        "high": 5e-4,
+        "log": true
+      }
+    },
+    "num_trials": 100
+  }
+}
+
