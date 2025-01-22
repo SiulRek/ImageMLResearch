@@ -37,5 +37,5 @@ source/preprocessing/notebooks/related/pipeline.json
 references/private/*
 
 # Temporary ignore
-demo/chihuahua_vs_muffin
 tiny_defect_project/
+demo/chihuahua_vs_muffin/data/chihuahua_vs_muffin.tfrecord
