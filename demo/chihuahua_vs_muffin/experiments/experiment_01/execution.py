@@ -61,8 +61,7 @@ def make_experiment(experimant_metadata, trial_definitions):
             details.
         - trial_definitions (list): A list of trial definitions.
     """
-    # Configurations
-    data_len = 4733
+    # Parameters
     epochs = 50
     batch_size = 128
     train_size = 0.7
@@ -81,7 +80,7 @@ def make_experiment(experimant_metadata, trial_definitions):
     )
 
     # Experiment Execution
-    with researcher.run_experiment(**experimant_metadata) as experiment:
+    with researcher.run_experiment(**experimant_metadata, ask_for_analysis=True) as experiment:
         for trial_definitions in trial_definitions:
             with experiment.run_trial(**trial_definitions) as trial:
                 if trial.already_runned:
