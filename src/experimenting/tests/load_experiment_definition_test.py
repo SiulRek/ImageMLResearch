@@ -12,10 +12,11 @@ class TestLoadExperimentDefinition(BaseTestCase):
 
     def setUp(self):
         super().setUp()
+        experiment_dir = os.path.join(self.temp_dir, "test_experiment")
         self.experiment_metadata = {
             "name": "Test Experiment",
             "description": "This is a test experiment.",
-            "directory": "test_experiment",
+            "directory": experiment_dir,
         }
         self.definitions_json_path = os.path.join(self.temp_dir, "definition.json")
 
