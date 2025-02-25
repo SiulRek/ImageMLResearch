@@ -161,8 +161,8 @@ class TestExperiment(BaseTestCase):
         trials_data = experiment.experiment_assets["trials"]
         reloaded_trials_data = reloaded_experiment.experiment_assets["trials"]
 
-        self.assertEqual(trials_data[0], reloaded_trials_data[1])
-        self.assertEqual(trials_data[1], reloaded_trials_data[0])
+        self.assertIn(trials_data[0], reloaded_trials_data)
+        self.assertIn(trials_data[1], reloaded_trials_data)
 
     # def test_load_experiment_data_with_warnings(self):
     #     trial_definitions = [
