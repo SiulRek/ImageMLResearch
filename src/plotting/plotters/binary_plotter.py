@@ -23,7 +23,7 @@ class BinaryPlotter(Plotter):
         label_to_title_func = self.label_manager.get_class
         return super().plot_images(grid_size, label_to_title_func)
 
-    @plot_decorator(default_title="Confusion Matrix", default_show=True)
+    @plot_decorator(default_title="Confusion Matrix", default_show=False)
     def plot_confusion_matrix(self, **general_plot_kwargs):
         """
         Plots the confusion matrix for binary classification.
@@ -42,7 +42,7 @@ class BinaryPlotter(Plotter):
         fig = plot_confusion_matrix(y_true, y_pred_rounded, class_names)
         return fig
 
-    @plot_decorator(default_title="ROC Curve", default_show=True)
+    @plot_decorator(default_title="ROC Curve", default_show=False)
     def plot_roc_curve(self, **general_plot_kwargs):
         """
         Plots the ROC curve for binary classification.
@@ -58,7 +58,7 @@ class BinaryPlotter(Plotter):
         fig = plot_roc_curve(y_true, y_pred)
         return fig
 
-    @plot_decorator(default_title="Precision-Recall Curve", default_show=True)
+    @plot_decorator(default_title="Precision-Recall Curve", default_show=False)
     def plot_pr_curve(self, **general_plot_kwargs):
         """
         Plots the PR curve for binary classification.
@@ -74,7 +74,7 @@ class BinaryPlotter(Plotter):
         fig = plot_pr_curve(y_true, y_pred)
         return fig
 
-    @plot_decorator(default_title="Results", default_show=True)
+    @plot_decorator(default_title="Results", default_show=False)
     def plot_results(self, grid_size=(2, 2)):
         """
         Plots the results of a binary classification model.

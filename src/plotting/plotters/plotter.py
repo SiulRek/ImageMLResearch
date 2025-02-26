@@ -40,6 +40,8 @@ def plot_decorator(default_title, default_show):
             self._add_figure(name, fig)
             if show:
                 plt.show()
+            else:
+                plt.close(fig)
             return fig
 
         return wrapper
@@ -52,9 +54,8 @@ class Plotter(DataRetriever):
 
     def __init__(self):
         """ Initializes the Plotter. """
-        # Not initializing ResearchAttributes here,
-        # prefer call synchronize_research_attributes explicitly.
-        # super().__init__()
+        # Not initializing ResearchAttributes here, prefer call
+        # synchronize_research_attributes explicitly. super().__init__()
 
         # Initialize research attributes used in the Plotter
         self._datasets_container = {
