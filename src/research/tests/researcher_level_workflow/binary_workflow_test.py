@@ -25,7 +25,8 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
     def _create_compiled_model(self, units):
         model = tf.keras.models.Sequential(
             [
-                tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
+                tf.keras.layers.Input(shape=(28, 28, 3)),
+                tf.keras.layers.Flatten(),
                 tf.keras.layers.Dense(units, activation="relu"),
                 tf.keras.layers.Dense(1, activation="sigmoid"),
             ]
@@ -88,7 +89,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
             )
 
     def test_workflow(self):
-        # #### Dataset Handling ####
+        # Dataset Handling
         dataset = self.load_mnist_digits_dataset(
             sample_num=1000, labeled=True, binary=True
         )
@@ -110,7 +111,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         )
         self._assert_datasets_container()
 
-        #### Experimenting ####
+        # Experimenting
         trial_definitions = [
             {
                 "name": "Trial 1",
@@ -136,7 +137,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
             self.researcher.plot_images()
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
-                    # ## Training ##
+                    # Training
                     self.assertTrue(
                         os.path.exists(trial.trial_assets["directory"]),
                     )
@@ -154,7 +155,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                         has_evaluation_metrics,
                     )
 
-                    # ## Plotting ##
+                    # Plotting
                     has_training_history = (
                         hasattr(self.researcher, "training_history")
                         and self.researcher.training_history is not None
@@ -167,7 +168,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                     self.researcher.plot_roc_curve(title="ROC Curve")
                     self.researcher.plot_pr_curve(title="PR Curve")
                     self.researcher.plot_results(grid_size=(2, 2))
-        #### Assertions of experiment files existence ####
+        # Assertions of experiment files existence
         self.assertEqual(
             len(experiment.experiment_assets["trials"]),
             i + 1,

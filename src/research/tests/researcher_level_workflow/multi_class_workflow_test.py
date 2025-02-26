@@ -27,7 +27,8 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
     def _create_compiled_model(self, units):
         model = tf.keras.models.Sequential(
             [
-                tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
+                tf.keras.layers.Input(shape=(28, 28, 3)),
+                tf.keras.layers.Flatten(),
                 tf.keras.layers.Dense(units, activation="relu"),
                 tf.keras.layers.Dense(10, activation="softmax"),
             ]
@@ -90,7 +91,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
         return pipeline
 
     def test_workflow(self):
-        # #### Dataset Handling ####
+        # Dataset Handling
         dataset = self.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         self.researcher.load_dataset(dataset)
         self.researcher.split_dataset(train_split=0.7, val_split=0.15, test_split=0.15)
@@ -110,7 +111,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
         )
         self._assert_datasets_container()
 
-        #### Experimenting ####
+        # Experimenting
         trial_definitions = [
             {
                 "name": "Trial 1",
@@ -136,7 +137,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
             self.researcher.plot_images()
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
-                    # ## Training ##
+                    # Training
                     self.assertTrue(
                         os.path.exists(trial.trial_assets["directory"]),
                     )
@@ -154,7 +155,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
                         has_evaluation_metrics,
                     )
 
-                    # ## Plotting ##
+                    # Plotting
                     has_training_history = (
                         hasattr(self.researcher, "training_history")
                         and self.researcher.training_history is not None
@@ -165,7 +166,7 @@ class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
                     self.researcher.plot_training_history(title="Training History")
                     self.researcher.plot_confusion_matrix(title="Confusion Matrix")
 
-        #### Assertions of experiment files existence ####
+        # Assertions of experiment files existence
         self.assertEqual(
             len(experiment.experiment_assets["trials"]),
             i + 1,

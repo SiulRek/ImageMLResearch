@@ -35,7 +35,8 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
     def _create_compiled_model(self, units):
         model = tf.keras.models.Sequential(
             [
-                tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
+                tf.keras.layers.Input(shape=(28, 28, 3)),
+                tf.keras.layers.Flatten(),
                 tf.keras.layers.Dense(units, activation="relu"),
                 tf.keras.layers.Dense(10, activation="softmax"),
             ]
@@ -83,7 +84,9 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         # Dataset Handling
         dataset = self.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         self.data_handler.load_dataset(dataset)
-        self.data_handler.split_dataset(train_split=0.7, val_split=0.15, test_split=0.15)
+        self.data_handler.split_dataset(
+            train_split=0.7, val_split=0.15, test_split=0.15
+        )
         self._assert_datasets_container(self.data_handler)
         self.data_handler.prepare_datasets(
             ["train_dataset", "val_dataset", "test_dataset"],

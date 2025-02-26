@@ -26,8 +26,8 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
             label_type="binary", class_names=["Digit 0", "Digit 1"]
         )
         self.data_handler = DataHandler()
-        # Only synchronize the research attributes for the data handler
-        # as it is the first, the rest will be synchronized later.
+        # Only synchronize the research attributes for the data handler as it is
+        # the first, the rest will be synchronized later.
         self.data_handler.synchronize_research_attributes(self.research_attributes)
         self.trainer = Trainer()
         self.plotter = BinaryPlotter()
@@ -35,7 +35,8 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
     def _create_compiled_model(self, units):
         model = tf.keras.models.Sequential(
             [
-                tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
+                tf.keras.layers.Input(shape=(28, 28, 3)),
+                tf.keras.layers.Flatten(),
                 tf.keras.layers.Dense(units, activation="relu"),
                 tf.keras.layers.Dense(1, activation="sigmoid"),
             ]
@@ -80,12 +81,14 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
             )
 
     def test_workflow(self):
-        # #### Dataset Handling ####
+        # Dataset Handling
         dataset = self.load_mnist_digits_dataset(
             sample_num=1000, labeled=True, binary=True
         )
         self.data_handler.load_dataset(dataset)
-        self.data_handler.split_dataset(train_split=0.7, val_split=0.15, test_split=0.15)
+        self.data_handler.split_dataset(
+            train_split=0.7, val_split=0.15, test_split=0.15
+        )
         self._assert_datasets_container(self.data_handler)
         self.data_handler.prepare_datasets(
             ["train_dataset", "val_dataset", "test_dataset"],
@@ -98,7 +101,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         self.data_handler.restore_datasets()
         self._assert_datasets_container(self.data_handler)
 
-        #### Experimenting ####
+        # Experimenting
         trial_definitions = [
             {
                 "name": "Trial 1",
@@ -128,7 +131,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
             experiment.synchronize_research_attributes(self.plotter)
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
-                    # ## Training ##
+                    # Training
                     self.assertTrue(
                         os.path.exists(trial.trial_assets["directory"]),
                         "The trial directory does not exist.",
@@ -150,7 +153,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                         "The trainer does not have evaluation metrics.",
                     )
 
-                    # ## Plotting ##
+                    # Plotting
                     self.plotter.synchronize_research_attributes(self.trainer)
                     self._assert_outputs_container(self.plotter)
                     has_training_history = (
@@ -168,7 +171,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                     self.plotter.plot_results(grid_size=(2, 2))
                     experiment.synchronize_research_attributes(self.plotter)
 
-        #### Assertions of experiment files existence ####
+        # Assertions of experiment files existence
         self.assertEqual(
             len(experiment.experiment_assets["trials"]),
             i + 1,
