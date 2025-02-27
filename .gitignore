@@ -16,7 +16,7 @@ batch_scripts/
 **/temp/
 **/temp.*
 **/test.*
-**/_*
+**/_[a-zA-Z]*
 
 # Test and Log Files
 **/test_results.log
@@ -39,3 +39,23 @@ references/private/*
 # Temporary ignore
 tiny_defect_project/
 demo/chihuahua_vs_muffin/data/chihuahua_vs_muffin.tfrecord
+
+# Python bytecode and cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution/build directories
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test cache and coverage reports
+.pytest_cache/
+.coverage
+coverage.xml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
