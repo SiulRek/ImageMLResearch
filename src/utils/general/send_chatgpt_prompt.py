@@ -1,7 +1,8 @@
 from openai import OpenAI
-
-from keys import OPENAI_KEY
-
+try:
+    from keys import OPENAI_KEY
+except ImportError:
+    OPENAI_KEY = None
 
 def send_chatgpt_prompt(prompt_message, max_response_tokens=3000, model="gpt-4o"):
     """
@@ -15,6 +16,10 @@ def send_chatgpt_prompt(prompt_message, max_response_tokens=3000, model="gpt-4o"
     Returns:
         - str: The response message from the model.
     """
+    assert OPENAI_KEY is not None, (
+        "Please provide an OPENAI_KEY by creating a keys.py file and "
+        "defining the OPENAI_KEY variable in it."
+    )
     client = OpenAI(api_key=OPENAI_KEY)
 
     response = client.chat.completions.with_raw_response.create(
