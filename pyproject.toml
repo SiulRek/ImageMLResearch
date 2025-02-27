@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imlresearch"
+version = "0.1.0"
+description = "See README.md for a detailed description."
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+license = { text = "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007" }
+authors = [
+    { name = "SiulRek", email = "luiskraker2000@gmail.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+]
+urls = { "Homepage" = "https://github.com/SiulRek/ImageMLResearch" }
+
+dependencies = [
+    "tensorflow==2.17.0",
+    "pandas==2.2.2",
+    "matplotlib==3.8.0",
+    "openai==1.34.0",
+    "optuna==3.6.1",
+    "seaborn==0.13.2",
+    "scikit-learn==1.4.1.post1",
+    "opencv-python==4.8.1.78"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
