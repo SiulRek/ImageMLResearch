@@ -3,11 +3,11 @@ import os
 import numpy as np
 import tensorflow as tf
 
-from src.data_handling.io.create_dataset import create_dataset
-from src.data_handling.tfrecord_serialization.deserialize import (
+from imlresearch.data_handling.io.create_dataset import create_dataset
+from imlresearch.data_handling.tfrecord_serialization.deserialize import (
     deserialize_dataset_from_tfrecord,
 )
-from src.data_handling.tfrecord_serialization.serialize import (
+from imlresearch.data_handling.tfrecord_serialization.serialize import (
     serialize_dataset_to_tf_record,
 )
 

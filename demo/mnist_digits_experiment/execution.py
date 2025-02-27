@@ -2,11 +2,11 @@ import os
 
 import tensorflow as tf
 
-from src.experimenting.helpers.load_experiment_definition import (
+from imlresearch.experimenting.helpers.load_experiment_definition import (
     load_experiment_definition,
 )
-from src.preprocessing.steps import ReverseScaler, TypeCaster
-from src.research.researchers import MultiClassResearcher
+from imlresearch.preprocessing.steps import ReverseScaler, TypeCaster
+from imlresearch.research.researchers import MultiClassResearcher
 
 
 def load_dataset():
