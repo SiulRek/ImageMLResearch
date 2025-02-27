@@ -29,6 +29,9 @@ def run_tests():
     Returns:
         - str: A message summarizing the test results.
     """
+    os.makedirs(FILE_DIR, exist_ok=True)
+    TestResultLogger(LOG_FILE)
+
     test_suite = unittest.TestSuite()
 
     # Instantiate test runners and add their tests to the suite
@@ -51,19 +54,15 @@ def run_tests():
 
     msg = generate_test_results_message(result)
 
-    return msg
-
-
-if __name__ == "__main__":
-    """ Main execution block for running the aggregated test suite. """
-
-    os.makedirs(FILE_DIR, exist_ok=True)
-    TestResultLogger(LOG_FILE)
-
-    message = run_tests()
-    print(message)
+    print(msg)
     error_log_file = LOG_FILE.replace(".log", "_errors.log")
     simple_log_file = LOG_FILE.replace(".log", "_simple.log")
     print(f"Test results logged to file: {LOG_FILE}")
     print(f"Test errors logged to file: {error_log_file}")
     print(f"Simple test results logged to file: {simple_log_file}")
+
+
+if __name__ == "__main__":
+    """ Main execution block for running the aggregated test suite. """
+
+    run_tests()
