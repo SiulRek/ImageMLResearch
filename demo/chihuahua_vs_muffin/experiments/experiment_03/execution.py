@@ -6,11 +6,9 @@ from demo.chihuahua_vs_muffin.helpers.check_experiment_dir import check_experime
 from demo.chihuahua_vs_muffin.helpers.load_data_dict import (
     load_chihuahua_vs_muffin_dict,
 )
-from imlresearch.experimenting.helpers.load_experiment_definition import (
-    load_experiment_definition,
-)
-from imlresearch.preprocessing.steps import ReverseScaler, TypeCaster, ShapeResizer
-from imlresearch.research.researchers import MultiClassResearcher
+from imlresearch import load_experiment_definition
+from imlresearch import MultiClassResearcher
+from imlresearch.preprocessing_steps import ReverseScaler, TypeCaster, ShapeResizer
 
 
 def create_preprocessing_pipeline():
