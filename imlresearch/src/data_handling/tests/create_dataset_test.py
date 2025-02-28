@@ -1,15 +1,17 @@
 import unittest
 
 import numpy as np
-try:
-    import pandas as pd
-    pandas_installed = True
-except ImportError:
-    pandas_installed = False
 import tensorflow as tf
 
 from imlresearch.src.data_handling.io.create_dataset import create_dataset
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
+
+try:
+    import pandas as pd
+
+    pandas_installed = True
+except ImportError:
+    pandas_installed = False
 
 
 class TestCreateDataset(BaseTestCase):

@@ -19,8 +19,8 @@ class TestRunnerBase(ABC):
     """
 
     def __init__(self):
-        """ Initializes the TestRunnerBase instance, setting up the test file path,
-        output directory, logger, and test suite. """
+        """Initializes the TestRunnerBase instance, setting up the test file path,
+        output directory, logger, and test suite."""
         self.test_file = self._infere_test_file_path()
         self.output_dir = self._compute_output_dir()
         os.makedirs(self.output_dir, exist_ok=True)
@@ -28,8 +28,8 @@ class TestRunnerBase(ABC):
         self.test_suite = unittest.TestSuite()
 
     def _init_logger(self):
-        """ Initializes the test result logger, creating a log file in the output
-        directory. """
+        """Initializes the test result logger, creating a log file in the output
+        directory."""
         self.log_file = os.path.join(self.output_dir, "test_results.log")
         TestResultLogger(self.log_file)  # Initialize Test Result Logger.
 
@@ -82,8 +82,8 @@ class TestRunnerBase(ABC):
 
     @abstractmethod
     def load_tests(self):
-        """ Abstract method to load specific tests. This method should be overridden
-        in subclasses to specify which tests to add to the test suite. """
+        """Abstract method to load specific tests. This method should be overridden
+        in subclasses to specify which tests to add to the test suite."""
         pass
 
     def load_test_case(self, test_case):
@@ -105,8 +105,8 @@ class TestRunnerBase(ABC):
         self.test_suite.addTest(Loader.loadTestsFromModule(test_module))
 
     def run_tests(self):
-        """ Runs the tests in the test suite and prints the results if called from
-        the command line. """
+        """Runs the tests in the test suite and prints the results if called from
+        the command line."""
         self.load_tests()
         test_result = unittest.TextTestRunner().run(self.test_suite)
         print("\n" + "*" * 35 + "\n")

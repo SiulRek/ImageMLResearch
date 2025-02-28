@@ -6,14 +6,14 @@ from imlresearch.src.data_handling.manipulation.pack_images_and_labels import (
     pack_images_and_labels,
 )
 from imlresearch.src.data_handling.manipulation.unpack_dataset import unpack_dataset
+from imlresearch.src.preprocessing.definitions.step_class_mapping import (
+    STEP_CLASS_MAPPING,
+)
 from imlresearch.src.preprocessing.helpers.get_pipeline_code_representation import (
     get_pipeline_code_representation,
 )
 from imlresearch.src.preprocessing.helpers.json_instances_serializer import (
     JSONInstancesSerializer,
-)
-from imlresearch.src.preprocessing.definitions.step_class_mapping import (
-    STEP_CLASS_MAPPING,
 )
 from imlresearch.src.preprocessing.steps.step_base import StepBase
 
@@ -53,16 +53,16 @@ class ImagePreprocessor:
 
     Notes:
         - The pipeline should only contain instances of classes that inherit
-            from StepBase.
+        from StepBase.
         - The `set_pipe` and `pipe_append` methods include type checks to
-            enforce this.
+        enforce this.
         - The JSON serialization and deserialization methods handle the
-            conversion and reconstruction of the pipeline steps, respectively.
+        conversion and reconstruction of the pipeline steps, respectively.
         - The `process` method's behavior changes based on the
-            `raise_step_process_exception` flag, allowing for flexible error
-            handling during the preprocessing stage.
+        `raise_step_process_exception` flag, allowing for flexible error
+        handling during the preprocessing stage.
         - The datatype thoughout the pipeline is the default datatype,
-            except if explicitly set in the step.
+        except if explicitly set in the step.
         - tf.uint8 is the only input datatype all pipeline steps can handle.
     """
 

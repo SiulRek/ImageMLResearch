@@ -4,8 +4,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class ShapeResizer(StepBase):
-    """ A preprocessing step that resizes an image to a specified shape, potentially
-    altering its aspect ratio. """
+    """A preprocessing step that resizes an image to a specified shape, potentially
+    altering its aspect ratio."""
 
     arguments_datatype = {"desired_shape": (int, int), "resize_method": str}
     name = "Shape Resizer"

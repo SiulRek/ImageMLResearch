@@ -19,6 +19,7 @@ def _shapes_are_known(dataset):
         shapes_known = bool(dataset.element_spec.shape)
     return shapes_known
 
+
 def _restore_dataset_shape(dataset):
     """
     Restores the static shape of a dataset with 'unknown' shape by iterating
@@ -74,7 +75,7 @@ def prepare_dataset(
         except ValueError:
             msg += "Shuffling requires a dataset with a rectangular shape."
             raise ValueError(msg)
-    #TODO: Make a test method for this
+    # TODO: Make a test method for this
     elif not _shapes_are_known(dataset):
         try:
             dataset = _restore_dataset_shape(dataset)

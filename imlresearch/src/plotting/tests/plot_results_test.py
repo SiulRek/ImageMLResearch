@@ -4,8 +4,12 @@ import unittest
 import matplotlib.pyplot as plt
 import numpy as np
 
-from imlresearch.src.plotting.functions.plot_results import plot_multi_class_classification_results
-from imlresearch.src.plotting.functions.plot_results import plot_binary_classification_results
+from imlresearch.src.plotting.functions.plot_results import (
+    plot_multi_class_classification_results,
+)
+from imlresearch.src.plotting.functions.plot_results import (
+    plot_binary_classification_results,
+)
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 

@@ -9,8 +9,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class RandomPerspectiveTransformer(StepBase):
-    """ A preprocessing step that applies a perspective transformation to an image
-    tensor. This transformation simulates a change in the viewpoint. """
+    """A preprocessing step that applies a perspective transformation to an image
+    tensor. This transformation simulates a change in the viewpoint."""
 
     arguments_datatype = {"warp_scale": float, "seed": int}
     name = "Random Perspective Transformer"

@@ -20,13 +20,13 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
 
     Note:
         - All test cases take the default separator value of '__' for
-            simplicity.
+        simplicity.
         - The naming convention for the dictionary key looks like this: {key
-            identifier letter}_{key}_i{index}__I{index}F{frequency}__extra °
-            Only the 'key' is required, the rest are dependent on the test
-            cases. ° __I{index}F{frequency} is the pattern that the function
-            looks for. ° i{index} is used to verify the operation as the pattern
-            __I{index}F{frequency} will be removed in the output dictionary.
+        identifier letter}_{key}_i{index}__I{index}F{frequency}__extra °
+        Only the 'key' is required, the rest are dependent on the test
+        cases. ° __I{index}F{frequency} is the pattern that the function
+        looks for. ° i{index} is used to verify the operation as the pattern
+        __I{index}F{frequency} will be removed in the output dictionary.
     """
 
     @classmethod

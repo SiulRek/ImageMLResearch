@@ -5,12 +5,19 @@ It provides tests to ensure that test classes are correctly created for one
 example preprocessing step and that conditional test logic (skipping certain
 tests) functions as expected.
 """
+
 import unittest
 from unittest.mock import patch
 
-from imlresearch.src.preprocessing.steps import AdaptiveHistogramEqualizer as ExampleStep
-from imlresearch.src.preprocessing.tests.for_steps.single_step_test import TestSingleStep
-from imlresearch.src.preprocessing.tests.for_steps.multiple_steps_test import create_test_class_for_step
+from imlresearch.src.preprocessing.steps import (
+    AdaptiveHistogramEqualizer as ExampleStep,
+)
+from imlresearch.src.preprocessing.tests.for_steps.multiple_steps_test import (
+    create_test_class_for_step,
+)
+from imlresearch.src.preprocessing.tests.for_steps.single_step_test import (
+    TestSingleStep,
+)
 
 
 class TestTestFramework(unittest.TestCase):

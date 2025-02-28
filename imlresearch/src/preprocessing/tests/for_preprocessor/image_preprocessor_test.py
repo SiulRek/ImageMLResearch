@@ -6,13 +6,15 @@ from unittest.mock import patch
 import cv2
 import tensorflow as tf
 
-from imlresearch.src.preprocessing.steps.step_base import StepBase
 from imlresearch.src.preprocessing.helpers.step_utils import correct_image_tensor_shape
 from imlresearch.src.preprocessing.image_preprocessor import ImagePreprocessor
+from imlresearch.src.preprocessing.steps.step_base import StepBase
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 ENABLE_VISUAL_INSPECTION = True
-JSON_TEMPLATE_REL = os.path.join(r"imlresearch/src/preprocessing/definitions/pipeline_template.json")
+JSON_TEMPLATE_REL = os.path.join(
+    r"imlresearch/src/preprocessing/definitions/pipeline_template.json"
+)
 
 
 class GrayscaleToRGB(StepBase):
@@ -301,7 +303,8 @@ class TestImagePreprocessor(BaseTestCase):
         dataset, meaning a dataset with both images and labels.
         """
         unpacked_dataset = self.image_dataset
-        # The dataset is packed with itself to create a dataset with both images and labels.
+        # The dataset is packed with itself to create a dataset with both images
+        # and labels.
         packed_dataset = tf.data.Dataset.zip((unpacked_dataset, unpacked_dataset))
 
         preprocessor = ImagePreprocessor()
@@ -360,7 +363,8 @@ class TestImagePreprocessor(BaseTestCase):
             "Grayscale_to_RGB": GrayscaleToRGB,
         }
         with patch(
-            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING", mock_mapping
+            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING",
+            mock_mapping,
         ):
             old_preprocessor = ImagePreprocessor()
             old_preprocessor.set_pipe(self.pipeline)
@@ -409,7 +413,8 @@ class TestImagePreprocessor(BaseTestCase):
             "Grayscale_to_RGB": GrayscaleToRGB,
         }
         with patch(
-            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING", mock_mapping
+            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING",
+            mock_mapping,
         ):
             preprocessor = ImagePreprocessor()
             preprocessor.load_randomized_pipe_from_json(self.json_test_file)

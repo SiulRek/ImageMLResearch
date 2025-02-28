@@ -1,6 +1,8 @@
 import numpy as np
 
-from imlresearch.src.plotting.functions.plot_confusion_matrix import plot_confusion_matrix
+from imlresearch.src.plotting.functions.plot_confusion_matrix import (
+    plot_confusion_matrix,
+)
 from imlresearch.src.plotting.functions.plot_pr_curve import plot_pr_curve
 from imlresearch.src.plotting.functions.plot_roc_curve import plot_roc_curve
 from imlresearch.src.plotting.plotters.plotter import Plotter, plot_decorator

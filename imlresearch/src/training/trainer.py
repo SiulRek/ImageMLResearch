@@ -11,9 +11,8 @@ class Trainer(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the Trainer. """
-        # Not initializing ResearchAttributes here,
-        # prefer call synchronize_research_attributes explicitly.
-        # super().__init__()
+        # Not initializing ResearchAttributes here, prefer call
+        # synchronize_research_attributes explicitly. super().__init__()
 
         # Initialize research attributes used in the Trainer
         self._datasets_container = {

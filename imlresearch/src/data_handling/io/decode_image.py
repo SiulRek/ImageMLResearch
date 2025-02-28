@@ -9,7 +9,7 @@ def decode_image(image_path):
 
     Args:
         - image_path (str): The path to the image file.
-    
+
     Returns:
         - tf.Tensor: A tensor representing the image.
     """

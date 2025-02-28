@@ -1,6 +1,6 @@
 def format_parameters(parameters):
-    """ Formats the parameters dictionary into a string that can be added to a JSON
-    file. """
+    """Formats the parameters dictionary into a string that can be added to a JSON
+    file."""
     formatted_items = []
     for k, v in parameters.items():
         if isinstance(v, str):

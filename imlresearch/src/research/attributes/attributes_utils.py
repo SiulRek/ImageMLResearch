@@ -5,7 +5,6 @@ def is_public_property(attr_name, source_instance):
     Args:
         - attr_name (str): The attribute name to check.
         - source_instance: The instance to check the attribute in.
-
     """
     cls = source_instance.__class__
     attr = getattr(cls, attr_name, None)

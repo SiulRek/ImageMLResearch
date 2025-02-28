@@ -9,11 +9,11 @@ from imlresearch.src.research.attributes.research_attributes import ResearchAttr
 
 
 class DataHandler(ResearchAttributes):
-    """ A class to handle various dataset operations including creation,
-    enhancement, splitting, and saving images. """
+    """A class to handle various dataset operations including creation,
+    enhancement, splitting, and saving images."""
 
     def __init__(self):
-        """ Initializes the DataHandler. """
+        """Initializes the DataHandler."""
         # Not initializing ResearchAttributes here, prefer call
         # synchronize_research_attributes explicitly. super().__init__()
 
@@ -57,7 +57,7 @@ class DataHandler(ResearchAttributes):
 
         Args:
             - data (tf.data.Dataset, dict, pandas.DataFrame): The data to
-            - load, can be: 1. A TensorFlow dataset consisting of Tuples of
+            load, can be: 1. A TensorFlow dataset consisting of Tuples of
             the form (image, label) where image shape is (height, width,1|3)
             2. a dictionary/pandas DataFrame, with key/column is 'path' and
             'label'.
@@ -214,7 +214,7 @@ class DataHandler(ResearchAttributes):
         )
 
     def backup_datasets(self):
-        """ Backups the current dataset container. """
+        """Backups the current dataset container."""
         for key, dataset in self._datasets_container.items():
             for sample in dataset.take(1):
                 if isinstance(sample, tuple):

@@ -63,6 +63,6 @@ def run_tests():
 
 
 if __name__ == "__main__":
-    """ Main execution block for running the aggregated test suite. """
+    """Main execution block for running the aggregated test suite."""
 
     run_tests()

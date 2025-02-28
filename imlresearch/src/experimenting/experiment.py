@@ -4,18 +4,23 @@ import json
 import os
 import warnings
 
-from imlresearch.src.experimenting.helpers.create_experiment_report import create_experiment_report
+from imlresearch.src.experimenting.helpers.ai_support import ask_for_experiment_analysis
+from imlresearch.src.experimenting.helpers.create_experiment_report import (
+    create_experiment_report,
+)
 from imlresearch.src.experimenting.helpers.experiment_assets import (
     get_default_experiment_assets,
     load_experiment_assets,
 )
 from imlresearch.src.experimenting.helpers.trial import Trial
-from imlresearch.src.plotting.functions.plot_training_histories import plot_training_histories
+from imlresearch.src.plotting.functions.plot_training_histories import (
+    plot_training_histories,
+)
 from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
 from imlresearch.src.utils import transform_figures_to_files
 from imlresearch.src.utils import get_datetime, get_duration, add_durations
 from imlresearch.src.utils import Logger
-from imlresearch.src.experimenting.helpers.ai_support import ask_for_experiment_analysis
+
 
 class ExperimentError(Exception):
     """ Exception raised for errors that occur during the experiment. """
@@ -26,7 +31,13 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     ResearchAttributes. """
 
     def __init__(
-        self, research_attributes, directory, name, description, sort_metric="accuracy", ask_for_analysis=False
+        self,
+        research_attributes,
+        directory,
+        name,
+        description,
+        sort_metric="accuracy",
+        ask_for_analysis=False,
     ):
         """
         Initializes the Experiment with the given parameters.
@@ -40,8 +51,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
                 report.
             - sort_metric (str): The metric to sort the trials by. Default
                 is "accuracy".
-            - ask_for_analysis (bool): Whether to ask ChatGPT for an analysis 
-                of the experiment. Default is False.
+            - ask_for_analysis (bool): Whether to ask ChatGPT for an
+                analysis of the experiment. Default is False.
 
         NOTE:
             - `Experiment` is the only research module that requires

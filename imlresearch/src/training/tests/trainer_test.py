@@ -29,8 +29,8 @@ class TestTrainer(BaseTestCase):
         research_attributes = ResearchAttributes(
             label_type="multi_class", class_names=self.class_names
         )
-        # To skip loading of datasets with DataHandler,
-        # the attribute is set directly to private attribute of Trainer.
+        # To skip loading of datasets with DataHandler, the attribute is set
+        # directly to private attribute of Trainer.
         research_attributes._datasets_container = {
             "train_dataset": self.train_dataset,
             "val_dataset": self.val_dataset,

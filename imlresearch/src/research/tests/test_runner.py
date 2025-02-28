@@ -15,7 +15,7 @@ from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
 
 
 class ResearchTestRunner(TestRunnerBase):
-    """ Test Runner for the Research Module. """
+    """Test Runner for the Research Module."""
 
     def load_tests(self):
         self.load_test_case(TestBinaryModuleLevelWorkflow)

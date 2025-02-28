@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 from imlresearch.src.plotting.functions.plot_images import plot_images
 from imlresearch.src.plotting.functions.plot_model_summary import plot_model_summary
 from imlresearch.src.plotting.functions.plot_text import plot_text
-from imlresearch.src.plotting.functions.plot_training_history import plot_training_history
+from imlresearch.src.plotting.functions.plot_training_history import (
+    plot_training_history,
+)
 from imlresearch.src.research.helpers.data_retriever import DataRetriever
 
 

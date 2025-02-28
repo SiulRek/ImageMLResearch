@@ -6,7 +6,7 @@ from imlresearch.src.experimenting.helpers.hparams_suggester import HParamsSugge
 
 
 class _TrialDefinitionsIterator:
-    """ An iterator class for generating trial definition. """
+    """An iterator class for generating trial definition."""
 
     def __init__(self, suggester, num_trials, prefix):
         """

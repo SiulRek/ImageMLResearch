@@ -64,7 +64,6 @@ class TestLoadExperimentDefinition(BaseTestCase):
             trial_definitions.suggester.set_last_score(1)
         with self.assertRaises(StopIteration):
             next(trial_definitions)
-            
 
     def test_load_definitions_file_not_found(self):
         with self.assertRaises(FileNotFoundError):

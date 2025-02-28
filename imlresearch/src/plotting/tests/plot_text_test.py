@@ -1,7 +1,6 @@
 import os
 import unittest
 
-
 from imlresearch.src.plotting.functions.plot_text import plot_text
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 

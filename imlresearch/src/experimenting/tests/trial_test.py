@@ -5,7 +5,9 @@ from unittest.mock import MagicMock
 
 import matplotlib.pyplot as plt
 
-from imlresearch.src.experimenting.helpers.last_score_singleton import LastScoreSingleton
+from imlresearch.src.experimenting.helpers.last_score_singleton import (
+    LastScoreSingleton,
+)
 from imlresearch.src.experimenting.helpers.trial import Trial
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 

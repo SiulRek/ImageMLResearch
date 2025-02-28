@@ -1,8 +1,16 @@
-from imlresearch.src.preprocessing.tests.for_helpers import copy_json_exclude_entries_test
-from imlresearch.src.preprocessing.tests.for_helpers import recursive_type_conversion_test
-from imlresearch.src.preprocessing.tests.for_helpers import randomly_select_sequential_keys_test
+from imlresearch.src.preprocessing.tests.for_helpers import (
+    copy_json_exclude_entries_test,
+)
+from imlresearch.src.preprocessing.tests.for_helpers import (
+    recursive_type_conversion_test,
+)
+from imlresearch.src.preprocessing.tests.for_helpers import (
+    randomly_select_sequential_keys_test,
+)
 from imlresearch.src.preprocessing.tests.for_helpers import parse_and_repeat_test
-from imlresearch.src.preprocessing.tests.for_helpers import json_instances_serializer_test
+from imlresearch.src.preprocessing.tests.for_helpers import (
+    json_instances_serializer_test,
+)
 from imlresearch.src.preprocessing.tests.for_preprocessor import image_preprocessor_test
 from imlresearch.src.preprocessing.tests.for_preprocessor.long_pipeline_test import (
     load_long_pipeline_tests,

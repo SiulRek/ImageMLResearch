@@ -5,8 +5,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class RandomElasticTransformer(StepBase):
-    """ A data augmentation step that applies a Random Elastic Transformer to an
-    image. """
+    """A data augmentation step that applies a Random Elastic Transformer to an
+    image."""
 
     arguments_datatype = {"alpha": float, "sigma": float, "seed": int}
     name = "Random Elastic Transformer"

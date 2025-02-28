@@ -66,7 +66,7 @@ class MarkdownFileWriter:
         self.file_lines = []
 
     def page_break(self):
-        """ Inserts a page break in the file. """
+        """Inserts a page break in the file."""
         self.file_lines.append('\n<div style="page-break-after: always;"></div>\n')
 
     def write_title(self, title, level=1, page_break=False):
@@ -223,12 +223,12 @@ class MarkdownFileWriter:
         self.file_lines.append(f"!{figure_link}\n")
 
     def save_file(self):
-        """ Saves the file to the specified file path. """
+        """Saves the file to the specified file path."""
         with open(self.file_path, "w", encoding="utf-8") as file:
             file.write("\n".join(self.file_lines))
 
     def clear_file(self):
-        """ Clears all the content of the current file. """
+        """Clears all the content of the current file."""
         self.file_lines = []
 
 

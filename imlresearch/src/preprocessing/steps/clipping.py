@@ -17,9 +17,9 @@ class Clipper(StepBase):
 
         Args:
             - min_value (float): The minimum value to clip to. Default is
-                0.0.
+            0.0.
             - max_value (float): The maximum value to clip to. Default is
-                1.0.
+            1.0.
         """
         super().__init__(locals())
 

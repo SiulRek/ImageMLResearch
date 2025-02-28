@@ -5,7 +5,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class ErosionFilter(StepBase):
-    """ A preprocessing step that applies erosion to an image. """
+    """A preprocessing step that applies erosion to an image."""
 
     arguments_datatype = {"kernel_size": int, "iterations": int}
     name = "Erosion Filter"

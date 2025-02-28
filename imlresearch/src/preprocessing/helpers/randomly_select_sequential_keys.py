@@ -3,18 +3,18 @@ import re
 
 
 def is_sequential(lst):
-    """ Check if the list elements start from 0 and increment by 1 with each
-    element. """
+    """Check if the list elements start from 0 and increment by 1 with each
+    element."""
     return all(i == val for i, val in enumerate(lst))
 
 
 def matches_pattern(key, pattern):
-    """ Check if a key matches a given regular expression pattern. """
+    """Check if a key matches a given regular expression pattern."""
     return pattern.match(key) is not None
 
 
 def extract_indices(input_dict, pattern):
-    """ Extract indices from keys in the input dictionary based on a given pattern. """
+    """Extract indices from keys in the input dictionary based on a given pattern."""
     return [
         int(pattern.match(key).group(2))
         for key in input_dict
@@ -23,7 +23,7 @@ def extract_indices(input_dict, pattern):
 
 
 def filter_keys_by_pattern(input_dict, pattern):
-    """ Filter keys in the input dictionary that match a given pattern. """
+    """Filter keys in the input dictionary that match a given pattern."""
     return [key for key in input_dict if matches_pattern(key, pattern)]
 
 

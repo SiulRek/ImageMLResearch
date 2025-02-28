@@ -4,7 +4,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class BilateralFilter(StepBase):
-    """ A preprocessing step that applies bilateral filter to an image. """
+    """A preprocessing step that applies bilateral filter to an image."""
 
     arguments_datatype = {"diameter": int, "sigma_color": float, "sigma_space": float}
     name = "Bilateral Filter"

@@ -17,9 +17,7 @@ class TestSaveImages(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.dataset = self.load_mnist_digits_dataset(
-            sample_num=5, labeled=True
-        )
+        self.dataset = self.load_mnist_digits_dataset(sample_num=5, labeled=True)
 
     def test_saving_images_default_settings(self):
         """ Test saving images with default settings. """
@@ -167,10 +165,12 @@ class TestSaveImages(BaseTestCase):
         self.assertEqual(
             len(list_dir), len(list(self.dataset)), "All images should be saved."
         )
-    
+
     def test_saving_images_with_unlabeled_dataset(self):
         """ Test saving images with an unlabeled dataset. """
-        results_dir = os.path.join(self.temp_dir, "saving_images_with_unlabeled_dataset")
+        results_dir = os.path.join(
+            self.temp_dir, "saving_images_with_unlabeled_dataset"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
@@ -188,7 +188,7 @@ class TestSaveImages(BaseTestCase):
         self.assertEqual(
             len(list_dir), len(list(self.dataset)), "All images should be saved."
         )
-    
+
     def test_saving_images_with_num_images(self):
         """ Test saving images with a specified number of images. """
         results_dir = os.path.join(self.temp_dir, "saving_images_with_num_images")
@@ -201,6 +201,6 @@ class TestSaveImages(BaseTestCase):
             len(list_dir), 3, "Only the specified number of images should be saved."
         )
 
-        
+
 if __name__ == "__main__":
     unittest.main()

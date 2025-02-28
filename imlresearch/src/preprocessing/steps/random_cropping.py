@@ -4,7 +4,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class RandomCropper(StepBase):
-    """ A data augmentation step that randomly crops a portion of the image. """
+    """A data augmentation step that randomly crops a portion of the image."""
 
     arguments_datatype = {"crop_size": (int, int), "seed": int}
     name = "Random Cropper"

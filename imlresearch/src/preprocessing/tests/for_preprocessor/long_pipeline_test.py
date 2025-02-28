@@ -14,17 +14,17 @@ import unittest
 
 import tensorflow as tf
 
-from imlresearch.src.preprocessing.helpers.json_instances_serializer import (
-    JSONInstancesSerializer,
-)
 from imlresearch.src.preprocessing.definitions.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
-from imlresearch.src.preprocessing.steps.step_base import StepBase
 from imlresearch.src.preprocessing.helpers.copy_json_exclude_entries import (
     copy_json_exclude_entries,
 )
+from imlresearch.src.preprocessing.helpers.json_instances_serializer import (
+    JSONInstancesSerializer,
+)
 from imlresearch.src.preprocessing.image_preprocessor import ImagePreprocessor
+from imlresearch.src.preprocessing.steps.step_base import StepBase
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 N = 100  # Number of Pipelines Tests to run.
@@ -73,7 +73,8 @@ class TestLongPipeline(BaseTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.json_template_file = os.path.join(
-            cls.root_dir, r"imlresearch/src/preprocessing/definitions/pipeline_template.json"
+            cls.root_dir,
+            r"imlresearch/src/preprocessing/definitions/pipeline_template.json",
         )
         cls.json_test_file = os.path.join(cls.temp_dir, "test_pipe.json")
         cls.log_file = os.path.join(cls.output_dir, "test_results.log")

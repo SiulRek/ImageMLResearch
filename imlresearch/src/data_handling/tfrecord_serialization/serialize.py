@@ -6,15 +6,15 @@ from imlresearch.src.utils import unbatch_dataset_if_batched
 
 
 def _bytes_feature(value):
-    """ Returns a bytes_list from a string / byte. """
+    """Returns a bytes_list from a string / byte."""
     if isinstance(value, type(tf.constant(0))):
         value = value.numpy()
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
 
 def serialize_sample_for_png(image, label=None):
-    """ Serializes an image and optionally a label pair to a tf.train.Example proto.
-    The image is expected to be a PNG image. """
+    """Serializes an image and optionally a label pair to a tf.train.Example proto.
+    The image is expected to be a PNG image."""
     feature = {"image": _bytes_feature(tf.io.encode_png(image).numpy())}
     if label is not None:
         feature["label"] = _bytes_feature(tf.io.serialize_tensor(label).numpy())
@@ -24,8 +24,8 @@ def serialize_sample_for_png(image, label=None):
 
 
 def serialize_sample_for_jpeg(image, label=None):
-    """ Serializes an image and optionally a label pair to a tf.train.Example proto.
-    The image is expected to be a JPEG image. """
+    """Serializes an image and optionally a label pair to a tf.train.Example proto.
+    The image is expected to be a JPEG image."""
     feature = {"image": _bytes_feature(tf.io.encode_jpeg(image).numpy())}
     if label is not None:
         feature["label"] = _bytes_feature(tf.io.serialize_tensor(label).numpy())

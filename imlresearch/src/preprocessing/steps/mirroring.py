@@ -4,8 +4,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class Mirrorer(StepBase):
-    """ A preprocessing step that mirrors an image tensor either horizontally or
-    vertically. The direction of mirroring is specified as an input parameter. """
+    """A preprocessing step that mirrors an image tensor either horizontally or
+    vertically. The direction of mirroring is specified as an input parameter."""
 
     arguments_datatype = {"mirror_direction": str}
     name = "Mirrorer"

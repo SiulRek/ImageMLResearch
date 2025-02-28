@@ -5,7 +5,9 @@ import os
 import shutil
 import warnings
 
-from imlresearch.src.experimenting.helpers.last_score_singleton import LastScoreSingleton
+from imlresearch.src.experimenting.helpers.last_score_singleton import (
+    LastScoreSingleton,
+)
 from imlresearch.src.research.attributes.attributes_utils import copy_public_properties
 from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
 from imlresearch.src.utils import transform_figures_to_files

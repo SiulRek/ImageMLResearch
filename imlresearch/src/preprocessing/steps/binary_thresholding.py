@@ -24,8 +24,8 @@ class BinaryThresholder(StepBase):
                 thresholding. Pixel values greater than this threshold are set
                 to the maximum value (255, white), and values less than or equal
                 to the threshold are set to 0 (black). Defaults to 128.
-            - max_val (float, optional): The maximum value that a pixel can take
-                after thresholding. Defaults to 255.
+            - max_val (float, optional): The maximum value that a pixel can
+                take after thresholding. Defaults to 255.
         """
         super().__init__(locals())
 

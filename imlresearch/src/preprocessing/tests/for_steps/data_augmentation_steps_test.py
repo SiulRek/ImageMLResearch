@@ -29,7 +29,9 @@ from unittest import skip
 import tensorflow as tf
 
 import imlresearch.src.preprocessing.steps as steps
-from imlresearch.src.preprocessing.tests.for_steps.single_step_test import TestSingleStep
+from imlresearch.src.preprocessing.tests.for_steps.single_step_test import (
+    TestSingleStep,
+)
 
 ENABLE_VISUAL_INSPECTION = True
 
@@ -44,9 +46,8 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
         def setUpClass(cls):
             super().setUpClass()
             cls.image_dataset = cls.load_mnist_digits_dataset(
-                sample_num=5,
-                labeled=False
-            ) # Overwrite dataset defined in TestSingleStep
+                sample_num=5, labeled=False
+            )  # Overwrite dataset defined in TestSingleStep
 
         if not ENABLE_VISUAL_INSPECTION:
 
@@ -95,13 +96,10 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
                     break
             self.assertFalse(equal_flag)
 
-        #TODO
-        # def test_images_augmented_differently(self):
-        #     """
-        #     Test to verify that images are augmented differently.
+        # TODO def test_images_augmented_differently(self): """ Test to verify
+        # that images are augmented differently.
 
-        #     Tests if the processed images are different from the original
-        #     images.
+        # Tests if the processed images are different from the original images.
 
     name = augmentation_class.name.replace(" ", "")
     DynamicDataAugmentationTest.__name__ = f"Test{name}"

@@ -7,7 +7,7 @@ def _sanitize_histories(histories):
 
     Args:
         - histories: Dictionary containing multiple histories in the format
-            {Name: history}.
+        - {Name: history}.
 
     Returns:
         - sanitized_histories: Dictionary containing multiple histories in
@@ -35,7 +35,7 @@ def plot_training_histories(histories, title=None):
 
     Args:
         - histories: Dictionary containing multiple histories in the format
-            {Name: history}
+        - {Name: history}
         - title: The title of the plot.
 
     Returns:
@@ -93,7 +93,7 @@ def plot_training_histories(histories, title=None):
                 ax.grid(True)
 
     if title is not None:
-        fig.suptitle(title, fontsize=font_size+3)
+        fig.suptitle(title, fontsize=font_size + 3)
 
     plt.tight_layout()
     return fig

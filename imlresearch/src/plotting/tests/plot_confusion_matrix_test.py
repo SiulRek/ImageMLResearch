@@ -1,9 +1,10 @@
 import os
 import unittest
 
-import matplotlib.pyplot as plt
 
-from imlresearch.src.plotting.functions.plot_confusion_matrix import plot_confusion_matrix
+from imlresearch.src.plotting.functions.plot_confusion_matrix import (
+    plot_confusion_matrix,
+)
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 

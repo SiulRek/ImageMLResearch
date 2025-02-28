@@ -119,7 +119,9 @@ class TestExperiment(BaseTestCase):
                     experiment._evaluation_metrics.update(metrics_set)
                     trial_runned = True
             if trial_runned:
-                self.assertIn(trial.trial_assets, experiment.experiment_assets["trials"])
+                self.assertIn(
+                    trial.trial_assets, experiment.experiment_assets["trials"]
+                )
 
             if sleep_time is not None:
                 sleep(sleep_time)
@@ -164,23 +166,15 @@ class TestExperiment(BaseTestCase):
         self.assertIn(trials_data[0], reloaded_trials_data)
         self.assertIn(trials_data[1], reloaded_trials_data)
 
-    # def test_load_experiment_data_with_warnings(self):
-    #     trial_definitions = [
-    #         ("trial1", {"lr": 0.01, "batch_size": 16}),
-    #         ("trial2", {"lr": 0.001, "batch_size": 32}),
-    #     ]
-    #     self._run_trials_in_experiment(trial_definitions)
+    # def test_load_experiment_data_with_warnings(self): trial_definitions = [
+    # ("trial1", {"lr": 0.01, "batch_size": 16}), ("trial2", {"lr": 0.001,
+    # "batch_size": 32}), ] self._run_trials_in_experiment(trial_definitions)
 
-    #     new_name = "new_experiment"
-    #     # XXX: Warning is not being caught even when issued.
-    #     with self.assertWarns(UserWarning):
-    #         Experiment(
-    #             research_attributes=self.research_attributes,
-    #             directory=self.directory,
-    #             name=new_name,
-    #             description=self.description,
-    #             sort_metric=self.sort_metric,
-    #         )
+    # new_name = "new_experiment" XXX: Warning is not being caught even when
+    # issued. with self.assertWarns(UserWarning): Experiment(
+    # research_attributes=self.research_attributes, directory=self.directory,
+    # name=new_name, description=self.description, sort_metric=self.sort_metric,
+    # )
 
     def test_trials_order(self):
 

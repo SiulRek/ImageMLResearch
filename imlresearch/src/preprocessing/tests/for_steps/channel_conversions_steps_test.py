@@ -7,7 +7,9 @@ from unittest import skip
 from imlresearch.src.preprocessing.image_preprocessor import ImagePreprocessor
 from imlresearch.src.preprocessing.steps import GrayscaleToRGB
 from imlresearch.src.preprocessing.steps import RGBToGrayscale
-from imlresearch.src.preprocessing.tests.for_steps.single_step_test import TestSingleStep
+from imlresearch.src.preprocessing.tests.for_steps.single_step_test import (
+    TestSingleStep,
+)
 
 ENABLE_VISUAL_INSPECTION = True
 

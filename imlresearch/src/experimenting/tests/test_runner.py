@@ -1,7 +1,13 @@
-from imlresearch.src.experimenting.tests.experiment_assets_test import TestLoadExperimentAssets
+from imlresearch.src.experimenting.tests.experiment_assets_test import (
+    TestLoadExperimentAssets,
+)
 from imlresearch.src.experimenting.tests.experiment_test import TestExperiment
-from imlresearch.src.experimenting.tests.hparams_suggester_test import TestHParamsSuggester
-from imlresearch.src.experimenting.tests.last_score_singleton_test import TestLastScoreSingleton
+from imlresearch.src.experimenting.tests.hparams_suggester_test import (
+    TestHParamsSuggester,
+)
+from imlresearch.src.experimenting.tests.last_score_singleton_test import (
+    TestLastScoreSingleton,
+)
 from imlresearch.src.experimenting.tests.load_experiment_definition_test import (
     TestLoadExperimentDefinition,
 )

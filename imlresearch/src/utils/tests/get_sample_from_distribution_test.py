@@ -5,7 +5,7 @@ from imlresearch.src.utils import get_sample_from_distribution
 
 
 class TestGetSampleFromDistribution(BaseTestCase):
-    """ Test suite for the get_sample_from_distribution function. """
+    """Test suite for the get_sample_from_distribution function."""
 
     def test_gaussian_distribution(self):
         data = {"distribution": "gaussian", "loc": 0, "scale": 1}

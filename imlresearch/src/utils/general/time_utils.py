@@ -6,8 +6,8 @@ def get_datetime():
     Returns the current date and time formatted as a beautiful string.
 
     Returns:
-        - str: The current date and time formatted as 'YYYY-MM-DD
-        - HH:MM:SS:MS'.
+        - str: The current date and time formatted as 
+        'YYYY-MM-DD-HH:MM:SS:MS'.
     """
     now = datetime.now()
     formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
@@ -34,7 +34,7 @@ def _prettify_duration(duration):
         after_decimal = duration.split(".")[1]
         if len(after_decimal) > 3:
             duration = duration.split(".")[0] + "." + after_decimal[:3]
-    
+
     # Add leading zeros to the minutes and seconds if needed.
     parts = duration.split(":")
     for i in range(1, len(parts)):

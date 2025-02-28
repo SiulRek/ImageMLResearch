@@ -13,7 +13,7 @@ def plot_training_history(history):
             history plot.
     """
     # Configuration
-    default_fig_size = (10, 6) # Assumes a single metric.
+    default_fig_size = (10, 6)  # Assumes a single metric.
     font_size = 12
 
     history_dict = history
@@ -26,9 +26,7 @@ def plot_training_history(history):
         else len(history_dict)
     )
     fig_size = (default_fig_size[0], default_fig_size[1] * num_metrics)
-    fig, axes = plt.subplots(
-        num_metrics, 1, figsize=(fig_size[0], fig_size[1])
-    )
+    fig, axes = plt.subplots(num_metrics, 1, figsize=(fig_size[0], fig_size[1]))
 
     if num_metrics == 1:
         axes = [axes]

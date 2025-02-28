@@ -2,7 +2,9 @@ import json
 import os
 import unittest
 
-from imlresearch.src.experimenting.helpers.experiment_assets import load_experiment_assets
+from imlresearch.src.experimenting.helpers.experiment_assets import (
+    load_experiment_assets,
+)
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 

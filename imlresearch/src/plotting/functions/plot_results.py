@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow.python.framework.errors_impl import InvalidArgumentError
 
-# NOTE: Currently only plotting of binary classification and multi-class classification
-# results are supported in the same function.
+# NOTE: Currently only plotting of binary classification and multi-class
+# classification results are supported in the same function.
 
 
 def plot_binary_classification_results(

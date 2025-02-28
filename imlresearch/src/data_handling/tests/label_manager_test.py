@@ -7,7 +7,7 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestLabelManager(BaseTestCase):
-    """ Test suite for the LabelManager class. """
+    """Test suite for the LabelManager class."""
 
     def test_binary_labels_valid_input(self):
         manager = LabelManager("binary")

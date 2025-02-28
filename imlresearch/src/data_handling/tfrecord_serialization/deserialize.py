@@ -4,8 +4,8 @@ import tensorflow as tf
 
 
 def parse_tfrecord(sample_proto, label_dtype=None):
-    """ Parses a serialized Example proto to parse the image and optionally label
-    tensors. """
+    """Parses a serialized Example proto to parse the image and optionally label
+    tensors."""
     feature_description = {
         "image": tf.io.FixedLenFeature([], tf.string),
     }

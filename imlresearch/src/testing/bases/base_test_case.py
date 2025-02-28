@@ -108,8 +108,8 @@ class BaseTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """ Class-level setup method that ensures necessary directories are created
-        and initializes logging for the test case. """
+        """Class-level setup method that ensures necessary directories are created
+        and initializes logging for the test case."""
         cls.root_dir = ROOT_DIR
         cls.root_dir = os.path.normpath(cls.root_dir)
         cls.data_dir = DATA_DIR
@@ -130,20 +130,20 @@ class BaseTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """ Class-level teardown method that removes the results directory if it is
-        empy. """
+        """Class-level teardown method that removes the results directory if it is
+        empy."""
         for dir_ in [cls.results_dir, cls.visualizations_dir]:
             if os.path.exists(dir_) and os.listdir(dir_) == []:
                 shutil.rmtree(dir_)
 
     def setUp(self):
-        """ Instance-level setup method that creates a temporary directory for use
-        during the test. """
+        """Instance-level setup method that creates a temporary directory for use
+        during the test."""
         os.makedirs(self.temp_dir, exist_ok=True)
 
     def run(self, result=None):
-        """ Overrides the run method of the unittest.TestCase class to log the
-        outcome of each test method. """
+        """Overrides the run method of the unittest.TestCase class to log the
+        outcome of each test method."""
         # NOTE: Logging is intended to occur in tearDown; however, since errors
         # are processed into the result after tearDown, it's necessary to
         # override the run method to log here instead.
@@ -152,8 +152,8 @@ class BaseTestCase(unittest.TestCase):
         return result
 
     def tearDown(self):
-        """ Instance-level teardown method that logs the outcome of each test method
-        and removes the temporary directory created during the test setup. """
+        """Instance-level teardown method that logs the outcome of each test method
+        and removes the temporary directory created during the test setup."""
         if os.path.exists(self.temp_dir) and self.remove_temp_dir:
             shutil.rmtree(self.temp_dir)
 

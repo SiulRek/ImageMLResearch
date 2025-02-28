@@ -1,8 +1,12 @@
 import numpy as np
 
 from imlresearch.src.data_handling.labelling.label_utils import reverse_one_hot
-from imlresearch.src.plotting.functions.plot_confusion_matrix import plot_confusion_matrix
-from imlresearch.src.plotting.functions.plot_results import plot_multi_class_classification_results
+from imlresearch.src.plotting.functions.plot_confusion_matrix import (
+    plot_confusion_matrix,
+)
+from imlresearch.src.plotting.functions.plot_results import (
+    plot_multi_class_classification_results,
+)
 from imlresearch.src.plotting.plotters.plotter import Plotter, plot_decorator
 
 

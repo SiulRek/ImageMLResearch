@@ -7,7 +7,7 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestDatasetFunctions(BaseTestCase):
-    """ Test suite for the split_dataset function. """
+    """Test suite for the split_dataset function."""
 
     def setUp(self):
         super().setUp()
@@ -62,8 +62,8 @@ class TestDatasetFunctions(BaseTestCase):
         self.assertIsNone(test, "Test set should be None when size is 0.")
 
     def test_split_with_manual_dataset_size(self):
-        """ Test that the split_dataset function handles the manually provided
-        dataset_size correctly. """
+        """Test that the split_dataset function handles the manually provided
+        dataset_size correctly."""
         train, val, test = split_dataset(self.dataset, dataset_size=100)
 
         self.assertEqual(

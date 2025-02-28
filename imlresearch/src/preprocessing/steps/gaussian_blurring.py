@@ -4,8 +4,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class GaussianBlurFilter(StepBase):
-    """ A preprocessing step that applies Contrast Limited Gaussian Blur Filter to
-    an image. """
+    """A preprocessing step that applies Contrast Limited Gaussian Blur Filter to
+    an image."""
 
     arguments_datatype = {"kernel_size": (int, int), "sigma": float}
     name = "Gaussian Blur Filter"

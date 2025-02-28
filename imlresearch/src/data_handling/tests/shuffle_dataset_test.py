@@ -7,7 +7,7 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestShuffleDataset(BaseTestCase):
-    """ Test suite for the shuffle_dataset function. """
+    """Test suite for the shuffle_dataset function."""
 
     def setUp(self):
         super().setUp()

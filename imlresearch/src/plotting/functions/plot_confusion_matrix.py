@@ -1,10 +1,10 @@
-# NOTE: plot_confusion_matrix is only allowed for binary and 
-# multiclass classification labels.
-
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
+
+# NOTE: plot_confusion_matrix is only allowed for binary and multiclass
+# classification labels.
 
 
 def plot_confusion_matrix(y_true, y_pred, class_names):

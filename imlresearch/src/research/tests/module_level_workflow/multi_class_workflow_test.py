@@ -13,7 +13,7 @@ from imlresearch.src.training.trainer import Trainer
 
 
 class TestMultiClassModuleLevelWorkflow(BaseTestCase):
-    """ Test case for the multi-class research workflow on module level. """
+    """Test case for the multi-class research workflow on module level."""
 
     @classmethod
     def setUpClass(cls):

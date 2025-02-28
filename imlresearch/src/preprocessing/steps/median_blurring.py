@@ -4,7 +4,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class MedianBlurFilter(StepBase):
-    """ A preprocessing step that applies median filter to an image. """
+    """A preprocessing step that applies median filter to an image."""
 
     arguments_datatype = {"kernel_size": int}
     name = "Median Blur Filter"

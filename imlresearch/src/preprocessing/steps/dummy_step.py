@@ -2,14 +2,14 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class DummyStep(StepBase):
-    """ A dummy preprocessing step that does nothing to the image. """
+    """A dummy preprocessing step that does nothing to the image."""
 
     name = "Dummy Step"
     arguments_datatype = {}
 
     def __init__(self):
-        """ Initializes the DummyStep object for integration into an image
-        preprocessing pipeline. """
+        """Initializes the DummyStep object for integration into an image
+        preprocessing pipeline."""
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper

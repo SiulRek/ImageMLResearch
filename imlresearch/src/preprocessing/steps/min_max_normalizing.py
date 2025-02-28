@@ -14,8 +14,8 @@ class MinMaxNormalizer(StepBase):
     name = "Min Max Normalizer"
 
     def __init__(self):
-        """ Initializes the MinMaxNormalizer object for integration into an image
-        preprocessing pipeline. """
+        """Initializes the MinMaxNormalizer object for integration into an image
+        preprocessing pipeline."""
         super().__init__({})
         self.output_datatype = tf.float16
         self._min_val = None

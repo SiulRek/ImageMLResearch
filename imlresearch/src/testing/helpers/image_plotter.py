@@ -11,7 +11,7 @@ import tensorflow as tf
 
 
 class ImagePlotterBase(ABC):
-    """ This class represents the base for the PCBVisualizer child classes. """
+    """This class represents the base for the PCBVisualizer child classes."""
 
     def __init__(self, show_plot=True):
         self.last_fig = None
@@ -33,8 +33,8 @@ class ImagePlotterBase(ABC):
 
 
 class ImagePlotter(ImagePlotterBase):
-    """ ImagePlotter during image processing. Pass slice from tensorflow images as
-    input parameter. """
+    """ImagePlotter during image processing. Pass slice from tensorflow images as
+    input parameter."""
 
     def plot_images(self, image_tf_dataset, title="Images"):
         """

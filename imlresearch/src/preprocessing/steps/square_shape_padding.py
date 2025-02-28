@@ -4,8 +4,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class SquareShapePadder(StepBase):
-    """ A preprocessing step that pads an image to a square shape using a specified
-    pixel value. """
+    """A preprocessing step that pads an image to a square shape using a specified
+    pixel value."""
 
     arguments_datatype = {"padding_pixel_value": int}
     name = "Square Shape Padder"

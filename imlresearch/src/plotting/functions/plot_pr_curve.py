@@ -1,9 +1,7 @@
-# NOTE: plot_pr_curve is only allowed for binary
-# classification labels.
-
-
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve, auc
+
+# NOTE: plot_pr_curve is only allowed for binary classification labels.
 
 
 def plot_pr_curve(y_true, y_pred):
@@ -46,6 +44,6 @@ def plot_pr_curve(y_true, y_pred):
     ax.legend(loc="lower left", fontsize=fontsize)
     ax.tick_params(axis="both", which="major", labelsize=fontsize)
     ax.grid(True)
-    
+
     plt.tight_layout()
     return fig

@@ -4,7 +4,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class AverageBlurFilter(StepBase):
-    """ A preprocessing step that applies average blur filter to an image. """
+    """A preprocessing step that applies average blur filter to an image."""
 
     arguments_datatype = {"kernel_size": (int, int)}
     name = "Average Blur Filter"

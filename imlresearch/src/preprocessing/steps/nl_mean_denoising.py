@@ -4,7 +4,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class NLMeanDenoiser(StepBase):
-    """ A preprocessing step that applies Non Local Mean Denoising to an image. """
+    """A preprocessing step that applies Non Local Mean Denoising to an image."""
 
     arguments_datatype = {
         "h": float,

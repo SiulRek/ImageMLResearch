@@ -22,7 +22,7 @@ class Rotator(StepBase):
 
         Args:
             - angle (float): The angle of rotation in degrees. Default is
-                90.0.
+            90.0.
         """
         super().__init__(locals())
 

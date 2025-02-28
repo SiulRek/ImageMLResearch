@@ -21,7 +21,7 @@ class ResearchAttributes:
             after fitting (Attribute 'history' of the return value).
         - evaluation_metrics (dict): The tracked evaluation metrics dicts of
             the model after evaluating. Can be set from outside.
-        - Format {Set_Name: Metrics ({Metric: Value})}
+                Format {Set_Name: Metrics ({Metric: Value})}
         - figures (dict): Dictionary containing the tracked figures. Format
         - {figure_name: figure}. Can be set from outside.
     """
@@ -50,38 +50,38 @@ class ResearchAttributes:
 
     @property
     def datasets_container(self):
-        """ Dictionary containing datasets of type tf.data.Dataset, where each
-        sample is a tuple (image, label). """
+        """Dictionary containing datasets of type tf.data.Dataset, where each
+        sample is a tuple (image, label)."""
         return self._datasets_container
 
     @property
     def label_manager(self):
-        """ LabelManager instance for handling labels. """
+        """LabelManager instance for handling labels."""
         return self._label_manager
 
     @property
     def outputs_container(self):
-        """ Dictionary containing outputs in form of Tuple -> (y_true, y_pred). """
+        """Dictionary containing outputs in form of Tuple -> (y_true, y_pred)."""
         return self._outputs_container
 
     @property
     def model(self):
-        """ The Keras model instance. """
+        """The Keras model instance."""
         return self._model
 
     @property
     def training_history(self):
-        """ The training history of the model after fitting. """
+        """The training history of the model after fitting."""
         return self._training_history
 
     @property
     def evaluation_metrics(self):
-        """ The evaluation metrics dicts of the model after evaluating. """
+        """The evaluation metrics dicts of the model after evaluating."""
         return self._evaluation_metrics
 
     @property
     def figures(self):
-        """ Dictionary containing figures. {figure_name: figure} """
+        """Dictionary containing figures. {figure_name: figure}"""
         return self._figures
 
     def synchronize_research_attributes(self, research_attributes):

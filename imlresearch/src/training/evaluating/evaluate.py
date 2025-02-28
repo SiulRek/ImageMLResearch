@@ -8,12 +8,14 @@ from imlresearch.src.training.evaluating.calculate_metrics import (
     calc_f1_score,
 )
 
+
 def _convert_support_key_to_int(classification_report):
     for metrics in classification_report.values():
         value = metrics.get("support")
         if value is not None:
             value = int(value)
             metrics.update({"support": value})
+
 
 def evaluate_multi_class_classification(y_true, y_pred, class_names=None):
     """
@@ -28,11 +30,11 @@ def evaluate_multi_class_classification(y_true, y_pred, class_names=None):
 
     Returns:
         - dict: Evaluation metrics. Dictionary with the following keys:
-        - 'accuracy' -> float
-        - 'precision' -> float
-        - 'recall' -> float
-        - 'f1' -> float
-        - 'classification_report' -> dict
+            ° 'accuracy' -> float
+            ° 'precision' -> float
+            ° 'recall' -> float
+            ° 'f1' -> float
+            ° 'classification_report' -> dict
     """
     y_pred_one_hot = np.zeros_like(y_pred)
     y_pred_one_hot[np.arange(len(y_pred)), np.argmax(y_pred, axis=-1)] = 1
@@ -70,11 +72,11 @@ def evaluate_binary_classification(y_true, y_pred, class_names=None):
 
     Returns:
         - dict: Evaluation metrics. Dictionary with the following keys:
-        - 'accuracy' -> float
-        - 'precision' -> float
-        - 'recall' -> float
-        - 'f1' -> float
-        - 'classification_report' -> dict
+        ° 'accuracy' -> float
+        ° 'precision' -> float
+        ° 'recall' -> float
+        ° 'f1' -> float
+        ° 'classification_report' -> dict
     """
     y_pred_rounded = np.round(y_pred).astype(int)
     accuracy = calc_accuracy(y_true, y_pred_rounded)

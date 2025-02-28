@@ -7,7 +7,7 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestPrepareDataset(BaseTestCase):
-    """ Test suite for the prepare_dataset function. """
+    """Test suite for the prepare_dataset function."""
 
     def setUp(self):
         super().setUp()

@@ -1,9 +1,7 @@
 import os
 import unittest
 
-from imlresearch.src.preprocessing.helpers.parse_and_repeat import (
-    parse_and_repeat,
-)
+from imlresearch.src.preprocessing.helpers.parse_and_repeat import parse_and_repeat
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 

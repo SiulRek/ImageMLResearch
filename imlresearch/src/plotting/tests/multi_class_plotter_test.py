@@ -10,7 +10,7 @@ from imlresearch.src.research.attributes.research_attributes import ResearchAttr
 
 
 class TestMultiClassPlotter(PlottingTestCase):
-    """ Test suite for the MultiClassPlotter class. """
+    """Test suite for the MultiClassPlotter class."""
 
     @classmethod
     def setUpClass(cls):
@@ -63,7 +63,7 @@ class TestMultiClassPlotter(PlottingTestCase):
         return np.array(images_list)
 
     def test_plot_images(self):
-        """ Test the plot_images method. """
+        """Test the plot_images method."""
         fig = self.multi_class_plotter.plot_images(grid_size=(2, 2), title="Images")
         self.assertEqual(
             len(self.multi_class_plotter.figures), 1, "The figure was not added."
@@ -76,7 +76,7 @@ class TestMultiClassPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "multi_class_plotter_plot_images.png")
 
     def test_plot_confusion_matrix(self):
-        """ Test the plot_confusion_matrix method. """
+        """Test the plot_confusion_matrix method."""
         fig = self.multi_class_plotter.plot_confusion_matrix(
             title="Test Confusion Matrix", show=False
         )
@@ -93,7 +93,7 @@ class TestMultiClassPlotter(PlottingTestCase):
         )
 
     def test_plot_results(self):
-        """ Test the plot_results method. """
+        """Test the plot_results method."""
         fig = self.multi_class_plotter.plot_results(
             grid_size=(2, 2), prediction_bar=True
         )

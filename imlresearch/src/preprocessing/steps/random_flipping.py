@@ -6,8 +6,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class RandomFlipper(StepBase):
-    """ A data augmentation step that flips the image randomly in a specified
-    direction. """
+    """A data augmentation step that flips the image randomly in a specified
+    direction."""
 
     arguments_datatype = {"flip_direction": str, "seed": int}
     name = "Random Flipper"

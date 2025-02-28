@@ -13,7 +13,7 @@ from imlresearch.src.training.trainer import Trainer
 
 
 class TestBinaryModuleLevelWorkflow(BaseTestCase):
-    """ Test case for the binary class research workflow on module level. """
+    """Test case for the binary class research workflow on module level."""
 
     @classmethod
     def setUpClass(cls):

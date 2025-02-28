@@ -40,7 +40,7 @@ class _ResearcherBase(DataHandler, Trainer):
 
     @property
     def preprocessor(self):
-        """ ImagePreprocessor: The image preprocessor instance. """
+        """ImagePreprocessor: The image preprocessor instance."""
         return self._preprocessor
 
     def run_experiment(self, directory, name, description, ask_for_analysis=False):
@@ -96,8 +96,8 @@ class _ResearcherBase(DataHandler, Trainer):
 
 
 class BinaryResearcher(_ResearcherBase, BinaryPlotter):
-    """ The BinaryResearcher class inherits from _ResearcherBase and BinaryPlotter
-    to provide functionalities for binary image classification research. """
+    """The BinaryResearcher class inherits from _ResearcherBase and BinaryPlotter
+    to provide functionalities for binary image classification research."""
 
     def __init__(self, class_names):
         """

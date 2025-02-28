@@ -52,11 +52,12 @@ class StepBase(ABC):
             arguments> name = <Preprocessing step identifier>
 
     def __init__(self, **processing_step_specific_args):
-        - super().__init__(locals())
+        super().__init__(locals())
 
-    @StepBase._nparray_pyfunc_wrapper # or @StepBase._tensor_pyfunc_wrapper def
-    __call__(self, image_tensor): # TODO: Implement the preprocessing logic
-    image_tensor_processed = ... return image_tensor_processed
+    @StepBase._nparray_pyfunc_wrapper # or @StepBase._tensor_pyfunc_wrapper 
+    def __call__(self, image_tensor): 
+        # TODO: Implement the preprocessing logic
+        image_tensor_processed = ... return image_tensor_processed
 
     TODOs when integrating a new preprocessing step in the framework:
         1. Create a preprocessing step class inheriting from `StepBase`
@@ -109,7 +110,7 @@ class StepBase(ABC):
         variables. It considers if parameters should be randomized or extracted
         directly from `local_vars`.
         """
-        excluded_parameters = ["self", "__class__"]
+        excluded_parameters = ["sel", "__class__"]
         initialization_parameters = {
             key: value
             for key, value in local_vars.items()

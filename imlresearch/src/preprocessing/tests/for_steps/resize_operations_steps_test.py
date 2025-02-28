@@ -9,7 +9,9 @@ import unittest
 from unittest import skip
 
 import imlresearch.src.preprocessing.steps as steps
-from imlresearch.src.preprocessing.tests.for_steps.single_step_test import TestSingleStep
+from imlresearch.src.preprocessing.tests.for_steps.single_step_test import (
+    TestSingleStep,
+)
 
 ENABLE_VISUAL_INSPECTION = True
 

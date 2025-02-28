@@ -33,12 +33,12 @@ class BaseTestCaseDemo(BaseTestCase):
         )
 
     def test_example_functionality(self):
-        """ An example test that logs its outcome and demonstrates the logging
-        functionality. """
+        """An example test that logs its outcome and demonstrates the logging
+        functionality."""
         self.assertTrue(True)
 
     def test_load_image_dataset(self):
-        """ An example test that demonstrates the usage of a helper method. """
+        """An example test that demonstrates the usage of a helper method."""
         dataset = self.load_geometrical_forms_dataset()
         for image in dataset.take(1):
             # plot the image to outputs directory

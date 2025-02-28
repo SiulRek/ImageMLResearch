@@ -6,8 +6,8 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class RandomRotator(StepBase):
-    """ A preprocessing step that applies Random Rotator to an image within a
-    specified angle range. """
+    """A preprocessing step that applies Random Rotator to an image within a
+    specified angle range."""
 
     arguments_datatype = {"angle_range": (int, int), "seed": int}
     name = "Random Rotator"

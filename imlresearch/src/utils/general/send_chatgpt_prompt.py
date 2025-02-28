@@ -1,8 +1,10 @@
 from openai import OpenAI
+
 try:
     from keys import OPENAI_KEY
 except ImportError:
     OPENAI_KEY = None
+
 
 def send_chatgpt_prompt(prompt_message, max_response_tokens=3000, model="gpt-4o"):
     """
@@ -30,8 +32,6 @@ def send_chatgpt_prompt(prompt_message, max_response_tokens=3000, model="gpt-4o"
         model=model,
         max_tokens=max_response_tokens,
     )
-    
-
 
     completion = response.parse()
     response_message = completion.choices[0].message.content

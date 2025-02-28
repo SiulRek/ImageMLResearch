@@ -3,7 +3,9 @@ import unittest
 
 import tensorflow as tf
 
-from imlresearch.src.plotting.functions.plot_training_history import plot_training_history
+from imlresearch.src.plotting.functions.plot_training_history import (
+    plot_training_history,
+)
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 

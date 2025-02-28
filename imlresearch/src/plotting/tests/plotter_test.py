@@ -12,7 +12,7 @@ from imlresearch.src.research.attributes.research_attributes import ResearchAttr
 
 
 class TestPlotter(PlottingTestCase):
-    """ Test suite for the Plotter class. """
+    """Test suite for the Plotter class."""
 
     @classmethod
     def setUpClass(cls):
@@ -49,7 +49,7 @@ class TestPlotter(PlottingTestCase):
         )  # Set the model for plot_model_summary
 
     def test_add_figure(self):
-        """ Test the _add_figure method. """
+        """Test the _add_figure method."""
         fig = plt.figure()
         self.plotter._add_figure("test_figure", fig)
         self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
@@ -60,7 +60,7 @@ class TestPlotter(PlottingTestCase):
         )
 
     def test_plot_images(self):
-        """ Test the plot_images method. """
+        """Test the plot_images method."""
 
         def label_to_title(label):
             return "Label: " + str(label.numpy())
@@ -75,7 +75,7 @@ class TestPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "plotter_plot_images.png")
 
     def test_plot_text(self):
-        """ Test the plot_text method. """
+        """Test the plot_text method."""
         fig = self.plotter.plot_text(
             self.text_sample, title="Sample Text Plot", show=False
         )
@@ -83,7 +83,7 @@ class TestPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "plotter_plot_text.png")
 
     def test_plot_training_history(self):
-        """ Test the plot_training_history method. """
+        """Test the plot_training_history method."""
         self.plotter._training_history = MagicMock()
         self.plotter._training_history = {
             "loss": [0.25, 0.15, 0.1],
@@ -99,7 +99,7 @@ class TestPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "plotter_plot_training_history.png")
 
     def test_plot_model_summary(self):
-        """ Test the plot_model_summary method. """
+        """Test the plot_model_summary method."""
         fig = self.plotter.plot_model_summary(title="Test Model Summary", show=False)
         self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
         self.assertIn(

@@ -10,7 +10,9 @@ from optuna.distributions import (
     IntDistribution,
 )
 
-from imlresearch.src.experimenting.helpers.last_score_singleton import LastScoreSingleton
+from imlresearch.src.experimenting.helpers.last_score_singleton import (
+    LastScoreSingleton,
+)
 
 DEFAULT_STUDY_NAME = "hparams_suggester_study"
 

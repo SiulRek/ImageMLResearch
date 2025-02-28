@@ -11,9 +11,8 @@ class DataRetriever(ResearchAttributes):
 
     def __init__(self):
         """ Initializes the DataRetriever. """
-        # Not initializing ResearchAttributes here,
-        # prefer call synchronize_research_attributes explicitly.
-        # super().__init__()
+        # Not initializing ResearchAttributes here, prefer call
+        # synchronize_research_attributes explicitly. super().__init__()
 
         # Initialize research attributes used in the DataRetriever
         self._datasets_container = {
@@ -28,7 +27,7 @@ class DataRetriever(ResearchAttributes):
         Converts an array to a numpy array using two approaches:
             - 1. If the array has a 'numpy' method, it is called.
             - 2. If the array does not have a 'numpy' method, it is
-                converted to a numpy array using np.array.
+            converted to a numpy array using np.array.
 
         Args:
             - array (array-like): The array to convert.

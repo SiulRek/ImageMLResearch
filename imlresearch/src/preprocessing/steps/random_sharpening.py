@@ -27,7 +27,7 @@ class RandomSharpening(StepBase):
     def _setup(self, dataset):
         random.seed(self.parameters["seed"])
         return super()._setup(dataset)
-    
+
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
         intensity = random.uniform(

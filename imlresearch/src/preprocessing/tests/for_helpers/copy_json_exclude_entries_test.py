@@ -25,20 +25,20 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()  
+        super().setUpClass()
 
         cls.source_file = os.path.join(cls.output_dir, "imlresearch.src.json")
         cls.dest_file = os.path.join(cls.output_dir, "dest.json")
 
     def setUp(self):
-        super().setUp()  
+        super().setUp()
 
         source_data = {"key1": "value1", "key2": "value2", "key3": "value3"}
         with open(self.source_file, "w", encoding="utf-8") as file:
             json.dump(source_data, file)
 
     def tearDown(self):
-        super().tearDown()  
+        super().tearDown()
 
         if os.path.exists(self.source_file):
             os.remove(self.source_file)

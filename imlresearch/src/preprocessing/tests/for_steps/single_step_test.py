@@ -19,7 +19,9 @@ from unittest.mock import patch
 
 import tensorflow as tf
 
-from imlresearch.src.preprocessing.definitions.step_class_mapping import STEP_CLASS_MAPPING
+from imlresearch.src.preprocessing.definitions.step_class_mapping import (
+    STEP_CLASS_MAPPING,
+)
 from imlresearch.src.preprocessing.helpers.recursive_type_conversion import (
     recursive_type_conversion,
 )
@@ -88,7 +90,8 @@ class TypeCaster(StepBase):
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
-        # image_tensor = tf.cast(image_tensor, self.output_datatype) Line is already going to be accomplished by the wrapper.
+        # image_tensor = tf.cast(image_tensor, self.output_datatype) Line is
+        # already going to be accomplished by the wrapper.
         return image_tensor
 
 
@@ -108,7 +111,8 @@ class TestSingleStep(BaseTestCase):
     images.
     """
 
-    # Class Attributes (overwritten when class is dynamically loaded (eg. multiple_steps_test.py) or customized (channel_conversion_steps_test.py))
+    # Class Attributes (overwritten when class is dynamically loaded (eg.
+    # multiple_steps_test.py) or customized (channel_conversion_steps_test.py))
     parameters = STEP_PARAMETERS
     TestStep = StepToTest
 
@@ -315,7 +319,8 @@ class TestSingleStep(BaseTestCase):
 
         mock_mapping = {"RGB_to_Grayscale": RGBToGrayscale, "Test_Step": self.TestStep}
         with patch(
-            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING", mock_mapping
+            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING",
+            mock_mapping,
         ):
             old_preprocessor = ImagePreprocessor()
             pipeline = [RGBToGrayscale(), self.test_step]
@@ -355,9 +360,7 @@ class TestSingleStep(BaseTestCase):
             plotter.save_plot_to_file(os.path.join(directory, figure_name))
 
             grayscaled_dataset = RGBToGrayscale()(self.image_dataset)
-            processed_grayscaled_dataset = self.test_step(
-                grayscaled_dataset
-            )
+            processed_grayscaled_dataset = self.test_step(grayscaled_dataset)
             plotter.plot_images(
                 processed_grayscaled_dataset, "Processed Grayscale Images"
             )

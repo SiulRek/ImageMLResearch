@@ -1,7 +1,6 @@
 import os
 import unittest
 
-
 from imlresearch.src.plotting.functions.plot_roc_curve import plot_roc_curve
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 

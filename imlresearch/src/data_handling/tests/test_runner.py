@@ -13,7 +13,7 @@ from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
 
 class DataHandlingTestRunner(TestRunnerBase):
     """ Test Runner for the Data Handling Module. """
-    
+
     def load_tests(self):
         self.load_test_module(create_dataset_test)
         self.load_test_module(label_manager_test)

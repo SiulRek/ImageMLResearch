@@ -17,7 +17,8 @@ def correct_image_tensor_shape(image_tensor):
     height = dims[0]
     width = dims[1]
 
-    # Check if the image is grayscale (2D) and if so, reshape it to 3D with 1 channel.
+    # Check if the image is grayscale (2D) and if so, reshape it to 3D with 1
+    # channel.
     if len(dims) == 2:
         reshaped_image = tf.reshape(image_tensor, [height, width, 1])
     else:

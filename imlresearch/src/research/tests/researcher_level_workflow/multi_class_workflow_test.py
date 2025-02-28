@@ -10,8 +10,8 @@ from imlresearch.src.testing.helpers.empty_directory import empty_directory
 
 
 class TestMultiClassResearcherLevelWorkflow(BaseTestCase):
-    """ Test case for the multi-class research workflow on high-level perspective
-    using the Researcher class. """
+    """Test case for the multi-class research workflow on high-level perspective
+    using the Researcher class."""
 
     @classmethod
     def setUpClass(cls):

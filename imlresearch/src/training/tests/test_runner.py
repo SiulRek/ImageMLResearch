@@ -4,7 +4,7 @@ from imlresearch.src.training.tests.trainer_test import TestTrainer
 
 
 class TrainingTestRunner(TestRunnerBase):
-    """ Test Runner for the Training Module. """
+    """Test Runner for the Training Module."""
 
     def load_tests(self):
         self.load_test_case(TestEvaluate)

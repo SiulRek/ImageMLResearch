@@ -12,7 +12,7 @@ from imlresearch.src.training.evaluating.evaluate import (
 class TestEvaluate(BaseTestCase):
 
     def _verify_metrics_dict(self, metrics, expected_metrics):
-        """ Verify that the Metrics dictionary contains expected keys and types. """
+        """Verify that the Metrics dictionary contains expected keys and types."""
         for metric, expected_type in expected_metrics.items():
             self.assertIn(metric, metrics)
             self.assertIsInstance(metrics[metric], expected_type)

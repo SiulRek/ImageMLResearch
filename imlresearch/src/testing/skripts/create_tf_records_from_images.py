@@ -3,8 +3,8 @@ import os
 import tensorflow as tf
 
 
-# NOTE: The functionality in DataHandling is not used in the module
-# here, as this makes the testing framework more independent.
+# NOTE: The functionality in DataHandling is not used in the module here, as
+# this makes the testing framework more independent.
 def _bytes_feature(value):
     """ Returns a bytes_list from a string / byte. """
     if isinstance(value, type(tf.constant(0))):
@@ -52,5 +52,7 @@ def create_tfrecord_from_images(image_directory, output_filepath):
 
 if __name__ == "__main__":
     image_directory = "imlresearch/src/testing/image_data/geometrical_forms"
-    output_filepath = "imlresearch/src/testing/image_data/tf_records/geometrical_forms.tfrecord"
+    output_filepath = (
+        "imlresearch/src/testing/image_data/tf_records/geometrical_forms.tfrecord"
+    )
     create_tfrecord_from_images(image_directory, output_filepath)

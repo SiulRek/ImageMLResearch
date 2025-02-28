@@ -9,7 +9,7 @@ from imlresearch.src.research.attributes.research_attributes import ResearchAttr
 
 
 class TestBinaryPlotter(PlottingTestCase):
-    """ Test suite for the BinaryPlotter class. """
+    """Test suite for the BinaryPlotter class."""
 
     @classmethod
     def setUpClass(cls):
@@ -54,7 +54,7 @@ class TestBinaryPlotter(PlottingTestCase):
         return images_tensor, labels_tensor
 
     def test_plot_confusion_matrix(self):
-        """ Test the plot_confusion_matrix method. """
+        """Test the plot_confusion_matrix method."""
         fig = self.binary_plotter.plot_confusion_matrix(
             title="Test Confusion Matrix", show=False
         )
@@ -69,7 +69,7 @@ class TestBinaryPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "binary_plotter_plot_confusion_matrix.png")
 
     def test_plot_images(self):
-        """ Test the plot_images method. """
+        """Test the plot_images method."""
         fig = self.binary_plotter.plot_images(grid_size=(2, 2))
         self.assertEqual(
             len(self.binary_plotter._figures), 1, "The figure was not added."
@@ -82,7 +82,7 @@ class TestBinaryPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "binary_plotter_plot_images.png")
 
     def test_plot_roc_curve(self):
-        """ Test the plot_roc_curve method. """
+        """Test the plot_roc_curve method."""
         fig = self.binary_plotter.plot_roc_curve(title="Test ROC Curve", show=False)
         self.assertEqual(
             len(self.binary_plotter._figures), 1, "The figure was not added."
@@ -95,7 +95,7 @@ class TestBinaryPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "binary_plotter_plot_roc_curve.png")
 
     def test_plot_pr_curve(self):
-        """ Test the plot_pr_curve method. """
+        """Test the plot_pr_curve method."""
         fig = self.binary_plotter.plot_pr_curve(title="Test PR Curve", show=False)
         self.assertEqual(
             len(self.binary_plotter._figures), 1, "The figure was not added."
@@ -108,7 +108,7 @@ class TestBinaryPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "binary_plotter_plot_pr_curve.png")
 
     def test_plot_results(self):
-        """ Test the plot_results method. """
+        """Test the plot_results method."""
         fig = self.binary_plotter.plot_results(grid_size=(2, 2))
         self.assertEqual(
             len(self.binary_plotter._figures), 1, "The figure was not added."
