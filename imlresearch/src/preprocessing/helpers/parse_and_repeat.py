@@ -14,14 +14,14 @@ def parse_and_repeat(input_string):
 
     Args:
         - input_string (str): The string to parse. It should be in the
-            format '[list]*number + [list]*number + ...'. Each [list] is a
-            literal Python list, and 'number' is an integer indicating the
-            number of times the list should be repeated. If the '*number' part
-            is omitted, the list is added once.
+          format '[list]*number + [list]*number + ...'. Each [list] is a
+          literal Python list, and 'number' is an integer indicating the
+          number of times the list should be repeated. If the '*number' part
+          is omitted, the list is added once.
 
     Returns:
         - list: A list containing the elements from the input string,
-            repeated as specified.
+          repeated as specified.
     """
     # Split the input string by '+' outside of brackets
     elements = re.split(r"\+\s*(?=[\[\]])", input_string)
@@ -33,7 +33,9 @@ def parse_and_repeat(input_string):
 
         # Ensure the element is not empty
         if not elem:
-            msg = f"Empty element found in input_string '{input_string}'."
+            msg = (
+                f"Empty element found in input_string '{input_string}'."
+            )
             raise ValueError(msg)
 
         # Check for the pattern [list]*number
@@ -42,8 +44,12 @@ def parse_and_repeat(input_string):
             try:
                 list_part = ast.literal_eval(repeat_pattern_match.group(1))
             except SyntaxError as exc:
-                msg = f"Cannot parse element '{elem}' in input_string '{input_string}'."
+                msg = (
+                    f"Cannot parse element '{elem}' in input_string "
+                    f"'{input_string}'."
+                )
                 raise ValueError(msg) from exc
+
             repeat_count = int(repeat_pattern_match.group(2))
             result.extend(list_part * repeat_count)
             continue
@@ -55,8 +61,12 @@ def parse_and_repeat(input_string):
             try:
                 list_part = ast.literal_eval(elem)
             except SyntaxError as exc:
-                msg = f"Cannot parse element '{elem}' in input_string '{input_string}'."
+                msg = (
+                    f"Cannot parse element '{elem}' in input_string "
+                    f"'{input_string}'."
+                )
                 raise ValueError(msg) from exc
+
             result.extend(list_part)
             continue
 

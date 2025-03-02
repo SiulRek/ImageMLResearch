@@ -2,7 +2,9 @@ import unittest
 
 import tensorflow as tf
 
-from imlresearch.src.data_handling.manipulation.prepare_dataset import prepare_dataset
+from imlresearch.src.data_handling.manipulation.prepare_dataset import (
+    prepare_dataset,
+)
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
@@ -18,7 +20,7 @@ class TestPrepareDataset(BaseTestCase):
         enhanced = prepare_dataset(self.dataset, shuffle_seed=42)
         enhanced_first_element = next(iter(enhanced)).numpy()
         self.assertFalse(
-            tf.reduce_all(tf.equal(original_first_element, enhanced_first_element)),
+            tf.reduce_all(tf.equal(original_first_element, enhanced_first_element)), # LINE TOO LONG!
             "Shuffling did not change the order of the dataset.",
         )
 

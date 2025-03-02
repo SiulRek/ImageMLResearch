@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 
 from imlresearch.src.plotting.functions.plot_images import plot_images
-from imlresearch.src.plotting.functions.plot_model_summary import plot_model_summary
+from imlresearch.src.plotting.functions.plot_model_summary import (
+    plot_model_summary
+)
 from imlresearch.src.plotting.functions.plot_text import plot_text
 from imlresearch.src.plotting.functions.plot_training_history import (
     plot_training_history,
@@ -20,8 +22,8 @@ def generate_unique_key_name(name, keys):
 
 
 def plot_decorator(default_title, default_show):
-    """ Decorator for all plotting functions. It adds a title to the plot and saves
-    the figure in the plotter. """
+    """Decorator for all plotting functions.
+    It adds a title to the plot and saves the figure in the plotter."""
 
     def decorator(plot_func):
         def wrapper(self, *args, **kwargs):
@@ -31,7 +33,7 @@ def plot_decorator(default_title, default_show):
             fig = plot_func(self, *args, **kwargs)
 
             if not isinstance(fig, plt.Figure):
-                msg = "The plot function must return a"
+                msg = "The plot function must return a "
                 msg += "matplotlib.pyplot.Figure."
                 raise ValueError(msg)
 
@@ -52,25 +54,19 @@ def plot_decorator(default_title, default_show):
 
 
 class Plotter(DataRetriever):
-    """ A class for plotting images and text using research attributes. """
+    """A class for plotting images and text using research attributes."""
 
     def __init__(self):
-        """ Initializes the Plotter. """
-        # Not initializing ResearchAttributes here, prefer call
-        # synchronize_research_attributes explicitly. super().__init__()
+        """Initializes the Plotter."""
+        # Not initializing ResearchAttributes here, prefer calling
+        # synchronize_research_attributes explicitly.
 
         # Initialize research attributes used in the Plotter
-        self._datasets_container = {
-            # Dataset Name: Dataset
-        }  # Read only
-        self._figures = {
-            # Figure Name: Figure
-        }  # Read only
-        self._outputs_container = {
-            # Output Name: Tuple -> (y_true, y_pred)
-        }  # Read only
-        self._training_history = {}  # Read only
-        self._model = None  # Read only
+        self._datasets_container = {}
+        self._figures = {}
+        self._outputs_container = {}
+        self._training_history = {}
+        self._model = None
 
     def _add_figure(self, name, fig):
         """
@@ -95,9 +91,9 @@ class Plotter(DataRetriever):
 
         Args:
             - grid_size: Tuple containing the grid size (rows, columns).
-                Defaults to (2, 2).
+              Defaults to (2, 2).
             - label_to_title_func: Function to convert the label to a
-                string. Defaults to None.
+              string. Defaults to None.
 
         General plot keyword arguments:
             - title: Optional title for the plot. Defaults to "Images".
@@ -106,11 +102,13 @@ class Plotter(DataRetriever):
         Returns:
             - The figure containing the images.
         """
-        dataset = self._datasets_container.get(
-            "complete_dataset"
-        ) or self._datasets_container.get("train_dataset")
+        dataset = self._datasets_container.get("complete_dataset") or \
+                  self._datasets_container.get("train_dataset")
         if not dataset:
-            msg = "Neither 'complete_dataset' nor 'train_dataset' found in dataset container."
+            msg = (
+                "Neither 'complete_dataset' nor 'train_dataset' "
+                "found in dataset container."
+            )
             raise ValueError(msg)
         return plot_images(dataset, grid_size, label_to_title_func)
 
@@ -137,8 +135,7 @@ class Plotter(DataRetriever):
         Plots the summary of the given model.
 
         General plot keyword arguments:
-            - title: Optional title for the plot. Defaults to "Model
-                Summary".
+            - title: Optional title for the plot. Defaults to "Model Summary".
             - show: Whether to show the plot. Defaults to False.
 
         Returns:
@@ -155,8 +152,7 @@ class Plotter(DataRetriever):
         Plots the training history of the model.
 
         General plot keyword arguments:
-            - title: Optional title for the plot. Defaults to "Training
-                History".
+            - title: Optional title for the plot. Defaults to "Training History".
             - show: Whether to show the plot. Defaults to False.
 
         Returns:

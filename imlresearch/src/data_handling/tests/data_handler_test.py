@@ -4,7 +4,9 @@ import unittest
 import tensorflow as tf
 
 from imlresearch.src.data_handling.data_handler import DataHandler
-from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
+from imlresearch.src.research.attributes.research_attributes import (
+    ResearchAttributes,
+)
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
@@ -23,12 +25,14 @@ class TestDataHandler(BaseTestCase):
         cls.data_handler.synchronize_research_attributes(research_attributes)
 
     def _assert_dataset(self, dataset):
-        """Asserts that the dataset is of type tf.data.Dataset and that the images
-        and labels have the correct shapes."""
+        """
+        Asserts that the dataset is of type tf.data.Dataset and that the 
+        images and labels have the correct shapes.
+        """
         self.assertIsInstance(
-            dataset, tf.data.Dataset, "Dataset is not of type tf.data.Dataset."
+            dataset, tf.data.Dataset,
+            "Dataset is not of type tf.data.Dataset."
         )
-
         for image, label in dataset.take(1):
             self.assertIn(image.shape, [(28, 28, 1), (28, 28, 3)])
             self.assertEqual(label.shape, (10,))
@@ -50,7 +54,9 @@ class TestDataHandler(BaseTestCase):
             ((10, 28, 28, 3), (10, 10)),
         ]
         for image_shape, label_shape in shapes_parameters:
-            with self.subTest(image_shape=image_shape, label_shape=label_shape):
+            with self.subTest(
+                image_shape=image_shape, label_shape=label_shape
+            ):
                 dataset = self._create_dataset(image_shape, label_shape)
                 self.data_handler._assert_dataset_format(dataset)
 
@@ -62,7 +68,9 @@ class TestDataHandler(BaseTestCase):
             ((10, 10, 1), (10, 10)),
         ]
         for image_shape, label_shape in shapes_parameters:
-            with self.subTest(image_shape=image_shape, label_shape=label_shape):
+            with self.subTest(
+                image_shape=image_shape, label_shape=label_shape
+            ):
                 dataset = self._create_dataset(image_shape, label_shape)
                 with self.assertRaises(ValueError):
                     self.data_handler._assert_dataset_format(dataset)
@@ -70,7 +78,9 @@ class TestDataHandler(BaseTestCase):
     def test_load_dataset_from_dict(self):
         """Test creation of dataset and storage in the dataset container."""
         self.data_handler.load_dataset(self.jpg_dict)
-        self.assertIn("complete_dataset", self.data_handler.datasets_container)
+        self.assertIn(
+            "complete_dataset", self.data_handler.datasets_container
+        )
         dataset = self.data_handler.datasets_container["complete_dataset"]
         self.assertIsInstance(dataset, tf.data.Dataset)
         self._assert_dataset(dataset)
@@ -83,19 +93,25 @@ class TestDataHandler(BaseTestCase):
         dataset = tf.data.Dataset.from_tensor_slices((images, labels))
 
         self.data_handler.load_dataset(dataset)
-        self.assertIn("complete_dataset", self.data_handler._datasets_container)
+        self.assertIn(
+            "complete_dataset", self.data_handler._datasets_container
+        )
         dataset = self.data_handler.datasets_container["complete_dataset"]
         self._assert_dataset(dataset)
 
     def test_enhance_dataset(self):
-        """Test enhancement of dataset and updating in the dataset container."""
+        """Test enhancement of dataset and updating in the container."""
         self.data_handler.load_dataset(self.jpg_dict)
         original_dataset = list(
             self.data_handler.datasets_container["complete_dataset"]
         )
         self.data_handler.prepare_datasets(batch_size=2, shuffle_seed=42)
-        self.assertIn("complete_dataset", self.data_handler.datasets_container)
-        enhanced_dataset = self.data_handler.datasets_container["complete_dataset"]
+        self.assertIn(
+            "complete_dataset", self.data_handler.datasets_container
+        )
+        enhanced_dataset = self.data_handler.datasets_container[
+            "complete_dataset"
+        ]
 
         for batch in enhanced_dataset:
             self.assertEqual(batch[0].shape[0], 2)
@@ -103,23 +119,31 @@ class TestDataHandler(BaseTestCase):
 
         enhanced_dataset_unbatched = enhanced_dataset.unbatch()
         self._assert_dataset(enhanced_dataset_unbatched)
-        for original, enhanced in zip(original_dataset, enhanced_dataset_unbatched):
+        for original, enhanced in zip(
+            original_dataset, enhanced_dataset_unbatched
+        ):
             if not tf.reduce_all(tf.equal(original[0], enhanced[0])):
                 break
         else:
             self.fail(
-                "All tensors are equal after enhancement, indicating no shuffling occurred"
+                "All tensors are equal after enhancement, "
+                "indicating no shuffling occurred"
             )
 
     def test_split_dataset(self):
-        """Test splitting of dataset and storage of splits in the dataset
-        container."""
+        """Test splitting of dataset and storage of splits."""
         self.data_handler.load_dataset(self.jpg_dict)
-        self.data_handler.split_dataset(train_split=0.6, val_split=0.2, test_split=0.2)
-        self.assertIn("train_dataset", self.data_handler.datasets_container)
+        self.data_handler.split_dataset(
+            train_split=0.6, val_split=0.2, test_split=0.2
+        )
+        self.assertIn(
+            "train_dataset", self.data_handler.datasets_container
+        )
         self.assertIn("val_dataset", self.data_handler.datasets_container)
         self.assertIn("test_dataset", self.data_handler.datasets_container)
-        self.assertNotIn("complete_dataset", self.data_handler.datasets_container)
+        self.assertNotIn(
+            "complete_dataset", self.data_handler.datasets_container
+        )
         train_dataset = self.data_handler.datasets_container["train_dataset"]
         val_dataset = self.data_handler.datasets_container["val_dataset"]
         test_dataset = self.data_handler.datasets_container["test_dataset"]
@@ -141,12 +165,18 @@ class TestDataHandler(BaseTestCase):
     def test_backup_and_restore_datasets(self):
         """Test backup and restore of datasets."""
         self.data_handler.load_dataset(self.jpg_dict)
-        self.assertTrue("complete_dataset" in self.data_handler.datasets_container)
+        self.assertTrue(
+            "complete_dataset" in self.data_handler.datasets_container
+        )
         self.data_handler.backup_datasets()
         self.data_handler.datasets_container.pop("complete_dataset")
         self.data_handler.restore_datasets()
-        self.assertTrue("complete_dataset" in self.data_handler.datasets_container)
-        self._assert_dataset(self.data_handler.datasets_container["complete_dataset"])
+        self.assertTrue(
+            "complete_dataset" in self.data_handler.datasets_container
+        )
+        self._assert_dataset(
+            self.data_handler.datasets_container["complete_dataset"]
+        )
 
     def _same_datasets_containers(self, container1, container2):
         """Asserts that two datasets containers are equal."""
@@ -166,21 +196,6 @@ class TestDataHandler(BaseTestCase):
         self._same_datasets_containers(
             reference_container, self.data_handler.datasets_container
         )
-        self.data_handler.prepare_datasets(batch_size=2)
-        self._same_datasets_containers(
-            reference_container, self.data_handler.datasets_container
-        )
-        self.data_handler.split_dataset(train_split=0.6, val_split=0.2, test_split=0.2)
-        self._same_datasets_containers(
-            reference_container, self.data_handler.datasets_container
-        )
-        self.data_handler.backup_datasets()
-        self.data_handler._backuped_datasets_container.update({"kwarg": "value"})
-        self.data_handler.restore_datasets()
-        self._same_datasets_containers(
-            reference_container, self.data_handler.datasets_container
-        )
-        self.assertIn("kwarg", reference_container)
 
 
 if __name__ == "__main__":

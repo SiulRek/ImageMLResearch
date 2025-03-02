@@ -2,7 +2,9 @@ import unittest
 
 import tensorflow as tf
 
-from imlresearch.src.data_handling.manipulation.shuffle_dataset import shuffle_dataset
+from imlresearch.src.data_handling.manipulation.shuffle_dataset import (
+    shuffle_dataset,
+)
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 

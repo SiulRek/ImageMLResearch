@@ -5,8 +5,12 @@ import tensorflow as tf
 
 from imlresearch.src.data_handling.data_handler import DataHandler
 from imlresearch.src.experimenting.experiment import Experiment
-from imlresearch.src.plotting.plotters.multi_class_plotter import MultiClassPlotter
-from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
+from imlresearch.src.plotting.plotters.multi_class_plotter import (
+    MultiClassPlotter,
+)
+from imlresearch.src.research.attributes.research_attributes import (
+    ResearchAttributes,
+)
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 from imlresearch.src.testing.helpers.empty_directory import empty_directory
 from imlresearch.src.training.trainer import Trainer
@@ -23,12 +27,14 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.research_attributes = ResearchAttributes(
-            label_type="multi_class", class_names=["Digit " + str(i) for i in range(10)]
+            label_type="multi_class",
+            class_names=[f"Digit {i}" for i in range(10)],
         )
         self.data_handler = DataHandler()
-        # Only synchronize the research attributes for the data handler as it is
-        # the first, the rest will be synchronized later.
-        self.data_handler.synchronize_research_attributes(self.research_attributes)
+        # Synchronize only the research attributes for the data handler first.
+        self.data_handler.synchronize_research_attributes(
+            self.research_attributes
+        )
         self.trainer = Trainer()
         self.plotter = MultiClassPlotter()
 
@@ -101,14 +107,8 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
 
         # Experimenting
         trial_definitions = [
-            {
-                "name": "Trial 1",
-                "hyperparameters": {"units": 128},
-            },
-            {
-                "name": "Trial 2",
-                "hyperparameters": {"units": 256},
-            },
+            {"name": "Trial 1", "hyperparameters": {"units": 128}},
+            {"name": "Trial 2", "hyperparameters": {"units": 256}},
         ]
 
         with Experiment(
@@ -127,6 +127,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             self.plotter.synchronize_research_attributes(experiment)
             self.plotter.plot_images()
             experiment.synchronize_research_attributes(self.plotter)
+
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
                     # Training
@@ -142,6 +143,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                     self.trainer.set_compiled_model(model)
                     self.trainer.fit_predict_evaluate(epochs=10, batch_size=32)
                     self._assert_outputs_container(self.trainer)
+
                     has_evaluation_metrics = (
                         hasattr(self.trainer, "evaluation_metrics")
                         and self.trainer.evaluation_metrics is not None
@@ -154,6 +156,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                     # Plotting
                     self.plotter.synchronize_research_attributes(self.trainer)
                     self._assert_outputs_container(self.plotter)
+
                     has_training_history = (
                         hasattr(self.trainer, "training_history")
                         and self.trainer.training_history is not None
@@ -162,7 +165,10 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                         has_training_history,
                         "The trainer does not have a training history.",
                     )
-                    self.plotter.plot_training_history(title="Training History")
+
+                    self.plotter.plot_training_history(
+                        title="Training History"
+                    )
                     self.plotter.plot_confusion_matrix(title="Confusion Matrix")
                     experiment.synchronize_research_attributes(self.plotter)
 
@@ -172,6 +178,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             i + 1,
             "The number of trials is incorrect.",
         )
+
         images_plot = os.path.join(
             experiment.experiment_assets["directory"], "images.png"
         )
@@ -179,18 +186,18 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             os.path.exists(images_plot),
             "The images plot does not exist.",
         )
+
         for trial in experiment.experiment_assets["trials"]:
             trial_directory = trial["directory"]
             figures_exist = all(
-                [
-                    os.path.exists(os.path.join(trial_directory, figure_name + ".png"))
-                    for figure_name in ["training_history", "confusion_matrix"]
-                ]
+                os.path.exists(os.path.join(trial_directory, f"{fig}.png"))
+                for fig in ["training_history", "confusion_matrix"]
             )
             self.assertTrue(
                 figures_exist,
                 f"Not all figures exist for the trial {trial['name']}.",
             )
+
             trial_info_exist = os.path.exists(
                 os.path.join(trial_directory, "trial_info.json")
             )

@@ -7,20 +7,17 @@ def _sanitize_histories(histories):
 
     Args:
         - histories: Dictionary containing multiple histories in the format
-        - {Name: history}.
+          {Name: history}.
 
     Returns:
         - sanitized_histories: Dictionary containing multiple histories in
-            the
-        - format - {Name: history}
+          the format {Name: history}.
         - known_metrics: List of known metrics in the histories.
     """
     sanitized_histories = {}
     known_metrics = list(next(iter(histories.values())).keys())
     for name, history in histories.items():
-        sanitized_history = {}
-        for metric in known_metrics:
-            sanitized_history[metric] = history.get(metric, [])
+        sanitized_history = {metric: history.get(metric, []) for metric in known_metrics}
         for metric in history:
             if metric not in known_metrics:
                 sanitized_history[metric] = history[metric]
@@ -35,12 +32,12 @@ def plot_training_histories(histories, title=None):
 
     Args:
         - histories: Dictionary containing multiple histories in the format
-        - {Name: history}
+          {Name: history}.
         - title: The title of the plot.
 
     Returns:
         - fig: The Matplotlib figure containing the combined training and
-            validation history plot.
+          validation history plot.
     """
     # Configuration
     font_size = 12
@@ -66,7 +63,7 @@ def plot_training_histories(histories, title=None):
         color = colors(idx)
         i = 0
         for metric in history_dict:
-            if history_dict[metric] != [] and not metric.startswith("val_"):
+            if history_dict[metric] and not metric.startswith("val_"):
                 ax = axes[i]
                 i += 1
                 epochs = range(1, len(history_dict[metric]) + 1)
@@ -77,7 +74,9 @@ def plot_training_histories(histories, title=None):
                     color=color,
                 )
                 if f"val_{metric}" in history_dict:
-                    val_epochs = range(1, len(history_dict[f"val_{metric}"]) + 1)
+                    val_epochs = range(
+                        1, len(history_dict[f"val_{metric}"]) + 1
+                    )
                     ax.plot(
                         val_epochs,
                         history_dict[f"val_{metric}"],

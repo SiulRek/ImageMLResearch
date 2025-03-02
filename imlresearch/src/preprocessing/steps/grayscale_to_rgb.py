@@ -4,21 +4,22 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class GrayscaleToRGB(StepBase):
-    """A preprocessing step that converts Grayscaled images to RGB images."""
+    """A preprocessing step that converts grayscale images to RGB images."""
 
     arguments_datatype = {}
     name = "Grayscale To RGB"
 
     def __init__(self):
-        """Initializes the GrayscaleToRGB object that can be integrated in an image
-        preprocessing pipeline."""
+        """
+        Initializes the GrayscaleToRGB object that can be integrated into
+        an image preprocessing pipeline.
+        """
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         if image_tensor.shape[2] == 1:
-            processed_image = image.grayscale_to_rgb(image_tensor)
-            return processed_image
+            return image.grayscale_to_rgb(image_tensor)
         return image_tensor
 
 

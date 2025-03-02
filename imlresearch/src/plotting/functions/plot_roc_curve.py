@@ -11,7 +11,7 @@ def plot_roc_curve(y_true, y_pred):
     Args:
         - y_true (array-like): True labels.
         - y_pred_proba (array-like): Predicted probabilities for the
-            positive class.
+          positive class.
 
     Returns:
         - fig: The Matplotlib figure containing the ROC curve plot.
@@ -26,7 +26,10 @@ def plot_roc_curve(y_true, y_pred):
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    ax.plot(fpr, tpr, color="blue", lw=2, label=f"ROC curve (area = {roc_auc:.2f})")
+    ax.plot(
+        fpr, tpr, color="blue", lw=2,
+        label=f"ROC curve (area = {roc_auc:.2f})"
+    )
     ax.plot([0, 1], [0, 1], color="gray", lw=2, linestyle="--")
 
     ax.set_xlim([0.0, 1.0])

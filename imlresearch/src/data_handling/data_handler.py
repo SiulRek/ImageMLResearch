@@ -3,9 +3,15 @@ import tensorflow as tf
 from imlresearch.src.data_handling.io.create_dataset import create_dataset
 from imlresearch.src.data_handling.io.save_images import save_images
 from imlresearch.src.data_handling.labelling.label_utils import reverse_one_hot
-from imlresearch.src.data_handling.manipulation.prepare_dataset import prepare_dataset
-from imlresearch.src.data_handling.manipulation.split_dataset import split_dataset
-from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
+from imlresearch.src.data_handling.manipulation.prepare_dataset import (
+    prepare_dataset,
+)
+from imlresearch.src.data_handling.manipulation.split_dataset import (
+    split_dataset,
+)
+from imlresearch.src.research.attributes.research_attributes import (
+    ResearchAttributes,
+)
 
 
 class DataHandler(ResearchAttributes):
@@ -77,7 +83,9 @@ class DataHandler(ResearchAttributes):
         # 2. data is type dictslist of dicts or pandas.DataFrame
         try:
             dataset = create_dataset(
-                data, self._label_manager.label_type, self._label_manager.class_names
+                data, 
+                self._label_manager.label_type, 
+                self._label_manager.class_names
             )
             self._assert_dataset_format(dataset)
             self._datasets_container.update({"complete_dataset": dataset})
@@ -140,21 +148,20 @@ class DataHandler(ResearchAttributes):
             )
             self._datasets_container.update({dataset_name: enhanced_dataset})
 
-    def split_dataset(self, train_split, val_split, test_split, dataset_size=None):
+    def split_dataset(self, train_split, val_split, 
+                      test_split, dataset_size=None):
         """
         Splits the 'complete_dataset' into 'train_dataset', 'val_dataset' and
         'test_dataset' and stores them in the 'datasets_container'. Note that
         the complete dataset is removed.
 
         Args:
-            - train_split (float): The proportion of the dataset for
-                training.
-            - val_split (float): The proportion of the dataset for
-                validation.
+            - train_split (float): The proportion of the dataset for training.
+            - val_split (float): The proportion of the dataset for validation.
             - test_split (float): The proportion of the dataset for testing.
-            - dataset_size (int, optional): The size of the dataset. If
-                None, the dataset size is determined by calling the
-                'cardinality' method.
+            - dataset_size (int, optional): The size of the dataset. If None,
+            the dataset size is determined by calling the 'cardinality'
+            method.
         """
         self._assert_dataset_exists("complete_dataset")
         dataset = self._datasets_container["complete_dataset"]
@@ -163,9 +170,9 @@ class DataHandler(ResearchAttributes):
         )
         self._datasets_container.update(
             {
-                "train_dataset": train_dataset,
-                "val_dataset": val_dataset,
-                "test_dataset": test_dataset,
+            "train_dataset": train_dataset,
+            "val_dataset": val_dataset,
+            "test_dataset": test_dataset,
             }
         )
         self._datasets_container.pop("complete_dataset")
@@ -179,7 +186,8 @@ class DataHandler(ResearchAttributes):
                 to "jpg".
             - prefix (str|callable, optional): The prefix for the image
                 file. Can be a string or a callable that takes the label as
-                input and returns a string. If None, the default prefix is used.
+                input and returns a string. If None, the default prefix is
+                used.
             - num_images (int, optional): The number of images to save.
         """
         image_format = "jpg"
@@ -202,7 +210,9 @@ class DataHandler(ResearchAttributes):
             if concatenated_dataset is None:
                 concatenated_dataset = dataset
             else:
-                concatenated_dataset = concatenated_dataset.concatenate(dataset)
+                concatenated_dataset = concatenated_dataset.concatenate(
+                    dataset
+                )
 
         save_images(
             concatenated_dataset,

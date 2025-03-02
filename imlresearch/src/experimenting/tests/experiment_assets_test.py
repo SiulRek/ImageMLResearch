@@ -57,12 +57,18 @@ class TestLoadExperimentAssets(BaseTestCase):
 
         experiment_assets = load_experiment_assets(self.experiment_dir)
 
-        self.assertEqual(experiment_assets["name"], self.mock_experiment_assets["name"])
         self.assertEqual(
-            experiment_assets["description"], self.mock_experiment_assets["description"]
+            experiment_assets["name"],
+            self.mock_experiment_assets["name"],
+        )
+        self.assertEqual(
+            experiment_assets["description"],
+            self.mock_experiment_assets["description"],
         )
         self.assertEqual(len(experiment_assets["trials"]), 1)
-        self.assertEqual(experiment_assets["trials"][0], self.mock_trial_assets)
+        self.assertEqual(
+            experiment_assets["trials"][0], self.mock_trial_assets
+        )
 
     def test_load_experiment_assets_untracked_trial(self):
         mock_experiment_assets = self.mock_experiment_assets
@@ -71,18 +77,26 @@ class TestLoadExperimentAssets(BaseTestCase):
         self.create_trial_info_file(self.mock_trial_assets)
 
         experiment_assets = load_experiment_assets(self.experiment_dir)
-        self.assertEqual(experiment_assets["name"], self.mock_experiment_assets["name"])
+
         self.assertEqual(
-            experiment_assets["description"], self.mock_experiment_assets["description"]
+            experiment_assets["name"],
+            self.mock_experiment_assets["name"],
+        )
+        self.assertEqual(
+            experiment_assets["description"],
+            self.mock_experiment_assets["description"],
         )
         self.assertEqual(len(experiment_assets["trials"]), 1)
-        self.assertEqual(experiment_assets["trials"][0], self.mock_trial_assets)
+        self.assertEqual(
+            experiment_assets["trials"][0], self.mock_trial_assets
+        )
 
     def test_load_experiment_assets_ignore_untracked_folder(self):
         mock_experiment_assets = self.mock_experiment_assets
         mock_experiment_assets["trials"] = []
         self.create_experiment_info_file(mock_experiment_assets)
-        os.makedirs(os.path.join(self.experiment_dir, "untracked_trial"), exist_ok=True)
+        untracked_dir = os.path.join(self.experiment_dir, "untracked_trial")
+        os.makedirs(untracked_dir, exist_ok=True)
 
         experiment_assets = load_experiment_assets(self.experiment_dir)
         self.assertEqual(len(experiment_assets["trials"]), 0)
@@ -93,9 +107,13 @@ class TestLoadExperimentAssets(BaseTestCase):
         with self.assertWarns(UserWarning):
             experiment_assets = load_experiment_assets(self.experiment_dir)
 
-        self.assertEqual(experiment_assets["name"], self.mock_experiment_assets["name"])
         self.assertEqual(
-            experiment_assets["description"], self.mock_experiment_assets["description"]
+            experiment_assets["name"],
+            self.mock_experiment_assets["name"],
+        )
+        self.assertEqual(
+            experiment_assets["description"],
+            self.mock_experiment_assets["description"],
         )
         self.assertEqual(len(experiment_assets["trials"]), 0)
 
@@ -108,6 +126,7 @@ class TestLoadExperimentAssets(BaseTestCase):
         mock_experiment_assets.pop("name")
         self.create_experiment_info_file(mock_experiment_assets)
         self.create_trial_info_file(self.mock_trial_assets)
+
         with self.assertRaises(ValueError):
             load_experiment_assets(self.experiment_dir)
 
@@ -116,6 +135,7 @@ class TestLoadExperimentAssets(BaseTestCase):
         mock_trial_assets = self.mock_trial_assets
         mock_trial_assets.pop("name")
         self.create_trial_info_file(mock_trial_assets)
+
         with self.assertRaises(ValueError):
             load_experiment_assets(self.experiment_dir)
 

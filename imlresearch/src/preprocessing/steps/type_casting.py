@@ -4,7 +4,9 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class TypeCaster(StepBase):
-    """ A preprocessing step that casts an image tensor to a specified data type. """
+    """
+    A preprocessing step that casts an image tensor to a specified data type.
+    """
 
     arguments_datatype = {"output_dtype": str}
     name = "Type Caster"
@@ -16,16 +18,15 @@ class TypeCaster(StepBase):
 
         Args:
             - output_dtype (str): The desired data type to cast the image
-                tensor to. Must be an attribute in tensorflow . Default is
-                'float16'.
+              tensor to. Must be an attribute in TensorFlow. Default is
+              'float16'.
         """
         super().__init__(locals())
         self.output_datatype = getattr(tf, output_dtype)
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
-        # image_tensor = tf.cast(image_tensor, self.output_datatype) Already
-        # done by the wrapper.
+        # Casting is handled by the wrapper, so no explicit operation needed.
         return image_tensor
 
 

@@ -21,7 +21,9 @@ class TestDataRetriever(BaseTestCase):
             (self.y_true, self.y_pred)
         ).batch(2)
 
-        self.data_retriever._datasets_container = {"complete_dataset": self.dataset}
+        self.data_retriever._datasets_container = {
+            "complete_dataset": self.dataset
+        }
         self.data_retriever._outputs_container = {
             "complete_output": (self.y_true, self.y_pred)
         }
@@ -67,21 +69,27 @@ class TestDataRetriever(BaseTestCase):
         self.assertTrue(np.array_equal(y_pred, self.y_pred))
 
         with self.assertRaises(ValueError):
-            self.data_retriever._retrieve_output_data_by_name("invalid_output_name")
+            self.data_retriever._retrieve_output_data_by_name(
+                "invalid_output_name"
+            )
 
     def test_retrieve_input_data_by_name(self):
         """Test retrieval of input data by name."""
-        x = self.data_retriever._retrieve_input_data_by_name("complete_dataset")
+        x = self.data_retriever._retrieve_input_data_by_name(
+            "complete_dataset"
+        )
         expected_tensor = tf.constant([[0, 1], [1, 0]], dtype=tf.int64)
 
         self.assertTrue(tf.reduce_all(tf.equal(x, expected_tensor)))
 
         with self.assertRaises(ValueError):
-            self.data_retriever._retrieve_input_data_by_name("invalid_dataset_name")
+            self.data_retriever._retrieve_input_data_by_name(
+                "invalid_dataset_name"
+            )
 
     def test_retrieve_test_input_output_data(self):
         """Test retrieval of input and output data for plotting."""
-        x, y_true, y_pred = self.data_retriever._retrieve_test_input_output_data()
+        x, y_true, y_pred = self.data_retriever._retrieve_test_input_output_data()  # noqa
         expected_tensor = tf.constant([[0, 1], [1, 0]], dtype=tf.int64)
 
         self.assertTrue(tf.reduce_all(tf.equal(x, expected_tensor)))

@@ -2,13 +2,17 @@ import os
 import unittest
 from unittest.mock import MagicMock
 
+import matplotlib.pyplot as plt
 from keras.layers import Dense
 from keras.models import Sequential
-import matplotlib.pyplot as plt
 
 from imlresearch.src.plotting.plotters.plotter import Plotter
-from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
-from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
+from imlresearch.src.plotting.tests.plotting_test_case import (
+    PlottingTestCase,
+)
+from imlresearch.src.research.attributes.research_attributes import (
+    ResearchAttributes,
+)
 
 
 class TestPlotter(PlottingTestCase):
@@ -17,22 +21,24 @@ class TestPlotter(PlottingTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.image_dataset = cls.load_mnist_digits_dataset(sample_num=10, labeled=True)
+        cls.image_dataset = cls.load_mnist_digits_dataset(
+            sample_num=10, labeled=True
+        )
         cls.text_sample = (
             "This is a sample text to plot.\n"
             "This is a sample text to plot.\n"
             "This is a sample text to plot.\n"
         )
-        cls.visualization_path = os.path.join(cls.results_dir, "plotter_test.png")
+        cls.visualization_path = os.path.join(
+            cls.results_dir, "plotter_test.png"
+        )
 
     @classmethod
     def _create_model(cls):
-        model = Sequential(
-            [
-                Dense(32, input_shape=(784,), activation="relu"),
-                Dense(10, activation="softmax"),
-            ]
-        )
+        model = Sequential([
+            Dense(32, input_shape=(784,), activation="relu"),
+            Dense(10, activation="softmax"),
+        ])
         return model
 
     def setUp(self):
@@ -41,18 +47,20 @@ class TestPlotter(PlottingTestCase):
             label_type="multi_class",
             class_names=[str(i) for i in range(10)],
         )
-        research_attributes._datasets_container["complete_dataset"] = self.image_dataset
+        research_attributes._datasets_container[
+            "complete_dataset"
+        ] = self.image_dataset
         self.plotter = Plotter()
         self.plotter.synchronize_research_attributes(research_attributes)
-        self.plotter._model = (
-            self._create_model()
-        )  # Set the model for plot_model_summary
+        self.plotter._model = self._create_model()
 
     def test_add_figure(self):
         """Test the _add_figure method."""
         fig = plt.figure()
         self.plotter._add_figure("test_figure", fig)
-        self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
+        self.assertEqual(
+            len(self.plotter._figures), 1, "The figure was not added."
+        )
         self.assertEqual(
             self.plotter._figures["test_figure"],
             fig,
@@ -71,7 +79,9 @@ class TestPlotter(PlottingTestCase):
             title="Test Plot Images",
             show=False,
         )
-        self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
+        self.assertEqual(
+            len(self.plotter._figures), 1, "The figure was not added."
+        )
         self._save_and_close_figure(fig, "plotter_plot_images.png")
 
     def test_plot_text(self):
@@ -79,7 +89,9 @@ class TestPlotter(PlottingTestCase):
         fig = self.plotter.plot_text(
             self.text_sample, title="Sample Text Plot", show=False
         )
-        self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
+        self.assertEqual(
+            len(self.plotter._figures), 1, "The figure was not added."
+        )
         self._save_and_close_figure(fig, "plotter_plot_text.png")
 
     def test_plot_training_history(self):
@@ -94,14 +106,24 @@ class TestPlotter(PlottingTestCase):
         fig = self.plotter.plot_training_history(
             title="Test Training History", show=False
         )
-        fig.savefig(os.path.join(self.results_dir, "plotter_plot_training_history.png"))
-        self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
+        fig.savefig(
+            os.path.join(
+                self.results_dir, "plotter_plot_training_history.png"
+            )
+        )
+        self.assertEqual(
+            len(self.plotter._figures), 1, "The figure was not added."
+        )
         self._save_and_close_figure(fig, "plotter_plot_training_history.png")
 
     def test_plot_model_summary(self):
         """Test the plot_model_summary method."""
-        fig = self.plotter.plot_model_summary(title="Test Model Summary", show=False)
-        self.assertEqual(len(self.plotter._figures), 1, "The figure was not added.")
+        fig = self.plotter.plot_model_summary(
+            title="Test Model Summary", show=False
+        )
+        self.assertEqual(
+            len(self.plotter._figures), 1, "The figure was not added."
+        )
         self.assertIn(
             "test_model_summary",
             self.plotter._figures,

@@ -13,24 +13,32 @@ def _bytes_feature(value):
 
 
 def serialize_sample_for_png(image, label=None):
-    """Serializes an image and optionally a label pair to a tf.train.Example proto.
-    The image is expected to be a PNG image."""
+    """Serializes an image and optionally a label pair to a tf.train.Example 
+    proto. The image is expected to be a PNG image."""
     feature = {"image": _bytes_feature(tf.io.encode_png(image).numpy())}
     if label is not None:
-        feature["label"] = _bytes_feature(tf.io.serialize_tensor(label).numpy())
+        feature["label"] = _bytes_feature(
+            tf.io.serialize_tensor(label).numpy()
+        )
 
-    sample_proto = tf.train.Example(features=tf.train.Features(feature=feature))
+    sample_proto = tf.train.Example(
+        features=tf.train.Features(feature=feature)
+    )
     return sample_proto.SerializeToString()
 
 
 def serialize_sample_for_jpeg(image, label=None):
-    """Serializes an image and optionally a label pair to a tf.train.Example proto.
-    The image is expected to be a JPEG image."""
+    """Serializes an image and optionally a label pair to a tf.train.Example
+    proto. The image is expected to be a JPEG image."""
     feature = {"image": _bytes_feature(tf.io.encode_jpeg(image).numpy())}
     if label is not None:
-        feature["label"] = _bytes_feature(tf.io.serialize_tensor(label).numpy())
+        feature["label"] = _bytes_feature(
+            tf.io.serialize_tensor(label).numpy()
+        )
 
-    sample_proto = tf.train.Example(features=tf.train.Features(feature=feature))
+    sample_proto = tf.train.Example(
+        features=tf.train.Features(feature=feature)
+    )
     return sample_proto.SerializeToString()
 
 

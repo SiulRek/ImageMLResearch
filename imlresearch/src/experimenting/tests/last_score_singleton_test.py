@@ -7,7 +7,6 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestLastScoreSingleton(BaseTestCase):
-
     def tearDown(self):
         super().tearDown()
         if LastScoreSingleton._instance:
@@ -26,8 +25,10 @@ class TestLastScoreSingleton(BaseTestCase):
             score_instance.set(value)
 
     def test_set_score_non_numeric(self):
-        """ Test if set() method raises an AssertionError when non-numeric values
-        are provided. """
+        """ 
+        Test if set() method raises an AssertionError when non-numeric 
+        values are provided. 
+        """
         non_numeric_values = ["string", True, False, [], {}]
         score_instance = LastScoreSingleton()
         for value in non_numeric_values:
@@ -35,10 +36,16 @@ class TestLastScoreSingleton(BaseTestCase):
                 score_instance.set(value)
 
     def test_singleton_behavior(self):
-        """ Test if the LastScoreSingleton class exhibits singleton behavior. """
+        """ 
+        Test if the LastScoreSingleton class exhibits singleton behavior. 
+        """
         instance1 = LastScoreSingleton()
         instance2 = LastScoreSingleton()
-        self.assertIs(instance1, instance2, "LastScoreSingleton is not a singleton!")
+        self.assertIs(
+            instance1,
+            instance2,
+            "LastScoreSingleton is not a singleton!"
+        )
 
     def test_set_and_take_score_same_instances(self):
         """ Test if set() and take() methods work correctly. """
@@ -46,29 +53,43 @@ class TestLastScoreSingleton(BaseTestCase):
 
         score_instance.set(0.85)
         self.assertEqual(
-            score_instance.take(), 0.85, "Score did not match after setting!"
+            score_instance.take(),
+            0.85,
+            "Score did not match after setting!",
         )
 
         score_instance.set(0.90)
-        self.assertEqual(score_instance.take(), 0.90, "Score did not update correctly!")
+        self.assertEqual(
+            score_instance.take(),
+            0.90,
+            "Score did not update correctly!",
+        )
 
     def test_set_and_take_score_different_instances(self):
-        """ Test if set() and take() methods work correctly with different
-        instances. """
+        """ 
+        Test if set() and take() methods work correctly with different 
+        instances. 
+        """
         score_instance_1 = LastScoreSingleton()
         score_instance_2 = LastScoreSingleton()
         score_instance_1.set(0.85)
         self.assertEqual(
-            score_instance_1.take(), 0.85, "Score did not match after setting!"
+            score_instance_1.take(),
+            0.85,
+            "Score did not match after setting!",
         )
 
         score_instance_2.set(0.90)
         self.assertEqual(
-            score_instance_2.take(), 0.90, "Score did not update correctly!"
+            score_instance_2.take(),
+            0.90,
+            "Score did not update correctly!",
         )
 
     def test_take_without_previous_set(self):
-        """ Test if take() method raises a ValueError when no score has been set. """
+        """ 
+        Test if take() method raises a ValueError when no score has been set. 
+        """
         score_instance = LastScoreSingleton()
         with self.assertRaises(ValueError):
             score_instance.take()

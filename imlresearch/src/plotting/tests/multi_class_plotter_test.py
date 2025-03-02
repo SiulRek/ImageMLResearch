@@ -4,9 +4,13 @@ from unittest.mock import MagicMock
 import numpy as np
 import tensorflow as tf
 
-from imlresearch.src.plotting.plotters.multi_class_plotter import MultiClassPlotter
+from imlresearch.src.plotting.plotters.multi_class_plotter import (
+    MultiClassPlotter,
+)
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
-from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
+from imlresearch.src.research.attributes.research_attributes import (
+    ResearchAttributes,
+)
 
 
 class TestMultiClassPlotter(PlottingTestCase):
@@ -16,7 +20,9 @@ class TestMultiClassPlotter(PlottingTestCase):
     def setUpClass(cls):
         super().setUpClass()
         sample_num = 100
-        dataset = cls.load_mnist_digits_dataset(sample_num=sample_num, labeled=True)
+        dataset = cls.load_mnist_digits_dataset(
+            sample_num=sample_num, labeled=True
+        )
         cls.class_names = ["Digit " + str(i) for i in range(10)]
         y_true = cls._get_labels_array(dataset)
         y_pred = cls._get_random_preds_tensor(sample_num)
@@ -25,7 +31,9 @@ class TestMultiClassPlotter(PlottingTestCase):
             label_type="multi_class", class_names=cls.class_names
         )
         research_attributes._datasets_container["complete_dataset"] = dataset
-        cls.multi_class_plotter.synchronize_research_attributes(research_attributes)
+        cls.multi_class_plotter.synchronize_research_attributes(
+            research_attributes
+        )
         cls.multi_class_plotter._retrieve_test_output_data = MagicMock(
             return_value=(y_true, y_pred)
         )
@@ -51,7 +59,9 @@ class TestMultiClassPlotter(PlottingTestCase):
 
     @classmethod
     def _get_random_preds_tensor(cls, sample_num):
-        preds = tf.random.uniform((sample_num,), minval=0, maxval=10, dtype=tf.int32)
+        preds = tf.random.uniform(
+            (sample_num,), minval=0, maxval=10, dtype=tf.int32
+        )
         preds = tf.one_hot(preds, depth=10)
         return preds
 
@@ -64,15 +74,11 @@ class TestMultiClassPlotter(PlottingTestCase):
 
     def test_plot_images(self):
         """Test the plot_images method."""
-        fig = self.multi_class_plotter.plot_images(grid_size=(2, 2), title="Images")
-        self.assertEqual(
-            len(self.multi_class_plotter.figures), 1, "The figure was not added."
+        fig = self.multi_class_plotter.plot_images(
+            grid_size=(2, 2), title="Images"
         )
-        self.assertIn(
-            "images",
-            self.multi_class_plotter.figures,
-            "The figure name is incorrect.",
-        )
+        self.assertEqual(len(self.multi_class_plotter.figures), 1)
+        self.assertIn("images", self.multi_class_plotter.figures)
         self._save_and_close_figure(fig, "multi_class_plotter_plot_images.png")
 
     def test_plot_confusion_matrix(self):
@@ -80,14 +86,8 @@ class TestMultiClassPlotter(PlottingTestCase):
         fig = self.multi_class_plotter.plot_confusion_matrix(
             title="Test Confusion Matrix", show=False
         )
-        self.assertEqual(
-            len(self.multi_class_plotter.figures), 1, "The figure was not added."
-        )
-        self.assertIn(
-            "test_confusion_matrix",
-            self.multi_class_plotter.figures,
-            "The figure name is incorrect.",
-        )
+        self.assertEqual(len(self.multi_class_plotter.figures), 1)
+        self.assertIn("test_confusion_matrix", self.multi_class_plotter.figures)
         self._save_and_close_figure(
             fig, "multi_class_plotter_plot_confusion_matrix.png"
         )
@@ -97,15 +97,11 @@ class TestMultiClassPlotter(PlottingTestCase):
         fig = self.multi_class_plotter.plot_results(
             grid_size=(2, 2), prediction_bar=True
         )
-        self.assertEqual(
-            len(self.multi_class_plotter.figures), 1, "The figure was not added."
+        self.assertEqual(len(self.multi_class_plotter.figures), 1)
+        self.assertIn("results", self.multi_class_plotter.figures)
+        self._save_and_close_figure(
+            fig, "multi_class_plotter_plot_results.png"
         )
-        self.assertIn(
-            "results",
-            self.multi_class_plotter.figures,
-            "The figure name is incorrect.",
-        )
-        self._save_and_close_figure(fig, "multi_class_plotter_plot_results.png")
 
 
 if __name__ == "__main__":

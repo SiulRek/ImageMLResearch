@@ -1,6 +1,8 @@
 import tensorflow as tf
 
-from imlresearch.src.data_handling.manipulation.shuffle_dataset import shuffle_dataset
+from imlresearch.src.data_handling.manipulation.shuffle_dataset import (
+    shuffle_dataset,
+)
 
 
 def _shapes_are_known(dataset):

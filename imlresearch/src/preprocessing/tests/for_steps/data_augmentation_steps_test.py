@@ -1,26 +1,24 @@
 """
-This module dynamically creates and manages unittest classes for testing various
-data augmentation steps, with each class inheriting from
-`TestDataAugmentationStep`. It utilizes dynamic class creation in Python to
-generate test cases for different data augmentation techniques. This module
-allows some tests to be skipped based on configuration flags and focuses on
-evaluating the augmentation's effect on the image.
+This module dynamically creates and manages unittest classes for testing
+various data augmentation steps, with each class inheriting from
+`TestDataAugmentationStep`. It utilizes dynamic class creation in Python
+to generate test cases for different data augmentation techniques. Some
+tests can be skipped based on configuration flags and focus on evaluating
+the augmentation's effect on the image.
 
 Key Components:
-    - SingleStepTest: A class that dynamically generates test cases for each
-        preprocessing step in the framework.
-    - ENABLE_VISUAL_INSPECTION: A flag used to enable or disable tests that
-        require visual inspection of augmented images.
+    - SingleStepTest: A class that dynamically generates test cases for
+      each preprocessing step in the framework.
+    - ENABLE_VISUAL_INSPECTION: A flag to enable/disable tests that require
+      visual inspection of augmented images.
     - augmentation_steps_data: A collection of tuples (augmentation_class,
-        arguments), representing different data augmentation steps and their
-        parameters to be tested.
+      arguments), representing different data augmentation steps.
 
 Note:
     - This module accommodates variations in data augmentation steps,
-        recognizing that not all test cases in `TestDataAugmentationStep` are
-        universally applicable. Certain augmentations may necessitate customized
-        modifications to the standard test cases, reflecting the diverse nature
-        of image augmentation challenges.
+      recognizing that not all test cases in `TestDataAugmentationStep`
+      are universally applicable. Certain augmentations may require
+      customized modifications to the standard test cases.
 """
 
 import unittest
@@ -60,14 +58,18 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
             def _verify_image_shapes(
                 self, processed_images, original_images, color_channel_expected
             ):
-                """ Helper method to verify the image dimensions and color channels
-                in a processed dataset. Compa """
+                """
+                Helper method to verify the image dimensions and color
+                channels in a processed dataset.
+                """
                 for processed_image in processed_images:
-                    processed_data_shape = tuple(processed_image.shape[:2].as_list())
+                    processed_data_shape = tuple(
+                        processed_image.shape[:2].as_list()
+                    )
                     self.assertEqual(
                         processed_data_shape,
                         self.parameters["crop_size"],
-                        "heights and/or widths are not equal.",
+                        "Heights and/or widths are not equal.",
                     )
                     self.assertEqual(
                         color_channel_expected,
@@ -96,11 +98,6 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
                     break
             self.assertFalse(equal_flag)
 
-        # TODO def test_images_augmented_differently(self): """ Test to verify
-        # that images are augmented differently.
-
-        # Tests if the processed images are different from the original images.
-
     name = augmentation_class.name.replace(" ", "")
     DynamicDataAugmentationTest.__name__ = f"Test{name}"
 
@@ -116,29 +113,38 @@ augmentation_steps_data = [
     ),
     (
         steps.RandomColorJitterer,
-        {"brightness": 0.3, "contrast": 0.3, "saturation": 0.3, "hue": 0.1, "seed": 42},
+        {
+            "brightness": 0.3,
+            "contrast": 0.3,
+            "saturation": 0.3,
+            "hue": 0.1,
+            "seed": 42,
+        },
     ),
     (steps.RandomCropper, {"crop_size": (24, 24), "seed": 42}),
     (steps.RandomPerspectiveTransformer, {"warp_scale": 0.2, "seed": 42}),
     (steps.RandomElasticTransformer, {"alpha": 34, "sigma": 4, "seed": 42}),
-    (steps.RandomSharpening, {"min_intensity": 2, "max_intensity": 5.0, "seed": 42}),
+    (
+        steps.RandomSharpening,
+        {"min_intensity": 2, "max_intensity": 5.0, "seed": 42},
+    ),
 ]
 
 
 def load_data_augmentation_steps_tests():
     """
-    Dynamically loads and aggregates individual test suites for multiple data
-    augmentation steps into a unified test suite.
+    Dynamically loads and aggregates individual test suites for multiple
+    data augmentation steps into a unified test suite.
 
-    This function iterates over a predefined list of data augmentation steps and
-    their corresponding arguments. For each step, it dynamically creates a test
-    class using `create_test_class_for_augmentation_step` and then loads the
-    test cases from these classes into individual test suites. These suites are
-    then combined into a single comprehensive test suite.
+    This function iterates over a predefined list of data augmentation steps
+    and their corresponding arguments. For each step, it dynamically creates
+    a test class using `create_test_class_for_augmentation_step` and loads
+    the test cases. These suites are then combined into a comprehensive test
+    suite.
 
     Returns:
         - unittest.TestSuite: A combined test suite that aggregates tests
-            for multiple data augmentation step test classes.
+          for multiple data augmentation step test classes.
     """
     test_suites = []
     loader = unittest.TestLoader()
@@ -150,7 +156,7 @@ def load_data_augmentation_steps_tests():
 
 
 if __name__ == "__main__":
-    """ Main execution block for running the loaded test suite. """
+    """Main execution block for running the loaded test suite."""
     runner = unittest.TextTestRunner()
     test_suites = load_data_augmentation_steps_tests()
     runner.run(test_suites)

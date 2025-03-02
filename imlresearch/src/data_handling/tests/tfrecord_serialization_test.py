@@ -15,7 +15,8 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestTFRecordSerialization(BaseTestCase):
-    """ Test suite for TFRecord serialization and deserialization functions. """
+    """ Test suite for TFRecord serialization and deserialization 
+    functions. """
 
     @classmethod
     def setUpClass(cls):
@@ -23,20 +24,29 @@ class TestTFRecordSerialization(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.dataset = self.load_mnist_digits_dataset(sample_num=5, labeled=True)
+        self.dataset = self.load_mnist_digits_dataset(
+            sample_num=5, labeled=True
+        )
 
-    def _compare_datasets(self, original_dataset, deserialized_dataset, atol=1e-6):
-        for original, deserialized in zip(original_dataset, deserialized_dataset):
+    def _compare_datasets(
+        self, original_dataset, deserialized_dataset, atol=1e-6
+    ):  
+        zip_datasets = zip(original_dataset, deserialized_dataset)
+        for original, deserialized in zip_datasets:
             original_image, original_label = original
             deserialized, deserialized_label = deserialized
 
             self.assertTrue(
-                np.allclose(original_image.numpy(), deserialized.numpy(), atol=atol),
+                np.allclose(
+                    original_image.numpy(), deserialized.numpy(), atol=atol
+                ),
                 "Restored images are not close enough to original images.",
             )
 
             self.assertTrue(
-                np.equal(original_label.numpy(), deserialized_label.numpy()).all(),
+                np.equal(
+                    original_label.numpy(), deserialized_label.numpy()
+                ).all(),
                 "Restored labels are not equal to original labels.",
             )
 
@@ -48,8 +58,12 @@ class TestTFRecordSerialization(BaseTestCase):
         os.makedirs(results_dir)
         tfrecord_path = os.path.join(results_dir, "data.tfrecord")
 
-        serialize_dataset_to_tf_record(self.dataset, tfrecord_path, image_format="jpeg")
-        self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
+        serialize_dataset_to_tf_record(
+            self.dataset, tfrecord_path, image_format="jpeg"
+        )
+        self.assertTrue(
+            os.path.exists(tfrecord_path), "TFRecord file should exist."
+        )
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
             tfrecord_path, label_dtype=tf.float32
@@ -65,9 +79,12 @@ class TestTFRecordSerialization(BaseTestCase):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
         tfrecord_path = os.path.join(results_dir, "data.tfrecord")
-
-        serialize_dataset_to_tf_record(self.dataset, tfrecord_path, image_format="png")
-        self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
+        serialize_dataset_to_tf_record(
+            self.dataset, tfrecord_path, image_format="png"
+        )
+        self.assertTrue(
+            os.path.exists(tfrecord_path), "TFRecord file should exist."
+        )
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
             tfrecord_path, label_dtype=tf.float32
@@ -75,7 +92,8 @@ class TestTFRecordSerialization(BaseTestCase):
         self._compare_datasets(self.dataset, deserialized_dataset)
 
     def test_serialize_deserialize_with_uint8_labels(self):
-        """ Test serialization and deserialization with unsigned uint8 labels. """
+        """ Test serialization and deserialization with unsigned uint8 
+        labels. """
         results_dir = os.path.join(
             self.temp_dir, "serialize_deserialize_with_float_labels"
         )
@@ -85,8 +103,12 @@ class TestTFRecordSerialization(BaseTestCase):
         tfrecord_path = os.path.join(results_dir, "data.tfrecord")
 
         uint_dataset = self.dataset.map(lambda x, y: (x, tf.cast(y, tf.uint8)))
-        serialize_dataset_to_tf_record(uint_dataset, tfrecord_path, image_format="png")
-        self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
+        serialize_dataset_to_tf_record(
+            uint_dataset, tfrecord_path, image_format="png"
+        )
+        self.assertTrue(
+            os.path.exists(tfrecord_path), "TFRecord file should exist."
+        )
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
             tfrecord_path, label_dtype=tf.uint8
@@ -107,7 +129,9 @@ class TestTFRecordSerialization(BaseTestCase):
         serialize_dataset_to_tf_record(
             batched_dataset, tfrecord_path, image_format="png"
         )
-        self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
+        self.assertTrue(
+            os.path.exists(tfrecord_path), "TFRecord file should exist."
+        )
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(
             tfrecord_path, label_dtype=tf.float32
@@ -128,7 +152,9 @@ class TestTFRecordSerialization(BaseTestCase):
         serialize_dataset_to_tf_record(
             unlabeled_dataset, tfrecord_path, image_format="png"
         )
-        self.assertTrue(os.path.exists(tfrecord_path), "TFRecord file should exist.")
+        self.assertTrue(
+            os.path.exists(tfrecord_path), "TFRecord file should exist."
+        )
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(tfrecord_path)
 

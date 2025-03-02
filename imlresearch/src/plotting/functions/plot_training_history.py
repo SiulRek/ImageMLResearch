@@ -6,11 +6,11 @@ def plot_training_history(history):
     Plots the training and validation history of a Keras model.
 
     Args:
-        - history: History dictionary containing the training and validation
+        - history: History dictionary containing the training and validation.
 
     Returns:
         - fig: The Matplotlib figure containing the training and validation
-            history plot.
+          history plot.
     """
     # Configuration
     default_fig_size = (10, 6)  # Assumes a single metric.
@@ -26,7 +26,7 @@ def plot_training_history(history):
         else len(history_dict)
     )
     fig_size = (default_fig_size[0], default_fig_size[1] * num_metrics)
-    fig, axes = plt.subplots(num_metrics, 1, figsize=(fig_size[0], fig_size[1]))
+    fig, axes = plt.subplots(num_metrics, 1, figsize=fig_size)
 
     if num_metrics == 1:
         axes = [axes]
@@ -36,13 +36,18 @@ def plot_training_history(history):
         if not metric.startswith("val_"):
             ax = axes[i]
             i += 1
-            ax.plot(epochs, history_dict[metric], "b-", label=f"Training {metric}")
+            ax.plot(
+                epochs,
+                history_dict[metric],
+                "b-",
+                label=f"Training {metric}"
+            )
             if f"val_{metric}" in history_dict:
                 ax.plot(
                     epochs,
                     history_dict[f"val_{metric}"],
                     "b--",
-                    label=f"Validation {metric}",
+                    label=f"Validation {metric}"
                 )
             ax.set_xlabel("Epochs", fontsize=font_size)
             ax.set_ylabel(metric.capitalize(), fontsize=font_size)

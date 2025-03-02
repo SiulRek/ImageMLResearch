@@ -87,14 +87,10 @@ class HParamsSuggester:
             - storage_dir (str, optional): The directory to save the study.
                 Defaults to None.
             - load_if_exists (bool): Whether to load an existing study if it
-                exists in the specified storage directory. Ignored if no
-                storage_dir is provided. Defaults to True.
+                exists in the specified storage directory. Defaults to True.
             - study_name (str, optional): The name of the study. Defaults to
                 DEFAULT_STUDY_NAME.
         """
-        # TODO: Think of a way to allow sampler and pruner to be defined by the
-        # user with hparams_configs. Pass them to create_study.
-
         study_kwargs = {"study_name": study_name, "direction": direction}
         if storage_dir is not None:
             study_kwargs["storage"] = self._process_storage_path(
@@ -148,7 +144,9 @@ class HParamsSuggester:
                     optional_keys=["step", "log"],
                 )
                 self.hparams_distributions[name] = FloatDistribution(**configs)
-                self.suggest_methods[name] = _get_suggest_float_method(name, configs)
+                self.suggest_methods[name] = (
+                    _get_suggest_float_method(name, configs)
+                )
             elif hp_type == "int":
                 _assert_hparam_configs(
                     configs,
@@ -157,7 +155,9 @@ class HParamsSuggester:
                     required_keys=["low", "high"],
                     optional_keys=["step", "log", "nearest_power2"],
                 )
-                self.suggest_methods[name] = _get_suggest_int_method(name, configs)
+                self.suggest_methods[name] = (
+                    _get_suggest_int_method(name, configs)
+                )
                 self.hparams_distributions[name] = IntDistribution(**configs)
             elif hp_type == "categorical":
                 _assert_hparam_configs(
@@ -166,12 +166,14 @@ class HParamsSuggester:
                     hp_type=hp_type,
                     required_keys=["choices"],
                 )
-                self.hparams_distributions[name] = CategoricalDistribution(**configs)
-                self.suggest_methods[name] = _get_suggest_categorical_method(
-                    name, configs
+                self.hparams_distributions[name] = (
+                    CategoricalDistribution(**configs)
+                )
+                self.suggest_methods[name] = (
+                    _get_suggest_categorical_method(name, configs)
                 )
             else:
-                msg += f"Invalid hyperparameter type: {hp_type} "
+                msg = f"Invalid hyperparameter type: {hp_type} "
                 raise ValueError(msg)
 
     def suggest_next(self):
@@ -182,8 +184,6 @@ class HParamsSuggester:
             - dict: The next set of hyperparameters.
         """
         if self.pending_trial is not None:
-            # If set_last_score() has not been called after the last call to
-            # next(), try to get the last score from the singleton.
             try:
                 last_score = LastScoreSingleton().take()
                 self.set_last_score(last_score)
@@ -206,13 +206,12 @@ class HParamsSuggester:
         Sets the score for the last suggested hyperparameters.
 
         Args:
-            - score (float): The score for the last suggested
-                hyperparameters. If None, the last trial will be dropped from
-                the study.
+            - score (float): The score for the last suggested hyperparameters.
+                If None, the last trial will be dropped from the study.
         """
         if self.pending_trial is None:
-            msg += "No pending trial to set score for. Consider calling next() "
-            msg = "first."
+            msg = "No pending trial to set score for. "
+            msg += "Consider calling next() first."
             raise ValueError(msg)
 
         if score is not None:

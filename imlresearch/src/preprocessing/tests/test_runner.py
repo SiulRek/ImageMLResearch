@@ -1,57 +1,62 @@
 from imlresearch.src.preprocessing.tests.for_helpers import (
     copy_json_exclude_entries_test,
-)
-from imlresearch.src.preprocessing.tests.for_helpers import (
     recursive_type_conversion_test,
-)
-from imlresearch.src.preprocessing.tests.for_helpers import (
     randomly_select_sequential_keys_test,
-)
-from imlresearch.src.preprocessing.tests.for_helpers import parse_and_repeat_test
-from imlresearch.src.preprocessing.tests.for_helpers import (
+    parse_and_repeat_test,
     json_instances_serializer_test,
 )
-from imlresearch.src.preprocessing.tests.for_preprocessor import image_preprocessor_test
-from imlresearch.src.preprocessing.tests.for_preprocessor.long_pipeline_test import (
+from imlresearch.src.preprocessing.tests.for_preprocessor import (
+    image_preprocessor_test,
+)
+from imlresearch.src.preprocessing.tests.for_preprocessor.long_pipeline_test import (  # noqa
     load_long_pipeline_tests,
 )
 from imlresearch.src.preprocessing.tests.for_steps import step_base_test
-from imlresearch.src.preprocessing.tests.for_steps.channel_conversions_steps_test import (
+from imlresearch.src.preprocessing.tests.for_steps.channel_conversions_steps_test import (  # noqa
     load_channel_conversion_steps_tests,
 )
-from imlresearch.src.preprocessing.tests.for_steps.data_augmentation_steps_test import (
+from imlresearch.src.preprocessing.tests.for_steps.data_augmentation_steps_test import (  # noqa
     load_data_augmentation_steps_tests,
 )
-from imlresearch.src.preprocessing.tests.for_steps.multiple_steps_test import (
+from imlresearch.src.preprocessing.tests.for_steps.multiple_steps_test import (  # noqa
     load_multiple_steps_tests,
 )
-from imlresearch.src.preprocessing.tests.for_steps.resize_operations_steps_test import (
+from imlresearch.src.preprocessing.tests.for_steps.resize_operations_steps_test import (  # noqa
     load_resize_operations_steps_tests,
 )
 from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
 
 
 class PreprocessingTestRunner(TestRunnerBase):
-    """ A test runner for image preprocessing tests. This runner aggregates tests
-    from different modules and adds them to the test suite. """
+    """
+    A test runner for image preprocessing tests. This runner aggregates tests 
+    from different modules and adds them to the test suite.
+    """
 
     def load_tests(self):
         """
-        Populates the test suite with a series of test cases from the image
+        Populates the test suite with various test cases from the image 
         preprocessing testing framework.
 
-        This function aggregates tests from different aspects of the image
-        preprocessing pipeline. It includes basic tests, tests for multiple
-        steps, specific channel conversion tests, and general image
-        preprocessing tests.
+        This function aggregates tests for:
+        - Basic preprocessing functionalities.
+        - Multiple-step pipelines.
+        - Channel conversions.
+        - Resize operations.
+        - General image preprocessing.
         """
-        self.load_test_module(copy_json_exclude_entries_test)
-        self.load_test_module(recursive_type_conversion_test)
-        self.load_test_module(randomly_select_sequential_keys_test)
-        self.load_test_module(json_instances_serializer_test)
-        self.load_test_module(parse_and_repeat_test)
-        self.load_test_module(step_base_test)
-        self.load_test_module(image_preprocessor_test)
+        helper_tests = [
+            copy_json_exclude_entries_test,
+            recursive_type_conversion_test,
+            randomly_select_sequential_keys_test,
+            json_instances_serializer_test,
+            parse_and_repeat_test,
+            step_base_test,
+            image_preprocessor_test,
+        ]
+        for test in helper_tests:
+            self.load_test_module(test)
+
         self.test_suite.addTest(load_multiple_steps_tests())
         self.test_suite.addTest(load_channel_conversion_steps_tests())
         self.test_suite.addTest(load_resize_operations_steps_tests())

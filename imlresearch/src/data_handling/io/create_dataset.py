@@ -16,8 +16,8 @@ def create_dataset(data, label_type=None, class_names=None):
     Args:
         - data (dicts, list of dicts or pandas.DataFrame): Data containing
             'path' and 'label'. 'path' should contain the relative file paths
-            and labels should contain the corresponding labels for the specified
-            'label_type'.
+            and labels should contain the corresponding labels for the
+            specified 'label_type'.
         - label_type (str, optional): Specifies the label encoding strategy
             ('binary', 'multi_class', 'multi_label', 'multi_class_multi_label',
             'object_detection'). Default is None.
@@ -26,16 +26,20 @@ def create_dataset(data, label_type=None, class_names=None):
 
     Returns:
         - tf.data.Dataset: A TensorFlow Dataset containing tuples of (image,
-            encoded label), where 'image' is the decoded image file and 'encoded
-            label' is processed by LabelManager. If no labels are provided,
-            returns a dataset of images only.
+            encoded label), where 'image' is the decoded image file and 
+            'encoded label' is processed by LabelManager. If no labels are 
+            provided, returns a dataset of images only.
     """
     if isinstance(data, pd.DataFrame):
         paths = data["path"].tolist()
         labels = data["label"].tolist() if "label" in data.columns else None
-    elif isinstance(data, list) and all(isinstance(item, dict) for item in data):
+    elif isinstance(data, list) and all(
+        isinstance(item, dict) for item in data
+    ):
         paths = [item["path"] for item in data]
-        labels = [item.get("label") for item in data] if "label" in data[0] else None
+        labels = (
+            [item.get("label") for item in data] if "label" in data[0] else None
+        )
     elif isinstance(data, dict):
         paths = data["path"]
         labels = data.get("label")

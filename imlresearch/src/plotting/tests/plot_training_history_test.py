@@ -10,7 +10,7 @@ from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
 class TestPlotTrainingHistory(PlottingTestCase):
-    """ Test suite for the plot_training_history function. """
+    """Test suite for the plot_training_history function."""
 
     @classmethod
     def setUpClass(cls):
@@ -39,15 +39,20 @@ class TestPlotTrainingHistory(PlottingTestCase):
 
         # Generate training history with and without validation data
         cls.history_with_val = cls.model.fit(
-            cls.train_dataset, epochs=5, validation_data=cls.val_dataset, verbose=0
+            cls.train_dataset,
+            epochs=5,
+            validation_data=cls.val_dataset,
+            verbose=0,
         ).history
         cls.history_without_val = cls.model.fit(
-            cls.train_dataset, epochs=5, verbose=0
+            cls.train_dataset,
+            epochs=5,
+            verbose=0,
         ).history
 
     @classmethod
     def load_mnist_data(cls):
-        """ Load MNIST data for generating training history. """
+        """Load MNIST data for generating training history."""
         dataset = cls.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         dataset = dataset.shuffle(10000)
 
@@ -58,17 +63,19 @@ class TestPlotTrainingHistory(PlottingTestCase):
         return train_dataset, val_dataset
 
     def test_plot_training_history_with_validation(self):
-        """ Test plotting training history with validation data. """
+        """Test plotting training history with validation data."""
         fig = plot_training_history(self.history_with_val)
         self._save_and_close_figure(fig, "plot_training_history_with_val.png")
 
     def test_plot_training_history_without_validation(self):
-        """ Test plotting training history without validation data. """
+        """Test plotting training history without validation data."""
         fig = plot_training_history(self.history_without_val)
-        self._save_and_close_figure(fig, "plot_training_history_without_val.png")
+        self._save_and_close_figure(
+            fig, "plot_training_history_without_val.png"
+        )
 
     def test_plot_training_history_with_multiple_metrics(self):
-        """ Test plotting training history with multiple metrics. """
+        """Test plotting training history with multiple metrics."""
         # Add another metric to the model
         self.model.compile(
             optimizer="adam",
@@ -76,11 +83,16 @@ class TestPlotTrainingHistory(PlottingTestCase):
             metrics=["accuracy", "mae"],
         )
         history_multiple_metrics = self.model.fit(
-            self.train_dataset, epochs=5, validation_data=self.val_dataset, verbose=0
+            self.train_dataset,
+            epochs=5,
+            validation_data=self.val_dataset,
+            verbose=0,
         ).history
 
         fig = plot_training_history(history_multiple_metrics)
-        self._save_and_close_figure(fig, "plot_training_history_multiple_metrics.png")
+        self._save_and_close_figure(
+            fig, "plot_training_history_multiple_metrics.png"
+        )
 
 
 if __name__ == "__main__":

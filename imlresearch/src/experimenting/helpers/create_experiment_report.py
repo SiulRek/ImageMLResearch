@@ -91,8 +91,8 @@ def _pop_classification_reports(trial):
 
 def create_experiment_report(experiment_assets):
     """
-    Generate a comprehensive experiment report in Markdown format and save it to
-    a file.
+    Generate a comprehensive experiment report in Markdown format and save it 
+    to a file.
 
     Args:
         - experiment_assets (dict): Dictionary containing experiment assets.
@@ -101,7 +101,8 @@ def create_experiment_report(experiment_assets):
     def from_exp_get(key, default="N/A"):
         return experiment_assets.get(key, default)
 
-    report_path = os.path.join(from_exp_get("directory"), "experiment_report.md")
+    report_dir = from_exp_get("directory")
+    report_path = os.path.join(report_dir, "experiment_report.md")
     writer = MarkdownFileWriter(report_path)
 
     # Write Experiment Metadata
@@ -114,8 +115,9 @@ def create_experiment_report(experiment_assets):
     if resume_time != start_time:
         writer.write_key_value("Last Resume Time", resume_time)
     writer.write_key_value("Total Duration", from_exp_get("duration"))
-    experiment_directory_link = writer.create_link(from_exp_get("directory"), "Link")
-    writer.write_key_value("Directory", experiment_directory_link)
+    
+    exp_dir_link = writer.create_link(from_exp_get("directory"), "Link")
+    writer.write_key_value("Directory", exp_dir_link)
 
     # Show Initial Visualizations
     if "figures" in experiment_assets and experiment_assets["figures"]:
@@ -146,15 +148,21 @@ def create_experiment_report(experiment_assets):
         start_time = from_trial_get("start_time").split(".")[0]
         writer.write_key_value("Start Time", start_time)
         writer.write_key_value("Duration", from_trial_get("duration"))
-        trial_directory_link = writer.create_link(from_trial_get("directory"), "Link")
-        writer.write_key_value("Directory", trial_directory_link)
+        
+        trial_dir_link = writer.create_link(
+            from_trial_get("directory"), "Link"
+        )
+        writer.write_key_value("Directory", trial_dir_link)
+        
         hyperparameter_table = {
             param: str(value)
             for param, value in from_trial_get("hyperparameters", {}).items()
         }
         writer.write_title("Hyperparameters:", level=3)
         writer.write_key_value_table(
-            hyperparameter_table, key_label="Hyperparameter", value_label="Value"
+            hyperparameter_table, 
+            key_label="Hyperparameter", 
+            value_label="Value"
         )
 
         # The last classification report is the test set report.
@@ -171,7 +179,11 @@ def create_experiment_report(experiment_assets):
             writer.write_figure(fig_name, fig_path)
 
         # Write Classification Report
-        writer.write_title("Detailed Report of Test Set:", level=3, page_break=True)
+        writer.write_title(
+            "Detailed Report of Test Set:", 
+            level=3, 
+            page_break=True
+        )
         writer.write_nested_table(classification_report, transpose=True)
 
     writer.save_file()

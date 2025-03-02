@@ -4,8 +4,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class ShapeResizer(StepBase):
-    """A preprocessing step that resizes an image to a specified shape, potentially
-    altering its aspect ratio."""
+    """
+    A preprocessing step that resizes an image to a specified shape,
+    potentially altering its aspect ratio.
+    """
 
     arguments_datatype = {"desired_shape": (int, int), "resize_method": str}
     name = "Shape Resizer"
@@ -25,10 +27,10 @@ class ShapeResizer(StepBase):
 
         Args:
             - desired_shape (tuple of int): The desired height and width of
-                the image after resizing.
+              the image after resizing.
             - resize_method (str): The method used for resizing. Options are
-                'bilinear', 'nearest', 'bicubic', 'lanczos3', 'lanczos5', and
-                'area'.
+              'bilinear', 'nearest', 'bicubic', 'lanczos3', 'lanczos5', and
+              'area'.
         """
         self.assert_resize_method(resize_method)
         super().__init__(locals())
@@ -44,14 +46,19 @@ class ShapeResizer(StepBase):
     def __call__(self, image_tensor):
         channels = image_tensor.shape[2]
         image_tensor_with_batch = tf.expand_dims(image_tensor, axis=0)
+
         method = self.resize_methods[self.parameters["resize_method"]]
         resized_image_with_batch = tf.image.resize(
-            image_tensor_with_batch, self.parameters["desired_shape"], method=method
+            image_tensor_with_batch,
+            self.parameters["desired_shape"],
+            method=method,
         )
+
         resized_image = tf.squeeze(resized_image_with_batch, axis=0)
         resized_image = tf.ensure_shape(
             resized_image, [*self.parameters["desired_shape"], channels]
         )
+
         return resized_image
 
 

@@ -40,8 +40,8 @@ class TestCreateDataset(BaseTestCase):
         raise ValueError(msg)
 
     def _expected_one_hot_label(self, label):
-        """ Helper function to get the expected one-hot label encoding as a numpy
-        array. """
+        """ Helper function to get the expected one-hot label encoding as a 
+        numpy array. """
         one_hot_label = np.zeros(len(self.class_names))
         one_hot_label[int(label)] = 1
         return one_hot_label
@@ -55,7 +55,8 @@ class TestCreateDataset(BaseTestCase):
         )
 
     def test_create_dataset_from_dicts_jpg(self):
-        """ Test create_dataset with a list of dictionaries containing JPG images. """
+        """ Test create_dataset with a list of dictionaries containing JPG 
+        images. """
         data = self.jpg_dict
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -65,7 +66,8 @@ class TestCreateDataset(BaseTestCase):
             self._assert_label(label, data["label"][i])
 
     def test_create_dataset_from_dicts_png(self):
-        """ Test create_dataset with a list of dictionaries containing PNG images. """
+        """ Test create_dataset with a list of dictionaries containing PNG 
+        images. """
         data = self.png_dict
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -76,7 +78,8 @@ class TestCreateDataset(BaseTestCase):
 
     @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_create_dataset_from_dataframe_jpg(self):
-        """ Test create_dataset with a pandas DataFrame containing JPG images. """
+        """ Test create_dataset with a pandas DataFrame containing JPG
+        images. """
         data = pd.DataFrame(self.jpg_dict)
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -87,7 +90,8 @@ class TestCreateDataset(BaseTestCase):
 
     @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_create_dataset_from_dataframe_png(self):
-        """ Test create_dataset with a pandas DataFrame containing PNG images. """
+        """ Test create_dataset with a pandas DataFrame containing PNG 
+        images. """
         data = pd.DataFrame(self.png_dict)
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -99,8 +103,10 @@ class TestCreateDataset(BaseTestCase):
     def test_dataset_from_dicts(self):
         """ Test dataset creation from a list of dictionaries. """
         data = [
-            {"path": self.png_dict["path"][0], "label": self.png_dict["label"][0]},
-            {"path": self.jpg_dict["path"][1], "label": self.jpg_dict["label"][1]},
+            {"path": self.png_dict["path"][0], 
+             "label": self.png_dict["label"][0]},
+            {"path": self.jpg_dict["path"][1], 
+             "label": self.jpg_dict["label"][1]},
         ]
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -119,7 +125,9 @@ class TestCreateDataset(BaseTestCase):
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
             self.assertIsInstance(label, tf.Tensor)
-            expected_label = self._expected_one_hot_label(self.jpg_dict["label"][i])
+            expected_label = self._expected_one_hot_label(
+                self.jpg_dict["label"][i]
+            )
             self.assertTrue(np.array_equal(label.numpy(), expected_label))
 
     @unittest.skipUnless(pandas_installed, "Pandas is not installed.")

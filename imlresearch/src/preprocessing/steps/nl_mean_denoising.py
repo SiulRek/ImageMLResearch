@@ -4,7 +4,9 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class NLMeanDenoiser(StepBase):
-    """A preprocessing step that applies Non Local Mean Denoising to an image."""
+    """
+    A preprocessing step that applies Non-Local Mean Denoising to an image.
+    """
 
     arguments_datatype = {
         "h": float,
@@ -20,24 +22,23 @@ class NLMeanDenoiser(StepBase):
 
         Args:
             - h (float): Filter strength. Higher values remove noise better
-                but may also remove image details.
+              but may also remove image details.
             - template_window_size (int): Odd size of the window used to
-                compute the weighted average for the given pixel.
+              compute the weighted average for the given pixel.
             - search_window_size (int): Odd size of the window used to
-                search for patches similar to the one centered at the current
-                pixel.
+              search for patches similar to the one centered at the current
+              pixel.
         """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
-        denoised_image = cv2.fastNlMeansDenoising(
+        return cv2.fastNlMeansDenoising(
             src=image_nparray,
             h=self.parameters["h"],
             templateWindowSize=self.parameters["template_window_size"],
             searchWindowSize=self.parameters["search_window_size"],
         )
-        return denoised_image
 
 
 if __name__ == "__main__":

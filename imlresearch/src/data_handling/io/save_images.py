@@ -59,7 +59,11 @@ def save_images(
     num_samples = sum(1 for _ in dataset)
     num_digits = max(4, math.ceil(math.log10(num_samples + start_number)))
 
-    encode_fn = tf.image.encode_jpeg if image_format == "jpg" else tf.image.encode_png
+    encode_fn = (
+        tf.image.encode_jpeg 
+        if image_format == "jpg" 
+        else tf.image.encode_png
+    )
 
     for seq_number, sample in enumerate(dataset, start=start_number):
         image, label = sample if labeled else (sample, None)

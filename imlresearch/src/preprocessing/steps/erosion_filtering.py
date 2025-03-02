@@ -26,7 +26,7 @@ class ErosionFilter(StepBase):
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
         kernel = np.ones(
-            (self.parameters["kernel_size"], self.parameters["kernel_size"]), np.uint8
+            (self.parameters["kernel_size"], self.parameters["kernel_size"]), np.uint8 # LINE TOO LONG!
         )
         eroded_image = cv2.erode(
             image_nparray, kernel, iterations=self.parameters["iterations"]

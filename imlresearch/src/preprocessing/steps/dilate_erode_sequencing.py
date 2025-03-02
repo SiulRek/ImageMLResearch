@@ -25,24 +25,25 @@ class DilateErodeSequencer(StepBase):
         self, kernel_size=3, sequence="de", iterations=-1, erosion_probability=0.5
     ):
         """
-        Initializes the DilateErodeSequencer object. If iterations are positive
-        and the erosion probability is within a valid range (0 to 1), it
-        automatically creates an operation sequence combining dilation and
+        Initializes the DilateErodeSequencer object. If iterations are
+        positive and the erosion probability is within a valid range (0 to 1),
+        it automatically creates an operation sequence combining dilation and
         erosion.
 
         Args:
             - kernel_size (int): Size of the kernel for dilation/erosion.
             - sequence (str): The sequence of operations ('d' for dilation,
-                'e' for erosion).
+              'e' for erosion).
             - iterations (int): Number of times the sequence is repeated.
-            - erosion_probability (float): Probability of choosing erosion
-                in the random sequence generation.
+            - erosion_probability (float): Probability of choosing erosion in
+              the random sequence generation.
         """
         if not 0 <= erosion_probability <= 1:
-            msg = "Erosion probability must be between 0 and 1."
-            raise ValueError(msg)
+            raise ValueError("Erosion probability must be between 0 and 1.")
 
-        sequence = self.generate_sequence(sequence, iterations, erosion_probability)
+        sequence = self.generate_sequence(
+            sequence, iterations, erosion_probability
+        )
 
         parameters = {
             "kernel_size": kernel_size,
@@ -67,11 +68,10 @@ class DilateErodeSequencer(StepBase):
             - str: The generated sequence of operations.
         """
         if iterations > 1:
-            operations = [
-                self._choose_operation(erosion_probability) for _ in range(iterations)
-            ]
-            random_sequence = "".join(operations)
-            return random_sequence
+            return "".join(
+                self._choose_operation(erosion_probability)
+                for _ in range(iterations)
+            )
         return sequence
 
     def _choose_operation(self, erosion_probability):
@@ -99,23 +99,29 @@ class DilateErodeSequencer(StepBase):
             - np.array: The processed image.
         """
         kernel = np.ones(
-            (self.parameters["kernel_size"], self.parameters["kernel_size"]), np.uint8
+            (self.parameters["kernel_size"], self.parameters["kernel_size"]),
+            np.uint8,
         )
         processed_image = image_nparray
 
         for operation in self.parameters["sequence"]:
             if operation == "d":
                 processed_image = cv2.dilate(
-                    processed_image, kernel, iterations=self.parameters["iterations"]
+                    processed_image,
+                    kernel,
+                    iterations=self.parameters["iterations"],
                 )
             elif operation == "e":
                 processed_image = cv2.erode(
-                    processed_image, kernel, iterations=self.parameters["iterations"]
+                    processed_image,
+                    kernel,
+                    iterations=self.parameters["iterations"],
                 )
             else:
-                msg = "Invalid operation in sequence."
-                msg += "Only 'd' (dilation) and 'e' (erosion) are allowed."
-                raise ValueError(msg)
+                raise ValueError(
+                    "Invalid operation in sequence. "
+                    "Only 'd' (dilation) and 'e' (erosion) are allowed."
+                )
 
         return processed_image
 

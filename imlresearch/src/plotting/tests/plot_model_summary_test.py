@@ -4,7 +4,9 @@ import unittest
 from keras.layers import Dense
 from keras.models import Sequential
 
-from imlresearch.src.plotting.functions.plot_model_summary import plot_model_summary
+from imlresearch.src.plotting.functions.plot_model_summary import (
+    plot_model_summary,
+)
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 

@@ -74,7 +74,8 @@ class LabelManager:
         """
         if not class_names and self._label_type == "multi_class":
             msg = (
-                "The class names are required at least to derive the number of classes."
+                "The class names are required at least to derive the number "
+                "of classes."
             )
             raise ValueError(msg)
         if not class_names and self._label_type == "binary":
@@ -86,8 +87,8 @@ class LabelManager:
 
     def _set_label_type_functions(self, label_type):
         """
-        Sets the label encoder and label to digit converter methods based on the
-        label type.
+        Sets the label encoder and label to digit converter methods based on 
+        the label type.
 
         Args:
             - label_type (str): The type of label encoding to manage.
@@ -105,7 +106,7 @@ class LabelManager:
             "binary": self._encode_binary_label,
             "multi_class": self._encode_multi_class_label,
             "multi_label": raise_exception_when_called(
-                NotImplementedError, "Multi-label encoding is not yet implemented."
+                NotImplementedError, "Multi-label encoding is not yet implemented." # LINE TOO LONG!
             ),
             "multi_class_multi_label": raise_exception_when_called(
                 NotImplementedError,
@@ -141,7 +142,8 @@ class LabelManager:
 
     def _encode_binary_label(self, label):
         """
-        Encodes a binary label into a format suitable for binary classification.
+        Encodes a binary label into a format suitable for binary 
+        classification.
 
         Args:
             - label (int): The label to encode. If string it should be a

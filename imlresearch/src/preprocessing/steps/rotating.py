@@ -5,11 +5,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class Rotator(StepBase):
     """
-    A preprocessing step that rotates an image tensor by a specified angle. The
-    angle of rotation is specified as an input parameter.
+    A preprocessing step that rotates an image tensor by a specified angle.
+    The angle of rotation is specified as an input parameter.
 
-    Note: the angle of rotation must be a multiple of 90 degrees. Otherwise, the
-    angle will be rounded to the nearest multiple of 90 degrees.
+    Note: The angle of rotation must be a multiple of 90 degrees. Otherwise,
+    the angle will be rounded to the nearest multiple of 90 degrees.
     """
 
     arguments_datatype = {"angle": float}
@@ -21,17 +21,15 @@ class Rotator(StepBase):
         preprocessing pipeline.
 
         Args:
-            - angle (float): The angle of rotation in degrees. Default is
-            90.0.
+            - angle (float): The angle of rotation in degrees. Default is 90.0.
         """
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
-        rotated_image = tf.image.rot90(
+        return tf.image.rot90(
             image_tensor, k=int(self.parameters["angle"] / 90)
         )
-        return rotated_image
 
 
 if __name__ == "__main__":

@@ -98,10 +98,9 @@ class ImagePreprocessor:
 
     def _initialize_class_instance_serializer(self, step_class_mapping):
         """
-        Checks if `step_class_mapping` is a dictionary and mapps to subclasses
-        of `StepBase`, if successfull instanciates the
-        `ClassInstancesSerializer` for pipeline serialization and
-        deserialization.
+        Checks if `step_class_mapping` is a dictionary and maps to subclasses
+        of `StepBase`. If successful, instantiates the `ClassInstancesSerializer`
+        for pipeline serialization and deserialization.
         """
         if not isinstance(step_class_mapping, dict):
             msg = f"'step_class_mapping' must be of type dict not {type(step_class_mapping)}."
@@ -109,9 +108,7 @@ class ImagePreprocessor:
 
         for mapped_class in step_class_mapping.values():
             if not issubclass(mapped_class, StepBase):
-                msg = (
-                    "At least one mapped class is not a class or subclass of StepBase."
-                )
+                msg = "At least one mapped class is not a class or subclass of StepBase."
                 raise ValueError(msg)
         self._serializer = JSONInstancesSerializer(step_class_mapping)
 
@@ -120,7 +117,7 @@ class ImagePreprocessor:
         Sets the default datatype for the pipeline steps.
 
         Args:
-            - datatype: The default output datatype if the pipeline steps.
+            - datatype: The default output datatype for the pipeline steps.
                 Must be a TensorFlow datatype (e.g., tf.float32, tf.uint8).
         """
         StepBase.default_output_datatype = datatype
@@ -171,8 +168,8 @@ class ImagePreprocessor:
 
     def save_pipe_to_json(self, json_path):
         """
-        Serializes the preprocessing pipeline to the specified JSON file, saving
-        the step hyperparameter configurations.
+        Serializes the preprocessing pipeline to the specified JSON file,
+        saving the step hyperparameter configurations.
 
         Args:
             - json_path (str): File path where the pipeline configuration
@@ -259,6 +256,8 @@ class ImagePreprocessor:
         self._consume_tf_dataset(processed_dataset)
 
         if label_dataset is not None:
-            processed_dataset = pack_images_and_labels(processed_dataset, label_dataset)
+            processed_dataset = pack_images_and_labels(
+                processed_dataset, label_dataset
+            )
 
         return processed_dataset

@@ -14,8 +14,10 @@ class MeanNormalizer(StepBase):
     name = "Mean Normalizer"
 
     def __init__(self):
-        """ Initializes the MeanNormalizer object for integration into an image
-        preprocessing pipeline. """
+        """
+        Initializes the MeanNormalizer object for integration into an
+        image preprocessing pipeline.
+        """
         super().__init__({})
         self.output_datatype = tf.float16
         self._mean_val = None
@@ -27,7 +29,7 @@ class MeanNormalizer(StepBase):
 
         Args:
             - dataset (tf.data.Dataset): The dataset to compute the
-                statistic on.
+              statistic on.
         """
         mean_vals = []
         range_vals = []
@@ -45,7 +47,9 @@ class MeanNormalizer(StepBase):
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         image_tensor = tf.cast(image_tensor, self.output_datatype)
-        normalized_image = (image_tensor - self._mean_val) / (self._range_val + 1e-4)
+        normalized_image = (
+            (image_tensor - self._mean_val) / (self._range_val + 1e-4)
+        )
         return normalized_image
 
 

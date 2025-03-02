@@ -1,12 +1,16 @@
 def format_parameters(parameters):
-    """Formats the parameters dictionary into a string that can be added to a JSON
-    file."""
+    """
+    Formats the parameters dictionary into a string that can be added to a JSON
+    file.
+    """
     formatted_items = []
     for k, v in parameters.items():
         if isinstance(v, str):
             formatted_value = f'"{v}"'
         else:
-            formatted_value = str(v).replace("True", "true").replace("False", "false")
+            formatted_value = (
+                str(v).replace("True", "true").replace("False", "false")
+            )
         formatted_item = f'        "{k}": {formatted_value}'
         formatted_items.append(formatted_item)
 
@@ -16,15 +20,15 @@ def format_parameters(parameters):
 
 def get_step_json_representation(parameters, step_name):
     """
-    Returns strings that corresponds to JSON entry text of the preprocessing
+    Returns strings that correspond to the JSON entry text of the preprocessing
     step.
 
     Args:
-        - parameters (dict): The parameters of the preprocessing step.
-        - step_name (str): The name of the preprocessing step.
+        parameters (dict): The parameters of the preprocessing step.
+        step_name (str): The name of the preprocessing step.
 
     Returns:
-        - str: The JSON representation of the preprocessing step.
+        str: The JSON representation of the preprocessing step.
     """
     # Convert datatype of values of parameters to match JSON format
     conv_parameters = {}

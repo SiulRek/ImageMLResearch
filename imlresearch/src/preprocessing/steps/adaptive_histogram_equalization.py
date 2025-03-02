@@ -17,16 +17,16 @@ class AdaptiveHistogramEqualizer(StepBase):
 
     def __init__(self, clip_limit=2.0, tile_gridsize=(8, 8)):
         """
-        Initializes the AdaptiveHistogramEqualizer object that can be integrated
-        in an image preprocessing pipeline.
+        Initializes the AdaptiveHistogramEqualizer object that can be
+        integrated in an image preprocessing pipeline.
 
         Args:
             - clip_limit (float): Threshold for contrast limiting. Higher
-                values increase contrast; too high values may lead to noise
-                amplification.
+              values increase contrast; too high values may lead to noise
+              amplification.
             - tile_gridsize (tuple): Size of the grid for the tiles
-                (regions) of the image to which CLAHE will be applied. Smaller
-                tiles can lead to more localized contrast enhancement.
+              (regions) of the image to which CLAHE will be applied.
+              Smaller tiles can lead to more localized contrast enhancement.
         """
         super().__init__(locals())
 
@@ -38,8 +38,7 @@ class AdaptiveHistogramEqualizer(StepBase):
             tileGridSize=self.parameters["tile_gridsize"],
         )
         clahe_channels = [clahe.apply(ch) for ch in channels]
-        clahe_image = cv2.merge(clahe_channels)
-        return clahe_image
+        return cv2.merge(clahe_channels)
 
 
 if __name__ == "__main__":

@@ -1,181 +1,203 @@
-"""
-This module contains tests for long image preprocessing pipelines.
-
-The task is to build large pipelines (not necessarily the most efficient ones)
-and test them on a dataset. The purpose of these long pipeline tests is to apply
-a preconfigured image preprocessing pipeline to a dataset and verify if any
-issues or bugs occur during the processing. This helps build confidence in the
-framework's ability to handle complex pipelines without any issues.
-"""
-
 import os
-import random
 import unittest
 
-import tensorflow as tf
-
-from imlresearch.src.preprocessing.definitions.step_class_mapping import (
-    STEP_CLASS_MAPPING,
+from imlresearch.src.preprocessing.helpers.randomly_select_sequential_keys import (
+    randomly_select_sequential_keys,
+    is_sequential,
 )
-from imlresearch.src.preprocessing.helpers.copy_json_exclude_entries import (
-    copy_json_exclude_entries,
-)
-from imlresearch.src.preprocessing.helpers.json_instances_serializer import (
-    JSONInstancesSerializer,
-)
-from imlresearch.src.preprocessing.image_preprocessor import ImagePreprocessor
-from imlresearch.src.preprocessing.steps.step_base import StepBase
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
-N = 100  # Number of Pipelines Tests to run.
 
-
-class RGBToGrayscale(StepBase):
-    """ A preprocessing step that converts RGB image to Grayscale image. """
-
-    arguments_datatype = {}
-    name = "RGB To Grayscale"
-
-    def __init__(self):
-        """ Initializes the RGBToGrayscale object that can be integrated in an image
-        preprocessing pipeline. """
-        super().__init__(locals())
-
-    @StepBase._tensor_pyfunc_wrapper
-    def __call__(self, image_tensor):
-        if image_tensor.shape[2] == 3:
-            processed_image = tf.image.rgb_to_grayscale(image_tensor)
-            return processed_image
-        return image_tensor
-
-
-class TestLongPipeline(BaseTestCase):
+class TestRandomlySelectSequentialKeys(BaseTestCase):
     """
-    This class is the base class for all the long pipeline tests.
+    Unit tests for `randomly_select_sequential_keys`.
 
-    The goal of the long pipeline tests is to identify if issues occure or bugs
-    appear during processing of long pipelines.
+    This suite tests the accuracy of the function in identifying and handling
+    sequential key patterns in dictionaries. It covers various cases, including
+    invalid patterns, sequential integrity, and frequency-based key selection.
+    Each test ensures the function's robustness and error handling, verifying
+    its consistency across different key configurations and input scenarios.
 
-    The class creates an image preprocessor with a preconfigured pipeline. The
-    pipeline is constructed from a JSON template that contains all the image
-    preprocessing steps of the framewor (some exclusions). The steps in the
-    pipeline are shuffled randomly. The class includes a method called
-    test_process_pipeline which applies the preprocessor to a dataset of images
-    and verifies the output. If successful, it attempts to convert the processed
-    dataset to grayscale and verifies the conversion as well. If the dataset is
-    accurately converted to grayscale, it can be inferred that the pipeline has
-    processed the dataset without any issues.
+    Note:
+        - All test cases take the default separator value of '__' for
+          simplicity.
+        - The naming convention for the dictionary key looks like this:
+          {key identifier letter}_{key}_i{index}__I{index}F{frequency}__extra
+          ° Only the 'key' is required, the rest are dependent on the test
+            cases.
+          ° __I{index}F{frequency} is the pattern that the function looks for.
+          ° i{index} is used to verify the operation as the pattern
+            __I{index}F{frequency} will be removed in the output dictionary.
     """
-
-    pipeline_id = None
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.json_template_file = os.path.join(
-            cls.root_dir,
-            r"imlresearch/src/preprocessing/definitions/pipeline_template.json",
+        cls.test_data_directory = os.path.join(
+            cls.output_dir, "randomly_select_sequential_keys_tests"
         )
-        cls.json_test_file = os.path.join(cls.temp_dir, "test_pipe.json")
-        cls.log_file = os.path.join(cls.output_dir, "test_results.log")
+        os.makedirs(cls.test_data_directory, exist_ok=True)
 
-        cls.image_dataset = cls.load_geometrical_forms_dataset()
+    def get_stripped_dict_keys(self, input_dict, separator="__"):
+        """
+        Get the keys of a dictionary with the separator and part after the
+        separator removed.
 
-    def setUp(self):
-        super().setUp()
-        with open(self.json_test_file, "a", encoding="utf-8"):
-            pass
-        self.preprocessor = self.create_preconfigured_image_preprocessor()
-        # print(self.preprocessor.get_pipe_code_representation())
+        Args:
+            input_dict (dict): The input dictionary.
+            separator (str, optional): The separator used in the key
+                pattern. Defaults to '__'.
 
-    def create_preconfigured_image_preprocessor(self):
-        excluded_keys = [
-            "Non Local Mean Denoiser",
-            "RGB To Grayscale",
-            "Grayscale To RGB",
-            "Local Contrast Normalizer",
-            "Type Caster",
-            "Random Color Jitterer",
-        ]
-        copy_json_exclude_entries(
-            self.json_template_file, self.json_test_file, excluded_keys
+        Returns:
+            list: A list of keys in the input dictionary.
+        """
+        return [key.split(separator)[0] for key in input_dict.keys()]
+
+    def test_some_keys_not_matching(self):
+        """
+        Test that the function raises an error when only some keys do not
+        match the pattern.
+        """
+        input_dict = {"a_key__I0": "value1", "b_key": "value2"}
+        with self.assertRaises(KeyError):
+            randomly_select_sequential_keys(input_dict)
+
+    def test_non_sequential_indices(self):
+        """
+        Test that the function raises an error when the indices are not
+        sequential.
+        """
+        input_dict = {"a_key_i1__I1": "value1", "b_key_i3__I3": "value2"}
+        with self.assertRaises(KeyError):
+            randomly_select_sequential_keys(input_dict)
+
+    def test_all_keys_matching(self):
+        """
+        Test that all keys are selected when all keys match the pattern and
+        have different indices.
+        """
+        input_dict = {
+            "a_key_i0__I0": "value0",
+            "b_key_i1__I1": "value1",
+            "c_key_i2__I2": "value2",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 3)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
         )
 
-        serializer = JSONInstancesSerializer(STEP_CLASS_MAPPING)
-        pipeline = serializer.get_instances_from_json(self.json_test_file)
-        random.shuffle(pipeline)
+    def test_normal_operation(self):
+        """
+        Test the normal operation of the function.
+        """
+        input_dict = {
+            "a_key_i0__I0": "value0",
+            "b_key_i0__I0": "alt0",
+            "a_key_i1__I1": "value1",
+            "b_key_i1__I1": "alt1",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 2)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
+        )
 
-        preprocessor = ImagePreprocessor()
-        preprocessor.set_pipe(pipeline)
-        return preprocessor
+    def _generate_test_data(self, num_sequences):
+        """
+        Generate test data with sequential keys for testing.
 
-    def _verify_image_shapes(
-        self, processed_dataset, original_dataset, color_channel_expected
-    ):
-        for original_image, processed_image in zip(original_dataset, processed_dataset):
-            original_image = tf.cast(original_image, processed_image.dtype)
-            if original_image.shape == processed_image.shape:
-                if tf.reduce_all(tf.math.equal(original_image, processed_image)):
-                    return False
-            if (
-                processed_image.shape[0] != processed_image.shape[1]
-            ):  # Check if height and width are equal in processed data.
-                return False
-            if color_channel_expected != processed_image.shape[2]:
-                return False
-        return True
+        Args:
+            num_sequences (int): The number of sequential pairs to generate.
 
-    def test_process_pipeline(self):
-        try:
-            processed_dataset = self.preprocessor.process(self.image_dataset)
-        except Exception as e:
-            raise BrokenPipeError(
-                "An exception occurred while processing the dataset. This is the problematic pipeline: \n"
-                + self.preprocessor.get_pipe_code_representation()
-            ) from e
+        Returns:
+            dict: A dictionary with generated test data.
+        """
+        return {
+            f"{i % 2}_key_i{i // 2}__I{i // 2}": f"value{i}"
+            for i in range(num_sequences * 2)
+        }
 
-        if not self._verify_image_shapes(
-            processed_dataset, self.image_dataset, color_channel_expected=3
-        ):
-            message = (
-                "The processed dataset has unexpected shapes. This is the problematic pipeline: \n"
-                + self.preprocessor.get_pipe_code_representation()
-            )
-            self.fail(message)
+    def test_normal_operation_with_long_sequence(self):
+        """
+        Test the normal operation of the function with a longer sequence.
+        """
+        num_sequences = 111
+        input_dict = self._generate_test_data(num_sequences)
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), num_sequences)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
+        )
 
-        grayscaled_dataset = RGBToGrayscale()(processed_dataset)
-        if not self._verify_image_shapes(
-            grayscaled_dataset, self.image_dataset, color_channel_expected=1
-        ):
-            message = (
-                "The processed dataset could not be converted to grayscale correctly. This is the problematic pipeline: \n"
-                + self.preprocessor.get_pipe_code_representation()
-            )
-            self.fail(message)
+    def test_resilient_operation_1(self):
+        """
+        Test that the function is resilient to unique identifier specified in
+        keys.
+        """
+        input_dict = {
+            "key_i1__1__I1": "value1",
+            "key_i1__2__I1": "alt1",
+            "key_i0__3__I0": "value0",
+            "key_i0__4__I0": "alt0",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = ["key_i1__1", "key_i1__2", "key_i0__3", "key_i0__4"]
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 2)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1][0]) for key in output_dict])
+        )
 
+    def test_resilient_operation_2(self):
+        """
+        Test that the function is resilient to the order of the keys.
+        """
+        input_dict = {
+            "a_key_i1__I1": "value1",
+            "b_key_i0__I0": "value0",
+            "c_key_i1__I1": "alt1",
+            "d_key_i0__I0": "alt0",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 2)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
+        )
 
-def load_long_pipeline_tests(n=N):
-    """
-    This function dynamically creates n classes inheriting from TestLongPipeline
-    and loads them into a test suite.
+    def test_key_already_selected(self):
+        """
+        Test that the function is resilient to keys that have already been
+        selected.
+        """
+        input_dict = {"a_key__I0": "value0", "a_key__I1": "value1"}
+        with self.assertRaises(KeyError):
+            randomly_select_sequential_keys(input_dict)
 
-    Args:
-        - n (int): Number of TestLongPipeline classes to create. Default to
-            N.
-    """
-
-    test_suites = []
-    for i in range(1, n + 1):
-        test_class_name = f"{TestLongPipeline.__name__}_{i}"
-        test_class = type(test_class_name, (TestLongPipeline,), {"pipeline_id": i})
-        test_suite = unittest.TestLoader().loadTestsFromTestCase(test_class)
-        test_suites.append(test_suite)
-
-    test_suite = unittest.TestSuite(test_suites)  # Combine the suites
-
-    return test_suite
+    def test_keys_with_frequency_simple(self):
+        """
+        Test that keys with frequency specification are processed correctly.
+        """
+        input_dict = {
+            "a_key__I0": "value0",
+            "b_key__I0F10": "alt0",
+            "c_key__I1": "value1",
+            "d_key__I1F10": "alt1",
+            "e_key__I2F10": "alt2",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 3)
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner()
-    runner.run(load_long_pipeline_tests(N))
+    unittest.main()

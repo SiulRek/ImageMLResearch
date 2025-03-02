@@ -5,7 +5,9 @@ import tensorflow as tf
 
 from imlresearch.src.plotting.plotters.binary_plotter import BinaryPlotter
 from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
-from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
+from imlresearch.src.research.attributes.research_attributes import (
+    ResearchAttributes,
+)
 
 
 class TestBinaryPlotter(PlottingTestCase):
@@ -20,7 +22,9 @@ class TestBinaryPlotter(PlottingTestCase):
         )
         cls.class_names = ["Digit 0", "Digit 1"]
         x, y_true = cls._get_images_and_labels_array(dataset)
-        y_pred = tf.random.uniform((sample_num,), minval=0, maxval=1, dtype=tf.float32)
+        y_pred = tf.random.uniform(
+            (sample_num,), minval=0, maxval=1, dtype=tf.float32
+        )
 
         cls.binary_plotter = BinaryPlotter()
         research_attributes = ResearchAttributes(
@@ -58,66 +62,42 @@ class TestBinaryPlotter(PlottingTestCase):
         fig = self.binary_plotter.plot_confusion_matrix(
             title="Test Confusion Matrix", show=False
         )
-        self.assertEqual(
-            len(self.binary_plotter._figures), 1, "The figure was not added."
+        self.assertEqual(len(self.binary_plotter._figures), 1)
+        self.assertIn("test_confusion_matrix", self.binary_plotter._figures)
+        self._save_and_close_figure(
+            fig, "binary_plotter_plot_confusion_matrix.png"
         )
-        self.assertIn(
-            "test_confusion_matrix",
-            self.binary_plotter._figures,
-            "The figure name is incorrect.",
-        )
-        self._save_and_close_figure(fig, "binary_plotter_plot_confusion_matrix.png")
 
     def test_plot_images(self):
         """Test the plot_images method."""
         fig = self.binary_plotter.plot_images(grid_size=(2, 2))
-        self.assertEqual(
-            len(self.binary_plotter._figures), 1, "The figure was not added."
-        )
-        self.assertIn(
-            "images",
-            self.binary_plotter._figures,
-            "The figure name is incorrect.",
-        )
+        self.assertEqual(len(self.binary_plotter._figures), 1)
+        self.assertIn("images", self.binary_plotter._figures)
         self._save_and_close_figure(fig, "binary_plotter_plot_images.png")
 
     def test_plot_roc_curve(self):
         """Test the plot_roc_curve method."""
-        fig = self.binary_plotter.plot_roc_curve(title="Test ROC Curve", show=False)
-        self.assertEqual(
-            len(self.binary_plotter._figures), 1, "The figure was not added."
+        fig = self.binary_plotter.plot_roc_curve(
+            title="Test ROC Curve", show=False
         )
-        self.assertIn(
-            "test_roc_curve",
-            self.binary_plotter._figures,
-            "The figure name is incorrect.",
-        )
+        self.assertEqual(len(self.binary_plotter._figures), 1)
+        self.assertIn("test_roc_curve", self.binary_plotter._figures)
         self._save_and_close_figure(fig, "binary_plotter_plot_roc_curve.png")
 
     def test_plot_pr_curve(self):
         """Test the plot_pr_curve method."""
-        fig = self.binary_plotter.plot_pr_curve(title="Test PR Curve", show=False)
-        self.assertEqual(
-            len(self.binary_plotter._figures), 1, "The figure was not added."
+        fig = self.binary_plotter.plot_pr_curve(
+            title="Test PR Curve", show=False
         )
-        self.assertIn(
-            "test_pr_curve",
-            self.binary_plotter._figures,
-            "The figure name is incorrect.",
-        )
+        self.assertEqual(len(self.binary_plotter._figures), 1)
+        self.assertIn("test_pr_curve", self.binary_plotter._figures)
         self._save_and_close_figure(fig, "binary_plotter_plot_pr_curve.png")
 
     def test_plot_results(self):
         """Test the plot_results method."""
         fig = self.binary_plotter.plot_results(grid_size=(2, 2))
-        self.assertEqual(
-            len(self.binary_plotter._figures), 1, "The figure was not added."
-        )
-        self.assertIn(
-            "results",
-            self.binary_plotter._figures,
-            "The figure name is incorrect.",
-        )
+        self.assertEqual(len(self.binary_plotter._figures), 1)
+        self.assertIn("results", self.binary_plotter._figures)
         self._save_and_close_figure(fig, "binary_plotter_plot_results.png")
 
 

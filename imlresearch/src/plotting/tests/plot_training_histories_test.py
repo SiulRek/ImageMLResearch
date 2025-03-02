@@ -10,7 +10,7 @@ from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
 class TestPlotTrainingHistories(PlottingTestCase):
-    """ Test suite for the plot_training_histories function. """
+    """Test suite for the plot_training_histories function."""
 
     @classmethod
     def setUpClass(cls):
@@ -39,17 +39,23 @@ class TestPlotTrainingHistories(PlottingTestCase):
 
         # Generate training histories for multiple models
         cls.history1 = cls.model.fit(
-            cls.train_dataset, epochs=5, validation_data=cls.val_dataset, verbose=0
+            cls.train_dataset,
+            epochs=5,
+            validation_data=cls.val_dataset,
+            verbose=0,
         ).history
         cls.history2 = cls.model.fit(
-            cls.train_dataset, epochs=5, validation_data=cls.val_dataset, verbose=0
+            cls.train_dataset,
+            epochs=5,
+            validation_data=cls.val_dataset,
+            verbose=0,
         ).history
 
         cls.histories = {"Model 1": cls.history1, "Model 2": cls.history2}
 
     @classmethod
     def load_mnist_data(cls):
-        """ Load MNIST data for generating training history. """
+        """Load MNIST data for generating training history."""
         dataset = cls.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         dataset = dataset.shuffle(10000)
 
@@ -60,29 +66,38 @@ class TestPlotTrainingHistories(PlottingTestCase):
         return train_dataset, val_dataset
 
     def test_plot_training_histories(self):
-        """ Test plotting training histories for multiple models. """
+        """Test plotting training histories for multiple models."""
         fig = plot_training_histories(self.histories)
         self._save_and_close_figure(fig, "plot_training_histories.png")
 
     def test_plot_training_histories_with_title(self):
-        """ Test plotting training histories with a title. """
-        fig = plot_training_histories(self.histories, title="Training Histories")
-        self._save_and_close_figure(fig, "plot_training_histories_with_title.png")
+        """Test plotting training histories with a title."""
+        fig = plot_training_histories(
+            self.histories, title="Training Histories"
+        )
+        self._save_and_close_figure(
+            fig, "plot_training_histories_with_title.png"
+        )
 
     def test_plot_training_histories_with_missing_metrics(self):
-        """ Test plotting training histories with missing metrics. """
+        """Test plotting training histories with missing metrics."""
         # Remove a metric from the history of one model
         self.histories["Model 1"].pop("accuracy")
         self.histories["Model 1"].pop("val_accuracy")
 
         fig = plot_training_histories(self.histories)
-        self._save_and_close_figure(fig, "plot_training_histories_missing_metrics.png")
+        self._save_and_close_figure(
+            fig, "plot_training_histories_missing_metrics.png"
+        )
 
     def test_plot_training_histories_with_different_epoch_lengths(self):
-        """ Test plotting training histories with different epoch lengths. """
+        """Test plotting training histories with different epoch lengths."""
         # Create a new history with a different epoch length
         history3 = self.model.fit(
-            self.train_dataset, epochs=7, validation_data=self.val_dataset, verbose=0
+            self.train_dataset,
+            epochs=7,
+            validation_data=self.val_dataset,
+            verbose=0,
         ).history
         histories = self.histories.copy()
         histories["Model 3"] = history3

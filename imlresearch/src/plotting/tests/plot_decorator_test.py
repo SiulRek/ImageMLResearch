@@ -42,7 +42,9 @@ class TestPlotDecorator(PlottingTestCase):
             return fig
 
         with patch("matplotlib.pyplot.show") as mock_show:
-            fig = sample_plot_func(self.plotter, title="Custom Title", show=True)
+            fig = sample_plot_func(
+                self.plotter, title="Custom Title", show=True
+            )
             mock_show.assert_called_once()
 
         self.plotter._add_figure.assert_called_once_with("custom_title", fig)

@@ -4,8 +4,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class Mirrorer(StepBase):
-    """A preprocessing step that mirrors an image tensor either horizontally or
-    vertically. The direction of mirroring is specified as an input parameter."""
+    """
+    A preprocessing step that mirrors an image tensor either horizontally
+    or vertically. The direction of mirroring is specified as an input
+    parameter.
+    """
 
     arguments_datatype = {"mirror_direction": str}
     name = "Mirrorer"
@@ -17,21 +20,22 @@ class Mirrorer(StepBase):
 
         Args:
             - mirror_direction (str): The direction for mirroring the image.
-                Accepts 'horizontal' or 'vertical'. Default is 'horizontal'.
+              Accepts 'horizontal' or 'vertical'. Default is 'horizontal'.
         """
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
-        if self.parameters["mirror_direction"] == "horizontal":
-            mirrored_image = tf.image.flip_left_right(image_tensor)
-        elif self.parameters["mirror_direction"] == "vertical":
-            mirrored_image = tf.image.flip_up_down(image_tensor)
-        else:
-            raise ValueError(
-                "Invalid mirror direction. Choose 'horizontal' or 'vertical'."
-            )
-        return mirrored_image
+        direction = self.parameters["mirror_direction"]
+
+        if direction == "horizontal":
+            return tf.image.flip_left_right(image_tensor)
+        if direction == "vertical":
+            return tf.image.flip_up_down(image_tensor)
+
+        raise ValueError(
+            "Invalid mirror direction. Choose 'horizontal' or 'vertical'."
+        )
 
 
 if __name__ == "__main__":

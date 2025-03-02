@@ -16,8 +16,10 @@ class StandardNormalizer(StepBase):
     name = "Standard Normalizer"
 
     def __init__(self):
-        """ Initializes the StandardNormalizer object for integration into an image
-        preprocessing pipeline. """
+        """
+        Initializes the StandardNormalizer object for integration into an
+        image preprocessing pipeline.
+        """
         super().__init__({})
         self.output_datatype = tf.float16
         self._mean_val = None
@@ -29,7 +31,7 @@ class StandardNormalizer(StepBase):
 
         Args:
             - dataset (tf.data.Dataset): The dataset to compute the
-                statistic on.
+              statistic on.
         """
         mean_vals = []
         std_vals = []
@@ -37,6 +39,7 @@ class StandardNormalizer(StepBase):
             sample = tf.cast(sample, self.output_datatype)
             mean_vals.append(tf.reduce_mean(sample))
             std_vals.append(reduce_std(sample))
+
         self._mean_val = tf.reduce_mean(mean_vals)
         self._std_val = tf.reduce_mean(std_vals)
 
@@ -46,7 +49,9 @@ class StandardNormalizer(StepBase):
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         image_tensor = tf.cast(image_tensor, self.output_datatype)
-        normalized_image = (image_tensor - self._mean_val) / (self._std_val + 1e-4)
+        normalized_image = (
+            (image_tensor - self._mean_val) / (self._std_val + 1e-4)
+        )
         return normalized_image
 
 

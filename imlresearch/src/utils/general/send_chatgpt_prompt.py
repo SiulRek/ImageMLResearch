@@ -6,27 +6,33 @@ except ImportError:
     OPENAI_KEY = None
 
 
-def send_chatgpt_prompt(prompt_message, max_response_tokens=3000, model="gpt-4o"):
+def send_chatgpt_prompt(
+    prompt_message, max_response_tokens=3000, model="gpt-4o"
+):
     """
     Sends a prompt to OpenAI's GPT model and returns the response.
 
     Args:
         - prompt_message (str): The message to send to the model.
-        - max_response_tokens (int): The maximum number of tokens to
-            generate.
+        - max_response_tokens (int): The maximum number of tokens to generate.
+        - model (str): The OpenAI GPT model to use. Defaults to "gpt-4o".
 
     Returns:
         - str: The response message from the model.
     """
     assert OPENAI_KEY is not None, (
-        "Please provide an OPENAI_KEY by creating a keys.py file and "
-        "defining the OPENAI_KEY variable in it."
+        "Please provide an OPENAI_KEY by creating a keys.py file and defining "
+        "the OPENAI_KEY variable in it."
     )
+
     client = OpenAI(api_key=OPENAI_KEY)
 
     response = client.chat.completions.with_raw_response.create(
         messages=[
-            {"role": "system", "content": "You are a Machine Learning Engineer."},
+            {
+                "role": "system",
+                "content": "You are a Machine Learning Engineer.",
+            },
             {"role": "user", "content": prompt_message},
         ],
         model=model,

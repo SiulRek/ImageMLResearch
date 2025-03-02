@@ -13,8 +13,7 @@ def calc_accuracy(y_true, y_pred):
         - float: The accuracy score.
     """
     accuracy = tf.keras.metrics.Accuracy()(y_true, y_pred)
-    accuracy = float(accuracy.numpy())
-    return accuracy
+    return float(accuracy.numpy())
 
 
 def calc_precision(y_true, y_pred):
@@ -29,8 +28,7 @@ def calc_precision(y_true, y_pred):
         - float: The precision score.
     """
     precision = tf.keras.metrics.Precision()(y_true, y_pred)
-    precision = float(precision.numpy())
-    return precision
+    return float(precision.numpy())
 
 
 def calc_recall(y_true, y_pred):
@@ -45,8 +43,7 @@ def calc_recall(y_true, y_pred):
         - float: The recall score.
     """
     recall = tf.keras.metrics.Recall()(y_true, y_pred)
-    recall = float(recall.numpy())
-    return recall
+    return float(recall.numpy())
 
 
 def calc_f1_score(y_true, y_pred):
@@ -62,7 +59,6 @@ def calc_f1_score(y_true, y_pred):
     """
     precision = calc_precision(y_true, y_pred)
     recall = calc_recall(y_true, y_pred)
-    f1_score = (
-        2 * (precision * recall) / (precision + recall + tf.keras.backend.epsilon())
-    )
+    epsilon = tf.keras.backend.epsilon()
+    f1_score = 2 * (precision * recall) / (precision + recall + epsilon)
     return float(f1_score)

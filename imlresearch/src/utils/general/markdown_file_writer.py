@@ -35,19 +35,17 @@ def _transpose_nested_dicts(nested_dict):
     Transposes a nested dictionary.
 
     Args:
-        - nested_dict (dict[str, dict[str, (int|float|bool|str)]]): The
-            nested dictionary to transpose.
+        - nested_dict (dict[str, dict[str, (int|float|bool|str)]]): 
+            The nested dictionary to transpose.
 
     Returns:
-        - dict[str, dict[str, (int|float|bool|str)]]: The transposed nested
-            dictionary.
+        - dict[str, dict[str, (int|float|bool|str)]]: 
+            The transposed nested dictionary.
     """
     transposed_dict = {}
     for outer_key, inner_dict in nested_dict.items():
         for inner_key, value in inner_dict.items():
-            if inner_key not in transposed_dict:
-                transposed_dict[inner_key] = {}
-            transposed_dict[inner_key][outer_key] = value
+            transposed_dict.setdefault(inner_key, {})[outer_key] = value
     return transposed_dict
 
 
@@ -56,8 +54,7 @@ class MarkdownFileWriter:
     A helper class to write to a Markdown file.
 
     Args:
-        - file_path (str): The file path where the Markdown file will be
-            saved.
+        - file_path (str): The file path where the Markdown file will be saved.
     """
 
     def __init__(self, file_path):
@@ -67,7 +64,9 @@ class MarkdownFileWriter:
 
     def page_break(self):
         """Inserts a page break in the file."""
-        self.file_lines.append('\n<div style="page-break-after: always;"></div>\n')
+        self.file_lines.append(
+            '\n<div style="page-break-after: always;"></div>\n'
+        )
 
     def write_title(self, title, level=1, page_break=False):
         """
@@ -75,49 +74,34 @@ class MarkdownFileWriter:
 
         Args:
             - title (str): The text of the title.
-            - level (int, optional): The level of the title, where 1 is the
-                highest level. Defaults to 1.
-            - page_break (bool, optional): Whether to insert a page break or
-                not.
+            - level (int, optional): The level of the title. Defaults to 1.
+            - page_break (bool, optional): Whether to insert a page break.
         """
         if page_break:
             self.page_break()
         title = (
-            f"{'#' * level} <span style=\"color:rgb(105, 169, 201);\">{title}</span>\n"
+            f"{'#' * level} <span style='color:rgb(105, 169, 201);'>"
+            f"{title}</span>\n"
         )
         self.file_lines.append(title)
 
     def write_text(self, text):
-        """
-        Writes a plain text paragraph to the file.
-
-        Args:
-            - text (str): The text to write.
-        """
+        """Writes a plain text paragraph to the file."""
         self.file_lines.append(f"{text}\n")
 
     def write_key_value(self, key, value):
-        """
-        Writes a key-value pair in bullet point format to the file.
-
-        Args:
-            - key (str): The key text.
-            - value (str): The value text.
-        """
+        """Writes a key-value pair in bullet point format to the file."""
         self.file_lines.append(f"*    *{key}*: {value}\n")
 
-    def write_key_value_table(self, table_data, key_label="Key", value_label="Value"):
+    def write_key_value_table(self, table_data, key_label="Key",
+                              value_label="Value"):
         """
-        Writes a table with key-value pairs, where each row contains a key and a
-        value.
+        Writes a table with key-value pairs.
 
         Args:
-            - table_data (dict[str, (int|float|bool|str)]): Dictionary
-                containing key-value pairs.
-            - key_label (str, optional): Label of the key column. Defaults
-                to "Key".
-            - value_label (str, optional): Label of the value column.
-                Defaults to "Value".
+            - table_data (dict[str, (int|float|bool|str)]): Key-value pairs.
+            - key_label (str, optional): Label of the key column. Defaults to "Key".
+            - value_label (str, optional): Label of the value column. 
         """
         if not table_data:
             return
@@ -131,6 +115,7 @@ class MarkdownFileWriter:
 
         self.file_lines.append(f"| {key_header} | {value_header} |")
         self.file_lines.append(f"| {'-' * max_elem_len} | {'-' * max_elem_len} |")
+
         for key, value in table_data.items():
             padded_key = f"{key}".ljust(max_elem_len)
             padded_value = f"{value}".ljust(max_elem_len)
@@ -139,11 +124,10 @@ class MarkdownFileWriter:
 
     def write_nested_table(self, nested_table_data, transpose=False):
         """
-        Writes a nested table with outer keys as column headers and inner keys
-        as row headers.
+        Writes a nested table with outer keys as column headers.
 
         Args:
-            - nested_table_data (dict[str, dict[str,(int|float|bool|str)]]):
+            - nested_table_data (dict[str, dict[str, (int|float|bool|str)]]):
                 Dictionary of dictionaries.
             - transpose (bool, optional): Whether to transpose the table.
         """
@@ -155,22 +139,12 @@ class MarkdownFileWriter:
 
         nested_table_data = _stringify_elements(nested_table_data)
 
-        def max_elem_length(elements):
-            return max(len(elem) for elem in elements)
-
         headers = list(nested_table_data.keys())
-        inner_dict = nested_table_data[headers[0]]
-        row_labels = list(inner_dict.keys())
+        row_labels = list(nested_table_data[headers[0]].keys())
 
-        max_elem_len = 0
-        for inner_dict in nested_table_data.values():
-            previous_max_elem_len = max_elem_len
-            if set(inner_dict.keys()) != set(row_labels):
-                for label in inner_dict.keys():
-                    if label not in row_labels:
-                        row_labels.append(label)
-            max_elem_len = max(max_elem_len, previous_max_elem_len)
-        max_elem_len = max(max_elem_len, max_elem_length(headers + row_labels))
+        max_elem_len = max(
+            len(header) for header in headers + row_labels
+        )
 
         header_row = (
             f"| {' ' * max_elem_len} | "
@@ -185,10 +159,11 @@ class MarkdownFileWriter:
         )
 
         for label in row_labels:
-            label = f"{label}"
             row = f"| {label.ljust(max_elem_len)} | "
             for header in headers:
-                value = nested_table_data[header].get(label, "N/A").ljust(max_elem_len)
+                value = nested_table_data[header].get(label, "N/A").ljust(
+                    max_elem_len
+                )
                 row += f"{value} | "
             self.file_lines.append(row)
         self.file_lines.append("\n")
@@ -199,17 +174,12 @@ class MarkdownFileWriter:
 
         Args:
             - path (str): The file path for the link.
-            - hyperlink_text (str, optional): The hyperlink text. Defaults
-                to "[Link]".
-
-        Returns:
-            - str: The Markdown formatted hyperlink.
+            - hyperlink_text (str, optional): The hyperlink text.
         """
         relative_path = os.path.relpath(path, self.file_dir)
         markdown_path = relative_path.replace(os.sep, "/")
         link = f"./{markdown_path}"
-        hyperlink_text = hyperlink_text or "[Link]"
-        return f"[{hyperlink_text}]({link})"
+        return f"[{hyperlink_text or '[Link]'}]({link})"
 
     def write_figure(self, figure_name, path):
         """
@@ -219,8 +189,7 @@ class MarkdownFileWriter:
             - figure_name (str): The alt text for the figure.
             - path (str): The file path to the figure.
         """
-        figure_link = self.create_link(path, figure_name)
-        self.file_lines.append(f"!{figure_link}\n")
+        self.file_lines.append(f"!{self.create_link(path, figure_name)}\n")
 
     def save_file(self):
         """Saves the file to the specified file path."""

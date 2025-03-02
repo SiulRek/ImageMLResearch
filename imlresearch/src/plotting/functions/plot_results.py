@@ -20,7 +20,7 @@ def plot_binary_classification_results(
         - y_pred (array-like): Predicted probabilities.
         - class_names (List): List of class names.
         - grid_size (Tuple): Tuple containing the grid size (rows, columns).
-            Defaults to (2, 2).
+          Defaults to (2, 2).
     """
     # Configuration
     n_rows, n_cols = grid_size
@@ -38,7 +38,6 @@ def plot_binary_classification_results(
         true_label = y_true[i]
         raw_prediction = y_pred[i]
         try:
-            # For the case the prediction is returned as a 1-dimensional array
             raw_prediction = raw_prediction[0]
         except (IndexError, InvalidArgumentError):
             pass
@@ -52,13 +51,11 @@ def plot_binary_classification_results(
         img_ax.imshow(image, **cmap)
 
         title_color = "green" if predicted_label == true_label else "red"
-        title = f"True: {true_label_name}\n"
-        title += f"Predicted: {predicted_label_name} ({predicted_prob*100:.2f}%)"
-        img_ax.set_title(
-            title,
-            fontsize=font_size,
-            color=title_color,
+        title = (
+            f"True: {true_label_name}\nPredicted: {predicted_label_name} "
+            f"({predicted_prob * 100:.2f}%)"
         )
+        img_ax.set_title(title, fontsize=font_size, color=title_color)
 
     plt.tight_layout()
     return fig
@@ -69,8 +66,8 @@ def plot_multi_class_classification_results(
 ):
     """
     Plots a grid of images with their true and predicted labels. If the
-    prediction_bar parameter is set to True, it also shows a bar plot with the
-    predicted probabilities.
+    prediction_bar parameter is set to True, it also shows a bar plot with
+    the predicted probabilities.
 
     Args:
         - x (array-like): Input data (images, can be grayscale or RGB).
@@ -78,9 +75,9 @@ def plot_multi_class_classification_results(
         - y_pred (array-like): Predicted labels, one-hot encoded.
         - class_names (List): List of class names.
         - grid_size (Tuple): Tuple containing the grid size (rows, columns).
-            Defaults to (2, 2).
+          Defaults to (2, 2).
         - prediction_bar (bool): Whether to show the predicted probabilities
-            as a bar plot. Defaults to False.
+          as a bar plot. Defaults to False.
     """
     # Configuration
     n_rows, n_cols = grid_size
@@ -105,7 +102,9 @@ def plot_multi_class_classification_results(
         cmap = {"cmap": "gray"} if image.shape[-1] == 1 else {}
         img_ax.imshow(image, **cmap)
 
-        title_color = "green" if predicted_label_index == true_label_index else "red"
+        title_color = (
+            "green" if predicted_label_index == true_label_index else "red"
+        )
         true_label_name = class_names[true_label_index]
         predicted_label_name = class_names[predicted_label_index]
         img_ax.set_title(
@@ -122,7 +121,9 @@ def plot_multi_class_classification_results(
             ]
             if predicted_label_index != true_label_index:
                 bar_colors[predicted_label_index] = "red"
-            bar_ax.bar(range(len(predicted_probs)), predicted_probs, color=bar_colors)
+            bar_ax.bar(
+                range(len(predicted_probs)), predicted_probs, color=bar_colors
+            )
             bar_ax.set_xticks(range(len(class_names)))
             bar_ax.set_xticklabels(class_names, rotation=90)
             bar_ax.set_ylim(0, 1)

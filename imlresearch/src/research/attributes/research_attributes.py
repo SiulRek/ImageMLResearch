@@ -1,5 +1,7 @@
 from imlresearch.src.data_handling.labelling.label_manager import LabelManager
-from imlresearch.src.research.attributes.attributes_utils import copy_public_properties
+from imlresearch.src.research.attributes.attributes_utils import (
+    copy_public_properties,
+)
 
 
 class ResearchAttributes:
@@ -8,22 +10,22 @@ class ResearchAttributes:
 
     Attributes:
         - datasets_container (dict): Dictionary containing datasets. When
-            creating new 'complete_dataset' is added, when split
-            'train_dataset', 'val_dataset', and 'test_dataset' are added.
+          creating new 'complete_dataset' is added, when split
+          'train_dataset', 'val_dataset', and 'test_dataset' are added.
         - label_manager (LabelManager): LabelManager instance for handling
-            labels.
+          labels.
         - outputs_container (dict): Dictionary containing outputs in form of
-            Tuple -> (y_true, y_pred). When fitting, outputs are added. The name
-            corresponds to the dataset name replacing 'dataset' with 'outputs',
-            e.g. 'train_dataset' -> 'train_outputs'.
+          Tuple -> (y_true, y_pred). When fitting, outputs are added. The name
+          corresponds to the dataset name replacing 'dataset' with 'outputs',
+          e.g. 'train_dataset' -> 'train_outputs'.
         - model (tf.keras.Model): The Keras model instance.
         - training_history (dict): The tracked training history of the model
-            after fitting (Attribute 'history' of the return value).
+          after fitting (Attribute 'history' of the return value).
         - evaluation_metrics (dict): The tracked evaluation metrics dicts of
-            the model after evaluating. Can be set from outside.
-                Format {Set_Name: Metrics ({Metric: Value})}
-        - figures (dict): Dictionary containing the tracked figures. Format
-        - {figure_name: figure}. Can be set from outside.
+          the model after evaluating. Can be set from outside.
+          Format {Set_Name: Metrics ({Metric: Value})}
+        - figures (dict): Dictionary containing the tracked figures.
+          Format {figure_name: figure}. Can be set from outside.
     """
 
     def __init__(self, label_type=None, class_names=None):
@@ -33,9 +35,9 @@ class ResearchAttributes:
 
         Args:
             - label_type (str, None): The type of labels used: 'binary',
-                'multi_class', 'multi_label', 'multi_label_multi_class',
-                'object_detection'. If None, the label_manager is initialized to
-                None.
+              'multi_class', 'multi_label', 'multi_label_multi_class',
+              'object_detection'. If None, the label_manager is initialized
+              to None.
             - class_names (list, optional): The list of class names.
         """
         self._datasets_container = {}
@@ -50,8 +52,10 @@ class ResearchAttributes:
 
     @property
     def datasets_container(self):
-        """Dictionary containing datasets of type tf.data.Dataset, where each
-        sample is a tuple (image, label)."""
+        """
+        Dictionary containing datasets of type tf.data.Dataset, where each
+        sample is a tuple (image, label).
+        """
         return self._datasets_container
 
     @property
@@ -90,21 +94,20 @@ class ResearchAttributes:
         instance.
 
         Args:
-            - instance: The class instance to insert attributes into.
+            - research_attributes (ResearchAttributes): The instance to sync.
         """
         if not isinstance(research_attributes, ResearchAttributes):
-            msg = "The input instance must be of type ResearchAttributes."
-            raise ValueError(msg)
+            raise ValueError("The input instance must be of type ResearchAttributes.")
         copy_public_properties(research_attributes, self)
 
     def reset_research_attributes(self, except_datasets=False):
         """
-        Resets the research attributes. Note 'label_manager' is unchanged, as it
-        should not be changed after initialization.
+        Resets the research attributes. Note 'label_manager' is unchanged, as
+        it should not be changed after initialization.
 
         Args:
             - except_datasets (bool, optional): If True, the datasets are
-                not reset.
+              not reset.
         """
         if not except_datasets:
             self._datasets_container.clear()

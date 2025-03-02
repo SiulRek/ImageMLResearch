@@ -1,7 +1,7 @@
 """
 This module provides test suites for the preprocessing steps performing resize
 operations within the image preprocessing pipeline. This module addresses the
-unique testing requirements for resize operations steps, ensuring their correct
+unique testing requirements for resize operation steps, ensuring their correct
 integration into the pipeline.
 """
 
@@ -21,16 +21,16 @@ class TestSquareShapePadder(TestSingleStep):
     A test suite for the SquareShapePadder step in the image preprocessing
     pipeline.
 
-    This class inherits from TestSingleStep and is specifically designed to test
-    the SquareShapePadder step, which pads images to make them square. It
-    includes tests to verify that images are correctly padded with the specified
-    pixel value.
+    This class inherits from TestSingleStep and is specifically designed to
+    test the SquareShapePadder step, which pads images to make them square.
+    It includes tests to verify that images are correctly padded with the
+    specified pixel value.
 
     Attributes:
         - TestStep: The step class to be tested, in this case,
-            steps.SquareShapePadder.
+          steps.SquareShapePadder.
         - parameters: A dictionary containing parameters for the
-            SquareShapePadder step.
+          SquareShapePadder step.
     """
 
     TestStep = steps.SquareShapePadder
@@ -47,21 +47,24 @@ class TestSquareShapePadder(TestSingleStep):
     ):
         """
         Helper method to verify the image dimensions and color channels in a
-        processed dataset. Compares the processed images to the original dataset
-        to ensure correct height, width, and color channel transformations.
+        processed dataset. Compares the processed images to the original
+        dataset to ensure correct height, width, and color channel
+        transformations.
         """
-        for original_image, processed_image in zip(original_dataset, processed_dataset):
-            processed_image_shape = tuple(processed_image.shape[:2].as_list())
-            original_image_shape = tuple(original_image.shape[:2].as_list())
-            self.assertNotEqual(processed_image_shape, original_image_shape)
+        for original_image, processed_image in zip(
+            original_dataset, processed_dataset
+        ):
+            processed_shape = tuple(processed_image.shape[:2].as_list())
+            original_shape = tuple(original_image.shape[:2].as_list())
+            self.assertNotEqual(processed_shape, original_shape)
             self.assertEqual(
                 color_channel_expected,
                 processed_image.shape[2],
                 "Color channels are not equal.",
             )
             self.assertEqual(
-                processed_image_shape[0],
-                processed_image_shape[1],
+                processed_shape[0],
+                processed_shape[1],
                 "Heights and widths are not equal.",
             )
 
@@ -76,7 +79,7 @@ class TestShapeResizer(TestSingleStep):
 
     Attributes:
         - TestStep: The step class to be tested, in this case,
-            steps.ShapeResizer.
+          steps.ShapeResizer.
         - parameters: A dictionary of parameters for the ShapeResizer step.
     """
 
@@ -94,13 +97,16 @@ class TestShapeResizer(TestSingleStep):
     ):
         """
         Helper method to verify the image dimensions and color channels in a
-        processed dataset. Compares the processed images to the original dataset
-        to ensure correct height, width, and color channel transformations.
+        processed dataset. Compares the processed images to the original
+        dataset to ensure correct height, width, and color channel
+        transformations.
         """
-        for original_image, processed_image in zip(original_dataset, processed_dataset):
-            processed_image_shape = tuple(processed_image.shape[:2].as_list())
-            original_image_shape = tuple(original_image.shape[:2].as_list())
-            self.assertNotEqual(processed_image_shape, original_image_shape)
+        for original_image, processed_image in zip(
+            original_dataset, processed_dataset
+        ):
+            processed_shape = tuple(processed_image.shape[:2].as_list())
+            original_shape = tuple(original_image.shape[:2].as_list())
+            self.assertNotEqual(processed_shape, original_shape)
             self.assertEqual(
                 color_channel_expected,
                 processed_image.shape[2],
@@ -108,13 +114,13 @@ class TestShapeResizer(TestSingleStep):
             )
             self.assertEqual(
                 self.parameters["desired_shape"][0],
-                processed_image_shape[0],
-                "heights are not like desired.",
+                processed_shape[0],
+                "Heights do not match the desired shape.",
             )
             self.assertEqual(
                 self.parameters["desired_shape"][1],
-                processed_image_shape[1],
-                "widths are not like desired.",
+                processed_shape[1],
+                "Widths do not match the desired shape.",
             )
 
 
@@ -124,19 +130,19 @@ def load_resize_operations_steps_tests():
     operations preprocessing steps into a unified test suite.
 
     This function iterates over a predefined list of image preprocessing steps
-    for resize operations and their corresponding arguments. For each step, it
-    dynamically creates a test class using `create_test_class_for_step` and then
-    loads the test cases from these classes into individual test suites. These
-    suites are then combined into a single comprehensive test suite.
+    for resize operations and their corresponding arguments. It loads the test
+    cases from these classes into individual test suites, which are then
+    combined into a single comprehensive test suite.
 
     Returns:
         - unittest.TestSuite: A combined test suite that aggregates tests
-            for multiple image preprocessing step test classes.
+          for multiple image preprocessing step test classes.
     """
     loader = unittest.TestLoader()
-    test_suites = []
-    test_suites.append(loader.loadTestsFromTestCase(TestSquareShapePadder))
-    test_suites.append(loader.loadTestsFromTestCase(TestShapeResizer))
+    test_suites = [
+        loader.loadTestsFromTestCase(TestSquareShapePadder),
+        loader.loadTestsFromTestCase(TestShapeResizer),
+    ]
     test_suite = unittest.TestSuite(test_suites)  # Combine the suites
     return test_suite
 

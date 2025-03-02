@@ -4,9 +4,8 @@ import tensorflow as tf
 def is_batched(dataset):
     """
     Checks if the dataset is batched. Expects a dataset of type tf.data.Dataset
-    and assumes that each sample in the dataset is either an image or a tuple
-    containing an image and its corresponding label. The images are expected to
-    have 3 dimensions.
+    and assumes that each sample is either an image or a tuple containing an 
+    image and its corresponding label. The images are expected to have 3 dims.
 
     Args:
         - dataset (tf.data.Dataset): Dataset to check.
@@ -17,20 +16,18 @@ def is_batched(dataset):
     if not isinstance(dataset, tf.data.Dataset):
         msg = "The input dataset must be a tf.data.Dataset object."
         raise ValueError(msg)
+
     for sample in dataset.take(1):
-        if isinstance(sample, tuple):
-            image, _ = sample
-        else:
-            image = sample
+        image = sample[0] if isinstance(sample, tuple) else sample
+
     return image.shape.ndims == 4
 
 
 def unbatch_dataset_if_batched(dataset):
     """
     Unbatches the dataset if it is batched. Expects a dataset of type
-    tf.data.Dataset and assumes that each sample in the dataset is either an
-    image or a tuple containing an image and its corresponding label. The images
-    are expected to have 3 dimensions.
+    tf.data.Dataset and assumes that each sample is either an image or a 
+    tuple containing an image and its corresponding label.
 
     Args:
         - dataset (tf.data.Dataset): Dataset to unbatch.
@@ -38,7 +35,4 @@ def unbatch_dataset_if_batched(dataset):
     Returns:
         - tf.data.Dataset: Unbatched dataset.
     """
-    batched = is_batched(dataset)
-    if not batched:
-        return dataset
-    return dataset.unbatch()
+    return dataset.unbatch() if is_batched(dataset) else dataset

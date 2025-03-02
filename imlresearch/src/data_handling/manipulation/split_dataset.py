@@ -37,7 +37,11 @@ def split_dataset(
     test_size = dataset_size - train_size - val_size
 
     train_dataset = dataset.take(train_size) if train_size > 0 else None
-    val_dataset = dataset.skip(train_size).take(val_size) if val_size > 0 else None
-    test_dataset = dataset.skip(train_size + val_size) if test_size > 0 else None
+    val_dataset = (
+        dataset.skip(train_size).take(val_size) if val_size > 0 else None
+    )
+    test_dataset = (
+        dataset.skip(train_size + val_size) if test_size > 0 else None
+    )
 
     return train_dataset, val_dataset, test_dataset

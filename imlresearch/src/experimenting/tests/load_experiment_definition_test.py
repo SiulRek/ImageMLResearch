@@ -9,7 +9,6 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestLoadExperimentDefinition(BaseTestCase):
-
     def setUp(self):
         super().setUp()
         experiment_dir = os.path.join(self.temp_dir, "test_experiment")
@@ -18,7 +17,9 @@ class TestLoadExperimentDefinition(BaseTestCase):
             "description": "This is a test experiment.",
             "directory": experiment_dir,
         }
-        self.definitions_json_path = os.path.join(self.temp_dir, "definition.json")
+        self.definitions_json_path = os.path.join(
+            self.temp_dir, "definition.json"
+        )
 
     def _write_definitions_to_file(self, definitions_content):
         with open(self.definitions_json_path, "w", encoding="utf-8") as f:
@@ -46,7 +47,9 @@ class TestLoadExperimentDefinition(BaseTestCase):
             "trial_definitions": {
                 "num_trials": 2,
                 "prefix": "trial_",
-                "hparams_configs": {"param": {"low": 1, "high": 10, "type": "int"}},
+                "hparams_configs": {
+                    "param": {"low": 1, "high": 10, "type": "int"}
+                },
             },
         }
         self._write_definitions_to_file(definitions_content)
@@ -59,8 +62,8 @@ class TestLoadExperimentDefinition(BaseTestCase):
         for i, trial_def in enumerate(trial_definitions):
             self.assertEqual(trial_def["name"], "trial_" + str(i + 1))
             self.assertIn("param", trial_def["hyperparameters"])
-            # NOTE: In real use case do not set the last score manually, it is
-            # just done here to isolate the functionality under test.
+            # NOTE: In real use case do not set the last score manually,
+            # it is just done here to isolate the functionality under test.
             trial_definitions.suggester.set_last_score(1)
         with self.assertRaises(StopIteration):
             next(trial_definitions)
@@ -79,7 +82,11 @@ class TestLoadExperimentDefinition(BaseTestCase):
 
     def test_invalid_contents(self):
         invalid_contents = [
-            {"trial_definitions": [{"name": "trial_1", "hyperparameters": {}}]},
+            {
+                "trial_definitions": [
+                    {"name": "trial_1", "hyperparameters": {}}
+                ]
+            },
             {"experiment_metadata": self.experiment_metadata},
             {
                 "experiment_metadata": self.experiment_metadata,

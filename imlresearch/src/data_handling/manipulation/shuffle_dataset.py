@@ -23,7 +23,9 @@ def shuffle_dataset(dataset, random_seed=42):
 
     if isinstance(elements[0], tuple) and len(elements[0]) == 2:
         features, labels = zip(*shuffled_elements)
-        dataset = tf.data.Dataset.from_tensor_slices((list(features), list(labels)))
+        dataset = tf.data.Dataset.from_tensor_slices(
+            (list(features), list(labels))
+        )
     else:
         dataset = tf.data.Dataset.from_tensor_slices(shuffled_elements)
 

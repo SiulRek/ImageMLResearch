@@ -6,23 +6,24 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
 class RandomRotator(StepBase):
-    """A preprocessing step that applies Random Rotator to an image within a
-    specified angle range."""
+    """
+    A preprocessing step that applies random rotation to an image within a
+    specified angle range.
+    """
 
     arguments_datatype = {"angle_range": (int, int), "seed": int}
     name = "Random Rotator"
 
     def __init__(self, angle_range=(-90, 90), seed=42):
         """
-        Initializes the RandomRotator object that can be integrated in an image
-        preprocessing pipeline.
+        Initializes the RandomRotator object that can be integrated into an
+        image preprocessing pipeline.
 
         Args:
             - angle_range (tuple): Tuple of two integers specifying the
-                range of angles for rotation. For example, (-90, 90) allows
-                rotations between -90 and 90 degrees.
-            - seed (int): Random seed for reproducible rotations. Default is
-            42.
+              range of angles for rotation. For example, (-90, 90) allows
+              rotations between -90 and 90 degrees.
+            - seed (int): Random seed for reproducible rotations. Default is 42.
         """
         super().__init__(locals())
 
@@ -34,9 +35,12 @@ class RandomRotator(StepBase):
     def __call__(self, image_nparray):
         angle = random.randint(*self.parameters["angle_range"])
         height, width = image_nparray.shape[:2]
-        rotation_matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1)
-        rotated_image = cv2.warpAffine(image_nparray, rotation_matrix, (width, height))
-        return rotated_image
+
+        rotation_matrix = cv2.getRotationMatrix2D(
+            (width / 2, height / 2), angle, 1
+        )
+
+        return cv2.warpAffine(image_nparray, rotation_matrix, (width, height))
 
 
 if __name__ == "__main__":

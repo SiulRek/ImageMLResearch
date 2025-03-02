@@ -17,11 +17,15 @@ class TestSaveImages(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.dataset = self.load_mnist_digits_dataset(sample_num=5, labeled=True)
+        self.dataset = self.load_mnist_digits_dataset(
+            sample_num=5, labeled=True
+        )
 
     def test_saving_images_default_settings(self):
         """ Test saving images with default settings. """
-        results_dir = os.path.join(self.temp_dir, "saving_images_default_settings")
+        results_dir = os.path.join(
+            self.temp_dir, "saving_images_default_settings"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
@@ -29,10 +33,12 @@ class TestSaveImages(BaseTestCase):
         list_dir = os.listdir(results_dir)
         for file in list_dir:
             self.assertTrue(
-                file.endswith(".jpg"), "Image should be saved in default JPG format."
+                file.endswith(".jpg"),
+                "Image should be saved in default JPG format."
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_images_png_format(self):
@@ -48,7 +54,8 @@ class TestSaveImages(BaseTestCase):
                 file.endswith(".png"), "Image should be saved in PNG format."
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_images_jpg_format(self):
@@ -64,12 +71,15 @@ class TestSaveImages(BaseTestCase):
                 file.endswith(".jpg"), "Image should be saved in JPG format."
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_images_with_string_prefix(self):
         """ Test saving images with a string prefix. """
-        results_dir = os.path.join(self.temp_dir, "saving_images_with_string_prefix")
+        results_dir = os.path.join(
+            self.temp_dir, "saving_images_with_string_prefix"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
@@ -81,7 +91,8 @@ class TestSaveImages(BaseTestCase):
                 "Image filename should contain the string prefix.",
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_images_with_function_prefix(self):
@@ -90,7 +101,9 @@ class TestSaveImages(BaseTestCase):
         def prefix_function(label):
             return f"label_{label.numpy()}"
 
-        results_dir = os.path.join(self.temp_dir, "saving_images_with_function_prefix")
+        results_dir = os.path.join(
+            self.temp_dir, "saving_images_with_function_prefix"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
@@ -102,12 +115,15 @@ class TestSaveImages(BaseTestCase):
                 "Image filename should contain the function prefix.",
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_sequential_naming_of_saved_images(self):
         """ Test sequential naming of saved images. """
-        results_dir = os.path.join(self.temp_dir, "sequential_naming_of_saved_images")
+        results_dir = os.path.join(
+            self.temp_dir, "sequential_naming_of_saved_images"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
@@ -121,16 +137,21 @@ class TestSaveImages(BaseTestCase):
                 "Image filename should be sequentially named.",
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_floating_point_images(self):
         """ Test saving images with floating point data type. """
-        results_dir = os.path.join(self.temp_dir, "saving_floating_point_images")
+        results_dir = os.path.join(
+            self.temp_dir, "saving_floating_point_images"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
-        dataset = self.dataset.map(lambda x, y: (tf.cast(x, tf.float32) / 255.0, y))
+        dataset = self.dataset.map(
+            lambda x, y: (tf.cast(x, tf.float32) / 255.0, y)
+        )
         save_images(dataset, results_dir)
         list_dir = os.listdir(results_dir)
         for file in list_dir:
@@ -142,12 +163,15 @@ class TestSaveImages(BaseTestCase):
                 "Image file should exist.",
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_images_with_batched_dataset(self):
         """ Test saving images with a batched dataset. """
-        results_dir = os.path.join(self.temp_dir, "saving_images_with_batched_dataset")
+        results_dir = os.path.join(
+            self.temp_dir, "saving_images_with_batched_dataset"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
@@ -163,7 +187,8 @@ class TestSaveImages(BaseTestCase):
                 "Image file should exist.",
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_images_with_unlabeled_dataset(self):
@@ -186,19 +211,23 @@ class TestSaveImages(BaseTestCase):
                 "Image file should exist.",
             )
         self.assertEqual(
-            len(list_dir), len(list(self.dataset)), "All images should be saved."
+            len(list_dir), len(list(self.dataset)),
+            "All images should be saved."
         )
 
     def test_saving_images_with_num_images(self):
         """ Test saving images with a specified number of images. """
-        results_dir = os.path.join(self.temp_dir, "saving_images_with_num_images")
+        results_dir = os.path.join(
+            self.temp_dir, "saving_images_with_num_images"
+        )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
         save_images(self.dataset, results_dir, num_images=3)
         list_dir = os.listdir(results_dir)
         self.assertEqual(
-            len(list_dir), 3, "Only the specified number of images should be saved."
+            len(list_dir), 3,
+            "Only the specified number of images should be saved."
         )
 
 

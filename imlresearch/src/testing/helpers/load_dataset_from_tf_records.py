@@ -7,7 +7,7 @@ def _parse_image_function(proto):
 
     Args:
         - proto (tf.Tensor): A scalar string tensor, a single serialized
-            Example.
+          Example.
 
     Returns:
         - tf.Tensor: A tensor representing the parsed image.
@@ -15,7 +15,9 @@ def _parse_image_function(proto):
     image_feature_description = {
         "image_raw": tf.io.FixedLenFeature([], tf.string),
     }
-    parsed_features = tf.io.parse_single_example(proto, image_feature_description)
+    parsed_features = tf.io.parse_single_example(
+        proto, image_feature_description
+    )
     image = tf.io.decode_png(parsed_features["image_raw"], channels=3)
     return image
 

@@ -1,8 +1,9 @@
 import unittest
-
 import numpy as np
 
-from imlresearch.src.experimenting.helpers.hparams_suggester import HParamsSuggester
+from imlresearch.src.experimenting.helpers.hparams_suggester import (
+    HParamsSuggester,
+)
 from imlresearch.src.experimenting.helpers.last_score_singleton import (
     LastScoreSingleton,
 )
@@ -10,7 +11,6 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestHParamsSuggester(BaseTestCase):
-
     def setUp(self):
         super().setUp()
         self.hparams_distributions_configs = {
@@ -31,24 +31,29 @@ class TestHParamsSuggester(BaseTestCase):
             param_type = configs[param]["type"]
             if param_type in ["float", "int"]:
                 self.assertIsInstance(hyperparams[param], (int, float))
-                self.assertGreaterEqual(hyperparams[param], configs[param]["low"])
-                self.assertLessEqual(hyperparams[param], configs[param]["high"])
+                self.assertGreaterEqual(
+                    hyperparams[param], configs[param]["low"]
+                )
+                self.assertLessEqual(
+                    hyperparams[param], configs[param]["high"]
+                )
             elif param_type == "categorical":
                 self.assertIn(
                     hyperparams[param],
                     configs[param]["choices"],
                 )
             else:
-                self.fail(f"Invalid hyperparameter type {param_type} for {param}")
+                msg = f"Invalid hyperparameter type {param_type} for {param}"
+                self.fail(msg)
 
     def test_initial_suggestion(self):
-        """ Test if the suggester provides a valid set of hyperparameters initially. """
+        """ Test if the suggester provides a valid set of hyperparameters. """
         next_hyperparams = self.suggester.suggest_next()
         self.assert_valid_hyperparams(next_hyperparams)
         self.assertIsNotNone(self.suggester.pending_trial)
 
     def test_to_nearest_power2(self):
-        """ Test if the suggester correctly rounds to the nearest power of two. """
+        """ Test if the suggester rounds to the nearest power of two. """
         hparams_distributions_configs = {
             "batch_size": {
                 "type": "int",
@@ -67,8 +72,7 @@ class TestHParamsSuggester(BaseTestCase):
             self.assertTrue(np.log2(batch_size).is_integer())
 
     def test_update_trial(self):
-        """ Test if the suggester updates the trial correctly after setting the
-        score. """
+        """ Test if the suggester updates the trial after setting the score. """
         next_hyperparams = self.suggester.suggest_next()
         trial_1 = self.suggester.pending_trial
         self.assert_valid_hyperparams(next_hyperparams)
@@ -129,9 +133,8 @@ class TestHParamsSuggester(BaseTestCase):
 
     def test_study_persistence(self):
         """
-        Test if the storage file is saved after suggesting a combination and if
-        a new HParamsSuggester instance with the same storage directory and
-        load_if_exists=True loads the previous study.
+        Test if the storage file is saved and if a new instance with the same 
+        storage directory and load_if_exists=True loads the previous study.
         """
         suggester = HParamsSuggester(
             self.hparams_distributions_configs,

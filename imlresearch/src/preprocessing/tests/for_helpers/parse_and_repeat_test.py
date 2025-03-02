@@ -1,90 +1,197 @@
 import os
 import unittest
 
-from imlresearch.src.preprocessing.helpers.parse_and_repeat import parse_and_repeat
+from imlresearch.src.preprocessing.helpers.randomly_select_sequential_keys import (
+    randomly_select_sequential_keys,
+    is_sequential,
+)
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
-class TestParseAndRepeat(BaseTestCase):
+class TestRandomlySelectSequentialKeys(BaseTestCase):
+    """
+    Unit tests for `randomly_select_sequential_keys`.
+
+    This suite tests the accuracy of the function in identifying and handling
+    sequential key patterns in dictionaries. It covers various cases,
+    including invalid patterns, sequential integrity, and frequency-based key
+    selection. Each test ensures the function's robustness and error handling.
+    """
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.test_data_directory = os.path.join(cls.temp_dir, "parse_and_repeat_tests")
+        cls.test_data_directory = os.path.join(
+            cls.output_dir, "randomly_select_sequential_keys_tests"
+        )
         os.makedirs(cls.test_data_directory, exist_ok=True)
 
-    def test_basic_functionality(self):
-        self.assertEqual(
-            parse_and_repeat("[1]*3 + [4]*2 + [True] + ['String']"),
-            [1, 1, 1, 4, 4, True, "String"],
+    def get_stripped_dict_keys(self, input_dict, separator="__"):
+        """
+        Get the keys of a dictionary with the separator and part after the
+        separator removed.
+
+        Args:
+            - input_dict (dict): The input dictionary.
+            - separator (str, optional): The separator used in the key
+              pattern. Defaults to '__'.
+
+        Returns:
+            - list: A list of keys in the input dictionary.
+        """
+        return [key.split(separator)[0] for key in input_dict.keys()]
+
+    def test_some_keys_not_matching(self):
+        """Test that an error is raised when only some keys do not match."""
+        input_dict = {"a_key__I0": "value1", "b_key": "value2"}
+        with self.assertRaises(KeyError):
+            randomly_select_sequential_keys(input_dict)
+
+    def test_non_sequential_indices(self):
+        """Test that an error is raised when indices are not sequential."""
+        input_dict = {"a_key_i1__I1": "value1", "b_key_i3__I3": "value2"}
+        with self.assertRaises(KeyError):
+            randomly_select_sequential_keys(input_dict)
+
+    def test_all_keys_matching(self):
+        """Test that all keys are selected when matching the pattern."""
+        input_dict = {
+            "a_key_i0__I0": "value0",
+            "b_key_i1__I1": "value1",
+            "c_key_i2__I2": "value2",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 3)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
         )
 
-    def test_nested_lists(self):
-        self.assertEqual(
-            parse_and_repeat("[[1,2,'3.22']]*2 + [[3,True,1.0]]*3 + [[4,False,2.0]]"),
-            [
-                [1, 2, "3.22"],
-                [1, 2, "3.22"],
-                [3, True, 1.0],
-                [3, True, 1.0],
-                [3, True, 1.0],
-                [4, False, 2.0],
-            ],
+    def test_normal_operation(self):
+        """Test the normal operation of the function."""
+        input_dict = {
+            "a_key_i0__I0": "value0",
+            "b_key_i0__I0": "alt0",
+            "a_key_i1__I1": "value1",
+            "b_key_i1__I1": "alt1",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 2)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
         )
 
-    def test_no_repetition(self):
-        self.assertEqual(parse_and_repeat("[5] + [6] + ['test']"), [5, 6, "test"])
+    def _generate_test_data(self, num_sequences):
+        """
+        Generate test data with sequential keys for testing.
 
-    def test_empty_list(self):
-        self.assertEqual(parse_and_repeat("[]"), [])
+        Args:
+            - num_sequences (int): Number of sequential pairs to generate.
 
-    def test_single_element(self):
-        self.assertEqual(parse_and_repeat("[7]"), [7])
-        self.assertEqual(parse_and_repeat("[7]*1"), [7])
+        Returns:
+            - dict: A dictionary with generated test data.
+        """
+        return {
+            f"{i % 2}_key_i{i // 2}__I{i // 2}": f"value{i}"
+            for i in range(num_sequences * 2)
+        }
 
-    def test_string_representation(self):
-        self.assertEqual(
-            parse_and_repeat("[''] + ['World', 'True']*2 + [['World', 'True']]*2"),
-            [
-                "",
-                "World",
-                "True",
-                "World",
-                "True",
-                ["World", "True"],
-                ["World", "True"],
-            ],
+    def test_normal_operation_with_long_sequence(self):
+        """Test normal operation with a longer sequence."""
+        num_sequences = 111
+        input_dict = self._generate_test_data(num_sequences)
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), num_sequences)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
         )
 
-    def test_dict_representation(self):
-        self.assertEqual(
-            parse_and_repeat("[{'key': 3}]*2 + [{'key': 1}]"),
-            [{"key": 3}, {"key": 3}, {"key": 1}],
+    def test_resilient_operation_1(self):
+        """Test resilience to unique identifiers specified in keys."""
+        input_dict = {
+            "key_i1__1__I1": "value1",
+            "key_i1__2__I1": "alt1",
+            "key_i0__3__I0": "value0",
+            "key_i0__4__I0": "alt0",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = ["key_i1__1", "key_i1__2", "key_i0__3", "key_i0__4"]
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 2)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1][0]) for key in output_dict])
         )
 
-    def test_invalid_formatting(self):
-        with self.assertRaises(ValueError):
-            parse_and_repeat("[1, 2, 3]*a")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("+[3]")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("[3]+")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("3*6")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("[3] +, [10]")
+    def test_resilient_operation_2(self):
+        """Test resilience to order of keys."""
+        input_dict = {
+            "a_key_i1__I1": "value1",
+            "b_key_i0__I0": "value0",
+            "c_key_i1__I1": "alt1",
+            "d_key_i0__I0": "alt0",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 2)
+        self.assertTrue(
+            is_sequential([int(key.split("i")[1]) for key in output_dict])
+        )
 
-    def test_invalid_literal(self):
-        with self.assertRaises(ValueError):
-            parse_and_repeat("[3] + 10]")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("[[1,2,'3.22']]*2 + [[3,True,Invalid]]*3 ")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("[[1,2+3]]*2 + [[3,True]]*3 ")
-        with self.assertRaises(ValueError):
-            parse_and_repeat("[[1,2,'3.22']]*2 + [[3,True,,]]*3 ")
+    def test_keys_with_frequency_simple(self):
+        """Test processing of keys with frequency specification."""
+        input_dict = {
+            "a_key__I0": "value0",
+            "b_key__I0F10": "alt0",
+            "c_key__I1": "value1",
+            "d_key__I1F10": "alt1",
+            "e_key__I2F10": "alt2",
+        }
+        output_dict = randomly_select_sequential_keys(input_dict)
+        stripped_input_keys = self.get_stripped_dict_keys(input_dict)
+        self.assertTrue(all(key in stripped_input_keys for key in output_dict))
+        self.assertEqual(len(output_dict), 3)
+
+    def test_pattern_ending_allowed(self):
+        """Test correct identification of keys with allowed extra characters."""
+        separator = "__"
+        input_dict = {
+            f"a_key{separator}extra{separator}I0": "value0",
+            f"b_key{separator}I1": "value1",
+            f"c_key{separator}I2{separator}extra": "value2",
+            f"d_key{separator}I3F10": "value3",
+            f"e_key{separator}I4F10{separator}extra": "value4",
+        }
+
+        expected_dict = {
+            f"a_key{separator}extra": "value0",
+            "b_key": "value1",
+            f"c_key{separator}extra": "value2",
+            "d_key": "value3",
+            f"e_key{separator}extra": "value4",
+        }
+
+        output_dict = randomly_select_sequential_keys(input_dict)
+        self.assertEqual(output_dict, expected_dict)
+
+    def test_pattern_ending_not_allowed(self):
+        """Test error handling of keys with disallowed extra characters."""
+        separator = "__"
+        input_dict = {
+            f"a_key{separator}I0": "value0",
+            f"b_key{separator}I1": "value1",
+            f"c_key{separator}I2_extra": "value2",
+            f"d_key{separator}I3F10": "value3",
+            f"e_key{separator}I4F10_extra": "value4",
+        }
+
+        with self.assertRaises(KeyError):
+            randomly_select_sequential_keys(input_dict)
 
 
 if __name__ == "__main__":

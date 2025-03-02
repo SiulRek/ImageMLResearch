@@ -7,7 +7,9 @@ from imlresearch.src.data_handling.tests import (
     split_dataset_test,
     tfrecord_serialization_test,
 )
-from imlresearch.src.data_handling.tests.data_handler_test import TestDataHandler
+from imlresearch.src.data_handling.tests.data_handler_test import (
+    TestDataHandler,
+)
 from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
 
 

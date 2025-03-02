@@ -26,14 +26,13 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-
         cls.source_file = os.path.join(cls.output_dir, "imlresearch.src.json")
         cls.dest_file = os.path.join(cls.output_dir, "dest.json")
 
     def setUp(self):
         super().setUp()
-
         source_data = {"key1": "value1", "key2": "value2", "key3": "value3"}
+
         with open(self.source_file, "w", encoding="utf-8") as file:
             json.dump(source_data, file)
 
@@ -47,7 +46,9 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
 
     def test_copy_json_exclude_entries(self):
         exclude_keys = ["key2"]
-        copy_json_exclude_entries(self.source_file, self.dest_file, exclude_keys)
+        copy_json_exclude_entries(
+            self.source_file, self.dest_file, exclude_keys
+        )
 
         with open(self.dest_file, "r", encoding="utf-8") as file:
             dest_data = json.load(file)
@@ -58,24 +59,30 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
 
     def test_copy_json_exclude_entries_empty_exclude_keys(self):
         exclude_keys = []
-        copy_json_exclude_entries(self.source_file, self.dest_file, exclude_keys)
+        copy_json_exclude_entries(
+            self.source_file, self.dest_file, exclude_keys
+        )
 
         with open(self.dest_file, "r", encoding="utf-8") as file:
             dest_data = json.load(file)
 
         with open(self.source_file, "r", encoding="utf-8") as file:
             source_data = json.load(file)
+
         self.assertEqual(dest_data, source_data)
 
     def test_copy_json_exclude_entries_not_existing_key(self):
         exclude_keys = ["key4"]
-        copy_json_exclude_entries(self.source_file, self.dest_file, exclude_keys)
+        copy_json_exclude_entries(
+            self.source_file, self.dest_file, exclude_keys
+        )
 
         with open(self.dest_file, "r", encoding="utf-8") as file:
             dest_data = json.load(file)
 
         with open(self.source_file, "r", encoding="utf-8") as file:
             source_data = json.load(file)
+
         self.assertEqual(dest_data, source_data)
 
 

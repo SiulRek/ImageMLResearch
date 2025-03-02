@@ -8,19 +8,25 @@ import warnings
 from imlresearch.src.experimenting.helpers.last_score_singleton import (
     LastScoreSingleton,
 )
-from imlresearch.src.research.attributes.attributes_utils import copy_public_properties
-from imlresearch.src.research.attributes.research_attributes import ResearchAttributes
+from imlresearch.src.research.attributes.attributes_utils import (
+    copy_public_properties,
+)
+from imlresearch.src.research.attributes.research_attributes import (
+    ResearchAttributes,
+)
 from imlresearch.src.utils import transform_figures_to_files
 from imlresearch.src.utils import get_datetime, get_duration
 
 
 class ResultsEmptyError(ValueError):
-    """ Raised when trial results are empty and the trial was never runned before. """
+    """ Raised when trial results are empty and the trial was never run before.
+    """
 
 
 def normalize_trial_name(trial_name):
-    """ Normalizes the trial name by converting it to lowercase and replacing spaces
-    with underscores. """
+    """ Normalizes the trial name by converting it to lowercase and replacing
+    spaces with underscores.
+    """
     return trial_name.replace(" ", "_").lower()
 
 
@@ -33,10 +39,7 @@ class Trial(AbstractContextManager):
             belongs to.
         - research_attributes (ResearchAttributes): Research attributes from
         - trial_assets (dict): Dictionary to store trial assets.
-        - keys: 'name', 'description', 'start_time', 'directory',
-        'hyperparameters', 'figures', 'evaluation_metrics',
-        'training_history' (optional).
-        - trial_directory (str): Directory where the trial assets is saved.
+        - trial_directory (str): Directory where the trial assets are saved.
         - experiment_trials (list): Reference to the list of trials in the
             experiment, used to append the trial assets.
     """
@@ -55,12 +58,8 @@ class Trial(AbstractContextManager):
         self._assert_required_experiment_attributes(experiment)
         self._init_research_attributes(experiment)
         self._init_trial_assets(experiment, name, hyperparameters)
-        self.experiment_trials = experiment.experiment_assets[
-            "trials"
-        ]  # Keep reference to track trials in experiment.
-        self.fetch_trial_results = (
-            experiment.get_results
-        )  # Keep reference to retrieve results from trial.
+        self.experiment_trials = experiment.experiment_assets["trials"]
+        self.fetch_trial_results = experiment.get_results
         self.logger = experiment.logger
         self._already_runned = self._check_if_already_runned()
 
@@ -101,7 +100,8 @@ class Trial(AbstractContextManager):
             - hyperparameters (dict): The hyperparameters for the trial.
         """
         trial_directory = self._make_trial_directory(
-            experiment.experiment_assets["directory"], normalize_trial_name(name)
+            experiment.experiment_assets["directory"],
+            normalize_trial_name(name),
         )
         self.trial_assets = {
             "name": name,
@@ -148,8 +148,6 @@ class Trial(AbstractContextManager):
         return self
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
-        # No need to log the exception as the exception logging is handled by
-        # the Experiment class.
         if exc_type is not None:
             raise
 
@@ -169,14 +167,12 @@ class Trial(AbstractContextManager):
         trial_info_json = os.path.join(
             self.trial_assets["directory"], "trial_info.json"
         )
-        # Remove history
         trial_assets = self.trial_assets.copy()
         try:
-            # Hyperparameters may not be JSON serializable.
             with open(trial_info_json, "w", encoding="utf-8") as f:
                 json.dump(trial_assets, f, indent=4)
         except TypeError:
-            msg = "Hyperparameters are not JSON serializable for trial"
+            msg = "Hyperparameters are not JSON serializable for trial "
             msg += f"{trial_assets['name']}. Saving None instead."
             warnings.warn(msg)
             self.logger.warning("Hyperparameters are not JSON serializable")
@@ -191,7 +187,7 @@ class Trial(AbstractContextManager):
         Args:
             - exc_type: The exception type if an exception occurred.
             - exc_value: The exception value if an exception occurred.
-            - traceback: The traceback if an exception occurred. C
+            - traceback: The traceback if an exception occurred.
         """
         duration = get_duration(self.trial_assets["start_time"])
         self.trial_assets["duration"] = duration
@@ -203,26 +199,22 @@ class Trial(AbstractContextManager):
         results_empty = all(value == {} for value in trial_results.values())
         trial_name = self.trial_assets["name"]
         if results_empty and self.already_runned:
-            msg = f"Skipping '{trial_name}'. Already run, no new\n"
-            msg += "results. Keeping old results."
+            msg = f"Skipping '{trial_name}'. Already run, no new results."
             warnings.warn(msg)
             self.logger.warning(f"Skipping {trial_name}")
-            # In case Hyperparameter study is done in the background, this trial
-            # is going to be skipped.
             LastScoreSingleton().set(None)
             return
 
         self.logger.info(f"Finalizing trial: {trial_name}")
 
         if results_empty:
-            msg = f"'{trial_name}' produced no results. Nothing\n"
-            msg += "saved."
+            msg = f"'{trial_name}' produced no results. Nothing saved."
             warnings.warn(msg)
             self.logger.warning(f"{trial_name} produced no results")
             return
+
         if self.already_runned:
-            msg = f"'{trial_name}' already run. Overwriting old\n"
-            msg += "results."
+            msg = f"'{trial_name}' already run. Overwriting old results."
             warnings.warn(msg)
             self.logger.warning(f"Overwriting old results for {trial_name}")
             self._remove_trial(trial_name)
@@ -236,14 +228,10 @@ class Trial(AbstractContextManager):
         training_history = copy(trial_results["training_history"])
         self.trial_assets["training_history"] = training_history
 
-        # Save the last validation loss to the LastScoreSingleton. This allows
-        # HParamsSuggester to access the last score and suggest hyperparameters
-        # based on the most recent trial's performance.
         loss = training_history.get("val_loss") or training_history.get("loss")
         last_score = loss[-1] if loss else None
         if last_score is not None:
             LastScoreSingleton().set(last_score)
 
         self._write_trial_assets()
-
         self.experiment_trials.append(self.trial_assets)

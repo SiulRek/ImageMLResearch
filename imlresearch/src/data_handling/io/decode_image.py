@@ -21,7 +21,9 @@ def decode_image(image_path):
     def decode_png(image):
         return tf.image.decode_png(image, channels=3)
 
-    is_jpeg = tf.strings.regex_full_match(image_path, r".*\.(jpeg|jpg|JPG|JPEG)$")
+    is_jpeg = tf.strings.regex_full_match(
+        image_path, r".*\.(jpeg|jpg|JPG|JPEG)$"
+    )
     is_png = tf.strings.regex_full_match(image_path, r".*\.(png|PNG)$")
 
     image = tf.cond(
