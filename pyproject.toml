@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "imlresearch"
-version = "0.0.2"
+version = "0.0.3"
 description = "Image Machine Learning Research Toolkit"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
@@ -14,7 +14,6 @@ authors = [
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
@@ -43,3 +42,25 @@ exclude = ["./demo", "./local", "demo*", "local*"]
 
 [tool.setuptools.package-data]
 "*" = ["*.png", "*.jpg"]
+
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle error
+    "F",  # Pyflakes
+    "I",  # isort
+]
+ignore = [
+    "I001",  # ignore sort of imports,
+]
+
+
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["E501", "F401"]  # lines too long; imported but unused
+
+[tool.ruff.lint.isort]
+force-single-line = true
