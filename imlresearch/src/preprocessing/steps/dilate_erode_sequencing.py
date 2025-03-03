@@ -22,7 +22,11 @@ class DilateErodeSequencer(StepBase):
     name = "Dilate Erode Sequencer"
 
     def __init__(
-        self, kernel_size=3, sequence="de", iterations=-1, erosion_probability=0.5
+        self,
+        kernel_size=3,
+        sequence="de",
+        iterations=-1,
+        erosion_probability=0.5,
     ):
         """
         Initializes the DilateErodeSequencer object. If iterations are

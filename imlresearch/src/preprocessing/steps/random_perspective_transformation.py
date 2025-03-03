@@ -62,7 +62,9 @@ class RandomPerspectiveTransformer(StepBase):
         )
 
         matrix = cv2.getPerspectiveTransform(src_points, dst_points)
-        warped_image = cv2.warpPerspective(image_nparray, matrix, (width, height))
+        warped_image = cv2.warpPerspective(
+            image_nparray, matrix, (width, height)
+        )
 
         image_tensor = tf.convert_to_tensor(
             warped_image, dtype=self.output_datatype

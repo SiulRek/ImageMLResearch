@@ -1,4 +1,3 @@
-import json
 import os
 import unittest
 from unittest.mock import patch
@@ -65,7 +64,7 @@ class ErrorStep(StepBase):
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
         processed_image = cv2.GaussianBlur(
-            image_nparray, oops_unknown_parameter_here="sorry"
+            image_nparray, ksize=(5, 5), sigmaX=2
         )
         return processed_image
 
@@ -90,7 +89,9 @@ class TestImagePreprocessor(BaseTestCase):
         cls.step_visualization_dir = os.path.join(
             cls.visualizations_dir, "image_preprocessor"
         )
-        if cls.visual_inspection and not os.path.isdir(cls.step_visualization_dir):
+        if cls.visual_inspection and not os.path.isdir(
+            cls.step_visualization_dir
+        ):
             os.makedirs(cls.step_visualization_dir)
 
     def setUp(self):

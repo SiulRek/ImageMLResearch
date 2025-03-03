@@ -114,7 +114,7 @@ class StepBase(ABC):
         variables. It considers if parameters should be randomized or
         extracted directly from `local_vars`.
         """
-        excluded_parameters = ["sel", "__class__"]
+        excluded_parameters = ["self", "__class__"]
         return {
             key: value
             for key, value in local_vars.items()

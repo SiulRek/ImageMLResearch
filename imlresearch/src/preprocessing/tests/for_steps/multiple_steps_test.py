@@ -137,4 +137,11 @@ def load_multiple_steps_tests():
         test_class = create_test_class_for_step(*step_data)
         test_suites.append(loader.loadTestsFromTestCase(test_class))
     test_suite = unittest.TestSuite(test_suites)  # Combine the suites
+
+    return test_suite
+
+if __name__ == "__main__":
+    """ Main execution block for running the loaded test suite. """
+    runner = unittest.TextTestRunner()
+    runner.run(load_multiple_steps_tests())
   

@@ -5,7 +5,9 @@ import tensorflow as tf
 from imlresearch.src.data_handling.manipulation.pack_images_and_labels import (
     pack_images_and_labels,
 )
-from imlresearch.src.data_handling.manipulation.unpack_dataset import unpack_dataset
+from imlresearch.src.data_handling.manipulation.unpack_dataset import (
+    unpack_dataset,
+)
 from imlresearch.src.preprocessing.definitions.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
@@ -99,16 +101,23 @@ class ImagePreprocessor:
     def _initialize_class_instance_serializer(self, step_class_mapping):
         """
         Checks if `step_class_mapping` is a dictionary and maps to subclasses
-        of `StepBase`. If successful, instantiates the `ClassInstancesSerializer`
-        for pipeline serialization and deserialization.
+        of `StepBase`. If successful, instantiates the
+        `ClassInstancesSerializer` for pipeline serialization and
+        deserialization.
         """
         if not isinstance(step_class_mapping, dict):
-            msg = f"'step_class_mapping' must be of type dict not {type(step_class_mapping)}."
+            msg = (
+                f"'step_class_mapping' must be of type dict not "
+                f"{type(step_class_mapping)}."
+            )
             raise TypeError(msg)
 
         for mapped_class in step_class_mapping.values():
             if not issubclass(mapped_class, StepBase):
-                msg = "At least one mapped class is not a class or subclass of StepBase."
+                msg = (
+                    "At least one mapped class is not a class or subclass "
+                    "of StepBase."
+                )
                 raise ValueError(msg)
         self._serializer = JSONInstancesSerializer(step_class_mapping)
 
@@ -198,7 +207,9 @@ class ImagePreprocessor:
             - json_path (str): File path from where the pipeline
                 configuration will be loaded.
         """
-        self._pipeline = self.serializer.get_randomized_instances_from_json(json_path)
+        self._pipeline = self.serializer.get_randomized_instances_from_json(
+            json_path
+        )
 
     def get_pipe_code_representation(self):
         """
@@ -211,8 +222,10 @@ class ImagePreprocessor:
         return get_pipeline_code_representation(self.pipeline)
 
     def _consume_tf_dataset(self, tf_dataset):
-        """ Consumes a TensorFlow dataset to force the execution of the computation
-        graph. """
+        """
+        Consumes a TensorFlow dataset to force the execution of the computation
+        graph.
+        """
         for _ in tf_dataset.take(1):
             pass
 
