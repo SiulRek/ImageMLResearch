@@ -31,7 +31,6 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             class_names=[f"Digit {i}" for i in range(10)],
         )
         self.data_handler = DataHandler()
-        # Synchronize only the research attributes for the data handler first.
         self.data_handler.synchronize_research_attributes(
             self.research_attributes
         )
@@ -87,7 +86,6 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             )
 
     def test_workflow(self):
-        # Dataset Handling
         dataset = self.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         self.data_handler.load_dataset(dataset)
         self.data_handler.split_dataset(
@@ -105,7 +103,6 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         self.data_handler.restore_datasets()
         self._assert_datasets_container(self.data_handler)
 
-        # Experimenting
         trial_definitions = [
             {"name": "Trial 1", "hyperparameters": {"units": 128}},
             {"name": "Trial 2", "hyperparameters": {"units": 256}},
@@ -123,14 +120,12 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                 "The experiment directory does not exist.",
             )
 
-            # Initial Visualization
             self.plotter.synchronize_research_attributes(experiment)
             self.plotter.plot_images()
             experiment.synchronize_research_attributes(self.plotter)
 
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
-                    # Training
                     self.assertTrue(
                         os.path.exists(trial.trial_assets["directory"]),
                         "The trial directory does not exist.",
@@ -153,7 +148,6 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                         "The trainer does not have evaluation metrics.",
                     )
 
-                    # Plotting
                     self.plotter.synchronize_research_attributes(self.trainer)
                     self._assert_outputs_container(self.plotter)
 
@@ -166,13 +160,10 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
                         "The trainer does not have a training history.",
                     )
 
-                    self.plotter.plot_training_history(
-                        title="Training History"
-                    )
+                    self.plotter.plot_training_history(title="Training History")
                     self.plotter.plot_confusion_matrix(title="Confusion Matrix")
                     experiment.synchronize_research_attributes(self.plotter)
 
-        # Assertions of experiment files existence
         self.assertEqual(
             len(experiment.experiment_assets["trials"]),
             i + 1,
@@ -223,7 +214,8 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         self.assertEqual(
             len(experiment_report_files),
             1,
-            f"Expected 1 report file, but found {len(experiment_report_files)}.",
+            "Expected 1 report file, but found "
+            f"{len(experiment_report_files)}.",
         )
 
 

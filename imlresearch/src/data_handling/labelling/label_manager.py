@@ -47,22 +47,12 @@ class LabelManager:
 
     @property
     def label_type(self):
-        """
-        Returns the label type of the manager.
-
-        Returns:
-            - str: The label type of the manager.
-        """
+        """Returns the label type of the manager."""
         return self._label_type
 
     @property
     def label_dtype(self):
-        """
-        Returns the data type of the label.
-
-        Returns:
-            - tf.DType: The data type of the label.
-        """
+        """Returns the data type of the label."""
         return self._label_dtype
 
     def _set_class_params(self, class_names):
@@ -87,7 +77,7 @@ class LabelManager:
 
     def _set_label_type_functions(self, label_type):
         """
-        Sets the label encoder and label to digit converter methods based on 
+        Sets the label encoder and label to digit converter methods based on
         the label type.
 
         Args:
@@ -106,7 +96,8 @@ class LabelManager:
             "binary": self._encode_binary_label,
             "multi_class": self._encode_multi_class_label,
             "multi_label": raise_exception_when_called(
-                NotImplementedError, "Multi-label encoding is not yet implemented." # LINE TOO LONG!
+                NotImplementedError,
+                "Multi-label encoding is not yet implemented.",
             ),
             "multi_class_multi_label": raise_exception_when_called(
                 NotImplementedError,
@@ -142,15 +133,14 @@ class LabelManager:
 
     def _encode_binary_label(self, label):
         """
-        Encodes a binary label into a format suitable for binary 
-        classification.
+        Encodes a binary label into a format suitable for binary classification.
 
         Args:
             - label (int): The label to encode. If string it should be a
                 class name.
 
-        Returns: - tf.Tensor: A TensorFlow constant of the label in binary
-        format.
+        Returns:
+            - tf.Tensor: A TensorFlow constant of the label in binary format.
         """
         label = self.get_index(label) if isinstance(label, str) else label
         try:

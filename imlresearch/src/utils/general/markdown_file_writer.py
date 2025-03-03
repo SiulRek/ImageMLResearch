@@ -12,7 +12,9 @@ def _stringify_elements(iterable):
         - The converted iterable with all elements as strings.
     """
     if isinstance(iterable, dict):
-        return {key: _stringify_elements(elem) for key, elem in iterable.items()}
+        return {
+            key: _stringify_elements(elem) for key, elem in iterable.items()
+        }
     if isinstance(iterable, list):
         return [_stringify_elements(elem) for elem in iterable]
     if isinstance(iterable, tuple):
@@ -93,15 +95,16 @@ class MarkdownFileWriter:
         """Writes a key-value pair in bullet point format to the file."""
         self.file_lines.append(f"*    *{key}*: {value}\n")
 
-    def write_key_value_table(self, table_data, key_label="Key",
-                              value_label="Value"):
+    def write_key_value_table(
+        self, table_data, key_label="Key", value_label="Value"
+    ):
         """
         Writes a table with key-value pairs.
 
         Args:
             - table_data (dict[str, (int|float|bool|str)]): Key-value pairs.
-            - key_label (str, optional): Label of the key column. Defaults to "Key".
-            - value_label (str, optional): Label of the value column. 
+            - key_label (str, optional): Label of the key column.
+            - value_label (str, optional): Label of the value column.
         """
         if not table_data:
             return
@@ -114,7 +117,9 @@ class MarkdownFileWriter:
         value_header = f"{value_label}".ljust(max_elem_len)
 
         self.file_lines.append(f"| {key_header} | {value_header} |")
-        self.file_lines.append(f"| {'-' * max_elem_len} | {'-' * max_elem_len} |")
+        self.file_lines.append(
+            f"| {'-' * max_elem_len} | {'-' * max_elem_len} |"
+        )
 
         for key, value in table_data.items():
             padded_key = f"{key}".ljust(max_elem_len)

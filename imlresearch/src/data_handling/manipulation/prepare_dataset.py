@@ -16,9 +16,9 @@ def _shapes_are_known(dataset):
         - bool: True if all shapes are known, False otherwise.
     """
     if isinstance(dataset.element_spec, tuple):
-        shapes_known = all([element.shape for element in dataset.element_spec])
+        shapes_known = all(element.shape is not None for element in dataset.element_spec)
     else:
-        shapes_known = bool(dataset.element_spec.shape)
+        shapes_known = dataset.element_spec.shape is not None
     return shapes_known
 
 
@@ -74,14 +74,14 @@ def prepare_dataset(
         try:
             # Shuffling automatically restores the dataset shape as well
             dataset = shuffle_dataset(dataset, random_seed=shuffle_seed)
-        except ValueError:
-            msg += "Shuffling requires a dataset with a rectangular shape."
-            raise ValueError(msg)
+        except ValueError as e:
+            msg = "Shuffling requires a dataset with a rectangular shape."
+            raise ValueError(msg) from e
     # TODO: Make a test method for this
     elif not _shapes_are_known(dataset):
         try:
             dataset = _restore_dataset_shape(dataset)
-        except ValueError:  # dataset might be not rectangular sequence
+        except ValueError:  # dataset might be not a rectangular sequence
             pass
 
     if batch_size is not None:

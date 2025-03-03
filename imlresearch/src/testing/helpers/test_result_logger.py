@@ -100,9 +100,7 @@ class TestResultLogger:
             log_message += f"\nMessage: {message}"
             self.logger.error(log_message)
             if not self.error_logger_logged_title and self.title:
-                self.error_logger.info(
-                    "-" * 14 + f"{self.title}" + "-" * 45
-                )
+                self.error_logger.info(f"{'-' * 14}{self.title}{'-' * 45}")
                 self.error_logger_logged_title = True
             self.error_logger.error(log_message)
         else:
@@ -135,34 +133,3 @@ class TestResultLogger:
                 self._log_outcome("passed", test_method_name)
         except Exception as exc:
             print(f"Logging error: {exc}")  # Logger should not interrupt testing
-
-
-# Example Test Suite to try out the logger
-class MyTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.logger = TestResultLogger()
-        cls.logger.log_title("This is a Title")
-
-    def tearDown(self):
-        """Log test outcome after each test."""
-        self.logger.log_test_outcome(
-            self._outcome.result, self._testMethodName
-        )
-
-    @classmethod
-    def tearDownClass(cls):
-        return super().tearDownClass()
-
-    def test_example_pass(self):
-        self.assertEqual(1, 1)
-
-    def test_example_fail(self):
-        self.assertEqual(1, 2)
-
-    def test_example_error(self):
-        raise ValueError()
-
-
-if __name__ == "__main__":
-    unittest.main()

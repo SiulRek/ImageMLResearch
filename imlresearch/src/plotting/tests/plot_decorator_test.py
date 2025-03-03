@@ -14,7 +14,9 @@ class TestPlotDecorator(PlottingTestCase):
         super().setUp()
         self.plotter = Plotter()
         self.plotter._figures = {}
-        self.plotter._add_figure = MagicMock(side_effect=self.plotter._add_figure)
+        self.plotter._add_figure = MagicMock(
+            side_effect=self.plotter._add_figure
+        )
 
     def test_plot_decorator_with_default_title_and_show(self):
         """ Test plot_decorator with default title and show parameters. """
@@ -75,8 +77,6 @@ class TestPlotDecorator(PlottingTestCase):
         def sample_plot_func(self):
             return "Not a figure"
 
-        # Mock the _add_figure method to raise ValueError if the figure is not
-        # valid
         self.plotter._add_figure = MagicMock(
             side_effect=ValueError(
                 "The figure must be an instance of matplotlib.pyplot.Figure."

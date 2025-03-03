@@ -34,9 +34,9 @@ class ImagePlotterBase(ABC):
         Args:
             - fig: The figure object.
             - title (str): Plot title.
-            - y_title (float, optional): Vertical title position. Defaults to 0.95.
-            - wspace (float, optional): Width spacing. Defaults to 0.01.
-            - hspace (float, optional): Height spacing. Defaults to 0.01.
+            - y_title (float, optional): Vertical title position.
+            - wspace (float, optional): Width spacing.
+            - hspace (float, optional): Height spacing.
         """
         fig.suptitle(title, fontsize=20, fontweight="bold", y=y_title)
         plt.subplots_adjust(wspace=wspace, hspace=hspace)
@@ -83,7 +83,7 @@ class ImagePlotter(ImagePlotterBase):
             - original_tf_dataset: TensorFlow dataset with original images.
             - processed_tf_dataset: TensorFlow dataset with processed images.
             - index (int): Index number of the images to compare.
-            - title (str, optional): Plot title. Defaults to 'Compare Images'.
+            - title (str, optional): Plot title.
         """
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
         axes = axes.ravel()

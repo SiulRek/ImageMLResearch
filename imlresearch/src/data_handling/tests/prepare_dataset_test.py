@@ -20,7 +20,9 @@ class TestPrepareDataset(BaseTestCase):
         enhanced = prepare_dataset(self.dataset, shuffle_seed=42)
         enhanced_first_element = next(iter(enhanced)).numpy()
         self.assertFalse(
-            tf.reduce_all(tf.equal(original_first_element, enhanced_first_element)), # LINE TOO LONG!
+            tf.reduce_all(
+                tf.equal(original_first_element, enhanced_first_element)
+            ),
             "Shuffling did not change the order of the dataset.",
         )
 

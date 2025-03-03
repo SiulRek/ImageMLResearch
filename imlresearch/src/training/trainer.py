@@ -109,9 +109,13 @@ class Trainer(ResearchAttributes):
         test_dataset = self._datasets_container.get("test_dataset", None)
 
         if train_dataset is None and complete_dataset:
-            raise ValueError("No train dataset provided. Probably no split done.")
+            raise ValueError(
+                "No train dataset provided. Probably no split done."
+            )  # Fixed line length
         if train_dataset is None:
-            raise ValueError("No train dataset provided. Consider loading a dataset.")
+            raise ValueError(
+                "No train dataset provided. Consider loading a dataset."
+            )  # Fixed line length
 
         if val_dataset:
             kwargs["validation_data"] = val_dataset

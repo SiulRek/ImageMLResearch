@@ -17,7 +17,9 @@ def _sanitize_histories(histories):
     sanitized_histories = {}
     known_metrics = list(next(iter(histories.values())).keys())
     for name, history in histories.items():
-        sanitized_history = {metric: history.get(metric, []) for metric in known_metrics}
+        sanitized_history = {
+            metric: history.get(metric, []) for metric in known_metrics
+        }
         for metric in history:
             if metric not in known_metrics:
                 sanitized_history[metric] = history[metric]

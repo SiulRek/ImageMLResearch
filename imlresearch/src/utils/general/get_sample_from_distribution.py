@@ -5,9 +5,9 @@ def get_sample_from_distribution(distribution_data):
     """
     Generates a single random sample from a specified probability distribution.
 
-    This function dynamically selects a distribution function based on the 
-    input dictionary 'distribution_data', which should contain the key 
-    'distribution' specifying the type of distribution and additional 
+    This function dynamically selects a distribution function based on the
+    input dictionary 'distribution_data', which should contain the key
+    'distribution' specifying the type of distribution and additional
     parameters required by the selected distribution.
 
     Args:
@@ -34,16 +34,13 @@ def get_sample_from_distribution(distribution_data):
         msg = "Missing 'distribution' key in 'distribution_data'."
         raise KeyError(msg)
 
-    dist_function = distribution_map.get(
-        distribution_data["distribution"].lower()
-    )
+    dist_name = distribution_data["distribution"].lower()
+    dist_function = distribution_map.get(dist_name)
     if not dist_function:
-        msg = f"Distribution {distribution_data['distribution']} is not supported."
-        raise ValueError(msg)
+        msg = f"Distribution {dist_name} is not supported."
+        raise ValueError(msg)  # Fixed line length issue
 
-    args = {
-        k: v for k, v in distribution_data.items() if k != "distribution"
-    }
+    args = {k: v for k, v in distribution_data.items() if k != "distribution"}
     args["size"] = 1
 
     try:

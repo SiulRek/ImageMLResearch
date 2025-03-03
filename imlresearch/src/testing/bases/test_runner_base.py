@@ -132,5 +132,11 @@ class TestRunnerBase(ABC):
         print(generate_test_results_message(test_result))
         print()
         print(f"Test results logged to: {self.log_file}")
-        print(f"Test errors logged to: {self.log_file.replace('.log', '_errors.log')}")
-        print(f"Simple test results logged to: {self.log_file.replace('.log', '_simple.log')}")
+        print(
+            f"Test errors logged to: "
+            f"{self.log_file.replace('.log', '_errors.log')}"
+        )
+        print(
+            f"Simple test results logged to: "
+            f"{self.log_file.replace('.log', '_simple.log')}"
+        )

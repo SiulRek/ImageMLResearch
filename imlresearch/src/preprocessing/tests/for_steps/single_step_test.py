@@ -11,14 +11,14 @@ Note:
         the need for customized modifications in test cases to effectively
         challenge and validate the diversity of image preprocessing steps.
 """
-import matplotlib
-matplotlib.use("Agg")  # Use a backend that doesn’t rely on Tkinter
 
 import json
 import os
 import unittest
 from unittest.mock import patch
 
+import matplotlib
+matplotlib.use("Agg")  # Use a backend that doesn’t rely on Tkinter
 import tensorflow as tf
 
 from imlresearch.src.preprocessing.definitions.step_class_mapping import STEP_CLASS_MAPPING

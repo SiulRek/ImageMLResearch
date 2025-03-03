@@ -159,7 +159,9 @@ class TestTFRecordSerialization(BaseTestCase):
         deserialized_dataset = deserialize_dataset_from_tfrecord(tfrecord_path)
 
         # Add a label for comparison
-        add_zero_label = lambda x: (x, tf.constant(0))
+        def add_zero_label(x):
+            return x, tf.constant(0)
+
         deserialized_dataset = deserialized_dataset.map(add_zero_label)
         labeled_dataset = unlabeled_dataset.map(add_zero_label)
         self._compare_datasets(labeled_dataset, deserialized_dataset)

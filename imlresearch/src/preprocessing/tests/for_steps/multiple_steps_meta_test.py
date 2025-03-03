@@ -92,7 +92,10 @@ class TestConditionalSkipping(unittest.TestCase):
         skipped_test_names = [
             test[0].id().split(".")[-1] for test in result.skipped
         ]
-        self.assertNotIn("test_processed_image_visualization", skipped_test_names)    # ISSUE E501 Line too long (82 > 80)
+        self.assertNotIn(
+            "test_processed_image_visualization",
+            skipped_test_names,
+        )  # Fixed line length issue
         TestClass = create_test_class_for_step(ExampleStep, {})
 
 

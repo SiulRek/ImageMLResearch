@@ -32,8 +32,7 @@ class TestPlotMultiClassClassificationResults(PlottingTestCase):
         cls.y_pred = np.random.rand(cls.y_true.shape[0], cls.y_true.shape[1])
 
     def test_plot_results_without_prediction_bar(self):
-        """Test plotting multi-class classification results without prediction
-        bars."""
+        """Test plotting multi-class classification results without prediction bars."""
         fig = plot_multi_class_classification_results(
             x=self.images,
             y_true=self.y_true,
@@ -45,8 +44,7 @@ class TestPlotMultiClassClassificationResults(PlottingTestCase):
         self._save_and_close_figure(fig, "without_prediction_bar.png")
 
     def test_plot_results_with_prediction_bar(self):
-        """Test plotting multi-class classification results with prediction
-        bars."""
+        """Test plotting multi-class classification results with prediction bars."""
         fig = plot_multi_class_classification_results(
             x=self.images,
             y_true=self.y_true,

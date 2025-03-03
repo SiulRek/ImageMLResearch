@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 from imlresearch.src.plotting.functions.plot_images import plot_images
 from imlresearch.src.plotting.functions.plot_model_summary import (
-    plot_model_summary
+    plot_model_summary,
 )
 from imlresearch.src.plotting.functions.plot_text import plot_text
 from imlresearch.src.plotting.functions.plot_training_history import (
@@ -33,8 +33,10 @@ def plot_decorator(default_title, default_show):
             fig = plot_func(self, *args, **kwargs)
 
             if not isinstance(fig, plt.Figure):
-                msg = "The plot function must return a "
-                msg += "matplotlib.pyplot.Figure."
+                msg = (
+                    "The plot function must return a "
+                    "matplotlib.pyplot.Figure."
+                )
                 raise ValueError(msg)
 
             fig.subplots_adjust(top=0.90)
@@ -152,7 +154,7 @@ class Plotter(DataRetriever):
         Plots the training history of the model.
 
         General plot keyword arguments:
-            - title: Optional title for the plot. Defaults to "Training History".
+            - title: Optional title for the plot.
             - show: Whether to show the plot. Defaults to False.
 
         Returns:

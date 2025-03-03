@@ -97,7 +97,9 @@ class ResearchAttributes:
             - research_attributes (ResearchAttributes): The instance to sync.
         """
         if not isinstance(research_attributes, ResearchAttributes):
-            raise ValueError("The input instance must be of type ResearchAttributes.")
+            raise ValueError(
+                "The input instance must be of type ResearchAttributes."
+            )
         copy_public_properties(research_attributes, self)
 
     def reset_research_attributes(self, except_datasets=False):
