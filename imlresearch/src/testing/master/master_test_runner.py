@@ -14,7 +14,7 @@ from imlresearch.src.experimenting.tests.test_runner import (
     ExperimentingTestRunner,
 )
 from imlresearch.src.plotting.tests.test_runner import PlottingTestRunner
-from imlresearch.src.preprocessing.tests.test_runner import PreprocessingTestRunner
+from imlresearch.src.preprocessing.tests.test_runner import PreprocessingTestRunner    # noqa: E501
 from imlresearch.src.research.tests.test_runner import ResearchTestRunner
 from imlresearch.src.testing.helpers.generate_test_results_message import (
     generate_test_results_message,

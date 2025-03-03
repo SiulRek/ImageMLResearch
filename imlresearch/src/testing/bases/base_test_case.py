@@ -114,9 +114,8 @@ class BaseTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """
-        Class-level setup: creates necessary directories and initializes logging.
-        """
+        """Class-level setup: creates necessary directories and initializes
+        logging."""
         cls.root_dir = os.path.normpath(ROOT_DIR)
         cls.data_dir = DATA_DIR
         cls.output_dir = cls._compute_output_dir()
@@ -158,9 +157,8 @@ class BaseTestCase(unittest.TestCase):
         return result
 
     def tearDown(self):
-        """
-        Instance-level teardown: logs test outcome and removes the temp directory.
-        """
+        """Instance-level teardown: logs test outcome and removes the temp 
+        directory."""
         if os.path.exists(self.temp_dir) and self.remove_temp_dir:
             shutil.rmtree(self.temp_dir)
 
@@ -186,8 +184,11 @@ class BaseTestCase(unittest.TestCase):
 
         Args:
             - sample_num (int, optional): Number of samples to load.
+                Defaults to None.
             - labeled (bool, optional): Whether to return dataset with labels.
-            - binary (bool, optional): Whether labels should be in binary format.
+                Default is False.
+            - binary (bool, optional): Whether labels should be in binary
+                format. Default is False.
 
         Returns:
             - tf.data.Dataset: The MNIST digits dataset.
@@ -221,7 +222,8 @@ class BaseTestCase(unittest.TestCase):
             - tuple: Two dictionaries containing file paths and labels.
         """
         dataset_dir = os.path.join(cls.data_dir, "mnist_digits")
-        jpg_dict, png_dict = {"path": [], "label": []}, {"path": [], "label": []}
+        jpg_dict = {"path": [], "label": []}
+        png_dict = {"path": [], "label": []}
 
         for file in os.listdir(dataset_dir):
             label = file.split(".")[0].split("_")[-1]

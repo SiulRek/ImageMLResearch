@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from imlresearch.src.preprocessing.helpers.randomly_select_sequential_keys import (
+from imlresearch.src.preprocessing.helpers.randomly_select_sequential_keys import (    # noqa: E501
     randomly_select_sequential_keys,
     is_sequential,
 )

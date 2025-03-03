@@ -12,7 +12,9 @@ class TestParseAndRepeat(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.test_data_directory = os.path.join(cls.temp_dir, "parse_and_repeat_tests")
+        cls.test_data_directory = os.path.join(
+            cls.temp_dir, "parse_and_repeat_tests"
+        )
         os.makedirs(cls.test_data_directory, exist_ok=True)
 
     def test_basic_functionality(self):
@@ -23,7 +25,9 @@ class TestParseAndRepeat(BaseTestCase):
 
     def test_nested_lists(self):
         self.assertEqual(
-            parse_and_repeat("[[1,2,'3.22']]*2 + [[3,True,1.0]]*3 + [[4,False,2.0]]"),
+            parse_and_repeat(
+                "[[1,2,'3.22']]*2 + [[3,True,1.0]]*3 + [[4,False,2.0]]"
+            ),
             [
                 [1, 2, "3.22"],
                 [1, 2, "3.22"],
@@ -33,20 +37,28 @@ class TestParseAndRepeat(BaseTestCase):
                 [4, False, 2.0],
             ],
         )
-
+        self.assertEqual(
+            parse_and_repeat("[5] + [6] + ['test']"), [5, 6, "test"]
+        )
     def test_no_repetition(self):
-        self.assertEqual(parse_and_repeat("[5] + [6] + ['test']"), [5, 6, "test"])
+        self.assertEqual(
+            parse_and_repeat("[5] + [6] + ['test']"), [5, 6, "test"]
+        )
 
     def test_empty_list(self):
         self.assertEqual(parse_and_repeat("[]"), [])
 
     def test_single_element(self):
         self.assertEqual(parse_and_repeat("[7]"), [7])
-        self.assertEqual(parse_and_repeat("[7]*1"), [7])
+        parse_and_repeat(
+                "[''] + ['World', 'True']*2 + [['World', 'True']]*2"
+            ),
 
     def test_string_representation(self):
         self.assertEqual(
-            parse_and_repeat("[''] + ['World', 'True']*2 + [['World', 'True']]*2"),
+            parse_and_repeat(
+                "[''] + ['World', 'True']*2 + [['World', 'True']]*2"
+            ),
             [
                 "",
                 "World",

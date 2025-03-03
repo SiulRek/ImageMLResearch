@@ -161,7 +161,9 @@ class Experiment(AbstractContextManager, ResearchAttributes):
             raise
 
     def _sort_trials(self):
-        """ Sorts the trials by the specified sort metric in descending order. """
+        """
+        Sorts the trials by the specified sort metric in descending order.
+        """
         if len(self.experiment_assets["trials"]) <= 1:
             return
 

@@ -8,7 +8,7 @@ from imlresearch.src.experimenting.tests.hparams_suggester_test import (
 from imlresearch.src.experimenting.tests.last_score_singleton_test import (
     TestLastScoreSingleton,
 )
-from imlresearch.src.experimenting.tests.load_experiment_definition_test import (
+from imlresearch.src.experimenting.tests.load_experiment_definition_test import (    # noqa: E501
     TestLoadExperimentDefinition,
 )
 from imlresearch.src.experimenting.tests.trial_test import TestTrial

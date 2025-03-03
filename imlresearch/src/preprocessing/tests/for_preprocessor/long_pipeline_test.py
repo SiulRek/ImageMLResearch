@@ -14,7 +14,7 @@ import unittest
 
 import tensorflow as tf
 
-from imlresearch.src.preprocessing.definitions.step_class_mapping import STEP_CLASS_MAPPING
+from imlresearch.src.preprocessing.definitions.step_class_mapping import STEP_CLASS_MAPPING    # noqa: E501
 from imlresearch.src.preprocessing.helpers.copy_json_exclude_entries import (
     copy_json_exclude_entries,
 )
@@ -35,8 +35,8 @@ class RGBToGrayscale(StepBase):
     name = "RGB To Grayscale"
 
     def __init__(self):
-        """ Initializes the RGBToGrayscale object that can be integrated in an image
-        preprocessing pipeline. """
+        """ Initializes the RGBToGrayscale object that can be integrated in an
+        image preprocessing pipeline. """
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
@@ -110,10 +110,13 @@ class TestLongPipeline(BaseTestCase):
     def _verify_image_shapes(
         self, processed_dataset, original_dataset, color_channel_expected
     ):
-        for original_image, processed_image in zip(original_dataset, processed_dataset):
+        for original_image, processed_image in zip(
+            original_dataset, processed_dataset
+        ):
             original_image = tf.cast(original_image, processed_image.dtype)
             if original_image.shape == processed_image.shape:
-                if tf.reduce_all(tf.math.equal(original_image, processed_image)):
+                equals = tf.math.equal(original_image, processed_image)
+                if tf.reduce_all(equals):
                     return False
             if (
                 processed_image.shape[0] != processed_image.shape[1]
@@ -128,7 +131,8 @@ class TestLongPipeline(BaseTestCase):
             processed_dataset = self.preprocessor.process(self.image_dataset)
         except Exception as e:
             raise BrokenPipeError(
-                "An exception occurred while processing the dataset. This is the problematic pipeline: \n"
+                "An exception occurred while processing the dataset. This is "
+                "the problematic pipeline: \n"
                 + self.preprocessor.get_pipe_code_representation()
             ) from e
 
@@ -136,7 +140,8 @@ class TestLongPipeline(BaseTestCase):
             processed_dataset, self.image_dataset, color_channel_expected=3
         ):
             message = (
-                "The processed dataset has unexpected shapes. This is the problematic pipeline: \n"
+                "The processed dataset has unexpected shapes. This is the "
+                "problematic pipeline: \n"
                 + self.preprocessor.get_pipe_code_representation()
             )
             self.fail(message)
@@ -146,7 +151,8 @@ class TestLongPipeline(BaseTestCase):
             grayscaled_dataset, self.image_dataset, color_channel_expected=1
         ):
             message = (
-                "The processed dataset could not be converted to grayscale correctly. This is the problematic pipeline: \n"
+                "The processed dataset could not be converted to grayscale "
+                "correctly. This is the problematic pipeline: \n"
                 + self.preprocessor.get_pipe_code_representation()
             )
             self.fail(message)
@@ -165,7 +171,9 @@ def load_long_pipeline_tests(n=N):
     test_suites = []
     for i in range(1, n + 1):
         test_class_name = f"{TestLongPipeline.__name__}_{i}"
-        test_class = type(test_class_name, (TestLongPipeline,), {"pipeline_id": i})
+        test_class = type(
+            test_class_name, (TestLongPipeline,), {"pipeline_id": i}
+        )
         test_suite = unittest.TestLoader().loadTestsFromTestCase(test_class)
         test_suites.append(test_suite)
 

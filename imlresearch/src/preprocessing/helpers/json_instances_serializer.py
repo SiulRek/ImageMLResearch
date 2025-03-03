@@ -4,8 +4,8 @@ import random
 import re
 import warnings
 
-from imlresearch.src.preprocessing.helpers.parse_and_repeat import parse_and_repeat
-from imlresearch.src.preprocessing.helpers.randomly_select_sequential_keys import (
+from imlresearch.src.preprocessing.helpers.parse_and_repeat import parse_and_repeat    # noqa: E501
+from imlresearch.src.preprocessing.helpers.randomly_select_sequential_keys import (    # noqa: E501
     randomly_select_sequential_keys,
 )
 from imlresearch.src.preprocessing.helpers.recursive_type_conversion import (
@@ -102,7 +102,8 @@ class JSONInstancesSerializer:
             return [self._serialize_to_json_value(item) for item in obj]
         if type(obj) is dict:
             return {
-                key: self._serialize_to_json_value(value) for key, value in obj.items()
+                key: self._serialize_to_json_value(value)
+                for key, value in obj.items()
             }
         elif type(obj) in {int, float, str, bool}:
             return obj
@@ -125,15 +126,19 @@ class JSONInstancesSerializer:
         """
         for class_name, mapped_class in self.instance_mapping.items():
             if isinstance(instance, mapped_class):
-                class_name = self._generate_unique_key_name(class_name, configurations)
+                class_name = self._generate_unique_key_name(
+                    class_name, configurations
+                )
                 if not hasattr(instance, "parameters"):
-                    msg = "Mapped class: "
-                    msg += f"'{mapped_class}' does not have the attribute 'parameters'."
+                    msg = (
+                        f"Mapped class: '{mapped_class}' does not have the "
+                        "attribute 'parameters'."
+                    )
                     raise AttributeError(msg)
                 if not isinstance(instance.parameters, dict):
-                    msg = "Mapped class: "
-                    msg += (
-                        f"'{mapped_class}' attribute 'parameters' is not of type dict."
+                    msg = (
+                        f"Mapped class: '{mapped_class}' attribute 'parameters'"
+                        " is not of type dict."
                     )
                     raise AttributeError(msg)
                 configurations[class_name] = instance.parameters
@@ -232,20 +237,24 @@ class JSONInstancesSerializer:
             elif isinstance(param_val, list):
                 deserialized_parameters[param_name] = random.choice(param_val)
             elif isinstance(param_val, dict):
-                deserialized_parameters[param_name] = get_sample_from_distribution(
-                    param_val
+                deserialized_parameters[param_name] = (
+                    get_sample_from_distribution(param_val)
                 )
             elif isinstance(param_val, str):
                 param_range = parse_and_repeat(param_val)
                 deserialized_parameters[param_name] = random.choice(param_range)
             else:
                 msg = f"The value of JSON parameter '{param_name}'"
-                msg += f" must be of type dict, list or str not {type(param_val)}."
+                msg += (
+                    f" must be of type dict, list or str not {type(param_val)}."
+                )
                 raise ValueError(msg)
 
         return deserialized_parameters
 
-    def _extract_arguments(self, json_data, class_name, mapped_class, randomized):
+    def _extract_arguments(
+        self, json_data, class_name, mapped_class, randomized
+    ):
         """
         Extracts and converts initialization parameters for a class instance
         from JSON data.
@@ -266,23 +275,28 @@ class JSONInstancesSerializer:
         """
 
         json_parameters = json_data.get(class_name)
-        arguments = self._deserialize_json_parameters(json_parameters, randomized)
+        arguments = self._deserialize_json_parameters(
+            json_parameters, randomized
+        )
 
         if hasattr(mapped_class, "arguments_datatype"):
 
             if type(mapped_class.arguments_datatype) is not dict:
                 msg = (
-                    f"The class attribute 'arguments_datatype' of class {mapped_class}"
+                    f"The class attribute 'arguments_datatype' of class "
+                    f"{mapped_class} must be of type dict. This allows to "
+                    "create a class instance."
                 )
-                msg += " must be of type dict. This allows to create a class instance."
                 raise AttributeError(msg)
 
             arguments_datatype = mapped_class.arguments_datatype
             arguments = recursive_type_conversion(arguments, arguments_datatype)
         else:
-            msg = "Class Instance Serializer Warning: "
-            msg += f"class '{mapped_class}' has no attribute 'arguments_datatype',"
-            msg += " this can lead to faulty instanciation."
+            msg = (
+            "Class Instance Serializer Warning: class "
+            f"'{mapped_class}' has no attribute 'arguments_datatype', "
+            "this can lead to faulty instanciation."
+            )
             warnings.warn(msg)
 
         return arguments
@@ -303,11 +317,14 @@ class JSONInstancesSerializer:
             - object: An instance of the class specified by 'class_name'.
         """
 
-        class_name_parts = class_name.split(JSONInstancesSerializer.KEY_SEPARATOR)
+        class_name_parts = class_name.split(
+            JSONInstancesSerializer.KEY_SEPARATOR
+        )
 
         if class_name_parts[0] not in self.instance_mapping.keys():
             raise KeyError(
-                f"Class Name '{class_name_parts[0]}' from json file has no instance mapping."
+            f"Class Name '{class_name_parts[0]}' from json file has no "
+            "instance mapping."
             )
         mapped_class = self.instance_mapping[class_name_parts[0]]
 
@@ -318,13 +335,19 @@ class JSONInstancesSerializer:
         try:
             return mapped_class(**arguments)
         except ValueError as e:
-            msg = f"Incorrect instanciation of class {mapped_class}"
-            msg += ", probably due to arguments mismatch with JSON file or incorrect mapping."
+            msg = (
+            f"Incorrect instanciation of class {mapped_class}, "
+            "probably due to arguments mismatch with JSON file or "
+            "incorrect mapping."
+            )
             raise ValueError(msg) from e
         except TypeError as e:
-            msg = f"Incorrect instanciation of class {mapped_class}"
-            msg += ", probably due to arguments mismatch with JSON file or incorrect mapping."
-            raise ValueError(msg) from e
+            msg = (
+            f"Incorrect instanciation of class {mapped_class}, "
+            "probably due to arguments mismatch with JSON file or "
+            "incorrect mapping."
+            )
+            raise TypeError(msg) from e
 
     def _build_instances_from_json(self, json_path, randomized):
         """
@@ -350,11 +373,16 @@ class JSONInstancesSerializer:
                 )
                 class_names = list(json_data.keys())
         except FileNotFoundError as e:
-            msg = "Specified JSON file storing the instance list to be loaded was not found: "
-            msg += f"{json_path}."
+            msg = (
+                "Specified JSON file storing the instance list to be loaded "
+                f"was not found: {json_path}."
+            )
             raise FileNotFoundError(msg) from e
         except KeyError as e:
-            msg = "The JSON file storing the instance list to be loaded has faulty key names."
+            msg = (
+                "The JSON file storing the instance list to be loaded has "
+                "faulty key names."
+            )
             raise KeyError(msg) from e
 
         instance_list = []

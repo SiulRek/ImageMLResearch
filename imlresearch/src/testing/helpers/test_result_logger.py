@@ -36,7 +36,8 @@ class TestResultLogger:
         self.log_file_errors = log_file.replace(".log", "_errors.log")
         self.setup_logger()
         self.title = ""  # Will be set through log_title method.
-        self.error_logger_logged_title = False  # Logs title only if an error occurs.
+        self.error_logger_logged_title = False  # Logs title only if an error
+        # or failure occurs.
 
     def _setup_file_handler(self, logger, file_path, level=logging.INFO):
         """
@@ -103,7 +104,9 @@ class TestResultLogger:
                 self.error_logger_logged_title = True
             self.error_logger.error(log_message)
         else:
-            raise ValueError(f"Outcome Type '{outcome_type}' is not recognized.")
+            raise ValueError(
+                f"Outcome Type '{outcome_type}' is not recognized."
+            )
 
     def log_test_outcome(self, result, test_method_name):
         """
@@ -131,4 +134,5 @@ class TestResultLogger:
             if success:
                 self._log_outcome("passed", test_method_name)
         except Exception as exc:
-            print(f"Logging error: {exc}")  # Logger should not interrupt testing
+            # Logger should not interrupt testing.
+            print(f"Logging error: {exc}")

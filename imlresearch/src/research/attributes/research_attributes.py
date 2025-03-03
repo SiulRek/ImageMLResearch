@@ -65,7 +65,8 @@ class ResearchAttributes:
 
     @property
     def outputs_container(self):
-        """Dictionary containing outputs in form of Tuple -> (y_true, y_pred)."""
+        """Dictionary containing outputs in form of 
+        Tuple -> (y_true, y_pred)."""
         return self._outputs_container
 
     @property

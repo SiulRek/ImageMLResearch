@@ -11,7 +11,7 @@ from imlresearch.src.data_handling.manipulation.unpack_dataset import (
 from imlresearch.src.preprocessing.definitions.step_class_mapping import (
     STEP_CLASS_MAPPING,
 )
-from imlresearch.src.preprocessing.helpers.get_pipeline_code_representation import (
+from imlresearch.src.preprocessing.helpers.get_pipeline_code_representation import (    # noqa: E501
     get_pipeline_code_representation,
 )
 from imlresearch.src.preprocessing.helpers.json_instances_serializer import (

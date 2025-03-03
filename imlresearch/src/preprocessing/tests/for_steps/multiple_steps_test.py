@@ -87,11 +87,13 @@ def create_test_class_for_step(
 
 
 steps_data = [
-    (steps.AdaptiveHistogramEqualizer, {"clip_limit": 1.0, "tile_gridsize": (5, 5)}),
+    (steps.AdaptiveHistogramEqualizer, 
+        {"clip_limit": 1.0, "tile_gridsize": (5, 5)}),
     (steps.GlobalHistogramEqualizer, {}),
     (steps.GaussianBlurFilter, {"kernel_size": (5, 5), "sigma": 2.0}),
     (steps.MedianBlurFilter, {"kernel_size": 5}),
-    (steps.BilateralFilter, {"diameter": 9, "sigma_color": 75, "sigma_space": 75}),
+    (steps.BilateralFilter, 
+        {"diameter": 9, "sigma_color": 75, "sigma_space": 75}),
     (steps.AverageBlurFilter, {"kernel_size": (8, 8)}),
     (steps.BinaryThresholder, {"thresh": 128, "max_val": 255}),
     (steps.OstuThresholder, {"thresh": 0, "max_val": 255}),

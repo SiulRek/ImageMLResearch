@@ -55,7 +55,9 @@ class RGBToGrayscale(StepBase):
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         image_grayscale_tensor = tf.image.rgb_to_grayscale(image_tensor)
-        image_grayscale_tensor = correct_image_tensor_shape(image_grayscale_tensor)
+        image_grayscale_tensor = correct_image_tensor_shape(
+            image_grayscale_tensor
+        )
         return image_grayscale_tensor
 
 
@@ -74,7 +76,8 @@ class GrayscaleToRGB(StepBase):
 
 
 class TypeCaster(StepBase):
-    """ A preprocessing step that casts an image tensor to a specified data type. """
+    """ A preprocessing step that casts an image tensor to a specified data 
+    type. """
 
     arguments_datatype = {"output_dtype": str}
     name = "Type Caster"
@@ -156,7 +159,8 @@ class TestSingleStep(BaseTestCase):
         processed dataset. Compares the processed images to the original dataset
         to ensure correct height, width, and color channel transformations.
         """
-        for original_image, processed_image in zip(original_images, processed_images):
+        zipped_images = zip(original_images, processed_images)
+        for original_image, processed_image in zipped_images:
             processed_data_shape = tuple(processed_image.shape[:2].as_list())
             original_data_shape = tuple(original_image.shape[:2].as_list())
             self.assertEqual(
@@ -183,7 +187,7 @@ class TestSingleStep(BaseTestCase):
         self.assertEqual(
             parameters.keys(),
             init_parameters_datatype.keys(),
-            "'init_parameters_datatype' keys does not match with 'parameters' attribute.",
+            "'init_parameters_datatype' keys do not match with 'parameters'.",
         )
 
         for key in parameters.keys():
@@ -303,7 +307,9 @@ class TestSingleStep(BaseTestCase):
             json_data = json.load(file)
 
         self.assertIn(
-            step_name, json_data.keys(), "StepToTest has no entry in JSON template."
+            step_name, 
+            json_data.keys(), 
+            "StepToTest has no entry in JSON template."
         )
 
         preprocessor = ImagePreprocessor()
@@ -321,9 +327,12 @@ class TestSingleStep(BaseTestCase):
         preserved across save and load operations.
         """
 
-        mock_mapping = {"RGB_to_Grayscale": RGBToGrayscale, "Test_Step": self.TestStep}
+        mock_mapping = {
+            "RGB_to_Grayscale": RGBToGrayscale,
+            "Test_Step": self.TestStep
+        }
         with patch(
-            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING",
+            "imlresearch.src.preprocessing.image_preprocessor.STEP_CLASS_MAPPING",    # noqa: E501
             mock_mapping,
         ):
             old_preprocessor = ImagePreprocessor()
@@ -341,7 +350,9 @@ class TestSingleStep(BaseTestCase):
         for old_step, new_step in zip(
             old_preprocessor._pipeline, new_preprocessor._pipeline
         ):
-            self.assertEqual(old_step, new_step, "Pipeline steps are not equal.")
+            self.assertEqual(
+                old_step, new_step, "Pipeline steps are not equal."
+            )
 
     def test_processed_image_visualization(self):
         """
@@ -358,7 +369,10 @@ class TestSingleStep(BaseTestCase):
             figure_name = "processed_rgb_images"
             plotter.save_plot_to_file(os.path.join(directory, figure_name))
             plotter.plot_image_comparison(
-                self.image_dataset, processed_rgb_dataset, 1, "RGB Images comparison"
+                self.image_dataset, 
+                processed_rgb_dataset, 
+                1, 
+                "RGB Images comparison"
             )
             figure_name = "rgb_images_comparison"
             plotter.save_plot_to_file(os.path.join(directory, figure_name))

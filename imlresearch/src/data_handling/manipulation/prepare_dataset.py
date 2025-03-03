@@ -16,7 +16,9 @@ def _shapes_are_known(dataset):
         - bool: True if all shapes are known, False otherwise.
     """
     if isinstance(dataset.element_spec, tuple):
-        shapes_known = all(element.shape is not None for element in dataset.element_spec)
+        shapes_known = all(
+            element.shape is not None for element in dataset.element_spec
+        )
     else:
         shapes_known = dataset.element_spec.shape is not None
     return shapes_known
