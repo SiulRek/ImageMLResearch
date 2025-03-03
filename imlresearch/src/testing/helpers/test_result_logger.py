@@ -1,5 +1,4 @@
 import logging
-import unittest
 
 
 class TestResultLogger:

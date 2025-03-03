@@ -60,7 +60,7 @@ class TestExperiment(BaseTestCase):
             self.assertTrue(os.path.exists(log_file))
 
     def test_experiment_data_written_to_json(self):
-        with self.call_test_experiment() as experiment:
+        with self.call_test_experiment():
             pass
         self.assertTrue(os.path.exists(self.experiment_json))
 

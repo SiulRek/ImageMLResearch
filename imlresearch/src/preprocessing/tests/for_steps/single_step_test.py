@@ -18,14 +18,18 @@ import unittest
 from unittest.mock import patch
 
 import matplotlib
-matplotlib.use("Agg")  # Use a backend that doesn’t rely on Tkinter
+matplotlib.use("Agg")
 import tensorflow as tf
 
-from imlresearch.src.preprocessing.definitions.step_class_mapping import STEP_CLASS_MAPPING
+from imlresearch.src.preprocessing.definitions.step_class_mapping import (
+    STEP_CLASS_MAPPING,
+)
 from imlresearch.src.preprocessing.helpers.recursive_type_conversion import (
     recursive_type_conversion,
 )
-from imlresearch.src.preprocessing.helpers.step_utils import correct_image_tensor_shape
+from imlresearch.src.preprocessing.helpers.step_utils import (
+    correct_image_tensor_shape,
+)
 from imlresearch.src.preprocessing.image_preprocessor import ImagePreprocessor
 from imlresearch.src.preprocessing.steps import Rotator as StepToTest
 from imlresearch.src.preprocessing.steps.step_base import StepBase

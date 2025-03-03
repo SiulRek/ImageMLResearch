@@ -41,8 +41,8 @@ def _get_execution_code(experiment_dir):
     """
     execution_skript = os.path.join(experiment_dir, "execution.py")
     if not os.path.exists(execution_skript):
-        msg += "Execution script named 'execution.py' not found in "
-        msg = f"{experiment_dir} "
+        msg = "Execution script named 'execution.py' not found in "
+        msg += f"{experiment_dir} "
         raise FileNotFoundError(msg)
     with open(execution_skript, "r", encoding="utf-8") as file:
         execution_code = file.read()
