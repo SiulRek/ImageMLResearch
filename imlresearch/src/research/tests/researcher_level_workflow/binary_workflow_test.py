@@ -10,7 +10,7 @@ from imlresearch.src.testing.helpers.empty_directory import empty_directory
 
 
 class TestBinaryResearcherLevelWorkflow(BaseTestCase):
-    """Test case for the binary class research workflow on a high-level 
+    """Test case for the binary class research workflow on a high-level
     perspective using the Researcher class."""
 
     @classmethod

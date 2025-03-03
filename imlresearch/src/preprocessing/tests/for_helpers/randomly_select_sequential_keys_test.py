@@ -163,4 +163,3 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test that the function is resilient to the order of the keys.
         """
-       

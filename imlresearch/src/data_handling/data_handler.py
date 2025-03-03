@@ -83,8 +83,8 @@ class DataHandler(ResearchAttributes):
         # 2. data is type dictslist of dicts or pandas.DataFrame
         try:
             dataset = create_dataset(
-                data, 
-                self._label_manager.label_type, 
+                data,
+                self._label_manager.label_type,
                 self._label_manager.class_names
             )
             self._assert_dataset_format(dataset)
@@ -148,7 +148,7 @@ class DataHandler(ResearchAttributes):
             )
             self._datasets_container.update({dataset_name: enhanced_dataset})
 
-    def split_dataset(self, train_split, val_split, 
+    def split_dataset(self, train_split, val_split,
                       test_split, dataset_size=None):
         """
         Splits the 'complete_dataset' into 'train_dataset', 'val_dataset' and

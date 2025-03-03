@@ -35,9 +35,9 @@ class ExperimentError(Exception):
 
 
 class Experiment(AbstractContextManager, ResearchAttributes):
-    """ 
-    A context manager class to manage experiments and trials, inheriting from 
-    ResearchAttributes. 
+    """
+    A context manager class to manage experiments and trials, inheriting from
+    ResearchAttributes.
     """
 
     def __init__(
@@ -152,8 +152,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         self.experiment_assets["duration"] = duration
 
     def _raise_exception_if_any(self, exc_type, exc_value, exc_traceback):
-        """ 
-        Raises an exception if an exception occurred during the experiment. 
+        """
+        Raises an exception if an exception occurred during the experiment.
         """
         if exc_type is not None:
             self.logger.error(f"Exception occurred:\n {exc_value}")
@@ -200,8 +200,8 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def _plot_history_of_best_3_trials(self):
         """
-        Plots the best of 3 trials for the experiment. Skips plotting if there 
-        are less than 3 trials or if any of the histories are empty. 
+        Plots the best of 3 trials for the experiment. Skips plotting if there
+        are less than 3 trials or if any of the histories are empty.
         """
         if len(self.experiment_assets["trials"]) < 3:
             return

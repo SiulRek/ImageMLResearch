@@ -26,8 +26,8 @@ def create_dataset(data, label_type=None, class_names=None):
 
     Returns:
         - tf.data.Dataset: A TensorFlow Dataset containing tuples of (image,
-            encoded label), where 'image' is the decoded image file and 
-            'encoded label' is processed by LabelManager. If no labels are 
+            encoded label), where 'image' is the decoded image file and
+            'encoded label' is processed by LabelManager. If no labels are
             provided, returns a dataset of images only.
     """
     if isinstance(data, pd.DataFrame):

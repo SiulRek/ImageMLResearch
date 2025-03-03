@@ -6,7 +6,7 @@ def get_datetime():
     Returns the current date and time formatted as a beautiful string.
 
     Returns:
-        - str: The current date and time formatted as 
+        - str: The current date and time formatted as
         'YYYY-MM-DD-HH:MM:SS:MS'.
     """
     now = datetime.now()

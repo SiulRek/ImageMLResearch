@@ -60,8 +60,8 @@ def save_images(
     num_digits = max(4, math.ceil(math.log10(num_samples + start_number)))
 
     encode_fn = (
-        tf.image.encode_jpeg 
-        if image_format == "jpg" 
+        tf.image.encode_jpeg
+        if image_format == "jpg"
         else tf.image.encode_png
     )
 

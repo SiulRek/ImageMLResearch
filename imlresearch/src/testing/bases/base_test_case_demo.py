@@ -9,7 +9,7 @@ class BaseTestCaseDemo(BaseTestCase):
     """
     A demonstration class to showcase the functionality of BaseTestCase.
 
-    It leverages the setup and teardown mechanisms of BaseTestCase to 
+    It leverages the setup and teardown mechanisms of BaseTestCase to
     demonstrate their effectiveness and usage in a practical testing scenario.
     """
 
@@ -40,7 +40,7 @@ class BaseTestCaseDemo(BaseTestCase):
 
     def test_example_functionality(self):
         """
-        An example test that logs its outcome and demonstrates 
+        An example test that logs its outcome and demonstrates
         the logging functionality.
         """
         self.assertTrue(True)

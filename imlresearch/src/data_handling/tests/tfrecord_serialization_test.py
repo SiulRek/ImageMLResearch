@@ -15,7 +15,7 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestTFRecordSerialization(BaseTestCase):
-    """ Test suite for TFRecord serialization and deserialization 
+    """ Test suite for TFRecord serialization and deserialization
     functions. """
 
     @classmethod
@@ -30,7 +30,7 @@ class TestTFRecordSerialization(BaseTestCase):
 
     def _compare_datasets(
         self, original_dataset, deserialized_dataset, atol=1e-6
-    ):  
+    ):
         zip_datasets = zip(original_dataset, deserialized_dataset)
         for original, deserialized in zip_datasets:
             original_image, original_label = original
@@ -92,7 +92,7 @@ class TestTFRecordSerialization(BaseTestCase):
         self._compare_datasets(self.dataset, deserialized_dataset)
 
     def test_serialize_deserialize_with_uint8_labels(self):
-        """ Test serialization and deserialization with unsigned uint8 
+        """ Test serialization and deserialization with unsigned uint8
         labels. """
         results_dir = os.path.join(
             self.temp_dir, "serialize_deserialize_with_float_labels"

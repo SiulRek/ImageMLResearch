@@ -18,15 +18,15 @@ class TestDatasetFunctions(BaseTestCase):
     def test_split_proportions(self):
         train, val, test = split_dataset(self.dataset)
         self.assertEqual(
-            train.cardinality().numpy(), 80, 
+            train.cardinality().numpy(), 80,
             "Training set size should be 80% of total."
         )
         self.assertEqual(
-            val.cardinality().numpy(), 10, 
+            val.cardinality().numpy(), 10,
             "Validation set size should be 10% of total."
         )
         self.assertEqual(
-            test.cardinality().numpy(), 10, 
+            test.cardinality().numpy(), 10,
             "Test set size should be 10% of total."
         )
 
@@ -42,34 +42,34 @@ class TestDatasetFunctions(BaseTestCase):
         )
         self.assertIsNone(train, "Training set should be None when size is 0.")
         self.assertEqual(
-            val.cardinality().numpy(), 50, 
+            val.cardinality().numpy(), 50,
             "Validation set size should be 50% of total."
         )
         self.assertEqual(
-            test.cardinality().numpy(), 50, 
+            test.cardinality().numpy(), 50,
             "Test set size should be 50% of total."
         )
         train, val, test = split_dataset(
             self.dataset, train_split=0.5, val_split=0.0, test_split=0.5
         )
         self.assertEqual(
-            train.cardinality().numpy(), 50, 
+            train.cardinality().numpy(), 50,
             "Training set size should be 50% of total."
         )
         self.assertIsNone(val, "Validation set should be None when size is 0.")
         self.assertEqual(
-            test.cardinality().numpy(), 50, 
+            test.cardinality().numpy(), 50,
             "Test set size should be 50% of total."
         )
         train, val, test = split_dataset(
             self.dataset, train_split=0.5, val_split=0.5, test_split=0.0
         )
         self.assertEqual(
-            train.cardinality().numpy(), 50, 
+            train.cardinality().numpy(), 50,
             "Training set size should be 50% of total."
         )
         self.assertEqual(
-            val.cardinality().numpy(), 50, 
+            val.cardinality().numpy(), 50,
             "Validation set size should be 50% of total."
         )
         self.assertIsNone(test, "Test set should be None when size is 0.")

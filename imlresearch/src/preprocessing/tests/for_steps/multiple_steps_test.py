@@ -126,7 +126,7 @@ def load_multiple_steps_tests():
     This function iterates over a predefined list of image preprocessing steps
     and their corresponding arguments. For each step, it dynamically creates a
     test class using `create_test_class_for_step` and loads the test cases.
-    
+
     Returns:
         - unittest.TestSuite: A combined test suite aggregating tests for
           multiple preprocessing step test classes.
@@ -144,4 +144,3 @@ if __name__ == "__main__":
     """ Main execution block for running the loaded test suite. """
     runner = unittest.TextTestRunner()
     runner.run(load_multiple_steps_tests())
-  

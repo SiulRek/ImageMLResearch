@@ -133,7 +133,7 @@ class TestHParamsSuggester(BaseTestCase):
 
     def test_study_persistence(self):
         """
-        Test if the storage file is saved and if a new instance with the same 
+        Test if the storage file is saved and if a new instance with the same
         storage directory and load_if_exists=True loads the previous study.
         """
         suggester = HParamsSuggester(

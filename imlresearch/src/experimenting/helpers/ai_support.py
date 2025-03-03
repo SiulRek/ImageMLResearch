@@ -19,7 +19,7 @@ RESULTS
 
 # Request for Analysis:
 
-Please analyze the experiment and its results above. Provide an analysis in 
+Please analyze the experiment and its results above. Provide an analysis in
 markdown with three chapters:
 ```markdown
 # 1. Key insights

@@ -26,7 +26,7 @@ class TestDataHandler(BaseTestCase):
 
     def _assert_dataset(self, dataset):
         """
-        Asserts that the dataset is of type tf.data.Dataset and that the 
+        Asserts that the dataset is of type tf.data.Dataset and that the
         images and labels have the correct shapes.
         """
         self.assertIsInstance(

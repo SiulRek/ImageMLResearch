@@ -13,7 +13,7 @@ def _bytes_feature(value):
 
 
 def serialize_sample_for_png(image, label=None):
-    """Serializes an image and optionally a label pair to a tf.train.Example 
+    """Serializes an image and optionally a label pair to a tf.train.Example
     proto. The image is expected to be a PNG image."""
     feature = {"image": _bytes_feature(tf.io.encode_png(image).numpy())}
     if label is not None:

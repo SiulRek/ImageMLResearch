@@ -37,11 +37,11 @@ def _transpose_nested_dicts(nested_dict):
     Transposes a nested dictionary.
 
     Args:
-        - nested_dict (dict[str, dict[str, (int|float|bool|str)]]): 
+        - nested_dict (dict[str, dict[str, (int|float|bool|str)]]):
             The nested dictionary to transpose.
 
     Returns:
-        - dict[str, dict[str, (int|float|bool|str)]]: 
+        - dict[str, dict[str, (int|float|bool|str)]]:
             The transposed nested dictionary.
     """
     transposed_dict = {}

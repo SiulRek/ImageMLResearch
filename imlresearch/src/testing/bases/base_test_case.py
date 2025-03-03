@@ -20,7 +20,7 @@ DATA_DIR = os.path.join(
 
 class BaseTestCase(unittest.TestCase):
     """
-    Abstract base class for test cases, providing setup and teardown 
+    Abstract base class for test cases, providing setup and teardown
     operations common across tests.
 
     Attributes:
@@ -28,7 +28,7 @@ class BaseTestCase(unittest.TestCase):
         - temp_dir (str): Temporary directory for use during tests.
         - log_file (str): Path to the log file used to record test results.
         - logger (TestResultLogger): Logger instance for test outcomes.
-        - remove_temp_dir (bool): Whether to remove the temp directory 
+        - remove_temp_dir (bool): Whether to remove the temp directory
           after tests.
     """
 
@@ -59,12 +59,12 @@ class BaseTestCase(unittest.TestCase):
         """
         Computes the test output directory path.
 
-        Traverses up the file hierarchy until a directory named 'tests' is 
+        Traverses up the file hierarchy until a directory named 'tests' is
         found, then returns the path to the 'outputs' subdirectory.
 
         Args:
             - parent_folder (str, optional): The parent folder name.
-        
+
         Returns:
             - str: The output directory path.
 
@@ -209,7 +209,7 @@ class BaseTestCase(unittest.TestCase):
         if labeled:
             Y = tf.one_hot(Y, 10) if not binary else Y
             return tf.data.Dataset.from_tensor_slices((X, Y))
-        
+
         return tf.data.Dataset.from_tensor_slices(X)
 
     @classmethod

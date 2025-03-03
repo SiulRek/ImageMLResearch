@@ -3,7 +3,7 @@ import os
 import tensorflow as tf
 
 
-# NOTE: The functionality in DataHandling is not used in the module here, 
+# NOTE: The functionality in DataHandling is not used in the module here,
 # as this makes the testing framework more independent.
 def _bytes_feature(value):
     """Returns a bytes_list from a string/byte."""

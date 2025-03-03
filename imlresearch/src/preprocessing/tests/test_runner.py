@@ -29,13 +29,13 @@ from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
 
 class PreprocessingTestRunner(TestRunnerBase):
     """
-    A test runner for image preprocessing tests. This runner aggregates tests 
+    A test runner for image preprocessing tests. This runner aggregates tests
     from different modules and adds them to the test suite.
     """
 
     def load_tests(self):
         """
-        Populates the test suite with various test cases from the image 
+        Populates the test suite with various test cases from the image
         preprocessing testing framework.
 
         This function aggregates tests for:

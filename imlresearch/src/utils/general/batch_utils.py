@@ -4,7 +4,7 @@ import tensorflow as tf
 def is_batched(dataset):
     """
     Checks if the dataset is batched. Expects a dataset of type tf.data.Dataset
-    and assumes that each sample is either an image or a tuple containing an 
+    and assumes that each sample is either an image or a tuple containing an
     image and its corresponding label. The images are expected to have 3 dims.
 
     Args:
@@ -26,7 +26,7 @@ def is_batched(dataset):
 def unbatch_dataset_if_batched(dataset):
     """
     Unbatches the dataset if it is batched. Expects a dataset of type
-    tf.data.Dataset and assumes that each sample is either an image or a 
+    tf.data.Dataset and assumes that each sample is either an image or a
     tuple containing an image and its corresponding label.
 
     Args:

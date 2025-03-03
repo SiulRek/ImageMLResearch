@@ -91,7 +91,7 @@ def _pop_classification_reports(trial):
 
 def create_experiment_report(experiment_assets):
     """
-    Generate a comprehensive experiment report in Markdown format and save it 
+    Generate a comprehensive experiment report in Markdown format and save it
     to a file.
 
     Args:
@@ -115,7 +115,7 @@ def create_experiment_report(experiment_assets):
     if resume_time != start_time:
         writer.write_key_value("Last Resume Time", resume_time)
     writer.write_key_value("Total Duration", from_exp_get("duration"))
-    
+
     exp_dir_link = writer.create_link(from_exp_get("directory"), "Link")
     writer.write_key_value("Directory", exp_dir_link)
 
@@ -148,20 +148,20 @@ def create_experiment_report(experiment_assets):
         start_time = from_trial_get("start_time").split(".")[0]
         writer.write_key_value("Start Time", start_time)
         writer.write_key_value("Duration", from_trial_get("duration"))
-        
+
         trial_dir_link = writer.create_link(
             from_trial_get("directory"), "Link"
         )
         writer.write_key_value("Directory", trial_dir_link)
-        
+
         hyperparameter_table = {
             param: str(value)
             for param, value in from_trial_get("hyperparameters", {}).items()
         }
         writer.write_title("Hyperparameters:", level=3)
         writer.write_key_value_table(
-            hyperparameter_table, 
-            key_label="Hyperparameter", 
+            hyperparameter_table,
+            key_label="Hyperparameter",
             value_label="Value"
         )
 
@@ -180,8 +180,8 @@ def create_experiment_report(experiment_assets):
 
         # Write Classification Report
         writer.write_title(
-            "Detailed Report of Test Set:", 
-            level=3, 
+            "Detailed Report of Test Set:",
+            level=3,
             page_break=True
         )
         writer.write_nested_table(classification_report, transpose=True)

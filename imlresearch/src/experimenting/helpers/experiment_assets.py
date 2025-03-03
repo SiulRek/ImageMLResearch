@@ -112,7 +112,7 @@ def load_trials(experiment_assets, experiment_dir):
 
     # 2. from the experiment output directory
     paths = [
-        os.path.join(experiment_dir, name) 
+        os.path.join(experiment_dir, name)
         for name in os.listdir(experiment_dir)
     ]
     dirs = [path for path in paths if os.path.isdir(path)]

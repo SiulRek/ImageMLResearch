@@ -156,7 +156,7 @@ class JSONInstancesSerializer:
             - str: A unique key name for the dictionary.
         """
         key = current_key
-        i = 2  # Starts from 2 as 1 is the case of key name 
+        i = 2  # Starts from 2 as 1 is the case of key name
         # without identification.
         while (
             key in dictionary.keys()
