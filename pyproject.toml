@@ -44,7 +44,7 @@ where = ["."]
 exclude = ["./demo", "./local", "demo*", "local*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.png", "*.jpg"]
+"*" = ["*.png", "*.jpg", "*.tfrecord", "*.json"]    # Required for test data
 
 # NOTE: Apply ruff on imlresearch/src
 [tool.ruff]
