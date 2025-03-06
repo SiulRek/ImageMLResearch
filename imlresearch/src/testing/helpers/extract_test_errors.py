@@ -7,13 +7,17 @@ ROOT_DIR = os.path.join(
 
 def extract_test_errors(file_path):
     """
-    Extracts test errors from a log file and saves them in a separate file.
+    Extract test errors from a log file and save them in a separate file.
 
-    Args:
-        - file_path (str): Path to the test log file.
+    Parameters
+    ----------
+    file_path : str
+        Path to the test log file.
 
-    Returns:
-        - str: Path to the saved errors log file.
+    Returns
+    -------
+    str
+        Path to the saved errors log file.
     """
     current_test_title_line = None
     errors = []

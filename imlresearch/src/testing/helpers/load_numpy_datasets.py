@@ -1,5 +1,4 @@
 import os
-
 import numpy as np
 import tensorflow as tf
 
@@ -13,12 +12,17 @@ def load_sign_digits_dataset(sample_num=None, labeled=True):
     """
     Load the sign language digits dataset used for testing.
 
-    Args:
-        - sample_num (int, optional): Number of samples to load.
-        - labeled (bool, optional): Whether to return the dataset with labels.
+    Parameters
+    ----------
+    sample_num : int, optional
+        Number of samples to load, by default None.
+    labeled : bool, optional
+        Whether to return the dataset with labels, by default True.
 
-    Returns:
-        - tf.data.Dataset: The sign language digits dataset for testing.
+    Returns
+    -------
+    tf.data.Dataset
+        The sign language digits dataset for testing.
     """
     X = np.load(os.path.join(NP_DATASET_DIR, "sign_language_digits_X.npy"))
     Y = np.load(os.path.join(NP_DATASET_DIR, "sign_language_digits_Y.npy"))

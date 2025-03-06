@@ -11,13 +11,19 @@ def plot_confusion_matrix(y_true, y_pred, class_names):
     """
     Plots a confusion matrix using Matplotlib and Seaborn.
 
-    Args:
-        - y_true (array-like): True labels.
-        - y_pred (array-like): Predicted labels.
-        - class_names (List): List of class names.
+    Parameters
+    ----------
+    y_true : array-like
+        True labels of the dataset.
+    y_pred : array-like
+        Predicted labels from the model.
+    class_names : list
+        List of class names corresponding to label indices.
 
-    Returns:
-        - fig: The Matplotlib figure containing the confusion matrix plot.
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the confusion matrix plot.
     """
     # Configuration
     figsize = (len(class_names) + 2, len(class_names) + 2)

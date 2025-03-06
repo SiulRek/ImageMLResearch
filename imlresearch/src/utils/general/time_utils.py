@@ -3,11 +3,12 @@ from datetime import datetime
 
 def get_datetime():
     """
-    Returns the current date and time formatted as a beautiful string.
+    Get the current date and time formatted as a string.
 
-    Returns:
-        - str: The current date and time formatted as
-        'YYYY-MM-DD-HH:MM:SS:MS'.
+    Returns
+    -------
+    str
+        The current date and time formatted as 'YYYY-MM-DD HH:MM:SS.MS'.
     """
     now = datetime.now()
     formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S.%f")
@@ -17,13 +18,17 @@ def get_datetime():
 
 def _prettify_duration(duration):
     """
-    Formats the duration string in a more readable format.
+    Format the duration string in a more readable format.
 
-    Args:
-        - duration (str): The duration string to be formatted.
+    Parameters
+    ----------
+    duration : str
+        The duration string to be formatted.
 
-    Returns:
-        - str: The formatted duration string.
+    Returns
+    -------
+    str
+        The formatted duration string.
     """
     if duration.startswith("0:00:"):  # Zero hours and minutes
         duration = duration.removeprefix("0:00:")
@@ -47,14 +52,17 @@ def _prettify_duration(duration):
 
 def get_duration(start_time):
     """
-    Returns the duration between the start time and the current time.
+    Get the duration between the start time and the current time.
 
-    Args:
-        - start_time (str): The start time in the format 'YYYY-MM-DD
-        - HH:MM:SS:MS'.
+    Parameters
+    ----------
+    start_time : str
+        The start time in the format 'YYYY-MM-DD HH:MM:SS.MS'.
 
-    Returns:
-        - str: The duration between the start time and the current time.
+    Returns
+    -------
+    str
+        The duration between the start time and the current time.
     """
     start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
     end_time = datetime.now()
@@ -65,13 +73,17 @@ def get_duration(start_time):
 
 def _normalize_duration(duration):
     """
-    Normalize the duration format to be of format 'H:MM:SS'.
+    Normalize the duration format to 'H:MM:SS'.
 
-    Args:
-        - duration (str): The duration string to be normalized.
+    Parameters
+    ----------
+    duration : str
+        The duration string to be normalized.
 
-    Returns:
-        - list: The normalized duration as a list of strings.
+    Returns
+    -------
+    str
+        The normalized duration in the format 'H:MM:SS'.
     """
     length = duration.count(":") + 1
     assert length <= 3, "Invalid duration format"
@@ -84,16 +96,20 @@ def _normalize_duration(duration):
 
 def add_durations(duration1, duration2):
     """
-    Adds two durations together.
+    Add two durations together.
 
-    Args:
-        - duration1 (str): A duration in the format 'H:MM:SS'.
-        - duration2 (str): A duration in the format 'H:MM:SS'.
+    Parameters
+    ----------
+    duration1 : str
+        A duration in the format 'H:MM:SS'.
+    duration2 : str
+        A duration in the format 'H:MM:SS'.
 
-    Returns:
-        - str: The sum of the two durations in the format 'H:MM:SS'.
+    Returns
+    -------
+    str
+        The sum of the two durations in the format 'H:MM:SS'.
     """
-
     duration1 = _normalize_duration(duration1)
     duration2 = _normalize_duration(duration2)
 

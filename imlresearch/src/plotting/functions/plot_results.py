@@ -10,17 +10,29 @@ def plot_binary_classification_results(
     x, y_true, y_pred, class_names, grid_size=(2, 2)
 ):
     """
-    Plots a grid of images with their true and predicted labels for binary
-    classification. The title of each plot shows the true label, predicted
-    label, and predicted probability.
+    Plots a grid of images with their true and predicted labels for binary 
+    classification.
 
-    Args:
-        - x (array-like): Input data (images, can be grayscale or RGB).
-        - y_true (array-like): True labels.
-        - y_pred (array-like): Predicted probabilities.
-        - class_names (List): List of class names.
-        - grid_size (Tuple): Tuple containing the grid size (rows, columns).
-          Defaults to (2, 2).
+    The title of each plot shows the true label, predicted label, and 
+    predicted probability.
+
+    Parameters
+    ----------
+    x : array-like
+        Input data (images, can be grayscale or RGB).
+    y_true : array-like
+        True labels.
+    y_pred : array-like
+        Predicted probabilities.
+    class_names : list
+        List of class names.
+    grid_size : tuple, optional
+        Tuple specifying the grid size as (rows, columns). Defaults to (2, 2).
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the classification results.
     """
     # Configuration
     n_rows, n_cols = grid_size
@@ -65,19 +77,31 @@ def plot_multi_class_classification_results(
     x, y_true, y_pred, class_names, grid_size=(2, 2), prediction_bar=False
 ):
     """
-    Plots a grid of images with their true and predicted labels. If the
-    prediction_bar parameter is set to True, it also shows a bar plot with
-    the predicted probabilities.
+    Plots a grid of images with their true and predicted labels.
 
-    Args:
-        - x (array-like): Input data (images, can be grayscale or RGB).
-        - y_true (array-like): True labels, one-hot encoded.
-        - y_pred (array-like): Predicted labels, one-hot encoded.
-        - class_names (List): List of class names.
-        - grid_size (Tuple): Tuple containing the grid size (rows, columns).
-          Defaults to (2, 2).
-        - prediction_bar (bool): Whether to show the predicted probabilities
-          as a bar plot. Defaults to False.
+    If the `prediction_bar` parameter is set to True, it also shows a bar 
+    plot with the predicted probabilities.
+
+    Parameters
+    ----------
+    x : array-like
+        Input data (images, can be grayscale or RGB).
+    y_true : array-like
+        True labels, one-hot encoded.
+    y_pred : array-like
+        Predicted labels, one-hot encoded.
+    class_names : list
+        List of class names.
+    grid_size : tuple, optional
+        Tuple specifying the grid size as (rows, columns). Defaults to (2, 2).
+    prediction_bar : bool, optional
+        Whether to show the predicted probabilities as a bar plot. 
+        Defaults to False.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the classification results.
     """
     # Configuration
     n_rows, n_cols = grid_size

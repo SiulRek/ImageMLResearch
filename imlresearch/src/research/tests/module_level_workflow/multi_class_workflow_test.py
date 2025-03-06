@@ -17,14 +17,27 @@ from imlresearch.src.training.trainer import Trainer
 
 
 class TestMultiClassModuleLevelWorkflow(BaseTestCase):
-    """Test case for the multi-class research workflow on module level."""
+    """
+    Test case for the multi-class research workflow on a module level.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Set up the test environment for all test cases.
+
+        This method clears the results directory before running tests.
+        """
         super().setUpClass()
         empty_directory(cls.results_dir)
 
     def setUp(self):
+        """
+        Set up the test environment before each test case.
+
+        This initializes research attributes, data handlers, trainers, 
+        and plotters.
+        """
         super().setUp()
         self.research_attributes = ResearchAttributes(
             label_type="multi_class",
@@ -38,6 +51,19 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         self.plotter = MultiClassPlotter()
 
     def _create_compiled_model(self, units):
+        """
+        Create and compile a simple neural network model.
+
+        Parameters
+        ----------
+        units : int
+            The number of units in the hidden dense layer.
+
+        Returns
+        -------
+        tf.keras.Model
+            The compiled Keras model.
+        """
         model = tf.keras.models.Sequential(
             [
                 tf.keras.layers.Input(shape=(28, 28, 3)),
@@ -54,6 +80,19 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         return model
 
     def _assert_datasets_container(self, module):
+        """
+        Assert that the module contains valid dataset containers.
+
+        Parameters
+        ----------
+        module : object
+            The module whose dataset container is validated.
+
+        Raises
+        ------
+        AssertionError
+            If the datasets container is missing or incorrect.
+        """
         has_datasets_container = (
             hasattr(module, "datasets_container")
             and module.datasets_container is not None
@@ -70,6 +109,19 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             )
 
     def _assert_outputs_container(self, module):
+        """
+        Assert that the module contains valid output containers.
+
+        Parameters
+        ----------
+        module : object
+            The module whose outputs container is validated.
+
+        Raises
+        ------
+        AssertionError
+            If the outputs container is missing or incorrect.
+        """
         has_outputs_container = (
             hasattr(module, "outputs_container")
             and module.outputs_container is not None
@@ -86,6 +138,12 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
             )
 
     def test_workflow(self):
+        """
+        Test the complete multi-class research workflow.
+
+        This method ensures that datasets are loaded, split, backed up, 
+        restored, and correctly processed through trials.
+        """
         dataset = self.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         self.data_handler.load_dataset(dataset)
         self.data_handler.split_dataset(

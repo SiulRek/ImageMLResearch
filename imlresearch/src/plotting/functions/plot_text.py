@@ -3,10 +3,17 @@ import matplotlib.pyplot as plt
 
 def plot_text(text):
     """
-    Plots the given text on a matplotlib figure.
+    Plots the given text on a Matplotlib figure.
 
-    Args:
-        - text: The text to be plotted.
+    Parameters
+    ----------
+    text : str
+        The text to be plotted.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the plotted text.
     """
     # Determine the size based on text length
     lines = text.split("\n")

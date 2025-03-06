@@ -6,8 +6,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class RandomElasticTransformer(StepBase):
     """
-    A data augmentation step that applies a Random Elastic Transformer
+    A data augmentation step that applies a random elastic transformation 
     to an image.
+
+    This transformation distorts the image locally using displacement fields 
+    smoothed with a Gaussian filter, simulating elastic deformations.
     """
 
     arguments_datatype = {"alpha": float, "sigma": float, "seed": int}
@@ -15,23 +18,54 @@ class RandomElasticTransformer(StepBase):
 
     def __init__(self, alpha=34, sigma=4, seed=42):
         """
-        Initializes the RandomElasticTransformer object for integration
-        into an image preprocessing pipeline.
+        Initialize the RandomElasticTransformer for integration into an 
+        image preprocessing pipeline.
 
-        Args:
-            - alpha (float): Intensity of the transformation. Default is 34.
-            - sigma (float): Standard deviation of the Gaussian filter.
-              Default is 4.
-            - seed (int): Random seed for reproducibility. Default is 42.
+        Parameters
+        ----------
+        alpha : float, optional
+            Intensity of the transformation. Higher values result in stronger 
+            distortions. Default is 34.
+        sigma : float, optional
+            Standard deviation of the Gaussian filter used to smooth the 
+            displacement fields. Default is 4.
+        seed : int, optional
+            Random seed for reproducibility. Default is 42.
         """
         super().__init__(locals())
 
     def _setup(self, dataset):
+        """
+        Set up the transformer with a fixed random seed for reproducibility.
+
+        Parameters
+        ----------
+        dataset : Any
+            The dataset being processed.
+
+        Returns
+        -------
+        Any
+            The result of the superclass setup method.
+        """
         np.random.seed(self.parameters["seed"])
         return super()._setup(dataset)
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply random elastic transformation to an image.
+
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        numpy.ndarray
+            The transformed image with elastic distortions.
+        """
         row, col, _ = image_nparray.shape
 
         alpha = self.parameters["alpha"]

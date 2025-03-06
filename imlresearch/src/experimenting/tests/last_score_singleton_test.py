@@ -7,18 +7,29 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestLastScoreSingleton(BaseTestCase):
+    """
+    Unit tests for the LastScoreSingleton class.
+    """
+
     def tearDown(self):
+        """
+        Resets the singleton instance after each test.
+        """
         super().tearDown()
         if LastScoreSingleton._instance:
             LastScoreSingleton._instance = None
 
     def test_set_score_none(self):
-        """ Test if set() method works correctly with None values. """
+        """
+        Tests if the set() method works correctly with None values.
+        """
         score_instance = LastScoreSingleton()
         score_instance.set(None)
 
     def test_set_score_numeric(self):
-        """ Test if set() method works correctly with numeric values. """
+        """
+        Tests if the set() method works correctly with numeric values.
+        """
         numeric_values = [-2, 0.85, 0, -0.85, 2]
         score_instance = LastScoreSingleton()
         for value in numeric_values:
@@ -26,7 +37,7 @@ class TestLastScoreSingleton(BaseTestCase):
 
     def test_set_score_non_numeric(self):
         """
-        Test if set() method raises an AssertionError when non-numeric
+        Tests if the set() method raises an AssertionError when non-numeric 
         values are provided.
         """
         non_numeric_values = ["string", True, False, [], {}]
@@ -37,7 +48,7 @@ class TestLastScoreSingleton(BaseTestCase):
 
     def test_singleton_behavior(self):
         """
-        Test if the LastScoreSingleton class exhibits singleton behavior.
+        Tests if the LastScoreSingleton class exhibits singleton behavior.
         """
         instance1 = LastScoreSingleton()
         instance2 = LastScoreSingleton()
@@ -48,7 +59,10 @@ class TestLastScoreSingleton(BaseTestCase):
         )
 
     def test_set_and_take_score_same_instances(self):
-        """ Test if set() and take() methods work correctly. """
+        """
+        Tests if the set() and take() methods work correctly within 
+        the same instance.
+        """
         score_instance = LastScoreSingleton()
 
         score_instance.set(0.85)
@@ -67,8 +81,8 @@ class TestLastScoreSingleton(BaseTestCase):
 
     def test_set_and_take_score_different_instances(self):
         """
-        Test if set() and take() methods work correctly with different
-        instances.
+        Tests if the set() and take() methods work correctly across
+        different instances.
         """
         score_instance_1 = LastScoreSingleton()
         score_instance_2 = LastScoreSingleton()
@@ -88,14 +102,17 @@ class TestLastScoreSingleton(BaseTestCase):
 
     def test_take_without_previous_set(self):
         """
-        Test if take() method raises a ValueError when no score has been set.
+        Tests if the take() method raises a ValueError when no score 
+        has been set.
         """
         score_instance = LastScoreSingleton()
         with self.assertRaises(ValueError):
             score_instance.take()
 
     def test_clear(self):
-        """ Test if clear() method works correctly. """
+        """
+        Tests if the clear() method works correctly.
+        """
         score_instance = LastScoreSingleton()
         score_instance.set(0.85)
         score_instance.clear()

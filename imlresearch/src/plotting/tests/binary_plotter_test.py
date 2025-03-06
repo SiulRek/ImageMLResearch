@@ -11,10 +11,16 @@ from imlresearch.src.research.attributes.research_attributes import (
 
 
 class TestBinaryPlotter(PlottingTestCase):
-    """Test suite for the BinaryPlotter class."""
+    """
+    Test suite for the BinaryPlotter class.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class by initializing a BinaryPlotter instance 
+        with sample binary classification data.
+        """
         super().setUpClass()
         sample_num = 100
         dataset = cls.load_mnist_digits_dataset(
@@ -43,11 +49,28 @@ class TestBinaryPlotter(PlottingTestCase):
         )
 
     def setUp(self):
+        """
+        Resets figures before each test to ensure test isolation.
+        """
         super().setUp()
-        self.binary_plotter._figures = {}  # Reset figures before each test
+        self.binary_plotter._figures = {}
 
     @classmethod
     def _get_images_and_labels_array(cls, dataset):
+        """
+        Extracts images and labels from the dataset and converts them 
+        into tensors.
+
+        Parameters
+        ----------
+        dataset : tf.data.Dataset
+            The dataset containing image-label pairs.
+
+        Returns
+        -------
+        tuple
+            A tuple containing image and label tensors.
+        """
         images_list = []
         labels_list = []
         for image, label in dataset:
@@ -58,7 +81,9 @@ class TestBinaryPlotter(PlottingTestCase):
         return images_tensor, labels_tensor
 
     def test_plot_confusion_matrix(self):
-        """Test the plot_confusion_matrix method."""
+        """
+        Tests the plot_confusion_matrix method.
+        """
         fig = self.binary_plotter.plot_confusion_matrix(
             title="Test Confusion Matrix", show=False
         )
@@ -69,14 +94,18 @@ class TestBinaryPlotter(PlottingTestCase):
         )
 
     def test_plot_images(self):
-        """Test the plot_images method."""
+        """
+        Tests the plot_images method.
+        """
         fig = self.binary_plotter.plot_images(grid_size=(2, 2))
         self.assertEqual(len(self.binary_plotter._figures), 1)
         self.assertIn("images", self.binary_plotter._figures)
         self._save_and_close_figure(fig, "binary_plotter_plot_images.png")
 
     def test_plot_roc_curve(self):
-        """Test the plot_roc_curve method."""
+        """
+        Tests the plot_roc_curve method.
+        """
         fig = self.binary_plotter.plot_roc_curve(
             title="Test ROC Curve", show=False
         )
@@ -85,7 +114,9 @@ class TestBinaryPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "binary_plotter_plot_roc_curve.png")
 
     def test_plot_pr_curve(self):
-        """Test the plot_pr_curve method."""
+        """
+        Tests the plot_pr_curve method.
+        """
         fig = self.binary_plotter.plot_pr_curve(
             title="Test PR Curve", show=False
         )
@@ -94,7 +125,9 @@ class TestBinaryPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "binary_plotter_plot_pr_curve.png")
 
     def test_plot_results(self):
-        """Test the plot_results method."""
+        """
+        Tests the plot_results method.
+        """
         fig = self.binary_plotter.plot_results(grid_size=(2, 2))
         self.assertEqual(len(self.binary_plotter._figures), 1)
         self.assertIn("results", self.binary_plotter._figures)

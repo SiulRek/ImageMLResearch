@@ -9,11 +9,16 @@ def save_mnist_digits_images(output_dir, sample_num, start_num, extension):
     """
     Save MNIST digits images to a directory.
 
-    Args:
-        - output_dir (str): Directory to save the images.
-        - sample_num (int): Number of images to save.
-        - start_num (int): Starting number for filenames.
-        - extension (str): Image file extension.
+    Parameters
+    ----------
+    output_dir : str
+        Directory to save the images.
+    sample_num : int
+        Number of images to save.
+    start_num : int
+        Starting number for filenames.
+    extension : str
+        Image file extension.
     """
     extension = extension if extension.startswith(".") else f".{extension}"
     mnist_digits_dataset = tf.keras.datasets.mnist.load_data()

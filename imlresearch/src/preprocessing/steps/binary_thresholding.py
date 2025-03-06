@@ -7,8 +7,8 @@ class BinaryThresholder(StepBase):
     """
     A preprocessing step that applies binary thresholding to an image.
 
-    Note: In the case of RGB images, it processes each color channel
-    (Red, Green, Blue) separately.
+    For RGB images, each color channel (Red, Green, Blue) is processed 
+    separately.
     """
 
     arguments_datatype = {"thresh": float, "max_val": float}
@@ -16,22 +16,37 @@ class BinaryThresholder(StepBase):
 
     def __init__(self, thresh=128, max_val=255):
         """
-        Initializes the BinaryThresholder object that can be integrated in
-        an image preprocessing pipeline.
+        Initialize the BinaryThresholder for integration into an image 
+        preprocessing pipeline.
 
-        Args:
-            - thresh (float, optional): The threshold value used for binary
-              thresholding. Pixel values greater than this threshold are set
-              to the maximum value (255, white), and values less than or equal
-              to the threshold are set to 0 (black). Defaults to 128.
-            - max_val (float, optional): The maximum value that a pixel can
-              take after thresholding. Defaults to 255.
+        Parameters
+        ----------
+        thresh : float, optional
+            The threshold value used for binary thresholding. Pixel values 
+            greater than this threshold are set to the maximum value (255, 
+            white), and values less than or equal to the threshold are set to 
+            0 (black). Default is 128.
+        max_val : float, optional
+            The maximum value that a pixel can take after thresholding. 
+            Default is 255.
         """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply binary thresholding to an image.
 
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        numpy.ndarray
+            The thresholded image.
+        """
         def apply_binary_threshold(np_array):
             _, thresholded_np_array = cv2.threshold(
                 src=np_array,

@@ -19,13 +19,25 @@ from imlresearch.src.utils import get_datetime, get_duration
 
 
 class ResultsEmptyError(ValueError):
-    """ Raised when trial results are empty and the trial was never run before.
+    """
+    Raised when trial results are empty and the trial was never run before.
     """
 
 
 def normalize_trial_name(trial_name):
-    """ Normalizes the trial name by converting it to lowercase and replacing
+    """
+    Normalize the trial name by converting it to lowercase and replacing
     spaces with underscores.
+
+    Parameters
+    ----------
+    trial_name : str
+        The name of the trial.
+
+    Returns
+    -------
+    str
+        The normalized trial name.
     """
     return trial_name.replace(" ", "_").lower()
 
@@ -34,26 +46,32 @@ class Trial(AbstractContextManager):
     """
     A context manager class to manage individual trials within an experiment.
 
-    Attributes:
-        - experiment (Experiment): The experiment instance this trial
-            belongs to.
-        - research_attributes (ResearchAttributes): Research attributes from
-        - trial_assets (dict): Dictionary to store trial assets.
-        - trial_directory (str): Directory where the trial assets are saved.
-        - experiment_trials (list): Reference to the list of trials in the
-            experiment, used to append the trial assets.
+    Attributes
+    ----------
+    experiment : Experiment
+        The experiment instance this trial belongs to.
+    research_attributes : ResearchAttributes
+        Research attributes for the trial.
+    trial_assets : dict
+        Dictionary storing trial assets.
+    trial_directory : str
+        Directory where the trial assets are saved.
+    experiment_trials : list
+        Reference to the list of trials in the experiment.
     """
 
     def __init__(self, experiment, name, hyperparameters):
         """
-        Initializes the Trial with the given parameters.
+        Initialize the Trial with the given parameters.
 
-        Args:
-            - experiment (Experiment): The experiment instance this trial
-                belongs to.
-            - name (str): The name of the trial.
-            - hyperparameters (dict): Dictionary containing the
-                hyperparameters.
+        Parameters
+        ----------
+        experiment : Experiment
+            The experiment instance this trial belongs to.
+        name : str
+            The name of the trial.
+        hyperparameters : dict
+            Dictionary containing the hyperparameters.
         """
         self._assert_required_experiment_attributes(experiment)
         self._init_research_attributes(experiment)
@@ -65,19 +83,29 @@ class Trial(AbstractContextManager):
 
     @property
     def already_runned(self):
-        """ Returns True if the trial has already been run, False otherwise. """
+        """
+        Check if the trial has already been run.
+
+        Returns
+        -------
+        bool
+            True if the trial has been run before, False otherwise.
+        """
         return self._already_runned
 
     def _assert_required_experiment_attributes(self, experiment):
         """
         Assert if the experiment object has the required attributes.
 
-        Args:
-            - experiment (Experiment): The experiment instance to check.
+        Parameters
+        ----------
+        experiment : Experiment
+            The experiment instance to check.
 
-        Raises:
-            - AttributeError: If the experiment object does not have the
-                required attributes.
+        Raises
+        ------
+        AttributeError
+            If the experiment object does not have the required attributes.
         """
         required_attributes = ["figures", "evaluation_metrics"]
         for attr in required_attributes:
@@ -86,7 +114,9 @@ class Trial(AbstractContextManager):
                 raise AttributeError(msg)
 
     def _init_research_attributes(self, experiment):
-        """ Initialize the research attributes from the Experiment class. """
+        """
+        Initialize the research attributes from the Experiment class.
+        """
         self.research_attributes = ResearchAttributes()
         copy_public_properties(experiment, self.research_attributes)
 
@@ -94,10 +124,14 @@ class Trial(AbstractContextManager):
         """
         Initialize the trial assets dictionary to store trial information.
 
-        Args:
-            - experiment (Experiment): The experiment instance.
-            - name (str): The name of the trial.
-            - hyperparameters (dict): The hyperparameters for the trial.
+        Parameters
+        ----------
+        experiment : Experiment
+            The experiment instance.
+        name : str
+            The name of the trial.
+        hyperparameters : dict
+            The hyperparameters for the trial.
         """
         trial_directory = self._make_trial_directory(
             experiment.experiment_assets["directory"],
@@ -116,14 +150,19 @@ class Trial(AbstractContextManager):
 
     def _make_trial_directory(self, experiment_directory, name):
         """
-        Creates the directory path, makes the directory and returns the path.
+        Create the directory for the trial.
 
-        Args:
-            - experiment_directory (str): The directory of the experiment.
-            - name (str): The name of the trial.
+        Parameters
+        ----------
+        experiment_directory : str
+            The directory of the experiment.
+        name : str
+            The name of the trial.
 
-        Returns:
-            - str: The path to the trial directory.
+        Returns
+        -------
+        str
+            The path to the trial directory.
         """
         trial_directory = os.path.join(
             experiment_directory,
@@ -133,25 +172,61 @@ class Trial(AbstractContextManager):
         return trial_directory
 
     def _check_if_already_runned(self):
+        """
+        Check if the trial has already been run.
+
+        Returns
+        -------
+        bool
+            True if the trial exists in the experiment's trial list,
+            False otherwise.
+        """
         trial = self.trial_assets["name"]
         experiment_trials = [trial["name"] for trial in self.experiment_trials]
         return trial in experiment_trials
 
     def __enter__(self):
         """
-        Sets up the trial by creating the necessary directories.
+        Set up the trial by creating the necessary directories.
 
-        Returns:
-            - self: The Trial instance.
+        Returns
+        -------
+        Trial
+            The Trial instance.
         """
         self.trial_assets["start_time"] = get_datetime()
         return self
 
     def _raise_exception_if_any(self, exc_type, exc_value, traceback):
+        """
+        Raise any encountered exception during trial execution.
+
+        Parameters
+        ----------
+        exc_type : Exception type
+            The exception type if an exception occurred.
+        exc_value : Exception value
+            The exception value if an exception occurred.
+        traceback : traceback
+            The traceback if an exception occurred.
+        """
         if exc_type is not None:
             raise
 
     def _remove_trial(self, trial_name):
+        """
+        Remove the trial from the experiment's trial list.
+
+        Parameters
+        ----------
+        trial_name : str
+            The name of the trial to remove.
+
+        Raises
+        ------
+        ValueError
+            If the trial is not found in the experiment's trial list.
+        """
         names = [trial["name"] for trial in self.experiment_trials]
         if trial_name not in names:
             msg = f"Trial {trial_name} not found in experiment trials."
@@ -163,7 +238,9 @@ class Trial(AbstractContextManager):
         os.makedirs(trial_dir)
 
     def _write_trial_assets(self):
-        """ Writes the trial assets to a JSON file. """
+        """
+        Write the trial assets to a JSON file.
+        """
         trial_info_json = os.path.join(
             self.trial_assets["directory"], "trial_info.json"
         )
@@ -182,12 +259,16 @@ class Trial(AbstractContextManager):
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
-        Saves the trial assets and figures and creates experiment report.
+        Save the trial assets, figures, and results.
 
-        Args:
-            - exc_type: The exception type if an exception occurred.
-            - exc_value: The exception value if an exception occurred.
-            - traceback: The traceback if an exception occurred.
+        Parameters
+        ----------
+        exc_type : Exception type
+            The exception type if an exception occurred.
+        exc_value : Exception value
+            The exception value if an exception occurred.
+        traceback : traceback
+            The traceback if an exception occurred.
         """
         duration = get_duration(self.trial_assets["start_time"])
         self.trial_assets["duration"] = duration

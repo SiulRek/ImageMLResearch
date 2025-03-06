@@ -7,14 +7,17 @@ def _get_results_summary_table(experiment_assets):
     """
     Generate a summary table for the experiment results of all trials.
 
-    Args:
-        - experiment_assets (dict): Dictionary containing experiment assets.
+    Parameters
+    ----------
+    experiment_assets : dict
+        Dictionary containing experiment assets.
 
-    Returns:
-        - dict: Dictionary containing the summary table with metrics as keys
-            and trial names as sub-keys.
+    Returns
+    -------
+    dict
+        Dictionary containing the summary table with metrics as keys
+        and trial names as sub-keys.
     """
-
     results_table = dict()
     chapters = dict()
     trials = experiment_assets.get("trials", [])
@@ -37,25 +40,27 @@ def _get_results_summary_table(experiment_assets):
 
 def _get_hyperparameters_summary_table(experiment_assets):
     """
-    Generate a hyperaparameters summary table of all trials in the experiment.
+    Generate a hyperparameters summary table of all trials in the experiment.
 
-    Args:
-        - experiment_assets (dict): Dictionary containing experiment assets.
+    Parameters
+    ----------
+    experiment_assets : dict
+        Dictionary containing experiment assets.
 
-    Returns:
-        - dict: Dictionary containing the summary table with metrics as keys
-            and trial names as sub-keys.
+    Returns
+    -------
+    dict
+        Dictionary containing the summary table with hyperparameters as keys
+        and trial names as sub-keys.
     """
-
     hparam_table = dict()
     chapters = dict()
     trials = experiment_assets.get("trials", [])
 
-    # Rows correspond to trials, columns correspond to metrics.
+    # Rows correspond to trials, columns correspond to hyperparameters.
     for trial in trials:
         row = trial.get("name", "No Name")
         chapters[row] = f"[Chapter](#{row.lower().replace(' ', '-')})"
-        # TODO: Get sort metric value here.
         hparams = trial.get("hyperparameters", {})
         for col, value in hparams.items():
             if col not in hparam_table:
@@ -69,15 +74,21 @@ def _pop_classification_reports(trial):
     """
     Pop the classification reports from the evaluation metrics of a trial.
 
-    Args:
-        - trial (dict): Dictionary containing trial assets.
+    Parameters
+    ----------
+    trial : dict
+        Dictionary containing trial assets.
 
-    Returns:
-        - list: List of classification reports mantaining the order of the
-            metrics sets in the evaluation metrics dictionary.
+    Returns
+    -------
+    list
+        List of classification reports maintaining the order of the
+        metrics sets in the evaluation metrics dictionary.
 
-    NOTE: This function pops the classification reports from the original
-    evaluation metrics dictionary.
+    Notes
+    -----
+    This function modifies the original evaluation metrics dictionary
+    by removing the classification reports.
     """
     classification_reports = []
     for metrics_set in trial.get("evaluation_metrics", {}).values():
@@ -94,10 +105,11 @@ def create_experiment_report(experiment_assets):
     Generate a comprehensive experiment report in Markdown format and save it
     to a file.
 
-    Args:
-        - experiment_assets (dict): Dictionary containing experiment assets.
+    Parameters
+    ----------
+    experiment_assets : dict
+        Dictionary containing experiment assets.
     """
-
     def from_exp_get(key, default="N/A"):
         return experiment_assets.get(key, default)
 

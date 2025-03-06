@@ -9,20 +9,24 @@ def recursive_type_conversion(source_value, target_datatype_template):
     (e.g., list, tuple, dictionary), each item within the collection will also
     be converted to match the corresponding item in the template.
 
-    Args:
-        - source_value: The value whose data type is to be converted.
-          It can be of any type: primitive data types, list, tuple, or dict.
-        - target_datatype_template: An instance of the desired data type
-          that serves as a template for conversion. It should be of the same
-          structure as `source_value` if it is a collection. If it is a
-          dictionary, `target_datatype_template` shall have all keys of
-          `source_value`, the other way around is not required.
+    Parameters
+    ----------
+    source_value : object
+        The value whose data type is to be converted. It can be of any type:
+        primitive data types, list, tuple, or dict.
+    target_datatype_template : object
+        An instance of the desired data type that serves as a template for
+        conversion. It should be of the same structure as `source_value` if it
+        is a collection. If it is a dictionary, `target_datatype_template`
+        shall have all keys of `source_value`, the other way around is not
+        required.
 
-    Returns:
-        - The `source_value` converted to the data type structure of
-          `target_datatype_template`.
+    Returns
+    -------
+    object
+        The `source_value` converted to the data type structure of
+        `target_datatype_template`.
     """
-
     target_datatype = type(target_datatype_template)
 
     if target_datatype_template in [int, float, str, bool]:
@@ -87,10 +91,3 @@ def recursive_type_conversion(source_value, target_datatype_template):
         return source_value
 
     return source_value
-
-
-if __name__ == "__main__":
-    source_value = [10, 1]
-    target_datatype_template = (int, bool)
-    print(recursive_type_conversion(source_value, target_datatype_template))
-    print(int("10"), "+", int("20"), "=", float("10") + float("20"))

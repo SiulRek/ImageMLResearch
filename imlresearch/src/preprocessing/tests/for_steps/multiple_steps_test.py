@@ -1,24 +1,30 @@
 """
-This module dynamically creates and manages unittest classes for testing
-various image preprocessing steps, with each class inheriting from
-`TestSingleStep`. It utilizes dynamic class creation in Python to generate
-test cases for different preprocessing steps. Some tests can be skipped
-based on configuration flags.
+This module dynamically creates and manages unittest classes for testing 
+various image preprocessing steps. Each class inherits from `TestSingleStep`.
 
-Key Components:
-    - DynamicTestStep: A class that dynamically generates test cases for
-      each specific image preprocessing step.
-    - ENABLE_VISUAL_INSPECTION: A flag to enable/disable tests that require
-      visual inspection of processed images.
-    - steps_data: A collection of tuples (step_class, arguments,
-      visual_inspection_always_disable), representing the different image
-      preprocessing steps and their parameters.
+It utilizes dynamic class creation in Python to generate test cases for 
+different preprocessing steps. Some tests can be skipped based on 
+configuration flags.
 
-Note:
-    - This module accommodates variations in preprocessing steps, recognizing
-      that not all test cases in `TestSingleStep` are universally applicable.
-      Some steps may require customized modifications to standard test cases.
+Key Components
+--------------
+ENABLE_VISUAL_INSPECTION : bool
+    A flag to enable or disable tests requiring visual inspection of images.
+steps_data : list of tuple
+    A collection of tuples (step_class, arguments, 
+    visual_inspection_always_disable), representing the different image 
+    preprocessing steps and their parameters.
+DynamicTestStep
+    A class that dynamically generates test cases for specific image 
+    preprocessing steps.
+
+Notes
+-----
+This module accommodates variations in preprocessing steps, recognizing 
+that not all test cases in `TestSingleStep` are universally applicable. 
+Some steps may require customized modifications to standard test cases.
 """
+
 
 import re
 import unittest
@@ -35,6 +41,26 @@ ENABLE_VISUAL_INSPECTION = True
 def create_test_class_for_step(
     step_class, arguments, visual_inspection_always_disable=False
 ):
+    """
+    Dynamically creates a test class for a given preprocessing step.
+
+    This function generates a unittest class that tests the provided
+    preprocessing step, verifying its execution and the effect on the image.
+
+    Parameters
+    ----------
+    step_class : class
+        The preprocessing step class to test.
+    arguments : dict
+        The arguments to initialize the preprocessing step.
+    visual_inspection_always_disable : bool, optional
+        Flag to always disable visual inspection tests, by default False
+
+    Returns
+    -------
+    type
+        A dynamically created test class.
+    """
 
     class DynamicTestStep(TestSingleStep):
         TestStep = step_class
@@ -44,6 +70,10 @@ def create_test_class_for_step(
 
             @skip("Visual inspection not enabled")
             def test_processed_image_visualization(self):
+                """
+                Skips the visualization test if visual inspection is 
+                disabled.
+                """
                 pass
 
         if isinstance(step_class(), steps.DilateErodeSequencer):
@@ -72,12 +102,14 @@ def create_test_class_for_step(
 
             @skip("No value or shape changes are expected in Type Casting.")
             def test_process_execution(self):
+                """ Skips test as no value or shape changes are expected. """
                 pass
 
         if isinstance(step_class(), steps.DummyStep):
 
             @skip("No value or shape changes are expected in Dummy Step.")
             def test_process_execution(self):
+                """ Skips test as no value or shape changes are expected. """
                 pass
 
     name = step_class.name.replace(" ", "")
@@ -129,9 +161,11 @@ def load_multiple_steps_tests():
     and their corresponding arguments. For each step, it dynamically creates a
     test class using `create_test_class_for_step` and loads the test cases.
 
-    Returns:
-        - unittest.TestSuite: A combined test suite aggregating tests for
-          multiple preprocessing step test classes.
+    Returns
+    -------
+    unittest.TestSuite
+        A combined test suite aggregating tests for multiple preprocessing
+        step test classes.
     """
     test_suites = []
     loader = unittest.TestLoader()

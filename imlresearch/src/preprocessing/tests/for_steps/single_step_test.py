@@ -5,11 +5,13 @@ preprocessing step must successfully pass all the tests specified in this module
 or customized tests to ensure its functionality, compatibility, and reliability
 within the pipeline!
 
-Note:
-    - Test Adaptability: The module acknowledges that not all tests in
-        `TestSingleStep` are universally applicable. Therefore, it accommodates
-        the need for customized modifications in test cases to effectively
-        challenge and validate the diversity of image preprocessing steps.
+Note
+---------
+Test Adaptability
+    The module acknowledges that not all tests in
+    `TestSingleStep` are universally applicable. Therefore, it accommodates
+    the need for customized modifications in test cases to effectively
+    challenge and validate the diversity of image preprocessing steps.
 """
 
 import json
@@ -87,10 +89,11 @@ class TypeCaster(StepBase):
         Initializes the TypeCaster object for integration into an image
         preprocessing pipeline.
 
-        Args:
-            - output_dtype (str): The desired data type to cast the image
-                tensor to. Must be an attribute in tensorflow. Default is
-                'float16'.
+        Parameters
+        ----------
+        output_dtype : str, optional
+            The desired data type to cast the image tensor to. Must be an
+            attribute in tensorflow. Default is 'float16'.
         """
         super().__init__(locals())
         self.output_datatype = getattr(tf, output_dtype)
@@ -158,6 +161,15 @@ class TestSingleStep(BaseTestCase):
         Helper method to verify the image dimensions and color channels in a
         processed dataset. Compares the processed images to the original dataset
         to ensure correct height, width, and color channel transformations.
+
+        Parameters
+        ----------
+        processed_images : list
+            The processed image dataset.
+        original_images : list
+            The original image dataset.
+        color_channel_expected : int
+            The expected number of color channels in the processed image.
         """
         zipped_images = zip(original_images, processed_images)
         for original_image, processed_image in zipped_images:
@@ -179,8 +191,8 @@ class TestSingleStep(BaseTestCase):
         Test to verify that the datatype specifications for StepToTest instance
         parameters are correct. Ensures that the actual parameters match the
         expected datatypes specified in the class.
-        """
 
+        """
         parameters = self.test_step.parameters
         init_parameters_datatype = self.TestStep.arguments_datatype
 
@@ -205,6 +217,7 @@ class TestSingleStep(BaseTestCase):
         Test to verify the presence and correctness of the mapping entry for the
         tested preprocessing step. Checks if the step class is correctly mapped
         and if the mapping points to the step itself.
+
         """
         step_name = self.test_step.name
         self.assertIn(
@@ -255,6 +268,7 @@ class TestSingleStep(BaseTestCase):
         maintaining data integrity. Verifies that the output datatype of the
         processed images matches the expected datatype specified in the
         preprocessing step's output datatype configuration.
+
         """
         processed_images = self.test_step(self.image_dataset)
         for image in processed_images:
@@ -265,6 +279,7 @@ class TestSingleStep(BaseTestCase):
         Test to ensure that RGB images are processed correctly. Verifies that
         the RGB images, after processing, have the expected color channel
         dimensions.
+
         """
         pipeline = [self.test_step, RGBToGrayscale()]
         preprocessor = ImagePreprocessor()
@@ -279,6 +294,7 @@ class TestSingleStep(BaseTestCase):
         Test to ensure that grayscale images are processed correctly. Checks if
         the grayscale images maintain their dimensions after processing and
         verifies the color channel transformation correctness.
+
         """
         pipeline = [RGBToGrayscale(), self.test_step]
         preprocessor = ImagePreprocessor()
@@ -299,8 +315,8 @@ class TestSingleStep(BaseTestCase):
         StepToTest, is correctly instantiated and configured based on the
         settings provided in the JSON file. This ensures the JSON Files's
         compatibility and correctness with the pipeline instantiation process.
-        """
 
+        """
         step_name = self.test_step.name
 
         with open(self.json_template, "r", encoding="utf-8") as file:
@@ -325,8 +341,8 @@ class TestSingleStep(BaseTestCase):
         Test to ensure the functionality of saving and loading the preprocessing
         pipeline. Confirms that the pipeline configuration is correctly
         preserved across save and load operations.
-        """
 
+        """
         mock_mapping = {
             "RGB_to_Grayscale": RGBToGrayscale,
             "Test_Step": self.TestStep
@@ -360,6 +376,7 @@ class TestSingleStep(BaseTestCase):
         images. It processes RGB and grayscale images through the StepToTest,
         visualizes them using PCBVisualizerforTF, and saves these visualizations
         to files. The method allows processed images to be visually inspected.
+
         """
         if self.visual_inspection:
             directory = self.step_visualization_dir

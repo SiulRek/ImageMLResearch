@@ -13,7 +13,14 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestTrial(BaseTestCase):
+    """
+    Unit tests for the Trial class.
+    """
+
     def setUp(self):
+        """
+        Sets up the test environment before each test case.
+        """
         super().setUp()
         self.mock_experiment = MagicMock()
         self.mock_experiment.experiment_assets = {
@@ -36,6 +43,19 @@ class TestTrial(BaseTestCase):
         )
 
     def _read_trial_info(self, trial):
+        """
+        Reads the trial information from the corresponding JSON file.
+
+        Parameters
+        ----------
+        trial : Trial
+            The trial instance.
+
+        Returns
+        -------
+        dict
+            The trial assets loaded from the JSON file.
+        """
         trial_info_json = os.path.join(
             trial.trial_assets["directory"], "trial_info.json"
         )
@@ -44,6 +64,9 @@ class TestTrial(BaseTestCase):
         return assets
 
     def test_trial_initialization(self):
+        """
+        Tests that a trial is correctly initialized.
+        """
         with self.call_test_trial() as trial:
             self.assertIsInstance(trial, Trial)
             self.assertEqual(trial.trial_assets["name"], self.name)
@@ -59,14 +82,17 @@ class TestTrial(BaseTestCase):
         self.assertIsInstance(trial.trial_assets["duration"], str)
 
     def test_trial_info_written_to_json(self):
-        with self.call_test_trial() as trial:
+        """
+        Tests that trial information is correctly written to a JSON file.
+        """
+        with self.call_test_trial():
             pass
         trial_info_json = os.path.join(
-            trial.trial_assets["directory"], "trial_info.json"
+            self.temp_dir, "test_trial", "trial_info.json"
         )
         self.assertTrue(os.path.exists(trial_info_json))
 
-        assets = self._read_trial_info(trial)
+        assets = self._read_trial_info(self.call_test_trial())
 
         self.assertEqual(assets["name"], self.name)
         self.assertEqual(assets["hyperparameters"], self.hyperparameters)
@@ -77,6 +103,9 @@ class TestTrial(BaseTestCase):
         self.assertIn("training_history", assets)
 
     def test_add_trial_to_experiment_assets(self):
+        """
+        Tests that a trial is added to the experiment's assets.
+        """
         with self.call_test_trial() as trial:
             pass
         trials = self.mock_experiment.experiment_assets["trials"]
@@ -84,6 +113,9 @@ class TestTrial(BaseTestCase):
         self.assertEqual(trials[0], trial.trial_assets)
 
     def test_trial_with_outputs(self):
+        """
+        Tests that a trial correctly processes outputs.
+        """
         with self.call_test_trial() as trial:
             figures = {
                 "history": plt.figure(),
@@ -109,13 +141,15 @@ class TestTrial(BaseTestCase):
         self.assertEqual(read_assets, trial_assets)
 
     def test_set_last_score(self):
+        """
+        Tests that the last score is correctly set.
+        """
         return_value = {
             "figures": {},
             "evaluation_metrics": {},
             "training_history": {},
         }
 
-        # val_loss is present in training history.
         with self.call_test_trial():
             return_value["training_history"] = {
                 "loss": [0.1, 0.2, 0.3],
@@ -125,24 +159,20 @@ class TestTrial(BaseTestCase):
         last_score = LastScoreSingleton().take()
         self.assertEqual(last_score, 0.4)
 
-        # val_loss is not present in training history.
         with self.call_test_trial():
             return_value["training_history"] = {"loss": [0.1, 0.2, 0.3]}
             self.mock_experiment.get_results.return_value = return_value
         last_score = LastScoreSingleton().take()
         self.assertEqual(last_score, 0.3)
 
-        # Non empty results but training_history is empty ...
         LastScoreSingleton().clear()
         with self.call_test_trial():
             return_value["evaluation_metrics"] = {"accuracy": 0.9}
             return_value["training_history"] = {}
             self.mock_experiment.get_results.return_value = return_value
-        # ... should raise an exception as no score was set.
         with self.assertRaises(ValueError):
             LastScoreSingleton().take()
 
-        # Empty results sets last score to None.
         LastScoreSingleton().clear()
         with self.call_test_trial():
             return_value["evaluation_metrics"] = {}
@@ -151,6 +181,9 @@ class TestTrial(BaseTestCase):
         self.assertIsNone(LastScoreSingleton().take())
 
     def test_trial_exit_with_exception(self):
+        """
+        Tests that an exception during a trial is properly handled.
+        """
         def raise_error_with_traceback():
             try:
                 raise ValueError()
@@ -169,6 +202,9 @@ class TestTrial(BaseTestCase):
         self.assertEqual(len(trials), 0)
 
     def test_trial_already_runned(self):
+        """
+        Tests if a trial that has already run is correctly detected.
+        """
         with self.call_test_trial() as trial:
             self.assertFalse(trial.already_runned)
 
@@ -176,6 +212,9 @@ class TestTrial(BaseTestCase):
             self.assertTrue(trial.already_runned)
 
     def test_non_serializable_hyperparameters(self):
+        """
+        Tests that non-serializable hyperparameters are handled properly.
+        """
         non_serializable_params = {"lr": MagicMock(), "model": MagicMock()}
         with Trial(
             experiment=self.mock_experiment,

@@ -1,6 +1,6 @@
 """
-This module facilitates running all unit tests across various submodules
-of the Researcher system. It uses Python's built-in unittest framework to
+This module facilitates running all unit tests across various submodules 
+of the Researcher system. It uses Python's built-in unittest framework to 
 run tests located in the 'tests' subdirectory of each module.
 """
 
@@ -14,7 +14,9 @@ from imlresearch.src.experimenting.tests.test_runner import (
     ExperimentingTestRunner,
 )
 from imlresearch.src.plotting.tests.test_runner import PlottingTestRunner
-from imlresearch.src.preprocessing.tests.test_runner import PreprocessingTestRunner    # noqa: E501
+from imlresearch.src.preprocessing.tests.test_runner import (
+    PreprocessingTestRunner,
+)
 from imlresearch.src.research.tests.test_runner import ResearchTestRunner
 from imlresearch.src.testing.helpers.generate_test_results_message import (
     generate_test_results_message,
@@ -29,10 +31,12 @@ LOG_FILE = os.path.join(FILE_DIR, "test_results.log")
 
 def run_tests():
     """
-    Runs all tests from various submodules and aggregates the results.
+    Run all tests from various submodules and aggregate the results.
 
-    Returns:
-        - str: A message summarizing the test results.
+    Returns
+    -------
+    str
+        A message summarizing the test results.
     """
     os.makedirs(FILE_DIR, exist_ok=True)
     TestResultLogger(LOG_FILE)

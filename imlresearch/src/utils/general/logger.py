@@ -5,12 +5,16 @@ import os
 class Logger:
     def __init__(self, log_file, log_level=logging.INFO, mode="w"):
         """
-        Initializes the Logger class with basic configuration.
+        Initialize the Logger class with basic configuration.
 
-        Args:
-            - log_file (str): Path to the log file.
-            - log_level (logging.level): Level of logging. Default is INFO.
-            - mode (str): The mode to open the log file. Default is "w".
+        Parameters
+        ----------
+        log_file : str
+            Path to the log file.
+        log_level : logging.level, optional
+            Level of logging, by default logging.INFO.
+        mode : str, optional
+            The mode to open the log file, by default "w".
         """
         self.log_file = log_file
         self.log_level = log_level
@@ -21,9 +25,13 @@ class Logger:
         """
         Set up the logger with a file handler and a standard logging format.
 
-        Args:
-            - mode (str): The mode to open the log file. Default is "w".
+        Parameters
+        ----------
+        mode : str
+            The mode to open the log file.
 
+        Notes
+        -----
         This method configures the logger to write to the log file specified
         in the `log_file` attribute.
         """
@@ -43,21 +51,49 @@ class Logger:
             self.logger.removeHandler(handler)
 
     def info(self, message):
-        """Writes an info message to the log."""
+        """
+        Write an info message to the log.
+
+        Parameters
+        ----------
+        message : str
+            The message to log at INFO level.
+        """
         self.logger.info(message)
 
     def warning(self, message):
-        """Writes a warning message to the log."""
+        """
+        Write a warning message to the log.
+
+        Parameters
+        ----------
+        message : str
+            The message to log at WARNING level.
+        """
         self.logger.warning(message)
 
     def error(self, message):
-        """Writes an error message to the log."""
+        """
+        Write an error message to the log.
+
+        Parameters
+        ----------
+        message : str
+            The message to log at ERROR level.
+        """
         self.logger.error(message)
 
     def log_title(self, title):
         """
-        Logs a title string with a specific format.
+        Log a title string with a specific format.
 
+        Parameters
+        ----------
+        title : str
+            The title string to log.
+
+        Notes
+        -----
         This method formats the given title string with a pattern of dashes
         before and after, then logs it at the INFO level.
         """

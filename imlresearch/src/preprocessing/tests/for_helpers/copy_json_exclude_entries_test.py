@@ -13,14 +13,14 @@ class TestCopyJsonExcludeEntries(BaseTestCase):
     Test cases for the copy_json_exclude_entries function.
 
     The Test Suite contains the following test cases:
-        - test_copy_json_exclude_entries: Tests the
-            copy_json_exclude_entries function with a non-empty exclude_keys
-            list.
-        - test_copy_json_exclude_entries_empty_exclude_keys: Tests the
-            copy_json_exclude_entries function with an empty exclude_keys list.
-        - test_copy_json_exclude_entries_not_existing_key: Tests the
-            copy_json_exclude_entries function with a non-existing key in the
-            exclude_keys list.
+    - test_copy_json_exclude_entries: Tests the
+        copy_json_exclude_entries function with a non-empty exclude_keys
+        list.
+    - test_copy_json_exclude_entries_empty_exclude_keys: Tests the
+        copy_json_exclude_entries function with an empty exclude_keys list.
+    - test_copy_json_exclude_entries_not_existing_key: Tests the
+        copy_json_exclude_entries function with a non-existing key in the
+        exclude_keys list.
     """
 
     @classmethod

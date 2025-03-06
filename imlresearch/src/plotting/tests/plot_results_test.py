@@ -12,10 +12,15 @@ from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
 class TestPlotMultiClassClassificationResults(PlottingTestCase):
-    """Test suite for the plot_multi_class_classification_results function."""
+    """
+    Test suite for the plot_multi_class_classification_results function.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class with sample data for multi-class classification.
+        """
         super().setUpClass()
         cls.image_dataset = cls.load_mnist_digits_dataset(
             sample_num=8, labeled=True
@@ -32,8 +37,10 @@ class TestPlotMultiClassClassificationResults(PlottingTestCase):
         cls.y_pred = np.random.rand(cls.y_true.shape[0], cls.y_true.shape[1])
 
     def test_plot_results_without_prediction_bar(self):
-        """Test plotting multi-class classification results without prediction 
-        bars."""
+        """
+        Tests plotting multi-class classification results without prediction 
+        bars.
+        """
         fig = plot_multi_class_classification_results(
             x=self.images,
             y_true=self.y_true,
@@ -45,8 +52,9 @@ class TestPlotMultiClassClassificationResults(PlottingTestCase):
         self._save_and_close_figure(fig, "without_prediction_bar.png")
 
     def test_plot_results_with_prediction_bar(self):
-        """Test plotting multi-class classification results with 
-        prediction bars."""
+        """
+        Tests plotting multi-class classification results with prediction bars.
+        """
         fig = plot_multi_class_classification_results(
             x=self.images,
             y_true=self.y_true,
@@ -59,10 +67,15 @@ class TestPlotMultiClassClassificationResults(PlottingTestCase):
 
 
 class TestPlotBinaryClassificationResults(PlottingTestCase):
-    """Test suite for the plot_binary_classification_results function."""
+    """
+    Test suite for the plot_binary_classification_results function.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class with sample data for binary classification.
+        """
         super().setUpClass()
         cls.image_dataset = cls.load_mnist_digits_dataset(
             sample_num=8, labeled=True, binary=True
@@ -79,8 +92,9 @@ class TestPlotBinaryClassificationResults(PlottingTestCase):
         cls.y_pred = np.random.rand(cls.y_true.shape[0])
 
     def test_plot_results_without_prediction_bar(self):
-        """Test plotting binary classification results without prediction 
-        bars."""
+        """
+        Tests plotting binary classification results without prediction bars.
+        """
         fig = plot_binary_classification_results(
             x=self.images,
             y_true=self.y_true,

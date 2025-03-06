@@ -6,39 +6,46 @@ from imlresearch.src.research.attributes.attributes_utils import (
 
 class ResearchAttributes:
     """
-    A class to store attributes shared between modules in the research package.
+    Store attributes shared between modules in the research package.
 
-    Attributes:
-        - datasets_container (dict): Dictionary containing datasets. When
-          creating new 'complete_dataset' is added, when split
-          'train_dataset', 'val_dataset', and 'test_dataset' are added.
-        - label_manager (LabelManager): LabelManager instance for handling
-          labels.
-        - outputs_container (dict): Dictionary containing outputs in form of
-          Tuple -> (y_true, y_pred). When fitting, outputs are added. The name
-          corresponds to the dataset name replacing 'dataset' with 'outputs',
-          e.g. 'train_dataset' -> 'train_outputs'.
-        - model (tf.keras.Model): The Keras model instance.
-        - training_history (dict): The tracked training history of the model
-          after fitting (Attribute 'history' of the return value).
-        - evaluation_metrics (dict): The tracked evaluation metrics dicts of
-          the model after evaluating. Can be set from outside.
-          Format {Set_Name: Metrics ({Metric: Value})}
-        - figures (dict): Dictionary containing the tracked figures.
-          Format {figure_name: figure}. Can be set from outside.
+    Attributes
+    ----------
+    datasets_container : dict
+        Dictionary containing datasets. When creating new datasets, 
+        'complete_dataset' is added; when split, 'train_dataset', 
+        'val_dataset', and 'test_dataset' are added.
+    label_manager : LabelManager
+        LabelManager instance for handling labels.
+    outputs_container : dict
+        Dictionary containing outputs in the form of tuples 
+        (y_true, y_pred). When fitting, outputs are added. The name 
+        corresponds to the dataset name replacing 'dataset' with 
+        'outputs', e.g., 'train_dataset' -> 'train_outputs'.
+    model : tf.keras.Model
+        The Keras model instance.
+    training_history : dict
+        The tracked training history of the model after fitting 
+        (Attribute 'history' of the return value).
+    evaluation_metrics : dict
+        The tracked evaluation metrics of the model after evaluating. 
+        Can be set from outside. Format: {Set_Name: {Metric: Value}}.
+    figures : dict
+        Dictionary containing the tracked figures. 
+        Format: {figure_name: figure}. Can be set from outside.
     """
 
     def __init__(self, label_type=None, class_names=None):
         """
-        Initializes the ResearchAttributes with optional label type and class
-        names.
+        Initialize ResearchAttributes with optional label type and class names.
 
-        Args:
-            - label_type (str, None): The type of labels used: 'binary',
-              'multi_class', 'multi_label', 'multi_label_multi_class',
-              'object_detection'. If None, the label_manager is initialized
-              to None.
-            - class_names (list, optional): The list of class names.
+        Parameters
+        ----------
+        label_type : str or None, optional
+            The type of labels used: 'binary', 'multi_class', 'multi_label', 
+            'multi_label_multi_class', 'object_detection'. If None, 
+            label_manager is set to None.
+        class_names : list, optional
+            The list of class names.
         """
         self._datasets_container = {}
         self._label_manager = (
@@ -53,49 +60,102 @@ class ResearchAttributes:
     @property
     def datasets_container(self):
         """
-        Dictionary containing datasets of type tf.data.Dataset, where each
-        sample is a tuple (image, label).
+        Get the dictionary containing datasets.
+
+        Returns
+        -------
+        dict
+            A dictionary of type tf.data.Dataset, where each sample 
+            is a tuple (image, label).
         """
         return self._datasets_container
 
     @property
     def label_manager(self):
-        """LabelManager instance for handling labels."""
+        """
+        Get the LabelManager instance.
+
+        Returns
+        -------
+        LabelManager
+            Instance for handling labels.
+        """
         return self._label_manager
 
     @property
     def outputs_container(self):
-        """Dictionary containing outputs in form of 
-        Tuple -> (y_true, y_pred)."""
+        """
+        Get the dictionary containing outputs.
+
+        Returns
+        -------
+        dict
+            Dictionary in the form of tuples (y_true, y_pred).
+        """
         return self._outputs_container
 
     @property
     def model(self):
-        """The Keras model instance."""
+        """
+        Get the Keras model instance.
+
+        Returns
+        -------
+        tf.keras.Model
+            The Keras model instance.
+        """
         return self._model
 
     @property
     def training_history(self):
-        """The training history of the model after fitting."""
+        """
+        Get the training history of the model after fitting.
+
+        Returns
+        -------
+        dict
+            Dictionary tracking the model's training history.
+        """
         return self._training_history
 
     @property
     def evaluation_metrics(self):
-        """The evaluation metrics dicts of the model after evaluating."""
+        """
+        Get the evaluation metrics dictionary of the model after evaluating.
+
+        Returns
+        -------
+        dict
+            Tracked evaluation metrics with format {Set_Name: {Metric: Value}}.
+        """
         return self._evaluation_metrics
 
     @property
     def figures(self):
-        """Dictionary containing figures. {figure_name: figure}"""
+        """
+        Get the dictionary containing figures.
+
+        Returns
+        -------
+        dict
+            Dictionary containing figures in the format {figure_name: figure}.
+        """
         return self._figures
 
     def synchronize_research_attributes(self, research_attributes):
         """
-        Synchronizes the research attributes with another ResearchAttributes
+        Synchronize research attributes with another ResearchAttributes 
         instance.
 
-        Args:
-            - research_attributes (ResearchAttributes): The instance to sync.
+        Parameters
+        ----------
+        research_attributes : ResearchAttributes
+            The instance to synchronize with.
+
+        Raises
+        ------
+        ValueError
+            If the input instance is not of type ResearchAttributes.
         """
         if not isinstance(research_attributes, ResearchAttributes):
             raise ValueError(
@@ -105,12 +165,12 @@ class ResearchAttributes:
 
     def reset_research_attributes(self, except_datasets=False):
         """
-        Resets the research attributes. Note 'label_manager' is unchanged, as
-        it should not be changed after initialization.
+        Reset research attributes while preserving the label manager.
 
-        Args:
-            - except_datasets (bool, optional): If True, the datasets are
-              not reset.
+        Parameters
+        ----------
+        except_datasets : bool, optional
+            If True, datasets are not reset, by default False.
         """
         if not except_datasets:
             self._datasets_container.clear()

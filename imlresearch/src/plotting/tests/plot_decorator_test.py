@@ -8,9 +8,14 @@ from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
 class TestPlotDecorator(PlottingTestCase):
-    """ Test suite for the plot_decorator function. """
+    """
+    Test suite for the plot_decorator function.
+    """
 
     def setUp(self):
+        """
+        Sets up a fresh instance of Plotter before each test.
+        """
         super().setUp()
         self.plotter = Plotter()
         self.plotter._figures = {}
@@ -19,7 +24,9 @@ class TestPlotDecorator(PlottingTestCase):
         )
 
     def test_plot_decorator_with_default_title_and_show(self):
-        """ Test plot_decorator with default title and show parameters. """
+        """
+        Tests plot_decorator with default title and show parameters.
+        """
 
         @plot_decorator(default_title="Default Title", default_show=False)
         def sample_plot_func(self):
@@ -35,7 +42,9 @@ class TestPlotDecorator(PlottingTestCase):
         plt.close(fig)
 
     def test_plot_decorator_with_custom_title_and_show(self):
-        """ Test plot_decorator with custom title and show parameters. """
+        """
+        Tests plot_decorator with custom title and show parameters.
+        """
 
         @plot_decorator(default_title="Default Title", default_show=False)
         def sample_plot_func(self):
@@ -55,7 +64,10 @@ class TestPlotDecorator(PlottingTestCase):
         plt.close(fig)
 
     def test_plot_decorator_without_title_and_show(self):
-        """ Test plot_decorator without title and show parameters. """
+        """
+        Tests plot_decorator without explicitly passing title and show 
+        parameters.
+        """
 
         @plot_decorator(default_title="Default Title", default_show=False)
         def sample_plot_func(self):
@@ -71,7 +83,10 @@ class TestPlotDecorator(PlottingTestCase):
         plt.close(fig)
 
     def test_plot_decorator_with_invalid_figure(self):
-        """ Test plot_decorator raises ValueError for invalid figure. """
+        """
+        Tests that plot_decorator raises ValueError when the returned value is
+        not a valid figure.
+        """
 
         @plot_decorator(default_title="Invalid Figure", default_show=False)
         def sample_plot_func(self):

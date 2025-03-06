@@ -12,8 +12,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class RandomPerspectiveTransformer(StepBase):
     """
-    A preprocessing step that applies a perspective transformation to an
-    image tensor. This transformation simulates a change in the viewpoint.
+    A preprocessing step that applies a perspective transformation to an 
+    image tensor.
+
+    This transformation simulates a change in viewpoint by warping the 
+    image using randomly perturbed corner points.
     """
 
     arguments_datatype = {"warp_scale": float, "seed": int}
@@ -21,22 +24,51 @@ class RandomPerspectiveTransformer(StepBase):
 
     def __init__(self, warp_scale=0.2, seed=None):
         """
-        Initializes the RandomPerspectiveTransformer object for integration
-        into an image preprocessing pipeline.
+        Initialize the RandomPerspectiveTransformer for integration into an 
+        image preprocessing pipeline.
 
-        Args:
-            - warp_scale (float): Factor to scale the maximum warp intensity.
-              Default is 0.2.
-            - seed (int): Random seed for reproducibility. Default is None.
+        Parameters
+        ----------
+        warp_scale : float, optional
+            Factor to scale the maximum warp intensity, determining the 
+            extent of perspective distortion. Default is 0.2.
+        seed : int, optional
+            Random seed for reproducibility. Default is None.
         """
         super().__init__(locals())
 
     def _setup(self, dataset):
+        """
+        Set up the transformer with a fixed random seed for reproducibility.
+
+        Parameters
+        ----------
+        dataset : Any
+            The dataset being processed.
+
+        Returns
+        -------
+        Any
+            The result of the superclass setup method.
+        """
         random.seed(self.parameters["seed"])
         return super()._setup(dataset)
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply a random perspective transformation to an image.
+
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        tf.Tensor
+            The transformed image tensor with corrected shape.
+        """
         height, width, _ = image_nparray.shape
         warp_intensity = int(
             min(height, width) * self.parameters["warp_scale"]

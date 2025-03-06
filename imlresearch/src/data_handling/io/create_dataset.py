@@ -9,26 +9,37 @@ from imlresearch.src.data_handling.labelling.label_manager import LabelManager
 
 def create_dataset(data, label_type=None, class_names=None):
     """
-    Creates a TensorFlow Dataset object from the given data containing file
-    paths and labels using LabelManager for label encoding. Data can be a list
+    Creates a TensorFlow Dataset from the provided data containing file paths 
+    and labels. Uses LabelManager for label encoding. The data can be a list 
     of dictionaries or a pandas DataFrame.
 
-    Args:
-        - data (dicts, list of dicts or pandas.DataFrame): Data containing
-            'path' and 'label'. 'path' should contain the relative file paths
-            and labels should contain the corresponding labels for the
-            specified 'label_type'.
-        - label_type (str, optional): Specifies the label encoding strategy
-            ('binary', 'multi_class', 'multi_label', 'multi_class_multi_label',
-            'object_detection'). Default is None.
-        - class_names (list, optional): The existing class names for label
-            encoding if 'label_type' is not None. Default is None.
+    Parameters
+    ----------
+    data : list of dict or dict or pandas.DataFrame
+        Data containing 'path' and 'label'. 'path' should contain the relative 
+        file paths, and 'label' should contain the corresponding labels for 
+        the specified 'label_type'.
+    label_type : str, optional
+        Specifies the label encoding strategy. Possible values include:
+        'binary', 'multi_class', 'multi_label', 
+        'multi_class_multi_label', 'object_detection'. Default is None.
+    class_names : list, optional
+        The existing class names for label encoding if 'label_type' is not 
+        None. Default is None.
 
-    Returns:
-        - tf.data.Dataset: A TensorFlow Dataset containing tuples of (image,
-            encoded label), where 'image' is the decoded image file and
-            'encoded label' is processed by LabelManager. If no labels are
-            provided, returns a dataset of images only.
+    Returns
+    -------
+    tf.data.Dataset
+        A TensorFlow Dataset containing tuples of (image, encoded label), where 
+        'image' is the decoded image file and 'encoded label' is processed by 
+        LabelManager. If no labels are provided, returns a dataset of images 
+        only.
+
+    Raises
+    ------
+    ValueError
+        If the input data is not a list of dictionaries, dictionary, or 
+        pandas DataFrame.
     """
     if isinstance(data, pd.DataFrame):
         paths = data["path"].tolist()
@@ -45,7 +56,7 @@ def create_dataset(data, label_type=None, class_names=None):
         labels = data.get("label")
     else:
         msg = "Data must be a list of dictionaries, dictionary, or pandas"
-        msg += "DataFrame."
+        msg += " DataFrame."
         raise ValueError(msg)
 
     if label_type and labels:

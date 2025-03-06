@@ -3,15 +3,19 @@ import tensorflow as tf
 
 def decode_image(image_path):
     """
-    Dynamically decodes an image from a given path based on its extension.
-    Supports JPEG and PNG formats. Uses TensorFlow operations to handle path
+    Decodes an image from a given path based on its extension. Supports 
+    JPEG and PNG formats. Uses TensorFlow operations to handle path 
     operations directly on tensors.
 
-    Args:
-        - image_path (str): The path to the image file.
+    Parameters
+    ----------
+    image_path : str
+        The path to the image file.
 
-    Returns:
-        - tf.Tensor: A tensor representing the image.
+    Returns
+    -------
+    tf.Tensor
+        A tensor representing the decoded image.
     """
     image = tf.io.read_file(image_path)
 

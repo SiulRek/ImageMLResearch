@@ -16,42 +16,46 @@ class StepBase(ABC):
     Base class for defining preprocessing steps for images in an image
     preprocessing pipeline.
 
-    This abstract class provides a structured approach for implementing
-    various image preprocessing steps. Each step is characterized by its
-    unique parameters and functionality, which are defined in the child
-    classes inheriting from StepBase. The class facilitates the integration
-    and execution of preprocessing steps within a TensorFlow image
-    processing pipeline.
+    This abstract class provides a structured approach for implementing various
+    image preprocessing steps. Each step is characterized by its unique 
+    parameters and functionality, which are defined in the child classes
+    inheriting from StepBase. The class facilitates the integration and
+    execution of preprocessing steps within
+    a TensorFlow image processing pipeline.
 
     Child classes should implement the `__call__` method according to their
-    specific processing requirements and specify the value of the class
-    attributes: `arguments_datatype` and `name`.
+    specific processing requirements and specify the value of the
+    class attributes:
+    `arguments_datatype` and `name`.
 
     Decorators `_tensor_pyfunc_wrapper` and `_nparray_pyfunc_wrapper` are
     provided for flexibility in implementing TensorFlow and Python functions.
 
-    Public Class Attribute (read-only):
-        - default_output_datatype (dtype): Default datatype for the output
-          image tensor, can be overridden in child classes.
-        - arguments_datatype (dtype, optional): Datatype for the
-          preprocessing step's arguments. If not defined, defaults to
-          `default_output_datatype`.
-        - name (str): The base identifier for the preprocessing step.
+    Attributes
+    ----------
+    default_output_datatype : dtype
+        Default datatype for the output image tensor, can be overridden in child
+        classes.
+    arguments_datatype : dtype, optional
+        Datatype for the preprocessing step's arguments. If not defined,
+        defaults to `default_output_datatype`.
+    name : str
+        The base identifier for the preprocessing step.
+    parameters : dict
+        A dictionary containing parameters needed for the preprocessing step.
 
-    Public Instance Attribute (read-only):
-        - parameters (dict): A dictionary containing parameters needed for
-          the preprocessing step.
+    Methods
+    -------
+    __call__(image_tensor: tf.Tensor, tf_target: Any) -> tf.Tensor
+        To be implemented by the child class to define the specific 
+        preprocessing functionality. The method takes an image tensor and an
+        optional target, returning the processed image tensor.
 
-    Public Methods:
-        - __call__(image_tensor: tf.Tensor, tf_target: Any) -> tf.Tensor:
-          To be implemented by the child class to define the specific
-          preprocessing functionality. The method takes an image tensor and
-          an optional target, returning the processed image tensor.
-
-    Child Class Template:
-        - class StepTemplate(StepBase):
-            arguments_datatype = <datatype for arguments>
-            name = <Preprocessing step identifier>
+    Child Class Template
+    --------------------
+    class StepTemplate(StepBase):
+        arguments_datatype = <datatype for arguments>
+        name = <Preprocessing step identifier>
 
         def __init__(self, **processing_step_specific_args):
             super().__init__(locals())
@@ -63,14 +67,17 @@ class StepBase(ABC):
             return image_tensor_processed
 
     TODOs when integrating a new preprocessing step in the framework:
-        1. Create a preprocessing step class inheriting from `StepBase`
-           according to the template.
-        2. Add mapping of the class to the constant `STEP_CLASS_MAPPING`
-           {<self.name>: type(self)}.
-        3. Add a JSON entry of the class to
-           .imlresearch/src/preprocessing/definitions/pipeline_template.json.
-        4. Execute single_step_test.py over this class.
+    ---------------------------------------------------------------
+    1. Create a preprocessing step class inheriting from `StepBase` according to
+       the template.
+    2. Add mapping of the class to the constant `STEP_CLASS_MAPPING` {
+        <self.name>: type(self)
+    }
+    3. Add a JSON entry of the class to
+    .imlresearch/src/preprocessing/definitions/pipeline_template.json.
+    4. Execute single_step_test.py over this class.
     """
+
 
     default_output_datatype = tf.uint8
     arguments_datatype = None  # Child Classes must override this attribute

@@ -15,21 +15,34 @@ from imlresearch.src.training.trainer import Trainer
 
 
 class TestBinaryModuleLevelWorkflow(BaseTestCase):
-    """Test case for the binary class research workflow on module level."""
+    """
+    Test case for the binary classification research workflow at the 
+    module level.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Set up the test environment for all test cases.
+
+        This method clears the results directory before running tests.
+        """
         super().setUpClass()
         empty_directory(cls.results_dir)
 
     def setUp(self):
+        """
+        Set up the test environment before each test case.
+
+        This initializes research attributes, data handlers, trainers, 
+        and plotters.
+        """
         super().setUp()
         self.research_attributes = ResearchAttributes(
             label_type="binary",
             class_names=["Digit 0", "Digit 1"],
         )
         self.data_handler = DataHandler()
-        # Synchronize research attributes only for the first data handler.
         self.data_handler.synchronize_research_attributes(
             self.research_attributes
         )
@@ -37,6 +50,19 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         self.plotter = BinaryPlotter()
 
     def _create_compiled_model(self, units):
+        """
+        Create and compile a simple binary classification model.
+
+        Parameters
+        ----------
+        units : int
+            The number of units in the hidden dense layer.
+
+        Returns
+        -------
+        tf.keras.Model
+            The compiled Keras model.
+        """
         model = tf.keras.models.Sequential(
             [
                 tf.keras.layers.Input(shape=(28, 28, 3)),
@@ -53,6 +79,19 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         return model
 
     def _assert_datasets_container(self, module):
+        """
+        Assert that the module contains valid dataset containers.
+
+        Parameters
+        ----------
+        module : object
+            The module whose dataset container is validated.
+
+        Raises
+        ------
+        AssertionError
+            If the datasets container is missing or incorrect.
+        """
         has_datasets_container = (
             hasattr(module, "datasets_container")
             and module.datasets_container is not None
@@ -69,6 +108,19 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
             )
 
     def _assert_outputs_container(self, module):
+        """
+        Assert that the module contains valid output containers.
+
+        Parameters
+        ----------
+        module : object
+            The module whose outputs container is validated.
+
+        Raises
+        ------
+        AssertionError
+            If the outputs container is missing or incorrect.
+        """
         has_outputs_container = (
             hasattr(module, "outputs_container")
             and module.outputs_container is not None
@@ -85,7 +137,12 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
             )
 
     def test_workflow(self):
-        # Dataset Handling
+        """
+        Test the complete binary classification research workflow.
+
+        This method ensures that datasets are loaded, split, backed up, 
+        restored, and correctly processed through trials.
+        """
         dataset = self.load_mnist_digits_dataset(
             sample_num=1000, labeled=True, binary=True
         )
@@ -105,7 +162,6 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         self.data_handler.restore_datasets()
         self._assert_datasets_container(self.data_handler)
 
-        # Experimenting
         trial_definitions = [
             {"name": "Trial 1", "hyperparameters": {"units": 128}},
             {"name": "Trial 2", "hyperparameters": {"units": 256}},
@@ -123,14 +179,12 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                 "The experiment directory does not exist.",
             )
 
-            # Initial Visualization
             self.plotter.synchronize_research_attributes(experiment)
             self.plotter.plot_images()
             experiment.synchronize_research_attributes(self.plotter)
 
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
-                    # Training
                     self.assertTrue(
                         os.path.exists(trial.trial_assets["directory"]),
                         "The trial directory does not exist.",
@@ -153,7 +207,6 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                         "The trainer does not have evaluation metrics.",
                     )
 
-                    # Plotting
                     self.plotter.synchronize_research_attributes(self.trainer)
                     self._assert_outputs_container(self.plotter)
 
@@ -177,7 +230,6 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
                     self.plotter.plot_results(grid_size=(2, 2))
                     experiment.synchronize_research_attributes(self.plotter)
 
-        # Assertions of experiment files existence
         self.assertEqual(
             len(experiment.experiment_assets["trials"]),
             i + 1,
@@ -228,10 +280,8 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         self.assertEqual(
             len(experiment_report_files),
             1,
-            (
             "Expected 1 report file, but found "
-            f"{len(experiment_report_files)}."
-            ),
+            f"{len(experiment_report_files)}.",
         )
 
 

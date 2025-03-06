@@ -16,20 +16,24 @@ from imlresearch.src.utils.general.batch_utils import is_batched
 
 class _ResearcherBase(DataHandler, Trainer):
     """
-    The Researcher class acts as a high-level interface for conducting
-    image-based machine learning experiments. It inherits functionalities from
-    DataHandler, Trainer, and ResearchAttributes. It also synchronizes research
-    attributes from a source instance during initialization.
+    A high-level interface for conducting image-based machine learning 
+    experiments. 
+
+    This class inherits functionalities from DataHandler, Trainer, and 
+    ResearchAttributes. It also synchronizes research attributes from a 
+    source instance during initialization.
     """
 
     def __init__(self, label_type, class_names):
         """
-        Initializes the Researcher by calling initializers from inherited
-        classes and synchronizing research attributes.
+        Initialize the Researcher with necessary attributes and dependencies.
 
-        Args:
-            - label_type (str): The label type for the research attributes.
-            - class_names (list): The class names for the research attributes.
+        Parameters
+        ----------
+        label_type : str
+            The label type for the research attributes.
+        class_names : list
+            The class names for the research attributes.
         """
         assert class_names is not None, (
             "It is recommended to provide class names."
@@ -45,25 +49,37 @@ class _ResearcherBase(DataHandler, Trainer):
 
     @property
     def preprocessor(self):
-        """ImagePreprocessor: The image preprocessor instance."""
+        """
+        Get the image preprocessor instance.
+
+        Returns
+        -------
+        ImagePreprocessor
+            The image preprocessor instance.
+        """
         return self._preprocessor
 
     def run_experiment(
         self, directory, name, description, ask_for_analysis=False
     ):
         """
-        Sets up and runs an experiment within a context manager.
+        Set up and run an experiment within a context manager.
 
-        Args:
-            - directory (str): The directory to save the experiment data.
-            - name (str): The name of the experiment.
-            - description (str): The description of the experiment for the
-              report.
-            - ask_for_analysis (bool, optional): Whether to ask AI for
-              analysis. Defaults to False.
+        Parameters
+        ----------
+        directory : str
+            The directory to save the experiment data.
+        name : str
+            The name of the experiment.
+        description : str
+            The description of the experiment for the report.
+        ask_for_analysis : bool, optional
+            Whether to ask AI for analysis, by default False.
 
-        Returns:
-            - Experiment: The Experiment context manager instance.
+        Returns
+        -------
+        Experiment
+            The Experiment context manager instance.
         """
         return Experiment(
             self,
@@ -77,16 +93,21 @@ class _ResearcherBase(DataHandler, Trainer):
         self, pipeline, dataset_names=None, backup=False
     ):
         """
-        Applies a preprocessing pipeline to the datasets.
+        Apply a preprocessing pipeline to the datasets.
 
-        Args:
-            - pipeline (list[StepBase]): List of preprocessing steps.
-            - dataset_names (list, optional): The dataset names to apply the
-              pipeline to. Defaults to None.
-            - backup (bool, optional): Whether to backup all the datasets
-              before applying the pipeline. Defaults to False.
+        Parameters
+        ----------
+        pipeline : list of StepBase
+            List of preprocessing steps.
+        dataset_names : list, optional
+            The dataset names to apply the pipeline to, by default None.
+        backup : bool, optional
+            Whether to backup all datasets before applying the pipeline, 
+            by default False.
 
-        NOTE: It is not supported to apply a preprocessing pipeline on batched
+        Notes
+        -----
+        It is not supported to apply a preprocessing pipeline on batched 
         datasets.
         """
         preprocessor = self._preprocessor
@@ -115,17 +136,20 @@ class _ResearcherBase(DataHandler, Trainer):
 
 class BinaryResearcher(_ResearcherBase, BinaryPlotter):
     """
-    The BinaryResearcher class inherits from _ResearcherBase and BinaryPlotter
-    to provide functionalities for binary image classification research.
+    A researcher class for binary image classification.
+
+    This class inherits from _ResearcherBase and BinaryPlotter to provide 
+    functionalities for binary image classification research.
     """
 
     def __init__(self, class_names):
         """
-        Initializes the BinaryResearcher by calling initializers from inherited
-        classes and synchronizing research attributes.
+        Initialize the BinaryResearcher.
 
-        Args:
-            - class_names (list): The class names for the research attributes.
+        Parameters
+        ----------
+        class_names : list
+            The class names for the research attributes.
         """
         BinaryPlotter.__init__(self)
         _ResearcherBase.__init__(self, "binary", class_names)
@@ -133,18 +157,20 @@ class BinaryResearcher(_ResearcherBase, BinaryPlotter):
 
 class MultiClassResearcher(_ResearcherBase, MultiClassPlotter):
     """
-    The MultiClassResearcher class inherits from _ResearcherBase and
-    MultiClassPlotter to provide functionalities for multi-class image
-    classification research.
+    A researcher class for multi-class image classification.
+
+    This class inherits from _ResearcherBase and MultiClassPlotter to 
+    provide functionalities for multi-class image classification research.
     """
 
     def __init__(self, class_names):
         """
-        Initializes the MultiClassResearcher by calling initializers from
-        inherited classes and synchronizing research attributes.
+        Initialize the MultiClassResearcher.
 
-        Args:
-            - class_names (list): The class names for the research attributes.
+        Parameters
+        ----------
+        class_names : list
+            The class names for the research attributes.
         """
         MultiClassPlotter.__init__(self)
         _ResearcherBase.__init__(self, "multi_class", class_names)

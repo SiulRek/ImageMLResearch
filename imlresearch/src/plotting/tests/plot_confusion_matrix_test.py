@@ -1,7 +1,6 @@
 import os
 import unittest
 
-
 from imlresearch.src.plotting.functions.plot_confusion_matrix import (
     plot_confusion_matrix,
 )
@@ -9,10 +8,15 @@ from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
 class TestPlotConfusionMatrix(PlottingTestCase):
-    """ Test suite for the plot_confusion_matrix function. """
+    """
+    Test suite for the plot_confusion_matrix function.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class with sample data for testing.
+        """
         super().setUpClass()
         cls.y_true = [0, 1, 2, 2, 0, 1, 0, 2, 1, 1]
         cls.y_pred = [0, 2, 2, 2, 0, 1, 0, 0, 1, 1]
@@ -22,7 +26,9 @@ class TestPlotConfusionMatrix(PlottingTestCase):
         )
 
     def test_plot_confusion_matrix(self):
-        """ Test plotting confusion matrix. """
+        """
+        Tests the plot_confusion_matrix function.
+        """
         fig = plot_confusion_matrix(self.y_true, self.y_pred, self.class_names)
         self._save_and_close_figure(fig, "confusion_matrix.png")
 

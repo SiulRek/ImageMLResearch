@@ -3,13 +3,22 @@ import os
 
 def _stringify_elements(iterable):
     """
-    Recursively converts the elements in an iterable to strings.
+    Recursively convert the elements in an iterable to strings.
 
-    Args:
-        - iterable: The iterable to be converted.
+    Parameters
+    ----------
+    iterable : iterable
+        The iterable to be converted.
 
-    Returns:
-        - The converted iterable with all elements as strings.
+    Returns
+    -------
+    iterable
+        The converted iterable with all elements as strings.
+
+    Raises
+    ------
+    ValueError
+        If an element type cannot be converted to a string.
     """
     if isinstance(iterable, dict):
         return {
@@ -28,21 +37,23 @@ def _stringify_elements(iterable):
     if isinstance(iterable, float):
         value = f"{iterable:.4f}" if iterable > 1e-3 else f"{iterable:.4e}"
         return value
-    msg = f"Values of Type {type(iterable)} cannot be converted to string."
+    msg = f"Values of type {type(iterable)} cannot be converted to string."
     raise ValueError(msg)
 
 
 def _transpose_nested_dicts(nested_dict):
     """
-    Transposes a nested dictionary.
+    Transpose a nested dictionary.
 
-    Args:
-        - nested_dict (dict[str, dict[str, (int|float|bool|str)]]):
-            The nested dictionary to transpose.
+    Parameters
+    ----------
+    nested_dict : dict of dict
+        The nested dictionary to transpose.
 
-    Returns:
-        - dict[str, dict[str, (int|float|bool|str)]]:
-            The transposed nested dictionary.
+    Returns
+    -------
+    dict of dict
+        The transposed nested dictionary.
     """
     transposed_dict = {}
     for outer_key, inner_dict in nested_dict.items():
@@ -55,8 +66,10 @@ class MarkdownFileWriter:
     """
     A helper class to write to a Markdown file.
 
-    Args:
-        - file_path (str): The file path where the Markdown file will be saved.
+    Parameters
+    ----------
+    file_path : str
+        The file path where the Markdown file will be saved.
     """
 
     def __init__(self, file_path):
@@ -65,19 +78,23 @@ class MarkdownFileWriter:
         self.file_lines = []
 
     def page_break(self):
-        """Inserts a page break in the file."""
+        """Insert a page break in the file."""
         self.file_lines.append(
             '\n<div style="page-break-after: always;"></div>\n'
         )
 
     def write_title(self, title, level=1, page_break=False):
         """
-        Writes a title to the file.
+        Write a title to the file.
 
-        Args:
-            - title (str): The text of the title.
-            - level (int, optional): The level of the title. Defaults to 1.
-            - page_break (bool, optional): Whether to insert a page break.
+        Parameters
+        ----------
+        title : str
+            The text of the title.
+        level : int, optional
+            The level of the title, by default 1.
+        page_break : bool, optional
+            Whether to insert a page break, by default False.
         """
         if page_break:
             self.page_break()
@@ -88,23 +105,43 @@ class MarkdownFileWriter:
         self.file_lines.append(title)
 
     def write_text(self, text):
-        """Writes a plain text paragraph to the file."""
+        """
+        Write a plain text paragraph to the file.
+
+        Parameters
+        ----------
+        text : str
+            The text to write.
+        """
         self.file_lines.append(f"{text}\n")
 
     def write_key_value(self, key, value):
-        """Writes a key-value pair in bullet point format to the file."""
+        """
+        Write a key-value pair in bullet point format.
+
+        Parameters
+        ----------
+        key : str
+            The key of the entry.
+        value : str
+            The value of the entry.
+        """
         self.file_lines.append(f"*    *{key}*: {value}\n")
 
     def write_key_value_table(
         self, table_data, key_label="Key", value_label="Value"
     ):
         """
-        Writes a table with key-value pairs.
+        Write a table with key-value pairs.
 
-        Args:
-            - table_data (dict[str, (int|float|bool|str)]): Key-value pairs.
-            - key_label (str, optional): Label of the key column.
-            - value_label (str, optional): Label of the value column.
+        Parameters
+        ----------
+        table_data : dict
+            Key-value pairs to be displayed in the table.
+        key_label : str, optional
+            Label of the key column, by default "Key".
+        value_label : str, optional
+            Label of the value column, by default "Value".
         """
         if not table_data:
             return
@@ -129,12 +166,14 @@ class MarkdownFileWriter:
 
     def write_nested_table(self, nested_table_data, transpose=False):
         """
-        Writes a nested table with outer keys as column headers.
+        Write a nested table with outer keys as column headers.
 
-        Args:
-            - nested_table_data (dict[str, dict[str, (int|float|bool|str)]]):
-                Dictionary of dictionaries.
-            - transpose (bool, optional): Whether to transpose the table.
+        Parameters
+        ----------
+        nested_table_data : dict of dict
+            Dictionary of dictionaries representing the table.
+        transpose : bool, optional
+            Whether to transpose the table, by default False.
         """
         if not nested_table_data:
             return
@@ -175,11 +214,19 @@ class MarkdownFileWriter:
 
     def create_link(self, path, hyperlink_text=None):
         """
-        Creates a Markdown hyperlink to a given path.
+        Create a Markdown hyperlink to a given path.
 
-        Args:
-            - path (str): The file path for the link.
-            - hyperlink_text (str, optional): The hyperlink text.
+        Parameters
+        ----------
+        path : str
+            The file path for the link.
+        hyperlink_text : str, optional
+            The hyperlink text, by default None.
+
+        Returns
+        -------
+        str
+            The Markdown formatted link.
         """
         relative_path = os.path.relpath(path, self.file_dir)
         markdown_path = relative_path.replace(os.sep, "/")
@@ -188,21 +235,24 @@ class MarkdownFileWriter:
 
     def write_figure(self, figure_name, path):
         """
-        Writes a Markdown image link to the file.
+        Write a Markdown image link to the file.
 
-        Args:
-            - figure_name (str): The alt text for the figure.
-            - path (str): The file path to the figure.
+        Parameters
+        ----------
+        figure_name : str
+            The alt text for the figure.
+        path : str
+            The file path to the figure.
         """
         self.file_lines.append(f"!{self.create_link(path, figure_name)}\n")
 
     def save_file(self):
-        """Saves the file to the specified file path."""
+        """Save the file to the specified file path."""
         with open(self.file_path, "w", encoding="utf-8") as file:
             file.write("\n".join(self.file_lines))
 
     def clear_file(self):
-        """Clears all the content of the current file."""
+        """Clear all the content of the current file."""
         self.file_lines = []
 
 

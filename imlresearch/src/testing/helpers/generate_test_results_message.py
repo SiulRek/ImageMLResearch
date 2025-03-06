@@ -1,12 +1,16 @@
 def generate_test_results_message(result):
     """
-    Generates a test result message based on the given test result object.
+    Generate a test result message based on the given test result object.
 
-    Args:
-        - result (unittest.TestResult): The test result object.
+    Parameters
+    ----------
+    result : unittest.TestResult
+        The test result object.
 
-    Returns:
-        - str: The generated test result message.
+    Returns
+    -------
+    str
+        The generated test result message.
     """
     num_passed_tests = (
         result.testsRun

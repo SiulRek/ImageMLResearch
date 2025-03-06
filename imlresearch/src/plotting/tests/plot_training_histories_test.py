@@ -10,10 +10,16 @@ from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
 class TestPlotTrainingHistories(PlottingTestCase):
-    """Test suite for the plot_training_histories function."""
+    """
+    Test suite for the plot_training_histories function.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class by creating a dummy Keras model and generating 
+        training histories for multiple models.
+        """
         super().setUpClass()
         cls.visualization_path = os.path.join(
             cls.results_dir, "plot_training_histories_test.png"
@@ -55,7 +61,14 @@ class TestPlotTrainingHistories(PlottingTestCase):
 
     @classmethod
     def load_mnist_data(cls):
-        """Load MNIST data for generating training history."""
+        """
+        Loads MNIST data for generating training history.
+
+        Returns
+        -------
+        tuple
+            A tuple containing training and validation datasets.
+        """
         dataset = cls.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         dataset = dataset.shuffle(10000)
 
@@ -66,12 +79,16 @@ class TestPlotTrainingHistories(PlottingTestCase):
         return train_dataset, val_dataset
 
     def test_plot_training_histories(self):
-        """Test plotting training histories for multiple models."""
+        """
+        Tests plotting training histories for multiple models.
+        """
         fig = plot_training_histories(self.histories)
         self._save_and_close_figure(fig, "plot_training_histories.png")
 
     def test_plot_training_histories_with_title(self):
-        """Test plotting training histories with a title."""
+        """
+        Tests plotting training histories with a title.
+        """
         fig = plot_training_histories(
             self.histories, title="Training Histories"
         )
@@ -80,7 +97,9 @@ class TestPlotTrainingHistories(PlottingTestCase):
         )
 
     def test_plot_training_histories_with_missing_metrics(self):
-        """Test plotting training histories with missing metrics."""
+        """
+        Tests plotting training histories with missing metrics.
+        """
         # Remove a metric from the history of one model
         self.histories["Model 1"].pop("accuracy")
         self.histories["Model 1"].pop("val_accuracy")
@@ -91,7 +110,9 @@ class TestPlotTrainingHistories(PlottingTestCase):
         )
 
     def test_plot_training_histories_with_different_epoch_lengths(self):
-        """Test plotting training histories with different epoch lengths."""
+        """
+        Tests plotting training histories with different epoch lengths.
+        """
         # Create a new history with a different epoch length
         history3 = self.model.fit(
             self.train_dataset,

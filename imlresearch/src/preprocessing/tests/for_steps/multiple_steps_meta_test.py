@@ -22,6 +22,12 @@ from imlresearch.src.preprocessing.tests.for_steps.single_step_test import (
 
 class TestTestFramework(unittest.TestCase):
     def test_dynamic_class_creation(self):
+        """
+        Test to verify the dynamic creation of test classes for preprocessing
+        steps. Ensures that the class name is correct, the class inherits from
+        `TestSingleStep`, and that `TestStep` and `parameters` attributes are
+        properly set.
+        """
         TestClass = create_test_class_for_step(
             ExampleStep, {"clip_limit": 1.0, "tile_gridsize": (5, 5)}
         )
@@ -40,6 +46,10 @@ class TestTestFramework(unittest.TestCase):
 
 class TestConditionalSkipping(unittest.TestCase):
     def test_visual_inspection_skipping_1(self):
+        """
+        Test to verify that tests requiring visual inspection are skipped
+        when `ENABLE_VISUAL_INSPECTION` is set to False.
+        """
         with patch(
             "imlresearch.src.preprocessing.tests.multiple_steps_test."
             "ENABLE_VISUAL_INSPECTION",
@@ -58,6 +68,10 @@ class TestConditionalSkipping(unittest.TestCase):
         TestClass = create_test_class_for_step(ExampleStep, {})
 
     def test_visual_inspection_skipping_2(self):
+        """
+        Test to verify that tests requiring visual inspection are skipped
+        when `visual_inspection_always_disable` is set to True.
+        """
         with patch(
             "imlresearch.src.preprocessing.tests.multiple_steps_test."
             "ENABLE_VISUAL_INSPECTION",
@@ -78,6 +92,10 @@ class TestConditionalSkipping(unittest.TestCase):
         TestClass = create_test_class_for_step(ExampleStep, {})
 
     def test_visual_inspection_not_skipping(self):
+        """
+        Test to verify that tests requiring visual inspection are not skipped
+        when `ENABLE_VISUAL_INSPECTION` is set to True.
+        """
         with patch(
             "imlresearch.src.preprocessing.tests.multiple_steps_test."
             "ENABLE_VISUAL_INSPECTION",

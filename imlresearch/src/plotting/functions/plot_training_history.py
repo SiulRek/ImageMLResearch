@@ -5,12 +5,16 @@ def plot_training_history(history):
     """
     Plots the training and validation history of a Keras model.
 
-    Args:
-        - history: History dictionary containing the training and validation.
+    Parameters
+    ----------
+    history : dict
+        Dictionary containing the training and validation history.
 
-    Returns:
-        - fig: The Matplotlib figure containing the training and validation
-          history plot.
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the training and validation 
+        history plot.
     """
     # Configuration
     default_fig_size = (10, 6)  # Assumes a single metric.
@@ -56,5 +60,5 @@ def plot_training_history(history):
             ax.legend(loc="best", fontsize=font_size)
             ax.grid(True)
 
-    plt.tight_layout()
+    plt.tight_layout()                  
     return fig

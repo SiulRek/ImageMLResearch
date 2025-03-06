@@ -7,8 +7,10 @@ class TruncatedThresholder(StepBase):
     """
     A preprocessing step that applies truncated thresholding to an image.
 
-    Note: In the case of RGB images, it processes each color channel
-    (Red, Green, Blue) separately.
+    For RGB images, each color channel (Red, Green, Blue) is processed 
+    separately. Truncated thresholding sets pixel values greater than the 
+    threshold to the threshold value, leaving values less than or equal to 
+    the threshold unchanged.
     """
 
     arguments_datatype = {"thresh": float, "max_val": float}
@@ -16,23 +18,37 @@ class TruncatedThresholder(StepBase):
 
     def __init__(self, thresh=128, max_val=255):
         """
-        Initializes the TruncatedThresholder object that can be integrated
-        into an image preprocessing pipeline.
+        Initialize the TruncatedThresholder for integration into an image 
+        preprocessing pipeline.
 
-        Args:
-            - thresh (float, optional): The threshold value used for
-              truncated thresholding. Pixel values greater than this
-              threshold are set to the threshold value itself, and values
-              less than or equal to the threshold remain unchanged.
-              Defaults to 128.
-            - max_val (float, optional): The maximum value that a pixel can
-              take after thresholding. Defaults to 255.
+        Parameters
+        ----------
+        thresh : float, optional
+            The threshold value used for truncated thresholding. Pixel values 
+            greater than this threshold are set to the threshold value itself, 
+            and values less than or equal to the threshold remain unchanged. 
+            Default is 128.
+        max_val : float, optional
+            The maximum value that a pixel can take after thresholding. Default 
+            is 255.
         """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply truncated thresholding to an image.
 
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        numpy.ndarray
+            The thresholded image.
+        """
         def apply_truncated_threshold(np_array):
             _, thresholded_np_array = cv2.threshold(
                 src=np_array,

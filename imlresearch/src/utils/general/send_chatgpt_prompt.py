@@ -10,15 +10,26 @@ def send_chatgpt_prompt(
     prompt_message, max_response_tokens=3000, model="gpt-4o"
 ):
     """
-    Sends a prompt to OpenAI's GPT model and returns the response.
+    Send a prompt to OpenAI's GPT model and return the response.
 
-    Args:
-        - prompt_message (str): The message to send to the model.
-        - max_response_tokens (int): The maximum number of tokens to generate.
-        - model (str): The OpenAI GPT model to use. Defaults to "gpt-4o".
+    Parameters
+    ----------
+    prompt_message : str
+        The message to send to the model.
+    max_response_tokens : int, optional
+        The maximum number of tokens to generate, by default 3000.
+    model : str, optional
+        The OpenAI GPT model to use, by default "gpt-4o".
 
-    Returns:
-        - str: The response message from the model.
+    Returns
+    -------
+    str
+        The response message from the model.
+
+    Raises
+    ------
+    AssertionError
+        If `OPENAI_KEY` is not provided.
     """
     assert OPENAI_KEY is not None, (
         "Please provide an OPENAI_KEY by creating a keys.py file and defining "

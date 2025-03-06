@@ -14,8 +14,15 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestExperiment(BaseTestCase):
+    """
+    Unit tests for the Experiment class.
+    """
+
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the class attributes for testing.
+        """
         super().setUpClass()
         cls.label_type = "multi_class"
         cls.class_names = ["cat", "dog"]
@@ -25,6 +32,14 @@ class TestExperiment(BaseTestCase):
 
     @patch("imlresearch.src.experimenting.helpers.create_experiment_report")
     def setUp(self, mock_create_experiment_report):
+        """
+        Sets up the necessary variables and mocks before each test.
+
+        Parameters
+        ----------
+        mock_create_experiment_report : MagicMock
+            A mock for the create_experiment_report function.
+        """
         super().setUp()
         self.mock_create_experiment_report = mock_create_experiment_report
 
@@ -45,6 +60,9 @@ class TestExperiment(BaseTestCase):
         )
 
     def test_experiment_initialization(self):
+        """
+        Tests that an experiment is initialized correctly.
+        """
         with self.call_test_experiment() as experiment:
             self.assertIsInstance(experiment, Experiment)
             self.assertEqual(
@@ -60,6 +78,9 @@ class TestExperiment(BaseTestCase):
             self.assertTrue(os.path.exists(log_file))
 
     def test_experiment_data_written_to_json(self):
+        """
+        Tests that experiment data is correctly written to a JSON file.
+        """
         with self.call_test_experiment():
             pass
         self.assertTrue(os.path.exists(self.experiment_json))
@@ -74,6 +95,9 @@ class TestExperiment(BaseTestCase):
         self.assertIn("trials", data)
 
     def test_create_experiment_report_called(self):
+        """
+        Tests that the experiment report is generated correctly.
+        """
         with patch.object(
             experiment_module, "create_experiment_report", MagicMock()
         ) as mock_create_experiment_report:
@@ -84,6 +108,9 @@ class TestExperiment(BaseTestCase):
             )
 
     def test_experiment_exit_with_exception(self):
+        """
+        Tests that an exception during an experiment is properly handled.
+        """
         def raise_error_with_traceback():
             try:
                 raise ValueError()
@@ -100,6 +127,21 @@ class TestExperiment(BaseTestCase):
         self.assertTrue(experiment_exception_raised)
 
     def _run_trials_in_experiment(self, trial_definitions, sleep_time=None):
+        """
+        Runs trials in an experiment.
+
+        Parameters
+        ----------
+        trial_definitions : list of tuple
+            A list of trial names and their corresponding hyperparameters.
+        sleep_time : float, optional
+            Time in seconds to sleep after running trials. Defaults to None.
+
+        Returns
+        -------
+        Experiment
+            The experiment instance with trials.
+        """
         with self.call_test_experiment() as experiment:
             trial_runned = False
             for i, (name, hyperparameters) in enumerate(trial_definitions):
@@ -111,7 +153,6 @@ class TestExperiment(BaseTestCase):
                         hyperparameters,
                     )
                     self.assertIn("start_time", trial.trial_assets)
-                    # Simulate accuracy
                     metric_val = float(1 - i * 0.1)
                     metric_inv_val = float(1 - metric_val)
                     metric_kw = {
@@ -132,6 +173,9 @@ class TestExperiment(BaseTestCase):
         return experiment
 
     def test_trials_creation(self):
+        """
+        Tests that trials are correctly created within an experiment.
+        """
         trial_definitions = [
             ("trial1", {"lr": 0.01, "batch_size": 16}),
             ("trial2", {"lr": 0.001, "batch_size": 32}),
@@ -141,6 +185,9 @@ class TestExperiment(BaseTestCase):
         self.assertEqual(len(experiment.experiment_assets["trials"]), 2)
 
     def test_load_experiment_data(self):
+        """
+        Tests loading an experiment with updated parameters.
+        """
         trial_definitions = [
             ("trial1", {"lr": 0.01, "batch_size": 16}),
             ("trial2", {"lr": 0.001, "batch_size": 32}),
@@ -191,6 +238,14 @@ class TestExperiment(BaseTestCase):
         self.assertLess(metric_1st_trial, metric_2nd_trial)
 
     def _modify_experiment_json(self, kwargs):
+        """
+        Modifies the experiment JSON file.
+
+        Parameters
+        ----------
+        kwargs : dict
+            Key-value pairs to update in the experiment JSON file.
+        """
         with open(self.experiment_json, "r", encoding="utf-8") as f:
             data = json.load(f)
         for key, value in kwargs.items():
@@ -199,6 +254,9 @@ class TestExperiment(BaseTestCase):
             json.dump(data, f)
 
     def test_resume_experiment(self):
+        """
+        Tests that an experiment can be resumed correctly.
+        """
         def get_experiment_duration(experiment):
             duration = experiment.experiment_assets["duration"]
             duration = float(duration.replace(":", ""))
@@ -222,12 +280,13 @@ class TestExperiment(BaseTestCase):
         resumed_experiment = self._run_trials_in_experiment(
             new_trial_definitions, sleep_time=0.01
         )
-        total_duration = get_experiment_duration(resumed_experiment)
 
         self.assertEqual(
             len(resumed_experiment.experiment_assets["trials"]), 4
         )
-        self.assertGreater(total_duration, initial_duration)
+        self.assertGreater(
+            get_experiment_duration(resumed_experiment), initial_duration
+        )
 
 
 if __name__ == "__main__":

@@ -6,9 +6,9 @@ class TestResultLogger:
     A Singleton logger for logging unittest results.
 
     This class generates three types of logs:
-        - Detailed Log: Includes the status of each test.
-        - Simplified Log: Only includes whether the test passed or failed.
-        - Error Log: Only includes errors and failures with messages.
+    - Detailed Log: Includes the status of each test.
+    - Simplified Log: Only includes whether the test passed or failed.
+    - Error Log: Only includes errors and failures with messages.
     """
 
     _instance = None
@@ -17,7 +17,14 @@ class TestResultLogger:
     _errors_count = 0
 
     def __new__(cls, *args, **kwargs):
-        """Ensures a single instance of the TestResultLogger class."""
+        """
+        Ensure a single instance of the TestResultLogger class.
+
+        Returns
+        -------
+        TestResultLogger
+            The singleton instance of the logger.
+        """
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         else:
@@ -28,25 +35,31 @@ class TestResultLogger:
         """
         Initialize the TestResultLogger.
 
-        Args:
-            - log_file (str): Path to the detailed log file.
+        Parameters
+        ----------
+        log_file : str, optional
+            Path to the detailed log file, by default "./test_results.log".
         """
         self.log_file = log_file
         self.log_file_simple = log_file.replace(".log", "_simple.log")
         self.log_file_errors = log_file.replace(".log", "_errors.log")
         self.setup_logger()
         self.title = ""  # Will be set through log_title method.
-        self.error_logger_logged_title = False  # Logs title only if an error
-        # or failure occurs.
+        # Logs title only if error occurs.
+        self.error_logger_logged_title = False
 
     def _setup_file_handler(self, logger, file_path, level=logging.INFO):
         """
-        Setup a file handler for the logger.
+        Set up a file handler for the logger.
 
-        Args:
-            - logger (logging.Logger): Logger object to configure.
-            - file_path (str): File path for logging.
-            - level (int): Logging level (default: logging.INFO).
+        Parameters
+        ----------
+        logger : logging.Logger
+            Logger object to configure.
+        file_path : str
+            File path for logging.
+        level : int, optional
+            Logging level, by default logging.INFO.
         """
         logger.setLevel(level)
         file_handler = logging.FileHandler(file_path, mode="w")
@@ -56,7 +69,9 @@ class TestResultLogger:
         logger.addHandler(file_handler)
 
     def setup_logger(self):
-        """Set up the loggers for detailed, simplified, and error logs."""
+        """
+        Set up the loggers for detailed, simplified, and error logs.
+        """
         self.logger = logging.getLogger("TestResultLogger")
         self.simple_logger = logging.getLogger("TestResultLoggerSimple")
         self.error_logger = logging.getLogger("TestResultLoggerErrors")
@@ -67,15 +82,29 @@ class TestResultLogger:
             self._setup_file_handler(self.error_logger, self.log_file_errors)
 
     def _format_title(self, title):
-        """Format a title for logging."""
+        """
+        Format a title for logging.
+
+        Parameters
+        ----------
+        title : str
+            Title to format.
+
+        Returns
+        -------
+        str
+            Formatted title string.
+        """
         return "-" * 14 + f" {title} " + "-" * (60 - len(title) - 14)
 
     def log_title(self, title):
         """
-        Logs a formatted title.
+        Log a formatted title.
 
-        Args:
-            - title (str): Title to be logged.
+        Parameters
+        ----------
+        title : str
+            Title to be logged.
         """
         formatted_title = self._format_title(title)
         self.title = formatted_title
@@ -84,12 +113,16 @@ class TestResultLogger:
 
     def _log_outcome(self, outcome_type, test_method_name, message=""):
         """
-        Logs test outcomes, including errors and failures.
+        Log test outcomes, including errors and failures.
 
-        Args:
-            - outcome_type (str): 'passed', 'failure', or 'raised exc'.
-            - test_method_name (str): Name of the test method.
-            - message (str, optional): Error or failure message.
+        Parameters
+        ----------
+        outcome_type : str
+            'passed', 'failure', or 'raised exc'.
+        test_method_name : str
+            Name of the test method.
+        message : str, optional
+            Error or failure message, by default "".
         """
         log_message = f"Test {outcome_type}: {test_method_name}"
         if outcome_type == "passed":
@@ -112,9 +145,12 @@ class TestResultLogger:
         """
         Log the outcome of a single test case.
 
-        Args:
-            - result (unittest.TestResult): The result object.
-            - test_method_name (str): The name of the test method.
+        Parameters
+        ----------
+        result : unittest.TestResult
+            The result object containing test execution details.
+        test_method_name : str
+            The name of the test method.
         """
         try:
             success = True

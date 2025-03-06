@@ -15,19 +15,44 @@ except ImportError:
 
 
 class TestCreateDataset(BaseTestCase):
-    """ Test suite for the create_dataset function. """
+    """
+    Test suite for the `create_dataset` function.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class by loading sample data.
+        """
         super().setUpClass()
         cls.jpg_dict, cls.png_dict = cls.load_mnist_digits_dicts()
 
     def setUp(self):
+        """
+        Sets up each test by defining class names.
+        """
         super().setUp()
         self.class_names = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     def _normalize_label(self, label):
-        """ Helper function to normalize the label to a predefined format. """
+        """
+        Normalizes a label to a predefined format.
+
+        Parameters
+        ----------
+        label : str, list, or tf.Tensor
+            The label to normalize.
+
+        Returns
+        -------
+        int
+            The normalized label.
+
+        Raises
+        ------
+        ValueError
+            If the label type is invalid.
+        """
         if isinstance(label, str):
             return int(label)
         if isinstance(label, list):
@@ -40,14 +65,34 @@ class TestCreateDataset(BaseTestCase):
         raise ValueError(msg)
 
     def _expected_one_hot_label(self, label):
-        """ Helper function to get the expected one-hot label encoding as a
-        numpy array. """
+        """
+        Generates the expected one-hot encoding for a given label.
+
+        Parameters
+        ----------
+        label : int
+            The class label.
+
+        Returns
+        -------
+        np.array
+            A one-hot encoded representation of the label.
+        """
         one_hot_label = np.zeros(len(self.class_names))
         one_hot_label[int(label)] = 1
         return one_hot_label
 
     def _assert_label(self, label, expected_label):
-        """ Helper function to check the label against the expected label. """
+        """
+        Checks if the given label matches the expected label.
+
+        Parameters
+        ----------
+        label : str, list, or tf.Tensor
+            The label to check.
+        expected_label : str, list, or tf.Tensor
+            The expected label.
+        """
         label = self._normalize_label(label)
         expected_label = self._normalize_label(expected_label)
         self.assertEqual(
@@ -55,8 +100,9 @@ class TestCreateDataset(BaseTestCase):
         )
 
     def test_create_dataset_from_dicts_jpg(self):
-        """ Test create_dataset with a list of dictionaries containing JPG
-        images. """
+        """
+        Tests `create_dataset` with a dictionary containing JPG images.
+        """
         data = self.jpg_dict
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -66,8 +112,9 @@ class TestCreateDataset(BaseTestCase):
             self._assert_label(label, data["label"][i])
 
     def test_create_dataset_from_dicts_png(self):
-        """ Test create_dataset with a list of dictionaries containing PNG
-        images. """
+        """
+        Tests `create_dataset` with a dictionary containing PNG images.
+        """
         data = self.png_dict
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -78,8 +125,9 @@ class TestCreateDataset(BaseTestCase):
 
     @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_create_dataset_from_dataframe_jpg(self):
-        """ Test create_dataset with a pandas DataFrame containing JPG
-        images. """
+        """
+        Tests `create_dataset` with a pandas DataFrame containing JPG images.
+        """
         data = pd.DataFrame(self.jpg_dict)
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -90,8 +138,9 @@ class TestCreateDataset(BaseTestCase):
 
     @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_create_dataset_from_dataframe_png(self):
-        """ Test create_dataset with a pandas DataFrame containing PNG
-        images. """
+        """
+        Tests `create_dataset` with a pandas DataFrame containing PNG images.
+        """
         data = pd.DataFrame(self.png_dict)
         dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -101,7 +150,9 @@ class TestCreateDataset(BaseTestCase):
             self._assert_label(label, self.png_dict["label"][i])
 
     def test_dataset_from_dicts(self):
-        """ Test dataset creation from a list of dictionaries. """
+        """
+        Tests dataset creation from a list of dictionaries.
+        """
         data = [
             {"path": self.png_dict["path"][0],
              "label": self.png_dict["label"][0]},
@@ -117,10 +168,11 @@ class TestCreateDataset(BaseTestCase):
 
     @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_one_hot_encoding(self):
-        """ Test one-hot encoding for class codes. """
+        """
+        Tests that one-hot encoding is applied correctly to class labels.
+        """
         data = pd.DataFrame(self.jpg_dict)
-        label_type = "multi_class"
-        dataset = create_dataset(data, label_type, self.class_names)
+        dataset = create_dataset(data, "multi_class", self.class_names)
         self.assertIsInstance(dataset, tf.data.Dataset)
         for i, (image, label) in enumerate(dataset):
             self.assertIsInstance(image, tf.Tensor)
@@ -132,7 +184,9 @@ class TestCreateDataset(BaseTestCase):
 
     @unittest.skipUnless(pandas_installed, "Pandas is not installed.")
     def test_no_label(self):
-        """ Test dataset creation without label. """
+        """
+        Tests dataset creation without labels.
+        """
         data = pd.DataFrame(self.jpg_dict)
         dataset = create_dataset(data)
         self.assertIsInstance(dataset, tf.data.Dataset)
@@ -140,7 +194,9 @@ class TestCreateDataset(BaseTestCase):
             self.assertIsInstance(image, tf.Tensor)
 
     def test_invalid_data_type(self):
-        """ Test if ValueError is raised for invalid data type. """
+        """
+        Tests that `ValueError` is raised for invalid data types.
+        """
         data = "invalid_data_type"
         with self.assertRaises(ValueError):
             create_dataset(data, "multi_class", self.class_names)

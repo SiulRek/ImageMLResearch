@@ -10,21 +10,30 @@ def save_images(
     **kwargs,
 ):
     """
-    Saves images from dataset to the specified directory. Unlabeled dataset is
-    allowed.
+    Saves images from a dataset to the specified directory. Supports both 
+    labeled and unlabeled datasets.
 
-    Args:
-        - dataset (tf.data.Dataset): The dataset containing images and
-            labels.
-        - output_dir (str): The directory to save the encoded image files.
-        - image_format (str, optional): The format for saving images ('jpg'
-            or 'png'). Defaults to 'jpg'.
-        - prefix (str or function, optional): The prefix for naming the
-            saved images. If a function is provided, it should take a label and
-            return a string. Defaults to None.
-        - start_number (int, optional): The starting number for the
-            sequential naming. Defaults to 0.
-        - num_images (int, optional): The number of images to save.
+    Parameters
+    ----------
+    dataset : tf.data.Dataset
+        The dataset containing images and optionally labels.
+    output_dir : str
+        The directory to save the encoded image files.
+    image_format : str, optional
+        The format for saving images ('jpg' or 'png'). Defaults to 'jpg'.
+    prefix : str or function, optional
+        The prefix for naming the saved images. If a function is provided, 
+        it should take a label and return a string. Defaults to None.
+    start_number : int, optional
+        The starting number for sequential naming. Defaults to 0.
+    num_images : int, optional
+        The number of images to save.
+
+    Raises
+    ------
+    ValueError
+        If the image data type is not supported or the image format is 
+        not 'jpg' or 'png'.
     """
     image_format = kwargs.get("image_format", "jpg")
     prefix = kwargs.get("prefix", "image_")

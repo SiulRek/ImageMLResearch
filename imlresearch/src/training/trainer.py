@@ -1,5 +1,4 @@
 import warnings
-
 import tensorflow as tf
 
 from imlresearch.src.research.attributes.research_attributes import (
@@ -16,10 +15,26 @@ class Trainer(ResearchAttributes):
     """
 
     def __init__(self):
-        """Initializes the Trainer."""
+        """
+        Initialize the Trainer.
+
+        Attributes
+        ----------
+        _datasets_container : dict
+            Dictionary containing datasets.
+        _label_manager : LabelManager or None
+            Label manager instance for handling labels.
+        _model : tf.keras.Model or None
+            The compiled Keras model.
+        _outputs_container : dict
+            Dictionary to store outputs after model predictions.
+        _training_history : dict
+            Dictionary storing model training history.
+        _evaluation_metrics : dict
+            Dictionary containing model evaluation metrics.
+        """
         # Not initializing ResearchAttributes here, prefer calling
         # synchronize_research_attributes explicitly.
-        # super().__init__()
 
         # Initialize research attributes used in the Trainer
         self._datasets_container = {}  # Read
@@ -31,15 +46,24 @@ class Trainer(ResearchAttributes):
 
     def set_compiled_model(self, model):
         """
-        Sets the compiled Keras model for training.
+        Set the compiled Keras model for training.
 
-        Args:
-            - model (tf.keras.Model): Compiled Keras model.
+        Parameters
+        ----------
+        model : tf.keras.Model
+            The compiled Keras model.
         """
         self._model = model
 
     def _assert_datasets_batched(self):
-        """Ensures that datasets are batched correctly."""
+        """
+        Ensure that datasets are batched correctly.
+
+        Raises
+        ------
+        ValueError
+            If a dataset is not batched properly.
+        """
         for name, dataset in self.datasets_container.items():
             dataset = self.datasets_container[name]
             if dataset and dataset.element_spec[0].shape.ndims != 4:
@@ -48,8 +72,8 @@ class Trainer(ResearchAttributes):
 
     def _evaluate_outputs(self):
         """
-        Evaluates the outputs of the model using the appropriate evaluation
-        function based on the label type.
+        Evaluate model outputs using the appropriate evaluation function 
+        based on the label type.
         """
         if "test_output" not in self._outputs_container:
             warnings.warn("No test output found for evaluation.")
@@ -73,13 +97,17 @@ class Trainer(ResearchAttributes):
 
     def _get_labels_tensor(self, dataset_name):
         """
-        Gets the labels from the dataset.
+        Retrieve labels from a dataset.
 
-        Args:
-            - dataset_name (str): Name of the dataset in the container.
+        Parameters
+        ----------
+        dataset_name : str
+            Name of the dataset in the container.
 
-        Returns:
-            - tf.Tensor: Labels from the dataset.
+        Returns
+        -------
+        tf.Tensor
+            Tensor containing labels from the dataset.
         """
         dataset = self._datasets_container[dataset_name]
         labels = dataset.map(lambda x, y: y)
@@ -88,13 +116,20 @@ class Trainer(ResearchAttributes):
 
     def fit_predict_evaluate(self, **kwargs):
         """
-        Fits the model, saves training history, predicts outputs, and evaluates.
+        Fit the model, save training history, predict outputs, and evaluate.
 
-        Requires a 'train_dataset' for training. Optionally, a 'val_dataset'
+        Requires a 'train_dataset' for training. Optionally, a 'val_dataset' 
         can be provided for validation, and a 'test_dataset' for evaluation.
 
-        Args:
-            - **kwargs: Keyword arguments for the Keras model's fit method.
+        Parameters
+        ----------
+        **kwargs : dict
+            Keyword arguments for the Keras model's `fit` method.
+
+        Raises
+        ------
+        ValueError
+            If no compiled model is set or no training dataset is available.
         """
         if self._model is None:
             raise ValueError("A compiled model must be set before calling fit.")

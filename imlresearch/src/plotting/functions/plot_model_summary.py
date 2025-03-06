@@ -1,17 +1,20 @@
 import io
-
 import matplotlib.pyplot as plt
 
 
 def plot_model_summary(model):
     """
-    Plot the summary of the passed model.
+    Plots the summary of a Keras model.
 
-    Args:
-        - model (Keras.Model): Keras model to plot the summary.
+    Parameters
+    ----------
+    model : keras.Model
+        The Keras model for which to plot the summary.
 
-    Returns:
-        - fig: Matplotlib figure for the model configuration.
+    Returns
+    -------
+    matplotlib.figure.Figure
+        Matplotlib figure representing the model summary.
     """
     # Configuration
     font_size = 10

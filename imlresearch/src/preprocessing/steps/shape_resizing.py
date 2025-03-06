@@ -5,8 +5,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class ShapeResizer(StepBase):
     """
-    A preprocessing step that resizes an image to a specified shape,
+    A preprocessing step that resizes an image to a specified shape, 
     potentially altering its aspect ratio.
+
+    The image can be resized using different methods such as bilinear, 
+    nearest neighbor, bicubic, and others.
     """
 
     arguments_datatype = {"desired_shape": (int, int), "resize_method": str}
@@ -22,20 +25,36 @@ class ShapeResizer(StepBase):
 
     def __init__(self, desired_shape=(2000, 2000), resize_method="bilinear"):
         """
-        Initializes the ShapeResizer object for integration into an image
-        preprocessing pipeline.
+        Initialize the ShapeResizer for integration into an image preprocessing 
+        pipeline.
 
-        Args:
-            - desired_shape (tuple of int): The desired height and width of
-              the image after resizing.
-            - resize_method (str): The method used for resizing. Options are
-              'bilinear', 'nearest', 'bicubic', 'lanczos3', 'lanczos5', and
-              'area'.
+        Parameters
+        ----------
+        desired_shape : tuple of int, optional
+            The desired height and width of the image after resizing. Default 
+            is (2000, 2000).
+        resize_method : str, optional
+            The method used for resizing. Options are 'bilinear', 'nearest', 
+            'bicubic', 'lanczos3', 'lanczos5', and 'area'.
+            Default is 'bilinear'.
         """
         self.assert_resize_method(resize_method)
         super().__init__(locals())
 
     def assert_resize_method(self, resize_method):
+        """
+        Ensure that the specified resize method is valid.
+
+        Parameters
+        ----------
+        resize_method : str
+            The method used for resizing.
+
+        Raises
+        ------
+        ValueError
+            If the resize method is not supported.
+        """
         if resize_method not in self.resize_methods:
             raise ValueError(
                 f"Resize method '{resize_method}' is not supported. "
@@ -44,6 +63,19 @@ class ShapeResizer(StepBase):
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
+        """
+        Apply resizing to an image tensor.
+
+        Parameters
+        ----------
+        image_tensor : tf.Tensor
+            The input image tensor.
+
+        Returns
+        -------
+        tf.Tensor
+            The resized image tensor.
+        """
         channels = image_tensor.shape[2]
         image_tensor_with_batch = tf.expand_dims(image_tensor, axis=0)
 

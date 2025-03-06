@@ -5,14 +5,20 @@ def _sanitize_histories(histories):
     """
     Sanitizes the histories dictionary by converting all values to lists.
 
-    Args:
-        - histories: Dictionary containing multiple histories in the format
-          {Name: history}.
+    Parameters
+    ----------
+    histories : dict
+        Dictionary containing multiple histories in the format 
+        {Name: history}.
 
-    Returns:
-        - sanitized_histories: Dictionary containing multiple histories in
-          the format {Name: history}.
-        - known_metrics: List of known metrics in the histories.
+    Returns
+    -------
+    tuple
+        sanitized_histories : dict
+            Dictionary containing multiple histories in the format 
+            {Name: history}.
+        known_metrics : list
+            List of known metrics in the histories.
     """
     sanitized_histories = {}
     known_metrics = list(next(iter(histories.values())).keys())
@@ -32,14 +38,18 @@ def plot_training_histories(histories, title=None):
     """
     Plots the training and validation histories of multiple Keras models.
 
-    Args:
-        - histories: Dictionary containing multiple histories in the format
-          {Name: history}.
-        - title: The title of the plot.
+    Parameters
+    ----------
+    histories : dict
+        Dictionary containing multiple histories in the format {Name: history}.
+    title : str, optional
+        The title of the plot.
 
-    Returns:
-        - fig: The Matplotlib figure containing the combined training and
-          validation history plot.
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the combined training and validation 
+        history plot.
     """
     # Configuration
     font_size = 12

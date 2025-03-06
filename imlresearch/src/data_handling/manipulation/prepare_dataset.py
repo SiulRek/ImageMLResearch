@@ -9,11 +9,15 @@ def _shapes_are_known(dataset):
     """
     Checks if all shapes in a dataset are known.
 
-    Args:
-        - dataset (tf.data.Dataset): The dataset to check.
+    Parameters
+    ----------
+    dataset : tf.data.Dataset
+        The dataset to check.
 
-    Returns:
-        - bool: True if all shapes are known, False otherwise.
+    Returns
+    -------
+    bool
+        True if all shapes are known, False otherwise.
     """
     if isinstance(dataset.element_spec, tuple):
         shapes_known = all(
@@ -26,14 +30,18 @@ def _shapes_are_known(dataset):
 
 def _restore_dataset_shape(dataset):
     """
-    Restores the static shape of a dataset with 'unknown' shape by iterating
+    Restores the static shape of a dataset with 'unknown' shape by iterating 
     over its elements and rebuilding it with the correct static shape.
 
-    Args:
-        - dataset (tf.data.Dataset): The dataset to restore shape for.
+    Parameters
+    ----------
+    dataset : tf.data.Dataset
+        The dataset to restore shape for.
 
-    Returns:
-        - tf.data.Dataset: A dataset with restored static shapes.
+    Returns
+    -------
+    tf.data.Dataset
+        A dataset with restored static shapes.
     """
     elements = list(dataset.as_numpy_iterator())
 
@@ -56,21 +64,33 @@ def prepare_dataset(
     repeat_num=None,
 ):
     """
-    Prepares a TensorFlow dataset by applying shuffling, batching, prefetching,
-    and repeating a number of times. If a parameter is None, the corresponding
+    Prepares a TensorFlow dataset by applying shuffling, batching, prefetching, 
+    and repeating a number of times. If a parameter is None, the corresponding 
     operation is not applied.
 
-    Args:
-        - dataset (tf.data.Dataset): The initial TensorFlow dataset to
-            enhance.
-        - batch_size (int, optional): Size of batches of data.
-        - shuffle_seed (int, optional): Seed for random shuffling.
-        - prefetch_buffer_size (int, optional): Number of batches to
-            prefetch (default is tf.data.experimental.AUTOTUNE).
-        - repeat_num (int, optional): Number of times to repeat the dataset.
+    Parameters
+    ----------
+    dataset : tf.data.Dataset
+        The initial TensorFlow dataset to enhance.
+    batch_size : int, optional
+        Size of batches of data.
+    shuffle_seed : int, optional
+        Seed for random shuffling.
+    prefetch_buffer_size : int, optional
+        Number of batches to prefetch
+        (default is tf.data.experimental.AUTOTUNE).
+    repeat_num : int, optional
+        Number of times to repeat the dataset.
 
-    Returns:
-        - tf.data.Dataset: The prepared TensorFlow dataset.
+    Returns
+    -------
+    tf.data.Dataset
+        The prepared TensorFlow dataset.
+
+    Raises
+    ------
+    ValueError
+        If shuffling is applied to a dataset with an unknown or irregular shape.
     """
     if shuffle_seed:
         try:

@@ -1,5 +1,4 @@
 import unittest
-
 import numpy as np
 
 from imlresearch.src.testing.bases.base_test_case import BaseTestCase
@@ -10,22 +9,29 @@ from imlresearch.src.training.evaluating.evaluate import (
 
 
 class TestEvaluate(BaseTestCase):
-    """Tests for evaluation functions."""
+    """
+    Tests for evaluation functions.
+    """
 
     def _verify_metrics_dict(self, metrics, expected_metrics):
         """
         Verify that the metrics dictionary contains expected keys and types.
 
-        Args:
-            - metrics (dict): The computed metrics dictionary.
-            - expected_metrics (dict): Expected keys and types.
+        Parameters
+        ----------
+        metrics : dict
+            The computed metrics dictionary.
+        expected_metrics : dict
+            Expected keys and corresponding types.
         """
         for metric, expected_type in expected_metrics.items():
             self.assertIn(metric, metrics)
             self.assertIsInstance(metrics[metric], expected_type)
 
     def test_binary_classification(self):
-        """Tests binary classification evaluation."""
+        """
+        Test binary classification evaluation.
+        """
         y_true = np.array([0, 1, 0, 1, 0, 1, 1, 0])
         y_pred = np.array([0, 1, 0, 1, 1, 0, 1, 0])
 
@@ -41,7 +47,9 @@ class TestEvaluate(BaseTestCase):
         self._verify_metrics_dict(metrics, expected_metrics)
 
     def test_binary_classification_with_class_names(self):
-        """Tests binary classification evaluation with class names."""
+        """
+        Test binary classification evaluation with class names.
+        """
         y_true = np.array([0, 1, 0, 1, 0, 1, 1, 0])
         y_pred = np.array([0, 1, 0, 1, 1, 0, 1, 0])
         class_names = ["class1", "class2"]
@@ -62,7 +70,9 @@ class TestEvaluate(BaseTestCase):
         self.assertIn("class2", report)
 
     def test_multi_class_classification(self):
-        """Tests multi-class classification evaluation."""
+        """
+        Test multi-class classification evaluation.
+        """
         y_true = np.array([[1, 0, 0], [0, 1, 0], [1, 0, 0]])
         y_pred = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 
@@ -78,7 +88,9 @@ class TestEvaluate(BaseTestCase):
         self._verify_metrics_dict(metrics, expected_metrics)
 
     def test_multi_class_classification_with_class_names(self):
-        """Tests multi-class classification evaluation with class names."""
+        """
+        Test multi-class classification evaluation with class names.
+        """
         y_true = np.array([[1, 0, 0], [0, 1, 0], [1, 0, 0]])
         y_pred = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         class_names = ["class1", "class2", "class3"]

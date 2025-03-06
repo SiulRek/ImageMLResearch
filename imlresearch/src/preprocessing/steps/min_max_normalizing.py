@@ -5,10 +5,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class MinMaxNormalizer(StepBase):
     """
-    A preprocessing step that applies a min-max normalization to an
-    image tensor.
+    Applies min-max normalization to an image tensor.
 
-    Note: The data type of the output image tensor is tf.float16.
+    The normalization rescales pixel values to the range [0, 1], ensuring 
+    the data is scaled appropriately for deep learning models.
     """
 
     arguments_datatype = {}
@@ -16,8 +16,8 @@ class MinMaxNormalizer(StepBase):
 
     def __init__(self):
         """
-        Initializes the MinMaxNormalizer object for integration into an
-        image preprocessing pipeline.
+        Initializes the MinMaxNormalizer for integration into an image
+        preprocessing pipeline.
         """
         super().__init__({})
         self.output_datatype = tf.float16
@@ -28,9 +28,10 @@ class MinMaxNormalizer(StepBase):
         """
         Computes the minimum and maximum values of the dataset.
 
-        Args:
-            - dataset (tf.data.Dataset): The dataset to compute the
-              statistic on.
+        Parameters
+        ----------
+        dataset : tf.data.Dataset
+            The dataset to compute the min-max statistics.
         """
         min_vals = []
         max_vals = []
@@ -43,6 +44,19 @@ class MinMaxNormalizer(StepBase):
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
+        """
+        Applies min-max normalization to the input image tensor.
+
+        Parameters
+        ----------
+        image_tensor : tf.Tensor
+            The input image tensor.
+
+        Returns
+        -------
+        tf.Tensor
+            The normalized image tensor.
+        """
         image_tensor = tf.cast(image_tensor, self.output_datatype)
         normalized_image = (
             (image_tensor - self._min_val) / (self._max_val - self._min_val)

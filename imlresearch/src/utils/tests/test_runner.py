@@ -8,10 +8,14 @@ from imlresearch.src.utils.tests.unbatch_dataset_if_batched_test import (
 
 
 class UtilsTestRunner(TestRunnerBase):
-    """Test Runner for the Utils Module."""
+    """
+    Test runner for the Utils module.
+    """
 
     def load_tests(self):
-        """Loads the tests for the Utils Module."""
+        """
+        Load the test cases for the Utils module.
+        """
         self.load_test_case(TestUnbatchDatasetIfBatched)
         self.load_test_case(TestGetSampleFromDistribution)
 

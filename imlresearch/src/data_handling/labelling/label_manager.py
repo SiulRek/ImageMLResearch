@@ -5,16 +5,20 @@ class LabelManager:
     """
     Manages different types of label encoding for machine learning models.
 
-    Attributes:
-        - class_names (list): The existing class names for label encoding.
-        - num_classes (int): The number of classes used for multi_class and
-            multi_class_multi_label label encoding.
+    Attributes
+    ----------
+    class_names : list
+        The existing class names for label encoding.
+    num_classes : int
+        The number of classes used for multi_class and multi_class_multi_label 
+        label encoding.
 
-    Methods:
-        - encode_label: Depending on the `label_type`, it delegates to the
-            corresponding method to encode labels.
-        - decode_label: Decodes a label from a numeric format to a string
-            format.
+    Methods
+    -------
+    encode_label(label)
+        Encodes a label based on the specified label type.
+    decode_label(index)
+        Decodes a label from a numeric format to a string format.
     """
 
     default_label_dtype = {
@@ -27,16 +31,19 @@ class LabelManager:
 
     def __init__(self, label_type, class_names=None, dtype=None):
         """
-        Initializes the LabelManager with a specific label encoding type and,
-        optionally, the number of classes.
+        Initializes the LabelManager with a specific label encoding type 
+        and, optionally, the number of classes.
 
-        Args:
-            - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'multi_class', 'multi_label',
-                'multi_class_multi_label', and 'object_detection'.
-            - class_names (list, optional): The existing class names for
-                label encoding.
-            - dtype (tf.DType, optional): The data type of the label.
+        Parameters
+        ----------
+        label_type : str
+            The type of label encoding to manage. Supported types are 
+            'binary', 'multi_class', 'multi_label', 
+            'multi_class_multi_label', and 'object_detection'.
+        class_names : list, optional
+            The existing class names for label encoding.
+        dtype : tf.DType, optional
+            The data type of the label.
         """
         self._label_type = label_type
         self.num_classes = None
@@ -59,8 +66,15 @@ class LabelManager:
         """
         Sets the number of classes based on the class names provided.
 
-        Args:
-            - class_names (list): The list of class names.
+        Parameters
+        ----------
+        class_names : list
+            The list of class names.
+
+        Raises
+        ------
+        ValueError
+            If class names are required but not provided.
         """
         if not class_names and self._label_type == "multi_class":
             msg = (
@@ -77,13 +91,20 @@ class LabelManager:
 
     def _set_label_type_functions(self, label_type):
         """
-        Sets the label encoder and label to digit converter methods based on
+        Sets the label encoder and label-to-digit converter methods based on 
         the label type.
 
-        Args:
-            - label_type (str): The type of label encoding to manage.
-                Supported types are 'binary', 'multi_class', 'multi_label',
-                'multi_class_multi_label', and 'object_detection'.
+        Parameters
+        ----------
+        label_type : str
+            The type of label encoding to manage. Supported types are 
+            'binary', 'multi_class', 'multi_label', 
+            'multi_class_multi_label', and 'object_detection'.
+
+        Raises
+        ------
+        ValueError
+            If the label type is not supported.
         """
 
         def raise_exception_when_called(exception, msg):
@@ -119,11 +140,20 @@ class LabelManager:
         """
         Returns the index of a class based on its name.
 
-        Args:
-            - class_name (str): The name of the class.
+        Parameters
+        ----------
+        class_name : str
+            The name of the class.
 
-        Returns:
-            - int: The index of the class.
+        Returns
+        -------
+        int
+            The index of the class.
+
+        Raises
+        ------
+        ValueError
+            If the class name is not in the class list.
         """
         class_name = self.class_names.index(class_name)
         if class_name is not None:
@@ -135,12 +165,20 @@ class LabelManager:
         """
         Encodes a binary label into a format suitable for binary classification.
 
-        Args:
-            - label (int): The label to encode. If string it should be a
-                class name.
+        Parameters
+        ----------
+        label : int or str
+            The label to encode. If string, it should be a class name.
 
-        Returns:
-            - tf.Tensor: A TensorFlow constant of the label in binary format.
+        Returns
+        -------
+        tf.Tensor
+            A TensorFlow constant of the label in binary format.
+
+        Raises
+        ------
+        ValueError
+            If the label is invalid for binary classification.
         """
         label = self.get_index(label) if isinstance(label, str) else label
         try:
@@ -155,14 +193,22 @@ class LabelManager:
 
     def _encode_multi_class_label(self, label):
         """
-        Encodes a multi_class label into one-hot encoded format.
+        Encodes a multi-class label into one-hot encoded format.
 
-        Args:
-            - label (int|str): The label to encode. If string it should be a
-                class name.
+        Parameters
+        ----------
+        label : int or str
+            The label to encode. If string, it should be a class name.
 
-        Returns:
-            - tf.Tensor: A one-hot encoded TensorFlow constant of the label.
+        Returns
+        -------
+        tf.Tensor
+            A one-hot encoded TensorFlow constant of the label.
+
+        Raises
+        ------
+        ValueError
+            If encoding fails.
         """
         label = self.get_index(label) if isinstance(label, str) else label
         try:
@@ -176,27 +222,40 @@ class LabelManager:
 
     def encode_label(self, label):
         """
-        Encodes a label based on the label type and class_name names specified
+        Encodes a label based on the label type and class names specified 
         during initialization to a tensor format.
 
-        Args:
-            - label (int|str): The label to encode. Can be an integer or a
-                string in case class_names are specified.
+        Parameters
+        ----------
+        label : int or str
+            The label to encode. Can be an integer or a string if 
+            class names are specified.
 
-        Returns:
-            - tf.Tensor: A TensorFlow constant of the encoded label.
+        Returns
+        -------
+        tf.Tensor
+            A TensorFlow constant of the encoded label.
         """
         return self._encode_label_func(label)
 
     def get_class(self, index):
         """
-        Converts a numeric label to a class_name name.
+        Converts a numeric label to a class name.
 
-        Args:
-            - index (str|numeric): The class_name index.
+        Parameters
+        ----------
+        index : str or int
+            The class index.
 
-        Returns:
-            - str: The class_name name corresponding to the numeric label.
+        Returns
+        -------
+        str
+            The class name corresponding to the numeric label.
+
+        Raises
+        ------
+        ValueError
+            If the index is out of bounds or not convertible to an integer.
         """
         if not self.class_names:
             msg = "No class names are provided for label decoding."

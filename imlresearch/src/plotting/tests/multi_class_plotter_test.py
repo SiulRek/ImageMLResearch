@@ -14,10 +14,15 @@ from imlresearch.src.research.attributes.research_attributes import (
 
 
 class TestMultiClassPlotter(PlottingTestCase):
-    """Test suite for the MultiClassPlotter class."""
+    """
+    Test suite for the MultiClassPlotter class.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class with sample data for testing.
+        """
         super().setUpClass()
         sample_num = 100
         dataset = cls.load_mnist_digits_dataset(
@@ -45,11 +50,27 @@ class TestMultiClassPlotter(PlottingTestCase):
         )
 
     def setUp(self):
+        """
+        Resets figures before each test.
+        """
         super().setUp()
-        self.multi_class_plotter._figures = {}  # Reset figures before each test
+        self.multi_class_plotter._figures = {}
 
     @classmethod
     def _get_labels_array(cls, dataset):
+        """
+        Extracts labels from the dataset and converts them into a tensor.
+
+        Parameters
+        ----------
+        dataset : tf.data.Dataset
+            The dataset containing image-label pairs.
+
+        Returns
+        -------
+        tf.Tensor
+            Tensor containing the extracted labels.
+        """
         labels_list = []
         for _, labels in dataset:
             labels_list.append(tf.expand_dims(labels, axis=0))
@@ -59,6 +80,19 @@ class TestMultiClassPlotter(PlottingTestCase):
 
     @classmethod
     def _get_random_preds_tensor(cls, sample_num):
+        """
+        Generates random one-hot encoded predictions.
+
+        Parameters
+        ----------
+        sample_num : int
+            Number of predictions to generate.
+
+        Returns
+        -------
+        tf.Tensor
+            One-hot encoded tensor of random predictions.
+        """
         preds = tf.random.uniform(
             (sample_num,), minval=0, maxval=10, dtype=tf.int32
         )
@@ -67,13 +101,28 @@ class TestMultiClassPlotter(PlottingTestCase):
 
     @classmethod
     def _get_images(cls, dataset):
+        """
+        Extracts images from the dataset and converts them into a NumPy array.
+
+        Parameters
+        ----------
+        dataset : tf.data.Dataset
+            The dataset containing image-label pairs.
+
+        Returns
+        -------
+        np.ndarray
+            NumPy array containing extracted images.
+        """
         images_list = []
         for images, _ in dataset:
             images_list.append(images.numpy())
         return np.array(images_list)
 
     def test_plot_images(self):
-        """Test the plot_images method."""
+        """
+        Tests the plot_images method.
+        """
         fig = self.multi_class_plotter.plot_images(
             grid_size=(2, 2), title="Images"
         )
@@ -82,7 +131,9 @@ class TestMultiClassPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "multi_class_plotter_plot_images.png")
 
     def test_plot_confusion_matrix(self):
-        """Test the plot_confusion_matrix method."""
+        """
+        Tests the plot_confusion_matrix method.
+        """
         fig = self.multi_class_plotter.plot_confusion_matrix(
             title="Test Confusion Matrix", show=False
         )
@@ -93,7 +144,9 @@ class TestMultiClassPlotter(PlottingTestCase):
         )
 
     def test_plot_results(self):
-        """Test the plot_results method."""
+        """
+        Tests the plot_results method.
+        """
         fig = self.multi_class_plotter.plot_results(
             grid_size=(2, 2), prediction_bar=True
         )

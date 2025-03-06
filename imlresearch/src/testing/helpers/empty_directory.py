@@ -4,10 +4,12 @@ import shutil
 
 def empty_directory(directory):
     """
-    Empties the contents of the specified directory.
+    Empty the contents of the specified directory.
 
-    Args:
-        - directory (str): The path to the directory to be emptied.
+    Parameters
+    ----------
+    directory : str
+        The path to the directory to be emptied.
     """
     for file_name in os.listdir(directory):
         file_path = os.path.join(directory, file_name)

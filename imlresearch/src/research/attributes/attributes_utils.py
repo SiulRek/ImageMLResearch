@@ -1,10 +1,18 @@
 def is_public_property(attr_name, source_instance):
     """
-    Checks if an attribute is a public property of a class instance.
+    Check if an attribute is a public property of a class instance.
 
-    Args:
-        - attr_name (str): The attribute name to check.
-        - source_instance: The instance to check the attribute in.
+    Parameters
+    ----------
+    attr_name : str
+        The attribute name to check.
+    source_instance : object
+        The instance to check the attribute in.
+
+    Returns
+    -------
+    bool
+        True if the attribute is a public property, False otherwise.
     """
     cls = source_instance.__class__
     attr = getattr(cls, attr_name, None)
@@ -13,15 +21,24 @@ def is_public_property(attr_name, source_instance):
 
 def copy_public_properties(source_instance, target_instance):
     """
-    Copies the public properties from one instance into another class instance.
-    Retrieves all public properties from source_instance and sets them as
-    attributes in the target_instance.
+    Copy public properties from one instance to another.
 
-    Args:
-        - source_instance: The instance from which properties are copied.
-        - target_instance: The class instance to insert attributes into.
+    This function retrieves all public properties from `source_instance` 
+    and sets them as attributes in `target_instance`.
+
+    Parameters
+    ----------
+    source_instance : object
+        The instance from which properties are copied.
+    target_instance : object
+        The class instance to insert attributes into.
+
+    Raises
+    ------
+    AttributeError
+        If a property is read-only and cannot be accessed via a private 
+        attribute.
     """
-
     for attr_name in dir(source_instance):
         if is_public_property(attr_name, source_instance):
             source_value = getattr(source_instance, attr_name)
@@ -38,5 +55,5 @@ def copy_public_properties(source_instance, target_instance):
                     )
                 else:
                     msg = f"Could neither set property {attr_name} nor access"
-                    msg += "its private attribute"
+                    msg += " its private attribute"
                     raise AttributeError(msg)

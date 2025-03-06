@@ -1,24 +1,47 @@
 """
-Disclaimer: The classes in this module were used for visualization purposes
-during the development of the Image Preprocessing Framework. They are not
+Disclaimer: The classes in this module were used for visualization purposes 
+during the development of the Image Preprocessing Framework. They are not 
 used for plotting purposes in model development.
 """
 
 from abc import ABC
-
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
 
 class ImagePlotterBase(ABC):
-    """Base class for the ImagePlotter child classes."""
+    """
+    Base class for the ImagePlotter child classes.
+
+    Attributes
+    ----------
+    last_fig : matplotlib.figure.Figure or None
+        Stores the last generated figure.
+    show_plot : bool
+        Determines whether to display plots.
+    """
 
     def __init__(self, show_plot=True):
+        """
+        Initialize the ImagePlotterBase.
+
+        Parameters
+        ----------
+        show_plot : bool, optional
+            Whether to display the plot after generation, by default True.
+        """
         self.last_fig = None
         self.show_plot = show_plot
 
     def save_plot_to_file(self, filename):
-        """Saves the last generated plot to a file."""
+        """
+        Save the last generated plot to a file.
+
+        Parameters
+        ----------
+        filename : str
+            The path to save the figure.
+        """
         if self.last_fig:
             self.last_fig.savefig(filename)
         else:
@@ -29,14 +52,20 @@ class ImagePlotterBase(ABC):
         self, fig, title, y_title=0.95, wspace=0.01, hspace=0.01
     ):
         """
-        Generates and displays a plot.
+        Generate and display a plot.
 
-        Args:
-            - fig: The figure object.
-            - title (str): Plot title.
-            - y_title (float, optional): Vertical title position.
-            - wspace (float, optional): Width spacing.
-            - hspace (float, optional): Height spacing.
+        Parameters
+        ----------
+        fig : matplotlib.figure.Figure
+            The figure object.
+        title : str
+            The plot title.
+        y_title : float, optional
+            Vertical title position, by default 0.95.
+        wspace : float, optional
+            Width spacing between subplots, by default 0.01.
+        hspace : float, optional
+            Height spacing between subplots, by default 0.01.
         """
         fig.suptitle(title, fontsize=20, fontweight="bold", y=y_title)
         plt.subplots_adjust(wspace=wspace, hspace=hspace)
@@ -49,16 +78,24 @@ class ImagePlotter(ImagePlotterBase):
     """
     ImagePlotter class for visualizing image processing.
 
-    Pass a slice from a TensorFlow dataset as an input parameter.
+    Attributes
+    ----------
+    last_fig : matplotlib.figure.Figure or None
+        Stores the last generated figure.
+    show_plot : bool
+        Determines whether to display plots.
     """
 
     def plot_images(self, image_tf_dataset, title="Images"):
         """
-        Plots 4 images from the given TensorFlow dataset.
+        Plot 4 images from the given TensorFlow dataset.
 
-        Args:
-            - image_tf_dataset: TensorFlow dataset containing images.
-            - title (str, optional): Plot title. Defaults to 'Images'.
+        Parameters
+        ----------
+        image_tf_dataset : tf.data.Dataset
+            A TensorFlow dataset containing images.
+        title : str, optional
+            The plot title, by default "Images".
         """
         fig, axes = plt.subplots(2, 2, figsize=(8, 8))
         axes = axes.ravel()
@@ -77,13 +114,18 @@ class ImagePlotter(ImagePlotterBase):
         self, original_tf_dataset, processed_tf_dataset, index, title=""
     ):
         """
-        Plots a side-by-side comparison of an original and a processed image.
+        Plot a side-by-side comparison of an original and a processed image.
 
-        Args:
-            - original_tf_dataset: TensorFlow dataset with original images.
-            - processed_tf_dataset: TensorFlow dataset with processed images.
-            - index (int): Index number of the images to compare.
-            - title (str, optional): Plot title.
+        Parameters
+        ----------
+        original_tf_dataset : tf.data.Dataset
+            A TensorFlow dataset with original images.
+        processed_tf_dataset : tf.data.Dataset
+            A TensorFlow dataset with processed images.
+        index : int
+            The index number of the images to compare.
+        title : str, optional
+            The plot title, by default an empty string.
         """
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
         axes = axes.ravel()

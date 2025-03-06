@@ -4,14 +4,19 @@ import tensorflow as tf
 
 def shuffle_dataset(dataset, random_seed=42):
     """
-    Shuffles the given dataset using the provided random seed.
+    Shuffles the given dataset using the specified random seed.
 
-    Args:
-        - dataset (tf.data.Dataset): The dataset to be shuffled.
-        - random_seed (int): The random seed for shuffling.
+    Parameters
+    ----------
+    dataset : tf.data.Dataset
+        The dataset to be shuffled.
+    random_seed : int, optional
+        The random seed for shuffling. Default is 42.
 
-    Returns:
-        - tf.data.Dataset: The shuffled dataset.
+    Returns
+    -------
+    tf.data.Dataset
+        The shuffled dataset.
     """
     elements = list(dataset.as_numpy_iterator())
     indices = np.arange(len(elements))

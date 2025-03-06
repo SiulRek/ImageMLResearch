@@ -5,18 +5,24 @@ import matplotlib.pyplot as plt
 
 def transform_figures_to_files(figures, directory, close_figures=True):
     """
-    Saves figures to a specified directory and returns a dictionary of file
-    paths. It does not modify the input dictionary but creates a new one.
+    Save figures to a specified directory and return a dictionary of file paths.
+
+    This function does not modify the input dictionary but creates a new one.
     After saving, figures are closed if `close_figures` is True.
 
-    Args:
-        - figures (dict): Dictionary mapping names to Matplotlib figures.
-        - directory (str): Directory where figures will be saved.
-        - close_figures (bool, optional): Whether to close figures after saving.
-            Defaults to True.
+    Parameters
+    ----------
+    figures : dict
+        Dictionary mapping names to Matplotlib figures.
+    directory : str
+        Directory where figures will be saved.
+    close_figures : bool, optional
+        Whether to close figures after saving, by default True.
 
-    Returns:
-        - dict: Dictionary mapping figure names to saved file paths.
+    Returns
+    -------
+    dict
+        Dictionary mapping figure names to saved file paths.
     """
     figure_paths = {}
 

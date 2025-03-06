@@ -20,16 +20,21 @@ DATA_DIR = os.path.join(
 
 class BaseTestCase(unittest.TestCase):
     """
-    Abstract base class for test cases, providing setup and teardown
+    Abstract base class for test cases, providing setup and teardown 
     operations common across tests.
 
-    Attributes:
-        - output_dir (str): Directory where test outputs will be saved.
-        - temp_dir (str): Temporary directory for use during tests.
-        - log_file (str): Path to the log file used to record test results.
-        - logger (TestResultLogger): Logger instance for test outcomes.
-        - remove_temp_dir (bool): Whether to remove the temp directory
-          after tests.
+    Attributes
+    ----------
+    output_dir : str
+        Directory where test outputs will be saved.
+    temp_dir : str
+        Temporary directory for use during tests.
+    log_file : str
+        Path to the log file used to record test results.
+    logger : TestResultLogger
+        Logger instance for test outcomes.
+    remove_temp_dir : bool
+        Whether to remove the temp directory after tests.
     """
 
     remove_temp_dir = True
@@ -37,13 +42,17 @@ class BaseTestCase(unittest.TestCase):
     @classmethod
     def _infere_test_file_path(cls):
         """
-        Infers the file path of the test file.
+        Infer the file path of the test file.
 
-        Returns:
-            - str: The inferred file path.
+        Returns
+        -------
+        str
+            The inferred file path.
 
-        Raises:
-            - FileNotFoundError: If the file path cannot be inferred.
+        Raises
+        ------
+        FileNotFoundError
+            If the file path cannot be inferred.
         """
         module = cls.__module__
         if module in sys.modules:
@@ -57,19 +66,26 @@ class BaseTestCase(unittest.TestCase):
     @classmethod
     def _compute_output_dir(cls, parent_folder="tests"):
         """
-        Computes the test output directory path.
+        Compute the test output directory path.
 
-        Traverses up the file hierarchy until a directory named 'tests' is
-        found, then returns the path to the 'outputs' subdirectory.
+        This method traverses up the file hierarchy until a directory 
+        named 'tests' is found, then returns the path to the 'outputs' 
+        subdirectory.
 
-        Args:
-            - parent_folder (str, optional): The parent folder name.
+        Parameters
+        ----------
+        parent_folder : str, optional
+            The parent folder name, by default "tests".
 
-        Returns:
-            - str: The output directory path.
+        Returns
+        -------
+        str
+            The output directory path.
 
-        Raises:
-            - NotADirectoryError: If the 'tests' directory is not found.
+        Raises
+        ------
+        NotADirectoryError
+            If the 'tests' directory is not found.
         """
         current_dir = os.path.dirname(cls._infere_test_file_path())
 
@@ -85,10 +101,12 @@ class BaseTestCase(unittest.TestCase):
     @classmethod
     def _get_test_case_title(cls):
         """
-        Generates a formatted test case title for logging.
+        Generate a formatted test case title for logging.
 
-        Returns:
-            - str: The formatted test case title.
+        Returns
+        -------
+        str
+            The formatted test case title.
         """
         name = cls.__name__.removeprefix("Test")
         name = "".join(
@@ -100,10 +118,12 @@ class BaseTestCase(unittest.TestCase):
     @classmethod
     def _get_test_case_folder_name(cls):
         """
-        Generates a formatted test case folder name.
+        Generate a formatted test case folder name.
 
-        Returns:
-            - str: The formatted test case name.
+        Returns
+        -------
+        str
+            The formatted test case name.
         """
         name = cls.__name__.removeprefix("Test")
         name = "".join(
@@ -114,8 +134,9 @@ class BaseTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Class-level setup: creates necessary directories and initializes
-        logging."""
+        """
+        Class-level setup: create necessary directories and initialize logging.
+        """
         cls.root_dir = os.path.normpath(ROOT_DIR)
         cls.data_dir = DATA_DIR
         cls.output_dir = cls._compute_output_dir()
@@ -136,7 +157,7 @@ class BaseTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         """
-        Class-level teardown: removes empty result directories.
+        Class-level teardown: remove empty result directories.
         """
         for dir_ in [cls.results_dir, cls.visualizations_dir]:
             if os.path.exists(dir_) and not os.listdir(dir_):
@@ -144,21 +165,27 @@ class BaseTestCase(unittest.TestCase):
 
     def setUp(self):
         """
-        Instance-level setup: creates a temporary directory for tests.
+        Instance-level setup: create a temporary directory for tests.
         """
         os.makedirs(self.temp_dir, exist_ok=True)
 
     def run(self, result=None):
         """
-        Overrides the run method to log the test outcome.
+        Override the run method to log the test outcome.
+
+        Parameters
+        ----------
+        result : unittest.TestResult, optional
+            The result object that will store test outcomes.
         """
         result = super().run(result)
         self.logger.log_test_outcome(result, self._testMethodName)
         return result
 
     def tearDown(self):
-        """Instance-level teardown: logs test outcome and removes the temp 
-        directory."""
+        """
+        Instance-level teardown: log test outcome and remove the temp directory.
+        """
         if os.path.exists(self.temp_dir) and self.remove_temp_dir:
             shutil.rmtree(self.temp_dir)
 
@@ -167,8 +194,10 @@ class BaseTestCase(unittest.TestCase):
         """
         Load the unlabeled image dataset for testing.
 
-        Returns:
-            - tf.data.Dataset: The dataset to be used for testing.
+        Returns
+        -------
+        tf.data.Dataset
+            The dataset to be used for testing.
         """
         tf_records_path = os.path.join(
             cls.data_dir, "tf_records", "geometrical_forms.tfrecord"
@@ -182,16 +211,19 @@ class BaseTestCase(unittest.TestCase):
         """
         Load the MNIST digits dataset for testing.
 
-        Args:
-            - sample_num (int, optional): Number of samples to load.
-                Defaults to None.
-            - labeled (bool, optional): Whether to return dataset with labels.
-                Default is False.
-            - binary (bool, optional): Whether labels should be in binary
-                format. Default is False.
+        Parameters
+        ----------
+        sample_num : int, optional
+            Number of samples to load, by default None.
+        labeled : bool, optional
+            Whether to return dataset with labels, by default False.
+        binary : bool, optional
+            Whether labels should be in binary format, by default False.
 
-        Returns:
-            - tf.data.Dataset: The MNIST digits dataset.
+        Returns
+        -------
+        tf.data.Dataset
+            The MNIST digits dataset.
         """
         dataset = tf.keras.datasets.mnist.load_data()
         (X_train, Y_train), (X_test, Y_test) = dataset
@@ -218,8 +250,10 @@ class BaseTestCase(unittest.TestCase):
         """
         Load the MNIST digits dataset as dictionaries with JPG and PNG formats.
 
-        Returns:
-            - tuple: Two dictionaries containing file paths and labels.
+        Returns
+        -------
+        tuple
+            Two dictionaries containing file paths and labels.
         """
         dataset_dir = os.path.join(cls.data_dir, "mnist_digits")
         jpg_dict = {"path": [], "label": []}

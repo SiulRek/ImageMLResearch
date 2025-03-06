@@ -15,11 +15,15 @@ from imlresearch.src.research.attributes.research_attributes import (
 
 
 class DataHandler(ResearchAttributes):
-    """A class to handle various dataset operations including creation,
-    enhancement, splitting, and saving images."""
+    """
+    A class for handling dataset operations including creation, enhancement, 
+    splitting, and saving images.
+    """
 
     def __init__(self):
-        """Initializes the DataHandler."""
+        """
+        Initializes the DataHandler.
+        """
         # Not initializing ResearchAttributes here, prefer call
         # synchronize_research_attributes explicitly. super().__init__()
 
@@ -33,14 +37,18 @@ class DataHandler(ResearchAttributes):
 
     def _assert_dataset_format(self, dataset):
         """
-        Checks if the dataset is of the form (image, label) and if the image
+        Checks if the dataset has the format (image, label) and if the image 
         shape is (height, width, 1|3).
 
-        Args:
-            - dataset (tf.data.Dataset): The dataset to check.
+        Parameters
+        ----------
+        dataset : tf.data.Dataset
+            The dataset to check.
 
-        Raises:
-            - ValueError: If the dataset is not of the required format.
+        Raises
+        ------
+        ValueError
+            If the dataset is not in the required format.
         """
         for sample in dataset.take(1):
             if (
@@ -58,29 +66,28 @@ class DataHandler(ResearchAttributes):
 
     def load_dataset(self, data):
         """
-        Load a dataset from the given data and stores it in the
+        Loads a dataset from the given data and stores it in the 
         'datasets_container' under 'complete_dataset'.
 
-        Args:
-            - data (tf.data.Dataset, dict, pandas.DataFrame): The data to
-            load, can be: 1. A TensorFlow dataset consisting of Tuples of
-            the form (image, label) where image shape is (height, width,1|3)
-            2. a dictionary/pandas DataFrame, with key/column is 'path' and
-            'label'.
+        Parameters
+        ----------
+        data : tf.data.Dataset or dict or pandas.DataFrame
+            The data to load. It can be:
+            1. A TensorFlow dataset of tuples (image, label), where image 
+               shape is (height, width, 1|3).
+            2. A dictionary or pandas DataFrame with 'path' and 'label' 
+               columns.
 
-        NOTE: when passing a tf.data.Dataset it is recommended to provide a
-        dataset where no Keras operation, like shuffling, batching, etc., has
-        been applied (refer to method docstring _assert_dataset_format). The
-        mentioned operations can than be applied in the 'prepare_datasets'
-        method.
+        Notes
+        -----
+        When passing a `tf.data.Dataset`, it is recommended to provide a 
+        dataset without Keras operations like shuffling or batching. These 
+        operations should be applied in the `prepare_datasets` method.
         """
-        # 2 possible methods to load dataset:
-        # 1. Is already of format tensorflow.data.Dataset
         if isinstance(data, tf.data.Dataset):
             self._assert_dataset_format(data)
             self._datasets_container.update({"complete_dataset": data})
             return
-        # 2. data is type dictslist of dicts or pandas.DataFrame
         try:
             dataset = create_dataset(
                 data,
@@ -98,12 +105,15 @@ class DataHandler(ResearchAttributes):
         """
         Checks if a dataset name exists in the dataset container.
 
-        Args:
-            - dataset_name (str): The name of the dataset to check.
+        Parameters
+        ----------
+        dataset_name : str
+            The name of the dataset to check.
 
-        Raises:
-            - ValueError: If the dataset does not exist in the dataset
-                container.
+        Raises
+        ------
+        ValueError
+            If the dataset does not exist in the dataset container.
         """
         if dataset_name not in self._datasets_container:
             msg = f"Dataset {dataset_name} not found in the dataset container."
@@ -118,22 +128,23 @@ class DataHandler(ResearchAttributes):
         repeat_num=None,
     ):
         """
-        Prepares the dataset for further training by applying transformations
-        and stores the enhanced dataset back in the 'datasets_container'.
+        Prepares datasets by applying transformations and updates them in the 
+        'datasets_container'.
 
-        Args:
-            - dataset_names (list): The names of the dataset to enhance. Can
-                be 'complete_dataset' or 'train_dataset', 'val_dataset', or
-                'test_dataset' if split already. If None, all datasets in the
-                container are enhanced.
-            - batch_size (int, optional): The batch size for the dataset.
-            - shuffle_seed (int, optional): The seed for shuffling the
-                dataset. If None, no shuffling is applied.
-            - prefetch_buffer_size (int, optional): The prefetch buffer
-                size.
-            - cache (bool, optional): Whether to cache the dataset.
-            - repeat_num (int, optional): The number of times to repeat the
-                dataset.
+        Parameters
+        ----------
+        dataset_names : list, optional
+            The names of the datasets to enhance. Can be 'complete_dataset' or 
+            any split datasets ('train_dataset', 'val_dataset', 'test_dataset').
+            If None, all datasets are processed.
+        batch_size : int, optional
+            The batch size for the dataset.
+        shuffle_seed : int, optional
+            The seed for shuffling. If None, no shuffling is applied.
+        prefetch_buffer_size : int, optional
+            The prefetch buffer size.
+        repeat_num : int, optional
+            The number of times to repeat the dataset.
         """
         dataset_names = dataset_names or list(self._datasets_container.keys())
         for dataset_name in dataset_names:
@@ -151,17 +162,20 @@ class DataHandler(ResearchAttributes):
     def split_dataset(self, train_split, val_split,
                       test_split, dataset_size=None):
         """
-        Splits the 'complete_dataset' into 'train_dataset', 'val_dataset' and
-        'test_dataset' and stores them in the 'datasets_container'. Note that
-        the complete dataset is removed.
+        Splits 'complete_dataset' into 'train_dataset', 'val_dataset', and 
+        'test_dataset'. Removes the 'complete_dataset' after splitting.
 
-        Args:
-            - train_split (float): The proportion of the dataset for training.
-            - val_split (float): The proportion of the dataset for validation.
-            - test_split (float): The proportion of the dataset for testing.
-            - dataset_size (int, optional): The size of the dataset. If None,
-            the dataset size is determined by calling the 'cardinality'
-            method.
+        Parameters
+        ----------
+        train_split : float
+            Proportion of the dataset for training.
+        val_split : float
+            Proportion of the dataset for validation.
+        test_split : float
+            Proportion of the dataset for testing.
+        dataset_size : int, optional
+            The dataset size. If None, the size is determined using the 
+            'cardinality' method.
         """
         self._assert_dataset_exists("complete_dataset")
         dataset = self._datasets_container["complete_dataset"]
@@ -170,25 +184,27 @@ class DataHandler(ResearchAttributes):
         )
         self._datasets_container.update(
             {
-            "train_dataset": train_dataset,
-            "val_dataset": val_dataset,
-            "test_dataset": test_dataset,
+                "train_dataset": train_dataset,
+                "val_dataset": val_dataset,
+                "test_dataset": test_dataset,
             }
         )
         self._datasets_container.pop("complete_dataset")
 
     def save_images(self, output_dir, prefix=None, num_images=None):
         """
-        Saves the images from the dataset to a specified directory.
+        Saves images from the dataset to a specified directory.
 
-        Args:
-            - output_dir (str): The directory to save the images. Defaults
-                to "jpg".
-            - prefix (str|callable, optional): The prefix for the image
-                file. Can be a string or a callable that takes the label as
-                input and returns a string. If None, the default prefix is
-                used.
-            - num_images (int, optional): The number of images to save.
+        Parameters
+        ----------
+        output_dir : str
+            The directory to save the images.
+        prefix : str or callable, optional
+            The prefix for the image files. If callable, it should take the 
+            label as input and return a string. If None, a default prefix is 
+            used.
+        num_images : int, optional
+            The number of images to save.
         """
         image_format = "jpg"
         if prefix is None:
@@ -204,7 +220,6 @@ class DataHandler(ResearchAttributes):
 
         start_number = 0
 
-        # concatenate all datasets in container
         concatenated_dataset = None
         for dataset in self._datasets_container.values():
             if concatenated_dataset is None:
@@ -224,7 +239,9 @@ class DataHandler(ResearchAttributes):
         )
 
     def backup_datasets(self):
-        """Backups the current dataset container."""
+        """
+        Creates a backup of the current dataset container.
+        """
         for key, dataset in self._datasets_container.items():
             for sample in dataset.take(1):
                 if isinstance(sample, tuple):
@@ -238,10 +255,12 @@ class DataHandler(ResearchAttributes):
 
     def restore_datasets(self):
         """
-        Restores the backuped dataset container.
+        Restores the dataset container from the backup.
 
-        Raises:
-            - ValueError: If no backuped dataset container is found.
+        Raises
+        ------
+        ValueError
+            If no backup dataset container is found.
         """
         if not self._backuped_datasets_container:
             msg = "No backuped dataset container found."

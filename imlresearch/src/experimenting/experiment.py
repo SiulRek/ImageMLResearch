@@ -31,13 +31,17 @@ from imlresearch.src.utils import (
 
 
 class ExperimentError(Exception):
-    """ Exception raised for errors that occur during the experiment. """
+    """
+    Exception raised for errors occurring during the experiment.
+    """
 
 
 class Experiment(AbstractContextManager, ResearchAttributes):
     """
-    A context manager class to manage experiments and trials, inheriting from
-    ResearchAttributes.
+    A context manager for managing experiments and trials.
+
+    Inherits from `ResearchAttributes` to facilitate research-related 
+    attributes.
     """
 
     def __init__(
@@ -50,7 +54,22 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         ask_for_analysis=False,
     ):
         """
-        Initializes the Experiment with the given parameters.
+        Initializes the experiment.
+
+        Parameters
+        ----------
+        research_attributes : ResearchAttributes
+            Research attributes to be used in the experiment.
+        directory : str
+            Directory where the experiment outputs will be stored.
+        name : str
+            Name of the experiment.
+        description : str
+            Description of the experiment.
+        sort_metric : str, optional
+            Metric to sort trials (default is 'accuracy').
+        ask_for_analysis : bool, optional
+            Whether to ask for AI-based experiment analysis.
         """
         out_dir = self._make_output_directory(directory)
         self._init_logger(out_dir)
@@ -69,8 +88,17 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def _make_output_directory(self, experiment_dir):
         """
-        Creates an output directory of the experiment within the given
-        directory.
+        Creates an output directory for the experiment.
+
+        Parameters
+        ----------
+        experiment_dir : str
+            The base directory for the experiment.
+
+        Returns
+        -------
+        str
+            The full path to the experiment output directory.
         """
         experiment_dir = os.path.abspath(os.path.normpath(experiment_dir))
         output_dir = os.path.join(experiment_dir, "output")
@@ -78,12 +106,31 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         return output_dir
 
     def _init_logger(self, directory):
+        """
+        Initializes the logger.
+
+        Parameters
+        ----------
+        directory : str
+            The directory where logs should be stored.
+        """
         log_file = os.path.join(directory, "execution.log")
         self.logger = Logger(log_file, mode="a")
 
     def _init_experiment_assets(self, out_dir, name, description, sort_metric):
         """
-        Initializes the experiment assets to store the experiment information.
+        Initializes or loads experiment assets.
+
+        Parameters
+        ----------
+        out_dir : str
+            The directory where experiment assets are stored.
+        name : str
+            Name of the experiment.
+        description : str
+            Description of the experiment.
+        sort_metric : str
+            The metric used for sorting trials.
         """
         try:
             experiment_assets = load_experiment_assets(out_dir)
@@ -109,7 +156,12 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def __enter__(self):
         """
-        Sets up the experiment by creating the necessary directories and files.
+        Sets up the experiment.
+
+        Returns
+        -------
+        Experiment
+            The experiment instance.
         """
         datetime = get_datetime()
         if self.experiment_assets["start_time"] is None:
@@ -119,8 +171,13 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def get_results(self):
         """
-        Gets the current results (figures, evaluation_metrics, training_history)
-        recorded in experiment.
+        Retrieves the current experiment results.
+
+        Returns
+        -------
+        dict
+            Dictionary containing figures, evaluation metrics, and training 
+            history.
         """
         return {
             "figures": self._figures,
@@ -130,7 +187,19 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def run_trial(self, name, hyperparameters):
         """
-        Runs a trial context manager within the experiment context manager.
+        Runs a trial within the experiment context.
+
+        Parameters
+        ----------
+        name : str
+            The name of the trial.
+        hyperparameters : dict
+            The hyperparameters for the trial.
+
+        Returns
+        -------
+        Trial
+            The trial instance.
         """
         self.logger.info(f"Starting trial: {name}")
         if self._no_trial_executed:
@@ -145,7 +214,9 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         return Trial(self, name, hyperparameters)
 
     def _calculate_total_duration(self):
-        """ Calculates the total duration of the experiment. """
+        """
+        Calculates the total duration of the experiment.
+        """
         duration = get_duration(self.experiment_assets["resume_time"])
         previous_duration = self.experiment_assets["duration"] or "0"
         duration = add_durations(previous_duration, duration)
@@ -153,7 +224,21 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def _raise_exception_if_any(self, exc_type, exc_value, exc_traceback):
         """
-        Raises an exception if an exception occurred during the experiment.
+        Raises an exception if one occurred during the experiment.
+
+        Parameters
+        ----------
+        exc_type : Exception
+            The exception type.
+        exc_value : Exception
+            The exception instance.
+        exc_traceback : traceback
+            The traceback object.
+
+        Raises
+        ------
+        Exception
+            The original exception raised during the experiment.
         """
         if exc_type is not None:
             self.logger.error(f"Exception occurred:\n {exc_value}")
@@ -162,7 +247,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def _sort_trials(self):
         """
-        Sorts the trials by the specified sort metric in descending order.
+        Sorts trials based on the specified sort metric.
         """
         if len(self.experiment_assets["trials"]) <= 1:
             return
@@ -188,7 +273,9 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         )
 
     def _write_experiment_assets(self):
-        """ Writes the experiment assets to a JSON file. """
+        """
+        Writes experiment assets to a JSON file.
+        """
         info_json = os.path.join(
             self.experiment_assets["directory"], "experiment_info.json"
         )
@@ -202,8 +289,10 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def _plot_history_of_best_3_trials(self):
         """
-        Plots the best of 3 trials for the experiment. Skips plotting if there
-        are less than 3 trials or if any of the histories are empty.
+        Plots the training histories of the best 3 trials.
+
+        Skips plotting if there are fewer than 3 trials or if any histories 
+        are empty.
         """
         if len(self.experiment_assets["trials"]) < 3:
             return
@@ -229,12 +318,10 @@ class Experiment(AbstractContextManager, ResearchAttributes):
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
-        Cleans up the experiment and saves the report.
+        Cleans up and finalizes the experiment.
         """
         self._calculate_total_duration()
-
         self._raise_exception_if_any(exc_type, exc_value, traceback)
-
         msg = f"Finalizing experiment: {self.experiment_assets['name']}"
         self.logger.info(msg)
 

@@ -2,29 +2,40 @@ def split_dataset(
     dataset, train_split=0.8, val_split=0.1, test_split=0.1, dataset_size=None
 ):
     """
-    Splits a TensorFlow dataset into training, validation, and test sets based
-    on the specified proportions.
+    Splits a TensorFlow dataset into training, validation, and test sets 
+    based on the specified proportions.
 
-    Args:
-        - dataset (tf.data.Dataset): The TensorFlow dataset to split.
-        - train_split (float, optional): Proportion of the dataset to
-            include in the training set.
-        - val_split (float, optional): Proportion of the dataset to include
-            in the validation set.
-        - test_split (float, optional): Proportion of the dataset to include
-            in the test set.
-        - dataset_size (int, optional): The size of the dataset. If None,
-            the dataset size is determined by calling the 'cardinality' method.
+    Parameters
+    ----------
+    dataset : tf.data.Dataset
+        The TensorFlow dataset to split.
+    train_split : float, optional
+        Proportion of the dataset to include in the training set. 
+        Default is 0.8.
+    val_split : float, optional
+        Proportion of the dataset to include in the validation set. 
+        Default is 0.1.
+    test_split : float, optional
+        Proportion of the dataset to include in the test set. Default is 0.1.
+    dataset_size : int, optional
+        The size of the dataset. If None, the size is determined using the 
+        `cardinality` method.
 
-    Returns:
-        - tf.data.Dataset or None: The training dataset or None if size is
-            0.
-        - tf.data.Dataset or None: The validation dataset or None if size is
-            0.
-        - tf.data.Dataset or None: The test dataset or None if size is 0.
+    Returns
+    -------
+    tuple of (tf.data.Dataset or None)
+        - The training dataset, or None if its size is 0.
+        - The validation dataset, or None if its size is 0.
+        - The test dataset, or None if its size is 0.
+
+    Raises
+    ------
+    ValueError
+        If the sum of train_split, val_split, and test_split is not equal 
+        to 1.0, or if the dataset size cannot be determined.
     """
     if train_split + val_split + test_split != 1.0:
-        msg = "The sum of train_size, val_size, and test_size should be 1.0."
+        msg = "The sum of train_split, val_split, and test_split should be 1.0."
         raise ValueError(msg)
     if dataset_size is None:
         dataset_size = dataset.cardinality().numpy()

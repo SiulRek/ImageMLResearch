@@ -1,27 +1,39 @@
 import os
-
 import tensorflow as tf
 
 
-# NOTE: The functionality in DataHandling is not used in the module here,
-# as this makes the testing framework more independent.
 def _bytes_feature(value):
-    """Returns a bytes_list from a string/byte."""
+    """
+    Convert a value to a bytes_list for TensorFlow features.
+
+    Parameters
+    ----------
+    value : bytes or tf.Tensor
+        The value to be converted into a TensorFlow Feature.
+
+    Returns
+    -------
+    tf.train.Feature
+        The bytes_list feature containing the value.
+    """
     if isinstance(value, type(tf.constant(0))):
-        # BytesList won't unpack a string from an EagerTensor.
-        value = value.numpy()
+        value = value.numpy()  # Convert EagerTensor to numpy
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
 
 def serialize_image(image_path):
     """
-    Reads an image, decodes it, and serializes it into a tf.train.Example.
+    Read an image, decode it, and serialize it into a tf.train.Example.
 
-    Args:
-        - image_path (str): Path to the image file.
+    Parameters
+    ----------
+    image_path : str
+        Path to the image file.
 
-    Returns:
-        - tf.train.Example: The Example proto containing the image.
+    Returns
+    -------
+    bytes
+        Serialized Example proto containing the image.
     """
     image_string = tf.io.read_file(image_path)
     image_decoded = tf.image.decode_png(image_string)
@@ -35,11 +47,14 @@ def serialize_image(image_path):
 
 def create_tfrecord_from_images(image_directory, output_filepath):
     """
-    Creates a TFRecord file from images in a specified directory.
+    Create a TFRecord file from images in a specified directory.
 
-    Args:
-        - image_directory (str): Directory where image files are located.
-        - output_filepath (str): Path to store the TFRecord file.
+    Parameters
+    ----------
+    image_directory : str
+        Directory where image files are located.
+    output_filepath : str
+        Path to store the TFRecord file.
     """
     with tf.io.TFRecordWriter(output_filepath) as writer:
         for filename in os.listdir(image_directory):

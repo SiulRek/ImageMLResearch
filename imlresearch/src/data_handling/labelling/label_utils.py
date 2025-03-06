@@ -4,13 +4,17 @@ import tensorflow as tf
 
 def reverse_one_hot(label):
     """
-    Converts a label to a NumPy digit.
+    Converts a one-hot encoded label to its corresponding class index.
 
-    Args:
-        - label: The label to convert.
+    Parameters
+    ----------
+    label : tf.Tensor or array-like
+        The one-hot encoded label to convert.
 
-    Returns:
-        - int: The digit corresponding to the label.
+    Returns
+    -------
+    int
+        The index corresponding to the highest value in the label.
     """
     if isinstance(label, tf.Tensor):
         label = label.numpy()

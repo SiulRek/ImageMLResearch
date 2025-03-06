@@ -5,8 +5,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class SquareShapePadder(StepBase):
     """
-    A preprocessing step that pads an image to a square shape using a
-    specified pixel value.
+    Pads an image to a square shape using a specified pixel value.
     """
 
     arguments_datatype = {"padding_pixel_value": int}
@@ -14,17 +13,33 @@ class SquareShapePadder(StepBase):
 
     def __init__(self, padding_pixel_value=0):
         """
-        Initializes the SquareShapePadder object for integration into an
-        image preprocessing pipeline.
+        Initializes the SquareShapePadder for integration into an image
+        preprocessing pipeline.
 
-        Args:
-            - padding_pixel_value (int, optional): The pixel value to be
-              used for padding. Defaults to 0.
+        Parameters
+        ----------
+        padding_pixel_value : int, optional
+            The pixel value to be used for padding (default is 0).
         """
         super().__init__(locals())
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
+        """
+        Pads the input image to make it square while maintaining content 
+        alignment.
+
+        Parameters
+        ----------
+        image_tensor : tf.Tensor
+            A 3D tensor representing the image with shape
+            (height, width, channels).
+
+        Returns
+        -------
+        tf.Tensor
+            The padded square image tensor.
+        """
         shape = tf.shape(image_tensor)
         height, width, channels = shape[0], shape[1], shape[2]
 

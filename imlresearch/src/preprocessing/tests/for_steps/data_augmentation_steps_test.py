@@ -6,19 +6,25 @@ to generate test cases for different data augmentation techniques. Some
 tests can be skipped based on configuration flags and focus on evaluating
 the augmentation's effect on the image.
 
-Key Components:
-    - SingleStepTest: A class that dynamically generates test cases for
-      each preprocessing step in the framework.
-    - ENABLE_VISUAL_INSPECTION: A flag to enable/disable tests that require
-      visual inspection of augmented images.
-    - augmentation_steps_data: A collection of tuples (augmentation_class,
-      arguments), representing different data augmentation steps.
+Key Components
+--------------
+SingleStepTest:
+    A class that dynamically generates test cases for each preprocessing step
+    in the framework.
+ENABLE_VISUAL_INSPECTION
+    A flag to enable/disable tests that require
+    visual inspection of augmented images.
+augmentation_steps_data
+    A collection of tuples (augmentation_class,
+    arguments), representing different data augmentation steps.
 
-Note:
-    - This module accommodates variations in data augmentation steps,
-      recognizing that not all test cases in `TestDataAugmentationStep`
-      are universally applicable. Certain augmentations may require
-      customized modifications to the standard test cases.
+Note
+----
+1
+    This module accommodates variations in data augmentation steps, recognizing
+    that not all test cases in `TestDataAugmentationStep` are universally
+    applicable. Certain augmentations may require customized modifications to
+    the standard test cases.
 """
 
 import unittest
@@ -35,6 +41,24 @@ ENABLE_VISUAL_INSPECTION = True
 
 
 def create_test_class_for_augmentation_step(augmentation_class, arguments):
+    """
+    Dynamically creates a test class for a given data augmentation step.
+
+    This function generates a unittest class that tests the provided data
+    augmentation step, verifying its execution and the effect on the image.
+
+    Parameters
+    ----------
+    augmentation_class : class
+        The data augmentation class to test.
+    arguments : dict
+        The arguments to initialize the augmentation step.
+
+    Returns
+    -------
+    type
+        A dynamically created test class.
+    """
 
     class DynamicDataAugmentationTest(TestSingleStep):
         TestStep = augmentation_class
@@ -51,6 +75,9 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
 
             @skip("Visual inspection not enabled")
             def test_processed_image_visualization(self):
+                """
+                Skips the visualization test if visual inspection is disabled.
+                """
                 pass
 
         if isinstance(augmentation_class(), steps.RandomCropper):
@@ -61,6 +88,16 @@ def create_test_class_for_augmentation_step(augmentation_class, arguments):
                 """
                 Helper method to verify the image dimensions and color
                 channels in a processed dataset.
+
+                Parameters
+                ----------
+                processed_images : list
+                    The processed image dataset.
+                original_images : list
+                    The original image dataset.
+                color_channel_expected : int
+                    The expected number of color channels in the processed
+                    image.
                 """
                 for processed_image in processed_images:
                     processed_data_shape = tuple(
@@ -142,9 +179,11 @@ def load_data_augmentation_steps_tests():
     the test cases. These suites are then combined into a comprehensive test
     suite.
 
-    Returns:
-        - unittest.TestSuite: A combined test suite that aggregates tests
-          for multiple data augmentation step test classes.
+    Returns
+    -------
+    unittest.TestSuite
+        A combined test suite that aggregates tests
+        for multiple data augmentation step test classes.
     """
     test_suites = []
     loader = unittest.TestLoader()

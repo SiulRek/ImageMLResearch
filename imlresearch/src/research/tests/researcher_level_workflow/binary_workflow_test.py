@@ -10,19 +10,44 @@ from imlresearch.src.testing.helpers.empty_directory import empty_directory
 
 
 class TestBinaryResearcherLevelWorkflow(BaseTestCase):
-    """Test case for the binary class research workflow on a high-level
-    perspective using the Researcher class."""
+    """
+    Test case for the binary classification research workflow from a 
+    high-level perspective using the Researcher class.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Set up the test environment for all test cases.
+
+        This method clears the results directory before running tests.
+        """
         super().setUpClass()
         empty_directory(cls.results_dir)
 
     def setUp(self):
+        """
+        Set up the test environment before each test case.
+
+        This initializes the BinaryResearcher instance.
+        """
         super().setUp()
         self.researcher = BinaryResearcher(class_names=["Digit 0", "Digit 1"])
 
     def _create_compiled_model(self, units):
+        """
+        Create and compile a binary classification model.
+
+        Parameters
+        ----------
+        units : int
+            The number of units in the hidden dense layer.
+
+        Returns
+        -------
+        tf.keras.Model
+            The compiled Keras model.
+        """
         model = tf.keras.models.Sequential(
             [
                 tf.keras.layers.Input(shape=(28, 28, 3)),
@@ -39,6 +64,17 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         return model
 
     def _assert_datasets_container(self, datasets_container=None, batched=True):
+        """
+        Assert that the researcher contains valid dataset containers.
+
+        Parameters
+        ----------
+        datasets_container : dict, optional
+            The datasets container to validate. If None, the researcher's 
+            datasets container is used.
+        batched : bool, optional
+            Whether the dataset is expected to be batched, by default True.
+        """
         if datasets_container is None:
             has_datasets_container = (
                 hasattr(self.researcher, "datasets_container")
@@ -57,6 +93,14 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                 self.assertEqual(label.shape, expected_label_shape)
 
     def _make_preprocessing_pipeline(self):
+        """
+        Create a preprocessing pipeline.
+
+        Returns
+        -------
+        list
+            A list of preprocessing steps.
+        """
         pipeline = [
             steps.ReverseScaler(255),
             steps.TypeCaster(output_dtype="float32"),
@@ -64,6 +108,9 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         return pipeline
 
     def _assert_outputs_container(self):
+        """
+        Assert that the researcher contains a valid outputs container.
+        """
         has_outputs_container = (
             hasattr(self.researcher, "outputs_container")
             and self.researcher.outputs_container is not None
@@ -74,7 +121,12 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
             self.assertIn(output_name, self.researcher.outputs_container)
 
     def test_workflow(self):
-        # Dataset Handling
+        """
+        Test the complete binary classification research workflow.
+
+        This method ensures that datasets are loaded, split, backed up, 
+        restored, preprocessed, and correctly processed through trials.
+        """
         dataset = self.load_mnist_digits_dataset(
             sample_num=1000, labeled=True, binary=True
         )
@@ -98,7 +150,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         )
         self._assert_datasets_container()
 
-        # Experimenting
         trial_definitions = [
             {"name": "Trial 1", "hyperparameters": {"units": 128}},
             {"name": "Trial 2", "hyperparameters": {"units": 256}},
@@ -114,11 +165,9 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                 os.path.exists(experiment.experiment_assets["directory"])
             )
 
-            # Initial Visualization
             self.researcher.plot_images()
             for i, trial_definition in enumerate(trial_definitions):
                 with experiment.run_trial(**trial_definition) as trial:
-                    # Training
                     self.assertTrue(
                         os.path.exists(trial.trial_assets["directory"])
                     )
@@ -136,7 +185,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                     )
                     self.assertTrue(has_evaluation_metrics)
 
-                    # Plotting
                     has_training_history = (
                         hasattr(self.researcher, "training_history")
                         and self.researcher.training_history is not None
@@ -152,7 +200,6 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
                     self.researcher.plot_pr_curve(title="PR Curve")
                     self.researcher.plot_results(grid_size=(2, 2))
 
-        # Assertions of experiment files existence
         self.assertEqual(len(experiment.experiment_assets["trials"]), i + 1)
         images_plot = os.path.join(
             experiment.experiment_assets["directory"], "images.png"

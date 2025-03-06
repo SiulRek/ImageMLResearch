@@ -6,6 +6,9 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 class NLMeanDenoiser(StepBase):
     """
     A preprocessing step that applies Non-Local Mean Denoising to an image.
+
+    Non-Local Means Denoising reduces noise in an image by averaging pixels 
+    with similar neighborhood patterns across the image.
     """
 
     arguments_datatype = {
@@ -17,22 +20,38 @@ class NLMeanDenoiser(StepBase):
 
     def __init__(self, h=1.0, template_window_size=7, search_window_size=21):
         """
-        Initializes the NLMeanDenoiser object for integration in an image
+        Initialize the NLMeanDenoiser for integration into an image
         preprocessing pipeline.
 
-        Args:
-            - h (float): Filter strength. Higher values remove noise better
-              but may also remove image details.
-            - template_window_size (int): Odd size of the window used to
-              compute the weighted average for the given pixel.
-            - search_window_size (int): Odd size of the window used to
-              search for patches similar to the one centered at the current
-              pixel.
+        Parameters
+        ----------
+        h : float, optional
+            Filter strength. Higher values remove noise better but may also 
+            remove image details. Default is 1.0.
+        template_window_size : int, optional
+            Odd size of the window used to compute the weighted average for 
+            the given pixel. Default is 7.
+        search_window_size : int, optional
+            Odd size of the window used to search for patches similar to the 
+            one centered at the current pixel. Default is 21.
         """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply Non-Local Mean Denoising to an image.
+
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        numpy.ndarray
+            The denoised image.
+        """
         return cv2.fastNlMeansDenoising(
             src=image_nparray,
             h=self.parameters["h"],

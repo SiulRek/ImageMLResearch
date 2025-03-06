@@ -12,6 +12,21 @@ from imlresearch.src.research.helpers.data_retriever import DataRetriever
 
 
 def generate_unique_key_name(name, keys):
+    """
+    Generates a unique key name by appending a numeric suffix if necessary.
+
+    Parameters
+    ----------
+    name : str
+        The base name to be used as a key.
+    keys : set
+        Existing keys to ensure uniqueness.
+
+    Returns
+    -------
+    str
+        A unique key name.
+    """
     name = name.lower().replace(" ", "_")
     if name not in keys:
         return name
@@ -22,8 +37,23 @@ def generate_unique_key_name(name, keys):
 
 
 def plot_decorator(default_title, default_show):
-    """Decorator for all plotting functions.
-    It adds a title to the plot and saves the figure in the plotter."""
+    """
+    Decorator for all plotting functions.
+
+    Adds a title to the plot and saves the figure in the plotter.
+
+    Parameters
+    ----------
+    default_title : str
+        Default title for the plot.
+    default_show : bool
+        Whether to show the plot by default.
+
+    Returns
+    -------
+    function
+        Decorated plotting function.
+    """
 
     def decorator(plot_func):
         def wrapper(self, *args, **kwargs):
@@ -56,10 +86,14 @@ def plot_decorator(default_title, default_show):
 
 
 class Plotter(DataRetriever):
-    """A class for plotting images and text using research attributes."""
+    """
+    A class for plotting images and text using research attributes.
+    """
 
     def __init__(self):
-        """Initializes the Plotter."""
+        """
+        Initializes the Plotter.
+        """
         # Not initializing ResearchAttributes here, prefer calling
         # synchronize_research_attributes explicitly.
 
@@ -74,9 +108,17 @@ class Plotter(DataRetriever):
         """
         Adds a figure to the plotter.
 
-        Args:
-            - name: The name of the figure.
-            - fig: The figure to be added.
+        Parameters
+        ----------
+        name : str
+            The name of the figure.
+        fig : matplotlib.figure.Figure
+            The figure to be added.
+
+        Raises
+        ------
+        ValueError
+            If the provided figure is not an instance of Matplotlib Figure.
         """
         if not isinstance(fig, plt.Figure):
             msg = "The figure must be an instance of matplotlib.pyplot.Figure."
@@ -91,18 +133,29 @@ class Plotter(DataRetriever):
         """
         Plots images from the complete dataset.
 
-        Args:
-            - grid_size: Tuple containing the grid size (rows, columns).
-              Defaults to (2, 2).
-            - label_to_title_func: Function to convert the label to a
-              string. Defaults to None.
+        Parameters
+        ----------
+        grid_size : tuple, optional
+            Tuple specifying the grid size as (rows, columns).
+            Defaults to (2, 2).
+        label_to_title_func : callable, optional
+            Function to convert the label to a string. Defaults to None.
+        **general_plot_kwargs : dict, optional
+            General plot keyword arguments.
+            - title : str, optional
+                Optional title for the plot. Defaults to "Images".
+            - show : bool, optional
+                Whether to show the plot. Defaults to False.
 
-        General plot keyword arguments:
-            - title: Optional title for the plot. Defaults to "Images".
-            - show: Whether to show the plot. Defaults to False.
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure containing the images.
 
-        Returns:
-            - The figure containing the images.
+        Raises
+        ------
+        ValueError
+            If neither 'complete_dataset' nor 'train_dataset' is found.
         """
         dataset = self._datasets_container.get("complete_dataset") or \
                   self._datasets_container.get("train_dataset")
@@ -119,15 +172,21 @@ class Plotter(DataRetriever):
         """
         Plots the given text.
 
-        Args:
-            - text: The text to be plotted.
+        Parameters
+        ----------
+        text : str
+            The text to be plotted.
+        **general_plot_kwargs : dict, optional
+            General plot keyword arguments.
+            - title : str, optional
+                Optional title for the plot. Defaults to 'Text'.
+            - show : bool, optional
+                Whether to show the plot. Defaults to False.
 
-        General plot keyword arguments:
-            - title: Optional title for the plot. Defaults to 'Text'.
-            - show: Whether to show the plot. Defaults to False.
-
-        Returns:
-            - The figure containing the text.
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure containing the text.
         """
         return plot_text(text)
 
@@ -136,12 +195,24 @@ class Plotter(DataRetriever):
         """
         Plots the summary of the given model.
 
-        General plot keyword arguments:
-            - title: Optional title for the plot. Defaults to "Model Summary".
-            - show: Whether to show the plot. Defaults to False.
+        Parameters
+        ----------
+        **general_plot_kwargs : dict, optional
+            General plot keyword arguments.
+            - title : str, optional
+                Optional title for the plot. Defaults to "Model Summary".
+            - show : bool, optional
+                Whether to show the plot. Defaults to False.
 
-        Returns:
-            - The figure containing the model summary.
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure containing the model summary.
+
+        Raises
+        ------
+        ValueError
+            If no model is found to plot.
         """
         if not self._model:
             msg = "No model found to plot."
@@ -153,12 +224,24 @@ class Plotter(DataRetriever):
         """
         Plots the training history of the model.
 
-        General plot keyword arguments:
-            - title: Optional title for the plot.
-            - show: Whether to show the plot. Defaults to False.
+        Parameters
+        ----------
+        **general_plot_kwargs : dict, optional
+            General plot keyword arguments.
+            - title : str, optional
+                Optional title for the plot.
+            - show : bool, optional
+                Whether to show the plot. Defaults to False.
 
-        Returns:
-            - The figure containing the training history.
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure containing the training history.
+
+        Raises
+        ------
+        ValueError
+            If no training history is found to plot.
         """
         if not self._training_history:
             msg = "No training history found to plot."

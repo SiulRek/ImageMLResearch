@@ -1,8 +1,9 @@
 """
-This module provides test suites for the preprocessing steps performing resize
-operations within the image preprocessing pipeline. This module addresses the
-unique testing requirements for resize operation steps, ensuring their correct
-integration into the pipeline.
+Test suites for image preprocessing steps performing resize operations.
+
+This module provides test cases for preprocessing steps that perform 
+resize operations within the image preprocessing pipeline. It ensures 
+correct integration and functionality of these steps.
 """
 
 import unittest
@@ -18,19 +19,17 @@ ENABLE_VISUAL_INSPECTION = True
 
 class TestSquareShapePadder(TestSingleStep):
     """
-    A test suite for the SquareShapePadder step in the image preprocessing
-    pipeline.
+    Test suite for the SquareShapePadder step in the preprocessing pipeline.
 
-    This class inherits from TestSingleStep and is specifically designed to
-    test the SquareShapePadder step, which pads images to make them square.
-    It includes tests to verify that images are correctly padded with the
-    specified pixel value.
+    This class verifies that images are correctly padded to a square shape 
+    using the specified pixel value.
 
-    Attributes:
-        - TestStep: The step class to be tested, in this case,
-          steps.SquareShapePadder.
-        - parameters: A dictionary containing parameters for the
-          SquareShapePadder step.
+    Attributes
+    ----------
+    TestStep : type
+        The preprocessing step class being tested (`steps.SquareShapePadder`).
+    parameters : dict
+        Dictionary containing parameters for `SquareShapePadder`.
     """
 
     TestStep = steps.SquareShapePadder
@@ -46,10 +45,20 @@ class TestSquareShapePadder(TestSingleStep):
         self, processed_dataset, original_dataset, color_channel_expected
     ):
         """
-        Helper method to verify the image dimensions and color channels in a
-        processed dataset. Compares the processed images to the original
-        dataset to ensure correct height, width, and color channel
-        transformations.
+        Verify image dimensions and color channels in the processed dataset.
+
+        Compares processed images to the original dataset to ensure that 
+        padding modifies height and width while maintaining the expected 
+        number of color channels.
+
+        Parameters
+        ----------
+        processed_dataset : list
+            List of processed images.
+        original_dataset : list
+            List of original images before processing.
+        color_channel_expected : int
+            Expected number of color channels in the processed images.
         """
         for original_image, processed_image in zip(
             original_dataset, processed_dataset
@@ -71,16 +80,17 @@ class TestSquareShapePadder(TestSingleStep):
 
 class TestShapeResizer(TestSingleStep):
     """
-    A test suite for the ShapeResizer step in the image preprocessing pipeline.
+    Test suite for the ShapeResizer step in the preprocessing pipeline.
 
-    This class extends TestSingleStep and focuses on testing the ShapeResizer
-    step, which resizes images to a desired shape. It includes tests for
-    verifying the resize operation on both RGB and grayscale images.
+    This class verifies that images are correctly resized to a desired shape, 
+    ensuring accuracy for both RGB and grayscale images.
 
-    Attributes:
-        - TestStep: The step class to be tested, in this case,
-          steps.ShapeResizer.
-        - parameters: A dictionary of parameters for the ShapeResizer step.
+    Attributes
+    ----------
+    TestStep : type
+        The preprocessing step class being tested (`steps.ShapeResizer`).
+    parameters : dict
+        Dictionary of parameters for `ShapeResizer`.
     """
 
     TestStep = steps.ShapeResizer
@@ -96,10 +106,20 @@ class TestShapeResizer(TestSingleStep):
         self, processed_dataset, original_dataset, color_channel_expected
     ):
         """
-        Helper method to verify the image dimensions and color channels in a
-        processed dataset. Compares the processed images to the original
-        dataset to ensure correct height, width, and color channel
-        transformations.
+        Verify image dimensions and color channels in the processed dataset.
+
+        Compares processed images to the original dataset to ensure resizing 
+        modifies height and width according to the expected values while 
+        maintaining the correct number of color channels.
+
+        Parameters
+        ----------
+        processed_dataset : list
+            List of processed images.
+        original_dataset : list
+            List of original images before processing.
+        color_channel_expected : int
+            Expected number of color channels in the processed images.
         """
         for original_image, processed_image in zip(
             original_dataset, processed_dataset
@@ -126,17 +146,15 @@ class TestShapeResizer(TestSingleStep):
 
 def load_resize_operations_steps_tests():
     """
-    Dynamically loads and aggregates individual test suites for resize
-    operations preprocessing steps into a unified test suite.
+    Load and aggregate test suites for resize operations preprocessing steps.
 
-    This function iterates over a predefined list of image preprocessing steps
-    for resize operations and their corresponding arguments. It loads the test
-    cases from these classes into individual test suites, which are then
-    combined into a single comprehensive test suite.
+    This function loads test cases for resize operations and combines them 
+    into a single comprehensive test suite.
 
-    Returns:
-        - unittest.TestSuite: A combined test suite that aggregates tests
-          for multiple image preprocessing step test classes.
+    Returns
+    -------
+    unittest.TestSuite
+        A combined test suite containing tests for multiple preprocessing steps.
     """
     loader = unittest.TestLoader()
     test_suites = [

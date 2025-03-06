@@ -10,10 +10,16 @@ from imlresearch.src.plotting.tests.plotting_test_case import PlottingTestCase
 
 
 class TestPlotTrainingHistory(PlottingTestCase):
-    """Test suite for the plot_training_history function."""
+    """
+    Test suite for the plot_training_history function.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class by creating a dummy Keras model and generating 
+        training history with and without validation data.
+        """
         super().setUpClass()
         cls.visualization_path = os.path.join(
             cls.results_dir, "plot_training_history_test.png"
@@ -52,7 +58,14 @@ class TestPlotTrainingHistory(PlottingTestCase):
 
     @classmethod
     def load_mnist_data(cls):
-        """Load MNIST data for generating training history."""
+        """
+        Loads MNIST data for generating training history.
+
+        Returns
+        -------
+        tuple
+            A tuple containing training and validation datasets.
+        """
         dataset = cls.load_mnist_digits_dataset(sample_num=1000, labeled=True)
         dataset = dataset.shuffle(10000)
 
@@ -63,19 +76,25 @@ class TestPlotTrainingHistory(PlottingTestCase):
         return train_dataset, val_dataset
 
     def test_plot_training_history_with_validation(self):
-        """Test plotting training history with validation data."""
+        """
+        Tests plotting training history with validation data.
+        """
         fig = plot_training_history(self.history_with_val)
         self._save_and_close_figure(fig, "plot_training_history_with_val.png")
 
     def test_plot_training_history_without_validation(self):
-        """Test plotting training history without validation data."""
+        """
+        Tests plotting training history without validation data.
+        """
         fig = plot_training_history(self.history_without_val)
         self._save_and_close_figure(
             fig, "plot_training_history_without_val.png"
         )
 
     def test_plot_training_history_with_multiple_metrics(self):
-        """Test plotting training history with multiple metrics."""
+        """
+        Tests plotting training history with multiple metrics.
+        """
         # Add another metric to the model
         self.model.compile(
             optimizer="adam",

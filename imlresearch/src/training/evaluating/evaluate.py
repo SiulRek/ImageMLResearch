@@ -10,6 +10,14 @@ from imlresearch.src.training.evaluating.calculate_metrics import (
 
 
 def _convert_support_key_to_int(classification_report):
+    """
+    Converts the 'support' key in the classification report to an integer.
+
+    Parameters
+    ----------
+    classification_report : dict
+        The classification report dictionary.
+    """
     for metrics in classification_report.values():
         value = metrics.get("support")
         if value is not None:
@@ -22,19 +30,25 @@ def evaluate_multi_class_classification(y_true, y_pred, class_names=None):
     Computes classification metrics from true and predicted labels for
     evaluation. Calculates metrics for multi-class classification.
 
-    Args:
-        - y_true (arrayLike): True labels.
-        - y_pred (arrayLike): Predicted labels.
-        - class_names (list, optional): List of class names. If provided,
-            the classification report will be returned with the class names.
+    Parameters
+    ----------
+    y_true : array-like
+        True labels.
+    y_pred : array-like
+        Predicted labels.
+    class_names : list, optional
+        List of class names. If provided, the classification report will
+        be returned with the class names.
 
-    Returns:
-        - dict: Evaluation metrics. Dictionary with the following keys:
-            ° 'accuracy' -> float
-            ° 'precision' -> float
-            ° 'recall' -> float
-            ° 'f1' -> float
-            ° 'classification_report' -> dict
+    Returns
+    -------
+    dict
+        Evaluation metrics. Dictionary with the following keys:
+            - 'accuracy' : float
+            - 'precision' : float
+            - 'recall' : float
+            - 'f1' : float
+            - 'classification_report' : dict
     """
     y_pred_one_hot = np.zeros_like(y_pred)
     y_pred_one_hot[np.arange(len(y_pred)), np.argmax(y_pred, axis=-1)] = 1
@@ -63,20 +77,25 @@ def evaluate_binary_classification(y_true, y_pred, class_names=None):
     Computes classification metrics from true and predicted labels for
     evaluation. Calculates metrics for binary classification.
 
-    Args:
-        - y_true (arrayLike): True labels.
-        - y_pred (arrayLike): Predicted labels.
-        - class_names (list, optional): List with len=2 of class names. If
-            provided, the classification report will be returned with the class
-            names.
+    Parameters
+    ----------
+    y_true : array-like
+        True labels.
+    y_pred : array-like
+        Predicted labels.
+    class_names : list, optional
+        List with len=2 of class names. If provided, the classification
+        report will be returned with the class names.
 
-    Returns:
-        - dict: Evaluation metrics. Dictionary with the following keys:
-        ° 'accuracy' -> float
-        ° 'precision' -> float
-        ° 'recall' -> float
-        ° 'f1' -> float
-        ° 'classification_report' -> dict
+    Returns
+    -------
+    dict
+        Evaluation metrics. Dictionary with the following keys:
+            - 'accuracy' : float
+            - 'precision' : float
+            - 'recall' : float
+            - 'f1' : float
+            - 'classification_report' : dict
     """
     y_pred_rounded = np.round(y_pred).astype(int)
     accuracy = calc_accuracy(y_true, y_pred_rounded)
@@ -84,7 +103,6 @@ def evaluate_binary_classification(y_true, y_pred, class_names=None):
     recall = calc_recall(y_true, y_pred)
     f1_score = calc_f1_score(y_true, y_pred)
     cn_kwarg = {"target_names": class_names} if class_names else {}
-    y_pred_rounded = np.round(y_pred).astype(int)
     report = classification_report(
         y_true, y_pred_rounded, output_dict=True, zero_division=0, **cn_kwarg
     )
@@ -104,11 +122,20 @@ def get_evaluation_function(label_type):
     """
     Gets the evaluation function based on the label type.
 
-    Args:
-        - label_type (str): Type of labels.
+    Parameters
+    ----------
+    label_type : str
+        Type of labels.
 
-    Returns:
-        - function: Evaluation function.
+    Returns
+    -------
+    function
+        Evaluation function.
+
+    Raises
+    ------
+    ValueError
+        If the label type is not supported for evaluation.
     """
     if label_type == "multi_class":
         return evaluate_multi_class_classification

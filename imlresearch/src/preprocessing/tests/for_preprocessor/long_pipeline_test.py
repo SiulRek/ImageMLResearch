@@ -163,9 +163,10 @@ def load_long_pipeline_tests(n=N):
     This function dynamically creates n classes inheriting from TestLongPipeline
     and loads them into a test suite.
 
-    Args:
-        - n (int): Number of TestLongPipeline classes to create. Default to
-            N.
+    Parameters
+    ----------
+    n : int
+        Number of TestLongPipeline classes to create. Default to N.
     """
 
     test_suites = []

@@ -40,6 +40,7 @@ class TestParseAndRepeat(BaseTestCase):
         self.assertEqual(
             parse_and_repeat("[5] + [6] + ['test']"), [5, 6, "test"]
         )
+        
     def test_no_repetition(self):
         self.assertEqual(
             parse_and_repeat("[5] + [6] + ['test']"), [5, 6, "test"]

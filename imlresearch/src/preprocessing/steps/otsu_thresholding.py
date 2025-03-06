@@ -7,8 +7,9 @@ class OstuThresholder(StepBase):
     """
     A preprocessing step that applies Otsu's Thresholding to an image.
 
-    Note: In the case of RGB images, it processes each color channel
-    (Red, Green, Blue) separately.
+    For RGB images, each color channel (Red, Green, Blue) is processed 
+    separately. Otsu's method automatically determines an optimal threshold 
+    value to separate the foreground from the background.
     """
 
     arguments_datatype = {"thresh": float, "max_val": float}
@@ -16,19 +17,34 @@ class OstuThresholder(StepBase):
 
     def __init__(self, thresh=0, max_val=255):
         """
-        Initializes the OstuThresholder object that can be integrated
-        into an image preprocessing pipeline.
+        Initialize the OtsuThresholder for integration into an image
+        preprocessing pipeline.
 
-        Args:
-            - thresh (float, optional): The threshold value used for
-              thresholding. Defaults to 0.
-            - max_val (float, optional): The maximum value that a pixel
-              can take after thresholding. Defaults to 255.
+        Parameters
+        ----------
+        thresh : float, optional
+            The threshold value used for thresholding. Default is 0.
+        max_val : float, optional
+            The maximum value that a pixel can take after thresholding. 
+            Default is 255.
         """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply Otsu's thresholding to an image.
+
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        numpy.ndarray
+            The thresholded image.
+        """
         if image_nparray.shape[2] == 1:
             _, thresholded_image = cv2.threshold(
                 image_nparray,

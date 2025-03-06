@@ -9,14 +9,22 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestShuffleDataset(BaseTestCase):
-    """Test suite for the shuffle_dataset function."""
+    """
+    Test suite for the `shuffle_dataset` function.
+    """
 
     def setUp(self):
+        """
+        Sets up the test case by initializing a dataset and a random seed.
+        """
         super().setUp()
         self.dataset = tf.data.Dataset.range(100)
         self.random_seed = 42
 
     def test_shuffling_changes_order(self):
+        """
+        Tests that shuffling changes the order of dataset elements.
+        """
         original_elements = list(self.dataset.as_numpy_iterator())
         shuffled_dataset = shuffle_dataset(self.dataset, self.random_seed)
         shuffled_elements = list(shuffled_dataset.as_numpy_iterator())
@@ -28,6 +36,9 @@ class TestShuffleDataset(BaseTestCase):
         )
 
     def test_shuffling_is_consistent_with_seed(self):
+        """
+        Tests that shuffling with the same seed produces the same order.
+        """
         shuffled_dataset_1 = shuffle_dataset(self.dataset, self.random_seed)
         shuffled_elements_1 = list(shuffled_dataset_1.as_numpy_iterator())
 
@@ -41,6 +52,9 @@ class TestShuffleDataset(BaseTestCase):
         )
 
     def test_shuffling_with_different_seeds(self):
+        """
+        Tests that shuffling with different seeds produces different orders.
+        """
         shuffled_dataset_1 = shuffle_dataset(self.dataset, self.random_seed)
         shuffled_elements_1 = list(shuffled_dataset_1.as_numpy_iterator())
 
@@ -55,6 +69,9 @@ class TestShuffleDataset(BaseTestCase):
         )
 
     def test_shuffling_of_batched_datasets(self):
+        """
+        Tests that shuffling works correctly with batched datasets.
+        """
         batched_dataset = self.dataset.batch(10)
         shuffled_dataset = shuffle_dataset(batched_dataset, self.random_seed)
         shuffled_elements = list(shuffled_dataset.as_numpy_iterator())
@@ -66,7 +83,9 @@ class TestShuffleDataset(BaseTestCase):
         )
 
     def test_shuffling_order_stays_consistent(self):
-        # Shuffling should produce the same order in multiple iterations.
+        """
+        Tests that shuffling produces the same order in multiple iterations.
+        """
         shuffled_dataset = shuffle_dataset(self.dataset, self.random_seed)
         shuffled_elements = list(shuffled_dataset.as_numpy_iterator())
 
@@ -83,6 +102,10 @@ class TestShuffleDataset(BaseTestCase):
         )
 
     def test_shuffling_of_dataset_with_features_and_labels(self):
+        """
+        Tests that shuffling works correctly for datasets containing 
+        both features and labels.
+        """
         features = tf.random.normal((100, 28, 28, 1))
         labels = tf.constant([i for i in range(100)])
         dataset = tf.data.Dataset.from_tensor_slices((features, labels))

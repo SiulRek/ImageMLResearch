@@ -16,10 +16,15 @@ from imlresearch.src.research.attributes.research_attributes import (
 
 
 class TestPlotter(PlottingTestCase):
-    """Test suite for the Plotter class."""
+    """
+    Test suite for the Plotter class.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class with sample data for testing.
+        """
         super().setUpClass()
         cls.image_dataset = cls.load_mnist_digits_dataset(
             sample_num=10, labeled=True
@@ -35,6 +40,14 @@ class TestPlotter(PlottingTestCase):
 
     @classmethod
     def _create_model(cls):
+        """
+        Creates a simple Keras model for testing.
+
+        Returns
+        -------
+        keras.models.Sequential
+            A simple feedforward neural network model.
+        """
         model = Sequential([
             Dense(32, input_shape=(784,), activation="relu"),
             Dense(10, activation="softmax"),
@@ -42,6 +55,9 @@ class TestPlotter(PlottingTestCase):
         return model
 
     def setUp(self):
+        """
+        Sets up each test with a new instance of Plotter.
+        """
         super().setUp()
         research_attributes = ResearchAttributes(
             label_type="multi_class",
@@ -55,7 +71,9 @@ class TestPlotter(PlottingTestCase):
         self.plotter._model = self._create_model()
 
     def test_add_figure(self):
-        """Test the _add_figure method."""
+        """
+        Tests the _add_figure method to ensure a figure is added correctly.
+        """
         fig = plt.figure()
         self.plotter._add_figure("test_figure", fig)
         self.assertEqual(
@@ -68,7 +86,9 @@ class TestPlotter(PlottingTestCase):
         )
 
     def test_plot_images(self):
-        """Test the plot_images method."""
+        """
+        Tests the plot_images method.
+        """
 
         def label_to_title(label):
             return "Label: " + str(label.numpy())
@@ -85,7 +105,9 @@ class TestPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "plotter_plot_images.png")
 
     def test_plot_text(self):
-        """Test the plot_text method."""
+        """
+        Tests the plot_text method.
+        """
         fig = self.plotter.plot_text(
             self.text_sample, title="Sample Text Plot", show=False
         )
@@ -95,7 +117,9 @@ class TestPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "plotter_plot_text.png")
 
     def test_plot_training_history(self):
-        """Test the plot_training_history method."""
+        """
+        Tests the plot_training_history method.
+        """
         self.plotter._training_history = MagicMock()
         self.plotter._training_history = {
             "loss": [0.25, 0.15, 0.1],
@@ -117,7 +141,9 @@ class TestPlotter(PlottingTestCase):
         self._save_and_close_figure(fig, "plotter_plot_training_history.png")
 
     def test_plot_model_summary(self):
-        """Test the plot_model_summary method."""
+        """
+        Tests the plot_model_summary method.
+        """
         fig = self.plotter.plot_model_summary(
             title="Test Model Summary", show=False
         )

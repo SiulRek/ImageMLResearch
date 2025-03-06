@@ -1,6 +1,5 @@
 import os
 import random
-
 from PIL import Image, ImageDraw
 
 
@@ -8,15 +7,21 @@ def generate_geometrical_form_image(
     path, width, height, image_number, image_format="png"
 ):
     """
-    Generate an image with noise, a rectangle, and a circle, and save it to
+    Generate an image with noise, a rectangle, and a circle, and save it to 
     the specified path.
 
-    Args:
-        - path (str): Directory path to save the generated image.
-        - width (int): Width of the image.
-        - height (int): Height of the image.
-        - image_number (int): The image number for the filename.
-        - image_format (str): The format to save the image. Defaults to "png".
+    Parameters
+    ----------
+    path : str
+        Directory path to save the generated image.
+    width : int
+        Width of the image.
+    height : int
+        Height of the image.
+    image_number : int
+        The image number for the filename.
+    image_format : str, optional
+        The format to save the image, by default "png".
     """
     image = Image.new("RGB", (width, height), "white")
     draw = ImageDraw.Draw(image)
@@ -54,17 +59,23 @@ def generate_geometrical_form_images(
     path, num_images, width=600, height=400, start_number=1, image_format="png"
 ):
     """
-    Generate multiple images of geometrical forms and save them to the
+    Generate multiple images of geometrical forms and save them to the 
     specified path.
 
-    Args:
-        - path (str): Directory path to save the images.
-        - num_images (int): Number of images to generate.
-        - width (int, optional): Width of the images. Defaults to 600.
-        - height (int, optional): Height of the images. Defaults to 400.
-        - start_number (int, optional): Starting number for filenames.
-            Defaults to 1.
-        - image_format (str, optional): Image format. Defaults to "png".
+    Parameters
+    ----------
+    path : str
+        Directory path to save the images.
+    num_images : int
+        Number of images to generate.
+    width : int, optional
+        Width of the images, by default 600.
+    height : int, optional
+        Height of the images, by default 400.
+    start_number : int, optional
+        Starting number for filenames, by default 1.
+    image_format : str, optional
+        Image format, by default "png".
     """
     if not os.path.exists(path):
         os.makedirs(path)

@@ -8,17 +8,20 @@ from imlresearch.src.experimenting.helpers.hparams_suggester import (
 
 
 class _TrialDefinitionsIterator:
-    """An iterator class for generating trial definition."""
+    """
+    Iterator for generating trial definitions.
+
+    Parameters
+    ----------
+    suggester : HParamsSuggester
+        The hyperparameters suggester object.
+    num_trials : int
+        The number of trials to generate.
+    prefix : str
+        The prefix for naming trials.
+    """
 
     def __init__(self, suggester, num_trials, prefix):
-        """
-        Initialize the TrialDefinitionsIterator.
-
-        Args:
-            - suggester (HParamsSuggester): The hyperparameters suggester
-                object.
-            - num_trials (int): The number of trials to generate.
-        """
         self.suggester = suggester
         self.num_trials = num_trials
         self.prefix = prefix
@@ -26,22 +29,28 @@ class _TrialDefinitionsIterator:
 
     def __iter__(self):
         """
-        Return the iterator object.
+        Returns the iterator object.
 
-        Returns:
-            - iterator: The iterator object.
+        Returns
+        -------
+        _TrialDefinitionsIterator
+            The iterator instance.
         """
         return self
 
     def __next__(self):
         """
-        Generate the next trial definition.
+        Generates the next trial definition.
 
-        Returns:
-            - dict: The trial definition.
+        Returns
+        -------
+        dict
+            The trial definition.
 
-        Raises:
-            - StopIteration: If all num_trials are already generated.
+        Raises
+        ------
+        StopIteration
+            If all `num_trials` are already generated.
         """
         if self.trial_count == self.num_trials:
             raise StopIteration
@@ -53,14 +62,22 @@ class _TrialDefinitionsIterator:
 
 def _load_definitions(definitions_json):
     """
-    Load experiment information from a JSON file.
+    Loads experiment information from a JSON file.
 
-    Args:
-        - definitions_json (str): The path to the directory containing the
-            definitions.json file.
+    Parameters
+    ----------
+    definitions_json : str
+        The path to the `definitions.json` file.
 
-    Returns:
-        - dict: A dictionary containing the experiment information.
+    Returns
+    -------
+    dict
+        A dictionary containing experiment metadata.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the JSON file is not found.
     """
     if not os.path.exists(definitions_json):
         msg = f"{definitions_json} is not found in the experiment directory."
@@ -71,6 +88,19 @@ def _load_definitions(definitions_json):
 
 
 def _assert_experiment_metadata(experiment_metadata):
+    """
+    Validates experiment metadata.
+
+    Parameters
+    ----------
+    experiment_metadata : dict
+        The experiment metadata to validate.
+
+    Raises
+    ------
+    AssertionError
+        If any required key is missing.
+    """
     expected_keys = ["name", "description", "directory"]
     for key in expected_keys:
         msg = f"{key} is not found in experiment_metadata."
@@ -79,18 +109,28 @@ def _assert_experiment_metadata(experiment_metadata):
 
 def _process_trial_definitions(trial_definitions, experiment_dir):
     """
-    Process the trial definitions to include the trial names.
+    Processes the trial definitions to include trial names.
 
-    Args:
-        - trial_definitions (list or dict): The trial definitions. It can be
-            a list of dicts or a dict containing the hyperparameters
-            configurations to be passed to HParamsSuggester class.
-        - experiment_dir (str): The directory of the experiment.
+    Parameters
+    ----------
+    trial_definitions : list or dict
+        The trial definitions, either a list of dictionaries or a dictionary
+        containing hyperparameters configurations for `HParamsSuggester`.
+    experiment_dir : str
+        The directory of the experiment.
 
-    Returns:
-        - iterator: An iterator of the trial definition.
+    Returns
+    -------
+    iterator
+        An iterator of trial definitions.
+
+    Raises
+    ------
+    AssertionError
+        If required keys are missing in `trial_definitions`.
+    ValueError
+        If `trial_definitions` is neither a list nor a dictionary.
     """
-    # Option 1: Set manually the trials providing a list of dicts.
     if isinstance(trial_definitions, list):
         expected_keys = {"name", "hyperparameters"}
         for trial in trial_definitions:
@@ -100,9 +140,8 @@ def _process_trial_definitions(trial_definitions, experiment_dir):
             )
         return iter(trial_definitions)
 
-    # Option 2: Use the hyperparameters suggester to generate trials
     if isinstance(trial_definitions, dict):
-        num_trials = trial_definitions.pop("num_trials", 1)  # Default 1 trial.
+        num_trials = trial_definitions.pop("num_trials", 1)  # Default: 1 trial
         prefix = trial_definitions.pop("prefix", "trial_")
         hparams_configs = trial_definitions.pop("hparams_configs", None)
         msg = "hparams_configs is not a key in trial_definitions."
@@ -126,15 +165,24 @@ def _process_trial_definitions(trial_definitions, experiment_dir):
 
 def load_experiment_definition(definition_json):
     """
-    Load the experiment metadata and trial definitions from a JSON file.
+    Loads experiment metadata and trial definitions from a JSON file.
 
-    Args:
-        - definition_json (str): The path to the JSON file containing the
-            experiment definition.
+    Parameters
+    ----------
+    definition_json : str
+        The path to the JSON file containing the experiment definition.
 
-    Returns:
-        - tuple: A tuple containing the experiment metadata and trial
-            definitions.
+    Returns
+    -------
+    tuple
+        A tuple containing:
+        - dict: Experiment metadata.
+        - iterator: Trial definitions.
+
+    Raises
+    ------
+    AssertionError
+        If the definition file structure is incorrect.
     """
     exp_def = _load_definitions(definition_json)
     msg = "Expected 2 keys in the definition file."

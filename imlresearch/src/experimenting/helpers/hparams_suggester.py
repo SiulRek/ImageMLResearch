@@ -20,6 +20,22 @@ DEFAULT_STUDY_NAME = "hparams_suggester_study"
 def _assert_hparam_configs(
     configs, hparam_name, hp_type, required_keys, optional_keys=[]
 ):
+    """
+    Validates the hyperparameter configuration.
+
+    Parameters
+    ----------
+    configs : dict
+        The configuration dictionary for the hyperparameter.
+    hparam_name : str
+        The name of the hyperparameter.
+    hp_type : str
+        The type of the hyperparameter (float, int, categorical).
+    required_keys : list
+        The required keys that must be present in the configuration.
+    optional_keys : list, optional
+        The optional keys that can be present in the configuration.
+    """
     for key in required_keys:
         msg = f"Required key '{key}' not found in config "
         msg += f"for {hp_type} parameter '{hparam_name}'"
@@ -31,6 +47,21 @@ def _assert_hparam_configs(
 
 
 def _get_suggest_float_method(name, config):
+    """
+    Returns a wrapper function to suggest a float hyperparameter.
+
+    Parameters
+    ----------
+    name : str
+        The name of the hyperparameter.
+    config : dict
+        The configuration dictionary for the hyperparameter.
+
+    Returns
+    -------
+    function
+        A wrapper function that suggests a float hyperparameter.
+    """
     def wrapper(trial):
         return trial.suggest_float(name, **config)
 
@@ -38,19 +69,44 @@ def _get_suggest_float_method(name, config):
 
 
 def _to_nearest_power_of_two(value):
+    """
+    Rounds a given value to the nearest power of two.
+
+    Parameters
+    ----------
+    value : float
+        The value to round.
+
+    Returns
+    -------
+    int
+        The nearest power of two.
+    """
     return 2 ** round(log2(value))
 
 
 def _get_suggest_int_method(name, config):
-    # nearest_power2 is consumed inside the wrapper, so we can safely remove it
-    # from the config.
+    """
+    Returns a wrapper function to suggest an integer hyperparameter.
+
+    Parameters
+    ----------
+    name : str
+        The name of the hyperparameter.
+    config : dict
+        The configuration dictionary for the hyperparameter.
+
+    Returns
+    -------
+    function
+        A wrapper function that suggests an integer hyperparameter.
+    """
     to_power_2 = config.pop("nearest_power2", False)
 
     def wrapper(trial):
         suggested = trial.suggest_int(name, **config)
         if to_power_2:
             suggested = _to_nearest_power_of_two(suggested)
-            # Overwrite the true suggested value with the nearest power of 2.
             trial.params[name] = suggested
         return suggested
 
@@ -58,6 +114,21 @@ def _get_suggest_int_method(name, config):
 
 
 def _get_suggest_categorical_method(name, config):
+    """
+    Returns a wrapper function to suggest a categorical hyperparameter.
+
+    Parameters
+    ----------
+    name : str
+        The name of the hyperparameter.
+    config : dict
+        The configuration dictionary for the hyperparameter.
+
+    Returns
+    -------
+    function
+        A wrapper function that suggests a categorical hyperparameter.
+    """
     def wrapper(trial):
         return trial.suggest_categorical(name, **config)
 
@@ -65,7 +136,12 @@ def _get_suggest_categorical_method(name, config):
 
 
 class HParamsSuggester:
-    """ A class to suggest hyperparameters using Optuna. """
+    """
+    A class to suggest hyperparameters using Optuna.
+
+    This class manages the process of suggesting hyperparameters
+    based on predefined configurations and an Optuna study.
+    """
 
     def __init__(
         self,
@@ -76,20 +152,21 @@ class HParamsSuggester:
         study_name=DEFAULT_STUDY_NAME,
     ):
         """
-        Initializes the HParamsSuggester with the provided hyperparameter
-        configurations.
+        Initializes the HParamsSuggester with hyperparameter configurations.
 
-        Args:
-            - hparams_configs (Dict[str, dict]): The hyperparameter
-                configurations.
-            - direction (str): The optimization direction, either "minimize"
-                or "maximize". Defaults to "minimize".
-            - storage_dir (str, optional): The directory to save the study.
-                Defaults to None.
-            - load_if_exists (bool): Whether to load an existing study if it
-                exists in the specified storage directory. Defaults to True.
-            - study_name (str, optional): The name of the study. Defaults to
-                DEFAULT_STUDY_NAME.
+        Parameters
+        ----------
+        hparams_configs : dict
+            The hyperparameter configurations.
+        direction : str, optional
+            The optimization direction, either "minimize" or "maximize".
+            Defaults to "minimize".
+        storage_dir : str, optional
+            The directory to save the study. Defaults to None.
+        load_if_exists : bool, optional
+            Whether to load an existing study if it exists. Defaults to True.
+        study_name : str, optional
+            The name of the study. Defaults to DEFAULT_STUDY_NAME.
         """
         study_kwargs = {"study_name": study_name, "direction": direction}
         if storage_dir is not None:
@@ -108,11 +185,19 @@ class HParamsSuggester:
 
     def _process_storage_path(self, storage_dir, study_name):
         """
-        Processes the storage path to be used by Optuna.
+        Processes the storage path for Optuna.
 
-        Args:
-            - storage_dir (str): The directory to save the study.
-            - study_name (str): The name of the study.
+        Parameters
+        ----------
+        storage_dir : str
+            The directory to save the study.
+        study_name : str
+            The name of the study.
+
+        Returns
+        -------
+        str
+            The formatted storage path for Optuna.
         """
         if os.path.isdir:
             os.makedirs(storage_dir, exist_ok=True)
@@ -125,12 +210,13 @@ class HParamsSuggester:
 
     def _compile_hparams_configs(self, hparams_configs):
         """
-        Compiles the hyperparameter configurations into distributions and
-        suggest methods.
+        Compiles hyperparameter configurations into distributions 
+        and suggestion methods.
 
-        Args:
-            - hparams_configs (Dict[str, dict]): The hyperparameter
-                configurations.
+        Parameters
+        ----------
+        hparams_configs : dict
+            The hyperparameter configurations.
         """
         hparams_configs = deepcopy(hparams_configs)
         for name, configs in hparams_configs.items():
@@ -180,8 +266,10 @@ class HParamsSuggester:
         """
         Returns the next set of hyperparameters to try.
 
-        Returns:
-            - dict: The next set of hyperparameters.
+        Returns
+        -------
+        dict
+            The next set of suggested hyperparameters.
         """
         if self.pending_trial is not None:
             try:
@@ -205,9 +293,11 @@ class HParamsSuggester:
         """
         Sets the score for the last suggested hyperparameters.
 
-        Args:
-            - score (float): The score for the last suggested hyperparameters.
-                If None, the last trial will be dropped from the study.
+        Parameters
+        ----------
+        score : float
+            The score for the last suggested hyperparameters.
+            If None, the last trial will be dropped.
         """
         if self.pending_trial is None:
             msg = "No pending trial to set score for. "

@@ -6,10 +6,16 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class StandardNormalizer(StepBase):
     """
-    A preprocessing step that applies standard normalization (Z-score
+    A preprocessing step that applies standard normalization (Z-score 
     normalization) to an image tensor.
 
-    Note: The data type of the output image tensor is tf.float16.
+    This process standardizes the image by subtracting the mean and dividing 
+    by the standard deviation, making the pixel values have a mean of 0 and 
+    a standard deviation of 1.
+
+    Note
+    ----
+    The data type of the output image tensor is `tf.float16`.
     """
 
     arguments_datatype = {}
@@ -17,8 +23,8 @@ class StandardNormalizer(StepBase):
 
     def __init__(self):
         """
-        Initializes the StandardNormalizer object for integration into an
-        image preprocessing pipeline.
+        Initialize the StandardNormalizer for integration into an image 
+        preprocessing pipeline.
         """
         super().__init__({})
         self.output_datatype = tf.float16
@@ -27,11 +33,12 @@ class StandardNormalizer(StepBase):
 
     def _setup(self, dataset):
         """
-        Computes the mean and standard deviation of the dataset.
+        Compute the mean and standard deviation of the dataset.
 
-        Args:
-            - dataset (tf.data.Dataset): The dataset to compute the
-              statistic on.
+        Parameters
+        ----------
+        dataset : tf.data.Dataset
+            The dataset on which statistics are computed.
         """
         mean_vals = []
         std_vals = []
@@ -48,6 +55,19 @@ class StandardNormalizer(StepBase):
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
+        """
+        Apply standard normalization to an image tensor.
+
+        Parameters
+        ----------
+        image_tensor : tf.Tensor
+            The input image tensor.
+
+        Returns
+        -------
+        tf.Tensor
+            The normalized image tensor.
+        """
         image_tensor = tf.cast(image_tensor, self.output_datatype)
         normalized_image = (
             (image_tensor - self._mean_val) / (self._std_val + 1e-4)

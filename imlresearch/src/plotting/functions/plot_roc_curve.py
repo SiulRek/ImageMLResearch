@@ -6,15 +6,19 @@ from sklearn.metrics import roc_curve, auc
 
 def plot_roc_curve(y_true, y_pred):
     """
-    Plots a ROC curve using Matplotlib.
+    Plots the Receiver Operating Characteristic (ROC) curve.
 
-    Args:
-        - y_true (array-like): True labels.
-        - y_pred_proba (array-like): Predicted probabilities for the
-          positive class.
+    Parameters
+    ----------
+    y_true : array-like
+        True labels of the dataset.
+    y_pred : array-like
+        Predicted probabilities for the positive class.
 
-    Returns:
-        - fig: The Matplotlib figure containing the ROC curve plot.
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the ROC curve plot.
     """
     # Configuration
     figsize = (8, 8)

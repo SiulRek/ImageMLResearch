@@ -29,9 +29,14 @@ from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
 
 
 class PlottingTestRunner(TestRunnerBase):
-    """Test Runner for the Plotting Module."""
+    """
+    Test Runner for the Plotting Module.
+    """
 
     def load_tests(self):
+        """
+        Loads all test cases and modules for the Plotting module.
+        """
         self.load_test_case(TestPlotConfusionMatrix)
         self.load_test_case(TestPlotText)
         self.load_test_case(TestPlotImages)

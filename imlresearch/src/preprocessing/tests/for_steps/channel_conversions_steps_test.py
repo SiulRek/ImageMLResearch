@@ -31,6 +31,12 @@ class TestRGBToGrayscale(TestSingleStep):
     process_grayscale_only = False
 
     def test_process_rgb_images(self):
+        """
+        Test to verify that RGB images are correctly processed into grayscale
+        images. Ensures that the color channel is correctly transformed from
+        RGB to grayscale.
+
+        """
         pipeline = [self.test_step]
         preprocessor = ImagePreprocessor()
         preprocessor.set_pipe(pipeline)
@@ -43,6 +49,9 @@ class TestRGBToGrayscale(TestSingleStep):
 
         @skip("Visual inspection not enabled")
         def test_processed_image_visualization(self):
+            """
+            Skips the visualization test if visual inspection is disabled.
+            """
             pass
 
 
@@ -68,6 +77,12 @@ class TestGrayscaleToRGB(TestSingleStep):
     process_grayscale_only = False
 
     def test_process_rgb_images(self):
+        """
+        Test to verify that RGB images are correctly processed into grayscale
+        images within a pipeline. This test ensures the correct color channel
+        dimensions after processing.
+
+        """
         pipeline = [self.test_step, RGBToGrayscale()]
         preprocessor = ImagePreprocessor()
         preprocessor.set_pipe(pipeline)
@@ -77,6 +92,12 @@ class TestGrayscaleToRGB(TestSingleStep):
         )
 
     def test_process_grayscaled_images(self):
+        """
+        Test to verify that grayscale images are processed correctly and
+        converted back to RGB images. Ensures correct color channel dimensions
+        and pipeline behavior.
+
+        """
         pipeline = [RGBToGrayscale(), self.test_step]
         preprocessor = ImagePreprocessor()
         preprocessor.set_pipe(pipeline)
@@ -90,6 +111,11 @@ class TestGrayscaleToRGB(TestSingleStep):
         )
 
     def test_process_execution(self):
+        """
+        Test to verify that the preprocessing step executes correctly on the
+        image dataset, ensuring that the step runs without errors.
+
+        """
         processed_dataset = self.test_step(self.image_dataset)
         for _ in processed_dataset.take(
             1
@@ -100,6 +126,9 @@ class TestGrayscaleToRGB(TestSingleStep):
 
         @skip("Visual inspection not enabled")
         def test_processed_image_visualization(self):
+            """
+            Skips the visualization test if visual inspection is disabled.
+            """
             pass
 
 
@@ -111,9 +140,11 @@ def load_channel_conversion_steps_tests():
     This function specifically creates test suites for testing the
     RGBToGrayscale and GrayscaleToRGB steps in an image preprocessing pipeline.
 
-    Returns:
-        - unittest.TestSuite: A unified test suite containing all the test
-            cases from the RGBToGrayscale and GrayscaleToRGB test classes.
+    Returns
+    -------
+    unittest.TestSuite
+        A unified test suite containing all the test cases from the
+        RGBToGrayscale and GrayscaleToRGB test classes.
     """
     loader = unittest.TestLoader()
     suite1 = loader.loadTestsFromTestCase(TestRGBToGrayscale)

@@ -9,20 +9,24 @@ def parse_and_repeat(input_string):
     The function expects an input string formatted as a sequence of list
     representations, each optionally followed by a multiplication factor,
     indicating how many times the list should be repeated. The elements are
-    separated by a '+' sign. For example, '[1, 2, 3]*2 + [4, 5]' will result in
-    [1, 2, 3, 1, 2, 3, 4, 5].
+    separated by a '+' sign. For example, '[1, 2, 3]*2 + [4, 5]' will result
+    in [1, 2, 3, 1, 2, 3, 4, 5].
 
-    Args:
-        - input_string (str): The string to parse. It should be in the
-          format '[list]*number + [list]*number + ...'. Each [list] is a
-          literal Python list, and 'number' is an integer indicating the
-          number of times the list should be repeated. If the '*number' part
-          is omitted, the list is added once.
+    Parameters
+    ----------
+    input_string : str
+        The string to parse. It should be in the format '[list]*number + [list]*
+        number + ...'. Each [list] is a literal Python list, and 'number' is an
+        integer indicating the number of times the list should be repeated. If
+        the '*number' part is omitted, the list is added once.
 
-    Returns:
-        - list: A list containing the elements from the input string,
-          repeated as specified.
+    Returns
+    -------
+    list
+        A list containing the elements from the input string, repeated as
+        specified.
     """
+
     # Split the input string by '+' outside of brackets
     elements = re.split(r"\+\s*(?=[\[\]])", input_string)
 

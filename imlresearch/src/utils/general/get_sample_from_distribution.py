@@ -3,21 +3,32 @@ import numpy as np
 
 def get_sample_from_distribution(distribution_data):
     """
-    Generates a single random sample from a specified probability distribution.
+    Generate a single random sample from a specified probability distribution.
 
     This function dynamically selects a distribution function based on the
-    input dictionary 'distribution_data', which should contain the key
+    input dictionary `distribution_data`, which should contain the key
     'distribution' specifying the type of distribution and additional
     parameters required by the selected distribution.
 
-    Args:
-        - distribution_data (dict): A dictionary containing the distribution
-            type and its corresponding parameters.
+    Parameters
+    ----------
+    distribution_data : dict
+        A dictionary containing the distribution type and its corresponding 
+        parameters.
 
-    Returns:
-        - float: A single sample from the specified distribution.
+    Returns
+    -------
+    float
+        A single sample from the specified distribution.
+
+    Raises
+    ------
+    KeyError
+        If the 'distribution' key is missing in `distribution_data`.
+    ValueError
+        If the specified distribution is not supported or if invalid 
+        parameters are provided.
     """
-
     distribution_map = {
         "gaussian": np.random.normal,  # mean ('loc'), std deviation ('scale')
         "uniform": np.random.uniform,  # lower ('low'), upper ('high')
@@ -38,7 +49,7 @@ def get_sample_from_distribution(distribution_data):
     dist_function = distribution_map.get(dist_name)
     if not dist_function:
         msg = f"Distribution {dist_name} is not supported."
-        raise ValueError(msg)  # Fixed line length issue
+        raise ValueError(msg)
 
     args = {k: v for k, v in distribution_data.items() if k != "distribution"}
     args["size"] = 1

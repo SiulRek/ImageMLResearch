@@ -6,16 +6,24 @@ from imlresearch.src.utils import unbatch_dataset_if_batched
 
 def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     """
-    Plots a grid of images from a TensorFlow dataset. It determines a random
-    skip value to avoid plotting the same images every time.
+    Plots a grid of images from a TensorFlow dataset.
 
-    Args:
-        - dataset (tf.data.Dataset): TensorFlow dataset containing the
-          images and optionally labels.
-        - grid_size (Tuple): Tuple containing the grid size (rows, columns).
-          Defaults to (2, 2).
-        - label_to_title_func (callable): Function to convert the label to a
-          string. Defaults to None.
+    The function determines a random skip value to avoid plotting the same 
+    images every time.
+
+    Parameters
+    ----------
+    dataset : tf.data.Dataset
+        TensorFlow dataset containing the images and optionally labels.
+    grid_size : tuple, optional
+        Tuple specifying the grid size as (rows, columns). Defaults to (2, 2).
+    label_to_title_func : callable, optional
+        Function to convert the label to a string. Defaults to None.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The Matplotlib figure containing the plotted images.
     """
     # Configuration
     fig_size = (grid_size[1] * 4, grid_size[0] * 4)

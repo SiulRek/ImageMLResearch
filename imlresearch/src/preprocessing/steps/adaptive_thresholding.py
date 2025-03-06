@@ -5,10 +5,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class AdaptiveThresholder(StepBase):
     """
-    A preprocessing step that applies adaptive Thresholding to an image.
+    A preprocessing step that applies adaptive thresholding to an image.
 
-    Note: In the case of RGB images, it processes each color channel
-    (Red, Green, Blue) separately.
+    This method dynamically determines threshold values for different regions 
+    of the image. For RGB images, each color channel (Red, Green, Blue) is 
+    processed separately.
     """
 
     arguments_datatype = {"block_size": int, "c": float, "max_val": float}
@@ -16,22 +17,37 @@ class AdaptiveThresholder(StepBase):
 
     def __init__(self, block_size=15, c=-2, max_val=255):
         """
-        Initializes the AdaptiveThresholder object that can be integrated in
-        an image preprocessing pipeline.
+        Initialize the AdaptiveThresholder for use in an image preprocessing 
+        pipeline.
 
-        Args:
-            - block_size (int, optional): Size of the pixel neighborhood
-              that is used to calculate the threshold value. Defaults to 15.
-            - c (float, optional): Constant subtracted from the mean or
-              weighted mean. Defaults to -2.
-            - max_val (float, optional): The maximum value that a pixel can
-              take. Defaults to 255.
+        Parameters
+        ----------
+        block_size : int, optional
+            The size of the pixel neighborhood used to calculate the threshold 
+            value. Must be an odd number. Default is 15.
+        c : float, optional
+            A constant subtracted from the mean or weighted mean. Default is -2.
+        max_val : float, optional
+            The maximum pixel intensity value after thresholding.
+            Default is 255.
         """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply adaptive thresholding to an image.
 
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        numpy.ndarray
+            The thresholded image.
+        """
         def apply_adaptive_threshold(np_array):
             return cv2.adaptiveThreshold(
                 np_array,

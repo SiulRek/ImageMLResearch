@@ -9,31 +9,41 @@ from imlresearch.src.utils import unbatch_dataset_if_batched
 
 class DataRetriever(ResearchAttributes):
     """
-    A class to retrieve input and output data from `datasets_containers` and
+    Retrieve input and output data from `datasets_containers` and 
     `outputs_containers` in ResearchAttributes.
     """
 
     def __init__(self):
-        """Initializes the DataRetriever."""
-        # Not initializing ResearchAttributes here, prefer calling
-        # synchronize_research_attributes explicitly.
+        """
+        Initialize the DataRetriever.
 
-        # Initialize research attributes used in the DataRetriever
+        Notes
+        -----
+        ResearchAttributes is not initialized here. Instead, 
+        `synchronize_research_attributes` should be explicitly called.
+
+        This initializes research attributes used in DataRetriever.
+        """
         self._datasets_container = {}
         self._outputs_container = {}
 
     def _to_numpy_array(self, array):
         """
-        Converts an array to a numpy array using two approaches:
-            - 1. If the array has a 'numpy' method, it is called.
-            - 2. If the array does not have a 'numpy' method, it is converted
-                 to a numpy array using np.array.
+        Convert an array to a NumPy array.
 
-        Args:
-            - array (array-like): The array to convert.
+        The conversion follows these steps:
+        1. If the array has a `numpy` method, it is called.
+        2. If no `numpy` method exists, `np.array` is used for conversion.
 
-        Returns:
-            - The numpy array.
+        Parameters
+        ----------
+        array : array-like
+            The array to convert.
+
+        Returns
+        -------
+        np.ndarray
+            The converted NumPy array.
         """
         if isinstance(array, np.ndarray):
             return array
@@ -44,10 +54,17 @@ class DataRetriever(ResearchAttributes):
 
     def _retrieve_class_names(self):
         """
-        Retrieves the class names from the label manager.
+        Retrieve class names from the label manager.
 
-        Returns:
-            - The class names.
+        Returns
+        -------
+        list
+            The class names.
+
+        Raises
+        ------
+        AttributeError
+            If no class names are found in the label manager.
         """
         try:
             return self.label_manager.class_names
@@ -56,11 +73,19 @@ class DataRetriever(ResearchAttributes):
 
     def _retrieve_test_output_data(self):
         """
-        Retrieves the output of the test dataset containing the true and
-        predicted labels.
+        Retrieve the output of the test dataset.
 
-        Returns:
-            - (Tuple): (y_true, y_pred)
+        This function returns the true and predicted labels.
+
+        Returns
+        -------
+        tuple
+            (y_true, y_pred)
+
+        Raises
+        ------
+        ValueError
+            If neither 'complete_output' nor 'test_output' is found.
         """
         complete_output = self._outputs_container.get("complete_output")
         test_output = self._outputs_container.get("test_output")
@@ -73,14 +98,22 @@ class DataRetriever(ResearchAttributes):
 
     def _retrieve_output_data_by_name(self, output_name):
         """
-        Retrieve output data by name.
+        Retrieve output data by its name.
 
-        Args:
-            - output_name (str): The name of the output data in the output
-              container to retrieve.
+        Parameters
+        ----------
+        output_name : str
+            The name of the output data to retrieve from the container.
 
-        Returns:
-            - The output data associated with the given name.
+        Returns
+        -------
+        object
+            The output data associated with the given name.
+
+        Raises
+        ------
+        ValueError
+            If no output data is found with the specified name.
         """
         if output_name not in self._outputs_container:
             raise ValueError(
@@ -90,13 +123,22 @@ class DataRetriever(ResearchAttributes):
 
     def _retrieve_input_data_by_name(self, dataset_name):
         """
-        Retrieves the input data from the dataset.
+        Retrieve input data from the dataset.
 
-        Args:
-            - dataset_name (str): Name of the dataset in the datasets container.
+        Parameters
+        ----------
+        dataset_name : str
+            The name of the dataset in the datasets container.
 
-        Returns:
-            - The input data.
+        Returns
+        -------
+        tf.Tensor
+            The retrieved input data.
+
+        Raises
+        ------
+        ValueError
+            If no dataset is found with the specified name.
         """
         if dataset_name not in self._datasets_container:
             raise ValueError(f"No dataset found with name '{dataset_name}'.")
@@ -111,10 +153,17 @@ class DataRetriever(ResearchAttributes):
 
     def _retrieve_test_input_output_data(self):
         """
-        Retrieves the input and output data of the test dataset.
+        Retrieve input and output data from the test dataset.
 
-        Returns:
-            - (Tuple): (x, y_true, y_pred)
+        Returns
+        -------
+        tuple
+            (x, y_true, y_pred)
+
+        Raises
+        ------
+        ValueError
+            If no dataset is found or if output data is not synchronized.
         """
         for dataset_name in ["complete_dataset", "test_dataset"]:
             if (

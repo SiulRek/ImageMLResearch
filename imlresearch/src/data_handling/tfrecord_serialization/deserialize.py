@@ -4,8 +4,23 @@ import tensorflow as tf
 
 
 def parse_tfrecord(sample_proto, label_dtype=None):
-    """Parses a serialized Example proto to parse the image and optionally
-    label tensors."""
+    """
+    Parses a serialized `Example` proto to extract the image and optionally 
+    label tensors.
+
+    Parameters
+    ----------
+    sample_proto : tf.Tensor
+        A serialized example from a TFRecord file.
+    label_dtype : tf.DType, optional
+        The data type of the label. If None, assumes there are no labels.
+
+    Returns
+    -------
+    tuple or tf.Tensor
+        If labels exist, returns a tuple (image, label). Otherwise, returns 
+        only the image tensor.
+    """
     feature_description = {
         "image": tf.io.FixedLenFeature([], tf.string),
     }
@@ -23,19 +38,28 @@ def parse_tfrecord(sample_proto, label_dtype=None):
 
 def deserialize_dataset_from_tfrecord(filepath, label_dtype=None):
     """
-    Loads a TFRecord file into a tf.data.Dataset object.
+    Loads a TFRecord file into a `tf.data.Dataset` object.
 
-    Args:
-        - filepath (str): The path to the TFRecord file.
-        - label_dtype (tf.DType, optional): The data type of the labels in
-            the dataset. If None, assumes there are no labels.
+    Parameters
+    ----------
+    filepath : str
+        The path to the TFRecord file.
+    label_dtype : tf.DType, optional
+        The data type of the labels in the dataset. If None, assumes there 
+        are no labels.
 
-    Returns:
-        - tf.data.Dataset: A dataset object containing image and optionally
-            label pairs.
+    Returns
+    -------
+    tf.data.Dataset
+        A dataset object containing images and optionally label pairs.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified TFRecord file does not exist.
     """
     if not os.path.exists(filepath):
-        msg = f"tfrecord '{filepath}' does not exist."
+        msg = f"TFRecord '{filepath}' does not exist."
         raise FileNotFoundError(msg)
 
     raw_dataset = tf.data.TFRecordDataset(filepath)

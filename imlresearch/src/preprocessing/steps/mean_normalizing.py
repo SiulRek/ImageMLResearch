@@ -7,7 +7,12 @@ class MeanNormalizer(StepBase):
     """
     A preprocessing step that applies mean normalization to an image tensor.
 
-    Note: The data type of the output image tensor is tf.float16.
+    This normalization ensures that pixel values are centered around zero 
+    and scaled based on the dataset's range.
+
+    Note
+    ----
+    The data type of the output image tensor is `tf.float16`.
     """
 
     arguments_datatype = {}
@@ -15,8 +20,8 @@ class MeanNormalizer(StepBase):
 
     def __init__(self):
         """
-        Initializes the MeanNormalizer object for integration into an
-        image preprocessing pipeline.
+        Initialize the MeanNormalizer for integration into an image 
+        preprocessing pipeline.
         """
         super().__init__({})
         self.output_datatype = tf.float16
@@ -25,11 +30,12 @@ class MeanNormalizer(StepBase):
 
     def _setup(self, dataset):
         """
-        Computes the mean and range (max - min) of the dataset.
+        Compute the mean and range (max - min) of the dataset.
 
-        Args:
-            - dataset (tf.data.Dataset): The dataset to compute the
-              statistic on.
+        Parameters
+        ----------
+        dataset : tf.data.Dataset
+            The dataset on which statistics are computed.
         """
         mean_vals = []
         range_vals = []
@@ -46,6 +52,19 @@ class MeanNormalizer(StepBase):
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
+        """
+        Apply mean normalization to an image tensor.
+
+        Parameters
+        ----------
+        image_tensor : tf.Tensor
+            The input image tensor.
+
+        Returns
+        -------
+        tf.Tensor
+            The mean-normalized image tensor.
+        """
         image_tensor = tf.cast(image_tensor, self.output_datatype)
         normalized_image = (
             (image_tensor - self._mean_val) / (self._range_val + 1e-4)

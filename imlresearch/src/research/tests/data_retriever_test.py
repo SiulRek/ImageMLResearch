@@ -8,9 +8,17 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestDataRetriever(BaseTestCase):
-    """Test suite for the DataRetriever class."""
+    """
+    Test suite for the DataRetriever class.
+    """
 
     def setUp(self):
+        """
+        Set up the test environment for DataRetriever.
+
+        This initializes a DataRetriever instance and creates mock datasets 
+        and outputs for testing.
+        """
         super().setUp()
         self.data_retriever = DataRetriever()
 
@@ -29,7 +37,9 @@ class TestDataRetriever(BaseTestCase):
         }
 
     def test_to_numpy_array(self):
-        """Test conversion to numpy array."""
+        """
+        Test conversion of various data types to NumPy arrays.
+        """
         tensor = tf.constant([1, 2, 3])
         numpy_array = np.array([1, 2, 3])
 
@@ -46,12 +56,19 @@ class TestDataRetriever(BaseTestCase):
         self.assertTrue(np.array_equal(result, numpy_array))
 
     def test_retrieve_class_names(self):
-        """Test retrieval of class names."""
+        """
+        Test retrieval of class names from the label manager.
+
+        This test expects an AttributeError since no label manager 
+        is initialized.
+        """
         with self.assertRaises(AttributeError):
             self.data_retriever._retrieve_class_names()
 
     def test_retrieve_test_output_data(self):
-        """Test retrieval of output data."""
+        """
+        Test retrieval of output data for the test dataset.
+        """
         y_true, y_pred = self.data_retriever._retrieve_test_output_data()
         self.assertTrue(np.array_equal(y_true, self.y_true))
         self.assertTrue(np.array_equal(y_pred, self.y_pred))
@@ -61,7 +78,9 @@ class TestDataRetriever(BaseTestCase):
             self.data_retriever._retrieve_test_output_data()
 
     def test_retrieve_output_data_by_name(self):
-        """Test retrieval of output data by name."""
+        """
+        Test retrieval of output data by its name.
+        """
         y_true, y_pred = self.data_retriever._retrieve_output_data_by_name(
             "complete_output"
         )
@@ -74,7 +93,9 @@ class TestDataRetriever(BaseTestCase):
             )
 
     def test_retrieve_input_data_by_name(self):
-        """Test retrieval of input data by name."""
+        """
+        Test retrieval of input data from the dataset.
+        """
         x = self.data_retriever._retrieve_input_data_by_name(
             "complete_dataset"
         )
@@ -88,7 +109,9 @@ class TestDataRetriever(BaseTestCase):
             )
 
     def test_retrieve_test_input_output_data(self):
-        """Test retrieval of input and output data for plotting."""
+        """
+        Test retrieval of input and output data for the test dataset.
+        """
         x, y_true, y_pred = self.data_retriever._retrieve_test_input_output_data()  # noqa
         expected_tensor = tf.constant([[0, 1], [1, 0]], dtype=tf.int64)
 

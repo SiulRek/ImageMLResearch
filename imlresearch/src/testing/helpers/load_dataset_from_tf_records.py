@@ -3,14 +3,17 @@ import tensorflow as tf
 
 def _parse_image_function(proto):
     """
-    Parses an image from the tf.train.Example.
+    Parse an image from the tf.train.Example.
 
-    Args:
-        - proto (tf.Tensor): A scalar string tensor, a single serialized
-          Example.
+    Parameters
+    ----------
+    proto : tf.Tensor
+        A scalar string tensor, a single serialized Example.
 
-    Returns:
-        - tf.Tensor: A tensor representing the parsed image.
+    Returns
+    -------
+    tf.Tensor
+        A tensor representing the parsed image.
     """
     image_feature_description = {
         "image_raw": tf.io.FixedLenFeature([], tf.string),
@@ -26,11 +29,15 @@ def load_dataset_from_tf_records(tf_records_path):
     """
     Load and parse the dataset from a TFRecord file.
 
-    Args:
-        - tf_records_path (str): The file path to the TFRecord file.
+    Parameters
+    ----------
+    tf_records_path : str
+        The file path to the TFRecord file.
 
-    Returns:
-        - tf.data.Dataset: The loaded and parsed dataset.
+    Returns
+    -------
+    tf.data.Dataset
+        The loaded and parsed dataset.
     """
     raw_dataset = tf.data.TFRecordDataset(tf_records_path)
     parsed_dataset = raw_dataset.map(_parse_image_function)

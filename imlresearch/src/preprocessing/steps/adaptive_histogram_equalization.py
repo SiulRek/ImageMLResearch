@@ -5,11 +5,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class AdaptiveHistogramEqualizer(StepBase):
     """
-    A preprocessing step that applies Contrast Limited Adaptive Histogram
-    Equalizer (CLAHE) to an image.
+    A preprocessing step that applies Contrast Limited Adaptive Histogram 
+    Equalization (CLAHE) to an image.
 
-    Note: In the case of RGB images, it processes each color channel (Red,
-    Green, Blue) separately.
+    For RGB images, each color channel (Red, Green, Blue) is processed 
+    separately to enhance contrast.
     """
 
     arguments_datatype = {"clip_limit": float, "tile_gridsize": (int, int)}
@@ -17,21 +17,36 @@ class AdaptiveHistogramEqualizer(StepBase):
 
     def __init__(self, clip_limit=2.0, tile_gridsize=(8, 8)):
         """
-        Initializes the AdaptiveHistogramEqualizer object that can be integrated
-        in an image preprocessing pipeline.
+        Initialize the AdaptiveHistogramEqualizer for integration into an 
+        image preprocessing pipeline.
 
-        Args:
-            - clip_limit (float): Threshold for contrast limiting. Higher
-                values increase contrast; too high values may lead to noise
-                amplification.
-            - tile_gridsize (tuple): Size of the grid for the tiles
-                (regions) of the image to which CLAHE will be applied. Smaller
-                tiles can lead to more localized contrast enhancement.
+        Parameters
+        ----------
+        clip_limit : float, optional
+            Threshold for contrast limiting. Higher values increase contrast, 
+            but too high values may lead to noise amplification. Default is 2.0.
+        tile_gridsize : tuple of int, optional
+            The size of the grid for the tiles (regions) of the image to which 
+            CLAHE will be applied. Smaller tiles can lead to more localized 
+            contrast enhancement. Default is (8, 8).
         """
         super().__init__(locals())
 
     @StepBase._nparray_pyfunc_wrapper
     def __call__(self, image_nparray):
+        """
+        Apply CLAHE to an image.
+
+        Parameters
+        ----------
+        image_nparray : numpy.ndarray
+            The input image as a NumPy array.
+
+        Returns
+        -------
+        numpy.ndarray
+            The image with enhanced contrast using CLAHE.
+        """
         channels = cv2.split(image_nparray)
         clahe = cv2.createCLAHE(
             clipLimit=self.parameters["clip_limit"],

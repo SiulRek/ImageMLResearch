@@ -15,14 +15,21 @@ from imlresearch.src.testing.bases.base_test_case import BaseTestCase
 
 
 class TestTFRecordSerialization(BaseTestCase):
-    """ Test suite for TFRecord serialization and deserialization
-    functions. """
+    """
+    Test suite for TFRecord serialization and deserialization functions.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Sets up the test class.
+        """
         super().setUpClass()
 
     def setUp(self):
+        """
+        Sets up each test by loading a sample labeled dataset.
+        """
         super().setUp()
         self.dataset = self.load_mnist_digits_dataset(
             sample_num=5, labeled=True
@@ -31,14 +38,27 @@ class TestTFRecordSerialization(BaseTestCase):
     def _compare_datasets(
         self, original_dataset, deserialized_dataset, atol=1e-6
     ):
+        """
+        Compares two datasets to ensure their contents are nearly identical.
+
+        Parameters
+        ----------
+        original_dataset : tf.data.Dataset
+            The original dataset.
+        deserialized_dataset : tf.data.Dataset
+            The dataset after serialization and deserialization.
+        atol : float, optional
+            Absolute tolerance for numerical comparisons.
+        """
         zip_datasets = zip(original_dataset, deserialized_dataset)
         for original, deserialized in zip_datasets:
             original_image, original_label = original
-            deserialized, deserialized_label = deserialized
+            deserialized_image, deserialized_label = deserialized
 
             self.assertTrue(
                 np.allclose(
-                    original_image.numpy(), deserialized.numpy(), atol=atol
+                    original_image.numpy(), deserialized_image.numpy(), 
+                    atol=atol
                 ),
                 "Restored images are not close enough to original images.",
             )
@@ -51,7 +71,9 @@ class TestTFRecordSerialization(BaseTestCase):
             )
 
     def test_serialize_deserialize_jpeg(self):
-        """ Test serialization and deserialization with JPEG format. """
+        """
+        Tests serialization and deserialization with JPEG format.
+        """
         results_dir = os.path.join(self.temp_dir, "serialize_deserialize_jpeg")
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
@@ -68,17 +90,19 @@ class TestTFRecordSerialization(BaseTestCase):
         deserialized_dataset = deserialize_dataset_from_tfrecord(
             tfrecord_path, label_dtype=tf.float32
         )
-        # Smallest ATOL 20 to pass the test. This is the reason why it is not
-        # recommended to use JPEG format for serialization.
+        # Smallest ATOL 20 to pass the test due to JPEG compression artifacts.
         self._compare_datasets(self.dataset, deserialized_dataset, atol=20)
 
     def test_serialize_deserialize_png(self):
-        """ Test serialization and deserialization with PNG format. """
+        """
+        Tests serialization and deserialization with PNG format.
+        """
         results_dir = os.path.join(self.temp_dir, "serialize_deserialize_png")
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
         os.makedirs(results_dir)
         tfrecord_path = os.path.join(results_dir, "data.tfrecord")
+
         serialize_dataset_to_tf_record(
             self.dataset, tfrecord_path, image_format="png"
         )
@@ -92,10 +116,11 @@ class TestTFRecordSerialization(BaseTestCase):
         self._compare_datasets(self.dataset, deserialized_dataset)
 
     def test_serialize_deserialize_with_uint8_labels(self):
-        """ Test serialization and deserialization with unsigned uint8
-        labels. """
+        """
+        Tests serialization and deserialization with unsigned uint8 labels.
+        """
         results_dir = os.path.join(
-            self.temp_dir, "serialize_deserialize_with_float_labels"
+            self.temp_dir, "serialize_deserialize_with_uint8_labels"
         )
         if os.path.exists(results_dir):
             shutil.rmtree(results_dir)
@@ -116,7 +141,9 @@ class TestTFRecordSerialization(BaseTestCase):
         self._compare_datasets(uint_dataset, deserialized_dataset)
 
     def test_serialize_deserialize_batched_dataset(self):
-        """ Test serialization and deserialization with batched dataset. """
+        """
+        Tests serialization and deserialization with a batched dataset.
+        """
         results_dir = os.path.join(
             self.temp_dir, "serialize_deserialize_batched_dataset"
         )
@@ -139,7 +166,9 @@ class TestTFRecordSerialization(BaseTestCase):
         self._compare_datasets(self.dataset, deserialized_dataset)
 
     def test_serialize_deserialize_unlabeled_dataset(self):
-        """ Test serialization and deserialization with unlabeled dataset. """
+        """
+        Tests serialization and deserialization with an unlabeled dataset.
+        """
         results_dir = os.path.join(
             self.temp_dir, "serialize_deserialize_unlabeled_dataset"
         )
@@ -158,7 +187,7 @@ class TestTFRecordSerialization(BaseTestCase):
 
         deserialized_dataset = deserialize_dataset_from_tfrecord(tfrecord_path)
 
-        # Add a label for comparison
+        # Add a dummy label for comparison
         def add_zero_label(x):
             return x, tf.constant(0)
 
@@ -167,8 +196,10 @@ class TestTFRecordSerialization(BaseTestCase):
         self._compare_datasets(labeled_dataset, deserialized_dataset)
 
     def test_file_not_found_error_on_serialization(self):
-        """ Test FileNotFoundError when trying to serialize to a non-existent
-        directory. """
+        """
+        Tests that `FileNotFoundError` is raised when trying to deserialize 
+        from a non-existent file.
+        """
         with self.assertRaises(FileNotFoundError):
             deserialize_dataset_from_tfrecord(
                 "/non_existent_dir/data.tfrecord", label_dtype=tf.float32

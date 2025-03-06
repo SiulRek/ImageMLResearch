@@ -16,9 +16,14 @@ from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
 
 
 class ExperimentingTestRunner(TestRunnerBase):
-    """ Test Runner for the Experimenting Module. """
+    """
+    Test Runner for the Experimenting Module.
+    """
 
     def load_tests(self):
+        """
+        Load all test cases related to the Experimenting module.
+        """
         self.load_test_case(TestExperiment)
         self.load_test_case(TestTrial)
         self.load_test_case(TestLoadExperimentAssets)

@@ -5,10 +5,16 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class LocalContrastNormalizer(StepBase):
     """
-    A preprocessing step that applies local contrast normalization to an image
-    tensor.
+    A preprocessing step that applies local contrast normalization to an 
+    image tensor.
 
-    Note: The data type of the output image tensor is tf.float16.
+    This process normalizes the local contrast of an image to enhance 
+    features in the image. It is typically applied after standard image 
+    normalization to improve the visibility of local features.
+
+    Note
+    ----
+    The data type of the output image tensor is `tf.float16`.
     """
 
     arguments_datatype = {
@@ -21,27 +27,44 @@ class LocalContrastNormalizer(StepBase):
 
     def __init__(self, depth_radius=5, bias=1.0, alpha=1e-4, beta=0.75):
         """
-        Initializes the LocalContrastNormalizer object for integration into an
-        image preprocessing pipeline.
+        Initialize the LocalContrastNormalizer for integration into an image 
+        preprocessing pipeline.
 
-        Args:
-            - depth_radius (int): Depth radius for normalization.
-            - bias (float): Bias to avoid division by zero.
-            - alpha (float): Scale factor.
-            - beta (float): Exponent for normalization.
+        Parameters
+        ----------
+        depth_radius : int, optional
+            Depth radius for normalization. Default is 5.
+        bias : float, optional
+            Bias to avoid division by zero. Default is 1.0.
+        alpha : float, optional
+            Scale factor. Default is 1e-4.
+        beta : float, optional
+            Exponent for normalization. Default is 0.75.
 
-        Note:
-            - This step is ideally applied to images that have already
-                undergone standard normalization. This ensures that the image
-                data is centered and scaled appropriately before local contrast
-                enhancement.
+        Note
+        ----
+        This step is ideally applied to images that have already undergone 
+        standard normalization to ensure appropriate centering and scaling 
+        of the image data before local contrast enhancement.
         """
         super().__init__(locals())
         self.output_datatype = tf.float16
 
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
+        """
+        Apply local contrast normalization to an image tensor.
 
+        Parameters
+        ----------
+        image_tensor : tf.Tensor
+            The input image tensor.
+
+        Returns
+        -------
+        tf.Tensor
+            The image tensor after local contrast normalization.
+        """
         image_tensor = tf.cast(image_tensor, tf.float16)
 
         # Add a batch dimension to image_tensor if it doesn't have one

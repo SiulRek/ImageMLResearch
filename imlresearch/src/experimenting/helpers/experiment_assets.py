@@ -31,34 +31,38 @@ _TRIAL_KEYS = {
 
 def get_default_experiment_assets():
     """
-    Returns the default experiment assets.
+    Return the default experiment assets.
 
-    Returns:
-        - dict: The default experiment assets.
+    Returns
+    -------
+    dict
+        The default experiment assets.
     """
     return deepcopy(_DEFAULT_EXPERIMENT_ASSETS)
 
 
 def assert_experiment_assets_attribute(experiment_assets):
     """
-    Asserts that the experiment assets attribute has the expected keys.
+    Assert that the experiment assets attribute has the expected keys.
 
-    Args:
-        - experiment_assets (dict): The experiment assets attribute to
-            assert.
+    Parameters
+    ----------
+    experiment_assets : dict
+        The experiment assets attribute to assert.
 
-    Raises:
-        - ValueError: If the experiment assets attribute does not have the
-            expected keys.
+    Raises
+    ------
+    ValueError
+        If the experiment assets attribute does not have the expected keys.
     """
     expected_keys = set(get_default_experiment_assets().keys())
     actual_keys = set(experiment_assets.keys())
     if expected_keys != actual_keys:
         missing_keys = expected_keys - actual_keys
         extra_keys = actual_keys - expected_keys
-        msg = "experiment assets attribute does not have the expected keys: "
+        msg = "Experiment assets attribute does not have the expected keys: "
         if missing_keys:
-            msg += f"Missing keys: {missing_keys}."
+            msg += f"Missing keys: {missing_keys}. "
         if extra_keys:
             msg += f"Extra keys: {extra_keys}."
         raise ValueError(msg)
@@ -66,51 +70,54 @@ def assert_experiment_assets_attribute(experiment_assets):
 
 def assert_trial_assets_attribute(trial_assets):
     """
-    Asserts that the trial assets attribute has the expected keys.
+    Assert that the trial assets attribute has the expected keys.
 
-    Args:
-        - trial_assets (dict): The trial assets attribute to assert.
+    Parameters
+    ----------
+    trial_assets : dict
+        The trial assets attribute to assert.
 
-    Raises:
-        - ValueError: If the trial assets attribute does not have the
-            expected keys.
+    Raises
+    ------
+    ValueError
+        If the trial assets attribute does not have the expected keys.
     """
     expected_keys = _TRIAL_KEYS
     actual_keys = set(trial_assets.keys())
     if expected_keys != actual_keys:
         missing_keys = expected_keys - actual_keys
         extra_keys = actual_keys - expected_keys
-        msg = "Trial assets attribute does not have the expected keys:\n "
+        msg = "Trial assets attribute does not have the expected keys:\n"
         if missing_keys:
-            missing_keys = ", ".join(missing_keys)
-            msg += f"Missing keys: {missing_keys}\n"
+            msg += f"Missing keys: {', '.join(missing_keys)}\n"
         if extra_keys:
-            extra_keys = ", ".join(extra_keys)
-            msg += f"Extra keys: {extra_keys}."
+            msg += f"Extra keys: {', '.join(extra_keys)}."
         raise ValueError(msg)
 
 
 def load_trials(experiment_assets, experiment_dir):
     """
-    Loads the trial assets from the given experiment directory and the
+    Load the trial assets from the given experiment directory and the
     experiment assets.
 
-    Args:
-        - experiment_assets (dict): The experiment assets containing trial
-            names.
-        - experiment_dir (str): The directory to load the trial assets from.
+    Parameters
+    ----------
+    experiment_assets : dict
+        The experiment assets containing trial names.
+    experiment_dir : str
+        The directory to load the trial assets from.
 
-    Returns:
-        - list: The loaded trial assets.
+    Returns
+    -------
+    None
     """
     experiment_dir = experiment_dir
 
     # Load existing trials from two sources
-    # 1. from experiment_assets
     tracked_names = experiment_assets["trials"]
     tracked_names = [normalize_trial_name(name) for name in tracked_names]
 
-    # 2. from the experiment output directory
+    # Load from experiment output directory
     paths = [
         os.path.join(experiment_dir, name)
         for name in os.listdir(experiment_dir)
@@ -135,23 +142,27 @@ def load_trials(experiment_assets, experiment_dir):
         elif trial_name in tracked_names:
             msg = f"No trial_info.json found for trial {trial_name}."
             warnings.warn(msg)
-        # else trial_name is a not tracked directory, ignore it
     experiment_assets.update({"trials": trials})
 
 
 def load_experiment_assets(experiment_dir):
     """
-    Loads the experiment assets from the given directory. Raises
-    FileNotFoundError if the experiment assets file is not found.
+    Load the experiment assets from the given directory.
 
-    Args:
-        - experiment_dir (str): The directory to load the experiment assets
-            from.
-        - default_experiment_assets (dict): The default experiment assets to
-            initialize if the directory is empty.
+    Parameters
+    ----------
+    experiment_dir : str
+        The directory to load the experiment assets from.
 
-    Returns:
-        - dict: The loaded or initialized experiment assets.
+    Returns
+    -------
+    dict
+        The loaded experiment assets.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the experiment assets file is not found.
     """
     experiment_info_path = os.path.join(
         experiment_dir, "experiment_info.json"

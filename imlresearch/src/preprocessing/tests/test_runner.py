@@ -35,16 +35,18 @@ class PreprocessingTestRunner(TestRunnerBase):
 
     def load_tests(self):
         """
-        Populates the test suite with various test cases from the image
-        preprocessing testing framework.
+        Populate the test suite with test cases for image preprocessing.
 
-        This function aggregates tests for:
-        - Basic preprocessing functionalities.
-        - Multiple-step pipelines.
-        - Channel conversions.
+        This method aggregates test cases covering various preprocessing 
+        functionalities, including:
+
+        - Basic preprocessing operations.
+        - Multi-step preprocessing pipelines.
+        - Image channel conversions.
         - Resize operations.
-        - General image preprocessing.
+        - General image preprocessing tasks.
         """
+
         helper_tests = [
             copy_json_exclude_entries_test,
             recursive_type_conversion_test,
