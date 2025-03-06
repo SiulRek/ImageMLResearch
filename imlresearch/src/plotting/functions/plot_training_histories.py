@@ -8,14 +8,14 @@ def _sanitize_histories(histories):
     Parameters
     ----------
     histories : dict
-        Dictionary containing multiple histories in the format 
+        Dictionary containing multiple histories in the format
         {Name: history}.
 
     Returns
     -------
     tuple
         sanitized_histories : dict
-            Dictionary containing multiple histories in the format 
+            Dictionary containing multiple histories in the format
             {Name: history}.
         known_metrics : list
             List of known metrics in the histories.
@@ -48,7 +48,7 @@ def plot_training_histories(histories, title=None):
     Returns
     -------
     matplotlib.figure.Figure
-        The Matplotlib figure containing the combined training and validation 
+        The Matplotlib figure containing the combined training and validation
         history plot.
     """
     # Configuration

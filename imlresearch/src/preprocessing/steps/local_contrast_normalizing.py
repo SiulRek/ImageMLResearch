@@ -5,11 +5,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class LocalContrastNormalizer(StepBase):
     """
-    A preprocessing step that applies local contrast normalization to an 
+    A preprocessing step that applies local contrast normalization to an
     image tensor.
 
-    This process normalizes the local contrast of an image to enhance 
-    features in the image. It is typically applied after standard image 
+    This process normalizes the local contrast of an image to enhance
+    features in the image. It is typically applied after standard image
     normalization to improve the visibility of local features.
 
     Note
@@ -27,7 +27,7 @@ class LocalContrastNormalizer(StepBase):
 
     def __init__(self, depth_radius=5, bias=1.0, alpha=1e-4, beta=0.75):
         """
-        Initialize the LocalContrastNormalizer for integration into an image 
+        Initialize the LocalContrastNormalizer for integration into an image
         preprocessing pipeline.
 
         Parameters
@@ -43,8 +43,8 @@ class LocalContrastNormalizer(StepBase):
 
         Note
         ----
-        This step is ideally applied to images that have already undergone 
-        standard normalization to ensure appropriate centering and scaling 
+        This step is ideally applied to images that have already undergone
+        standard normalization to ensure appropriate centering and scaling
         of the image data before local contrast enhancement.
         """
         super().__init__(locals())

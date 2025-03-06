@@ -5,10 +5,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class ShapeResizer(StepBase):
     """
-    A preprocessing step that resizes an image to a specified shape, 
+    A preprocessing step that resizes an image to a specified shape,
     potentially altering its aspect ratio.
 
-    The image can be resized using different methods such as bilinear, 
+    The image can be resized using different methods such as bilinear,
     nearest neighbor, bicubic, and others.
     """
 
@@ -25,16 +25,16 @@ class ShapeResizer(StepBase):
 
     def __init__(self, desired_shape=(2000, 2000), resize_method="bilinear"):
         """
-        Initialize the ShapeResizer for integration into an image preprocessing 
+        Initialize the ShapeResizer for integration into an image preprocessing
         pipeline.
 
         Parameters
         ----------
         desired_shape : tuple of int, optional
-            The desired height and width of the image after resizing. Default 
+            The desired height and width of the image after resizing. Default
             is (2000, 2000).
         resize_method : str, optional
-            The method used for resizing. Options are 'bilinear', 'nearest', 
+            The method used for resizing. Options are 'bilinear', 'nearest',
             'bicubic', 'lanczos3', 'lanczos5', and 'area'.
             Default is 'bilinear'.
         """

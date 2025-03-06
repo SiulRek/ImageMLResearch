@@ -5,7 +5,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class Mirrorer(StepBase):
     """
-    A preprocessing step that mirrors an image tensor either horizontally 
+    A preprocessing step that mirrors an image tensor either horizontally
     or vertically.
 
     The direction of mirroring is specified as an input parameter.
@@ -16,13 +16,13 @@ class Mirrorer(StepBase):
 
     def __init__(self, mirror_direction="horizontal"):
         """
-        Initialize the Mirrorer for integration into an image preprocessing 
+        Initialize the Mirrorer for integration into an image preprocessing
         pipeline.
 
         Parameters
         ----------
         mirror_direction : str, optional
-            The direction for mirroring the image. Accepts 'horizontal' or 
+            The direction for mirroring the image. Accepts 'horizontal' or
             'vertical'. Default is 'horizontal'.
         """
         super().__init__(locals())

@@ -26,7 +26,7 @@ class SquareShapePadder(StepBase):
     @StepBase._tensor_pyfunc_wrapper
     def __call__(self, image_tensor):
         """
-        Pads the input image to make it square while maintaining content 
+        Pads the input image to make it square while maintaining content
         alignment.
 
         Parameters

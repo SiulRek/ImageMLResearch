@@ -12,10 +12,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class RandomPerspectiveTransformer(StepBase):
     """
-    A preprocessing step that applies a perspective transformation to an 
+    A preprocessing step that applies a perspective transformation to an
     image tensor.
 
-    This transformation simulates a change in viewpoint by warping the 
+    This transformation simulates a change in viewpoint by warping the
     image using randomly perturbed corner points.
     """
 
@@ -24,13 +24,13 @@ class RandomPerspectiveTransformer(StepBase):
 
     def __init__(self, warp_scale=0.2, seed=None):
         """
-        Initialize the RandomPerspectiveTransformer for integration into an 
+        Initialize the RandomPerspectiveTransformer for integration into an
         image preprocessing pipeline.
 
         Parameters
         ----------
         warp_scale : float, optional
-            Factor to scale the maximum warp intensity, determining the 
+            Factor to scale the maximum warp intensity, determining the
             extent of perspective distortion. Default is 0.2.
         seed : int, optional
             Random seed for reproducibility. Default is None.

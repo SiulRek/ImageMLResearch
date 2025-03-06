@@ -13,7 +13,7 @@ def get_sample_from_distribution(distribution_data):
     Parameters
     ----------
     distribution_data : dict
-        A dictionary containing the distribution type and its corresponding 
+        A dictionary containing the distribution type and its corresponding
         parameters.
 
     Returns

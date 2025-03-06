@@ -40,7 +40,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
     """
     A context manager for managing experiments and trials.
 
-    Inherits from `ResearchAttributes` to facilitate research-related 
+    Inherits from `ResearchAttributes` to facilitate research-related
     attributes.
     """
 
@@ -176,7 +176,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         Returns
         -------
         dict
-            Dictionary containing figures, evaluation metrics, and training 
+            Dictionary containing figures, evaluation metrics, and training
             history.
         """
         return {
@@ -291,7 +291,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         """
         Plots the training histories of the best 3 trials.
 
-        Skips plotting if there are fewer than 3 trials or if any histories 
+        Skips plotting if there are fewer than 3 trials or if any histories
         are empty.
         """
         if len(self.experiment_assets["trials"]) < 3:

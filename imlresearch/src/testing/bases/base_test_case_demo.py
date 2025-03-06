@@ -9,7 +9,7 @@ class BaseTestCaseDemo(BaseTestCase):
     """
     Demonstration class showcasing the functionality of BaseTestCase.
 
-    This class utilizes the setup and teardown mechanisms of BaseTestCase 
+    This class utilizes the setup and teardown mechanisms of BaseTestCase
     to demonstrate their effectiveness and practical usage in testing.
     """
 
@@ -65,7 +65,7 @@ class BaseTestCaseDemo(BaseTestCase):
         """
         Example test demonstrating dataset loading functionality.
 
-        This test case verifies that an image dataset can be loaded 
+        This test case verifies that an image dataset can be loaded
         and saved as an output image.
         """
         dataset = self.load_geometrical_forms_dataset()

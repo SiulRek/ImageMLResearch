@@ -1,9 +1,9 @@
 """
 Unit tests for `randomly_select_sequential_keys`.
 
-This module tests the accuracy and robustness of the function in identifying 
-and handling sequential key patterns in dictionaries. It verifies behavior 
-across various scenarios, including invalid patterns, sequential integrity, 
+This module tests the accuracy and robustness of the function in identifying
+and handling sequential key patterns in dictionaries. It verifies behavior
+across various scenarios, including invalid patterns, sequential integrity,
 and frequency-based key selection.
 
 Attributes
@@ -26,8 +26,8 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
     """
     Test suite for `randomly_select_sequential_keys`.
 
-    This suite verifies that the function correctly identifies, processes, 
-    and selects sequential keys in dictionaries with different patterns 
+    This suite verifies that the function correctly identifies, processes,
+    and selects sequential keys in dictionaries with different patterns
     and constraints.
 
     Notes
@@ -37,7 +37,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
       `{key identifier}_{key}_i{index}__I{index}F{frequency}__extra`
     - Only the `{key}` part is required; other elements vary by test case.
     - `__I{index}F{frequency}` is the pattern detected by the function.
-    - `i{index}` is used for verification since `__I{index}F{frequency}` 
+    - `i{index}` is used for verification since `__I{index}F{frequency}`
       is removed in the output.
     """
 
@@ -82,7 +82,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
 
     def test_all_keys_matching(self):
         """
-        Test that all keys are selected when they match the pattern 
+        Test that all keys are selected when they match the pattern
         with different indices.
         """
         input_dict = {
@@ -152,7 +152,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test the function's resilience to unique identifiers in keys.
 
-        Ensures that keys containing additional unique identifiers are 
+        Ensures that keys containing additional unique identifiers are
         processed correctly without affecting sequential selection.
         """
         input_dict = {
@@ -175,7 +175,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test the function's resilience to the order of the keys.
 
-        Ensures that the function correctly processes keys regardless of 
+        Ensures that the function correctly processes keys regardless of
         their ordering in the dictionary.
         """
         input_dict = {
@@ -196,7 +196,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test that a KeyError is raised when keys are already selected.
 
-        Ensures that the function correctly identifies keys that should 
+        Ensures that the function correctly identifies keys that should
         not be selected multiple times.
         """
         input_dict = {"a_key__I0": "value0", "a_key__I1": "value1"}
@@ -208,7 +208,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test processing of keys with frequency specification.
 
-        Ensures that the function correctly handles keys that include 
+        Ensures that the function correctly handles keys that include
         a frequency component in their naming pattern.
         """
         input_dict = {
@@ -227,7 +227,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test selection probability of keys with frequency specification.
 
-        Ensures that keys with frequency indicators are selected with the 
+        Ensures that keys with frequency indicators are selected with the
         correct probability distribution.
         """
         input_dict = {
@@ -254,7 +254,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test handling of keys with allowed characters after the pattern.
 
-        Ensures that keys containing additional allowed characters beyond 
+        Ensures that keys containing additional allowed characters beyond
         the expected pattern are correctly identified.
         """
         separator = "__"
@@ -281,7 +281,7 @@ class TestRandomlySelectSequentialKeys(BaseTestCase):
         """
         Test that extra disallowed characters after the pattern raise an error.
 
-        Ensures that keys with unexpected characters following the pattern 
+        Ensures that keys with unexpected characters following the pattern
         are correctly rejected.
         """
         separator = "__"

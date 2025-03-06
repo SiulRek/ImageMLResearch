@@ -7,9 +7,9 @@ class TruncatedThresholder(StepBase):
     """
     A preprocessing step that applies truncated thresholding to an image.
 
-    For RGB images, each color channel (Red, Green, Blue) is processed 
-    separately. Truncated thresholding sets pixel values greater than the 
-    threshold to the threshold value, leaving values less than or equal to 
+    For RGB images, each color channel (Red, Green, Blue) is processed
+    separately. Truncated thresholding sets pixel values greater than the
+    threshold to the threshold value, leaving values less than or equal to
     the threshold unchanged.
     """
 
@@ -18,18 +18,18 @@ class TruncatedThresholder(StepBase):
 
     def __init__(self, thresh=128, max_val=255):
         """
-        Initialize the TruncatedThresholder for integration into an image 
+        Initialize the TruncatedThresholder for integration into an image
         preprocessing pipeline.
 
         Parameters
         ----------
         thresh : float, optional
-            The threshold value used for truncated thresholding. Pixel values 
-            greater than this threshold are set to the threshold value itself, 
-            and values less than or equal to the threshold remain unchanged. 
+            The threshold value used for truncated thresholding. Pixel values
+            greater than this threshold are set to the threshold value itself,
+            and values less than or equal to the threshold remain unchanged.
             Default is 128.
         max_val : float, optional
-            The maximum value that a pixel can take after thresholding. Default 
+            The maximum value that a pixel can take after thresholding. Default
             is 255.
         """
         super().__init__(locals())

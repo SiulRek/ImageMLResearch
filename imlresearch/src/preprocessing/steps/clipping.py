@@ -5,10 +5,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class Clipper(StepBase):
     """
-    A preprocessing step that clips the pixel values of an image tensor 
+    A preprocessing step that clips the pixel values of an image tensor
     to a specified range.
 
-    This operation ensures that all pixel values fall within the defined 
+    This operation ensures that all pixel values fall within the defined
     minimum and maximum limits.
     """
 
@@ -17,7 +17,7 @@ class Clipper(StepBase):
 
     def __init__(self, min_value=0.0, max_value=1.0):
         """
-        Initialize the Clipper for integration into an image preprocessing 
+        Initialize the Clipper for integration into an image preprocessing
         pipeline.
 
         Parameters
@@ -42,7 +42,7 @@ class Clipper(StepBase):
         Returns
         -------
         tf.Tensor
-            The clipped image tensor, with pixel values limited to the 
+            The clipped image tensor, with pixel values limited to the
             specified range.
         """
         image_tensor = tf.cast(image_tensor, self.output_datatype)

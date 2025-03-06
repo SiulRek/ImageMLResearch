@@ -17,7 +17,7 @@ class StepBase(ABC):
     preprocessing pipeline.
 
     This abstract class provides a structured approach for implementing various
-    image preprocessing steps. Each step is characterized by its unique 
+    image preprocessing steps. Each step is characterized by its unique
     parameters and functionality, which are defined in the child classes
     inheriting from StepBase. The class facilitates the integration and
     execution of preprocessing steps within
@@ -47,7 +47,7 @@ class StepBase(ABC):
     Methods
     -------
     __call__(image_tensor: tf.Tensor, tf_target: Any) -> tf.Tensor
-        To be implemented by the child class to define the specific 
+        To be implemented by the child class to define the specific
         preprocessing functionality. The method takes an image tensor and an
         optional target, returning the processed image tensor.
 

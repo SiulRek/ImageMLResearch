@@ -10,7 +10,7 @@ class LabelManager:
     class_names : list
         The existing class names for label encoding.
     num_classes : int
-        The number of classes used for multi_class and multi_class_multi_label 
+        The number of classes used for multi_class and multi_class_multi_label
         label encoding.
 
     Methods
@@ -31,14 +31,14 @@ class LabelManager:
 
     def __init__(self, label_type, class_names=None, dtype=None):
         """
-        Initializes the LabelManager with a specific label encoding type 
+        Initializes the LabelManager with a specific label encoding type
         and, optionally, the number of classes.
 
         Parameters
         ----------
         label_type : str
-            The type of label encoding to manage. Supported types are 
-            'binary', 'multi_class', 'multi_label', 
+            The type of label encoding to manage. Supported types are
+            'binary', 'multi_class', 'multi_label',
             'multi_class_multi_label', and 'object_detection'.
         class_names : list, optional
             The existing class names for label encoding.
@@ -86,14 +86,14 @@ class LabelManager:
 
     def _set_label_type_functions(self, label_type):
         """
-        Sets the label encoder and label-to-digit converter methods based on 
+        Sets the label encoder and label-to-digit converter methods based on
         the label type.
 
         Parameters
         ----------
         label_type : str
-            The type of label encoding to manage. Supported types are 
-            'binary', 'multi_class', 'multi_label', 
+            The type of label encoding to manage. Supported types are
+            'binary', 'multi_class', 'multi_label',
             'multi_class_multi_label', and 'object_detection'.
         """
 
@@ -197,13 +197,13 @@ class LabelManager:
 
     def encode_label(self, label):
         """
-        Encodes a label based on the label type and class names specified 
+        Encodes a label based on the label type and class names specified
         during initialization to a tensor format.
 
         Parameters
         ----------
         label : int or str
-            The label to encode. Can be an integer or a string if 
+            The label to encode. Can be an integer or a string if
             class names are specified.
 
         Returns

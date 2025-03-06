@@ -57,7 +57,7 @@ class TestTFRecordSerialization(BaseTestCase):
 
             self.assertTrue(
                 np.allclose(
-                    original_image.numpy(), deserialized_image.numpy(), 
+                    original_image.numpy(), deserialized_image.numpy(),
                     atol=atol
                 ),
                 "Restored images are not close enough to original images.",
@@ -197,7 +197,7 @@ class TestTFRecordSerialization(BaseTestCase):
 
     def test_file_not_found_error_on_serialization(self):
         """
-        Tests that `FileNotFoundError` is raised when trying to deserialize 
+        Tests that `FileNotFoundError` is raised when trying to deserialize
         from a non-existent file.
         """
         with self.assertRaises(FileNotFoundError):

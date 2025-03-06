@@ -37,7 +37,7 @@ class PreprocessingTestRunner(TestRunnerBase):
         """
         Populate the test suite with test cases for image preprocessing.
 
-        This method aggregates test cases covering various preprocessing 
+        This method aggregates test cases covering various preprocessing
         functionalities, including:
 
         - Basic preprocessing operations.

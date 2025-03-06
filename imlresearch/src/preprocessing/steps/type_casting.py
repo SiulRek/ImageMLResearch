@@ -13,13 +13,13 @@ class TypeCaster(StepBase):
 
     def __init__(self, output_dtype="float16"):
         """
-        Initialize the TypeCaster for integration into an image preprocessing 
+        Initialize the TypeCaster for integration into an image preprocessing
         pipeline.
 
         Parameters
         ----------
         output_dtype : str, optional
-            The desired data type to cast the image tensor to. Must be an 
+            The desired data type to cast the image tensor to. Must be an
             attribute in TensorFlow. Default is 'float16'.
         """
         super().__init__(locals())

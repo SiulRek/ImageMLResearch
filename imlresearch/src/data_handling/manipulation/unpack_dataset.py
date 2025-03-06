@@ -1,12 +1,12 @@
 def unpack_dataset(tf_dataset):
     """
-    Unpacks a `tf.data.Dataset` into two separate datasets: one for images 
+    Unpacks a `tf.data.Dataset` into two separate datasets: one for images
     and another for labels.
 
     Parameters
     ----------
     tf_dataset : tf.data.Dataset
-        A `tf.data.Dataset` object containing tuples of (image, label), where 
+        A `tf.data.Dataset` object containing tuples of (image, label), where
         'image' is the decoded image tensor and 'label' is an integer label.
 
     Returns

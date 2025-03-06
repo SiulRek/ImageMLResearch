@@ -17,7 +17,7 @@ def copy_json_exclude_entries(source_file, dest_file, exclude_keys):
 
     Notes
     -----
-    The function will open the source JSON file, remove the specified keys from 
+    The function will open the source JSON file, remove the specified keys from
     the data, and then save the updated data into the destination JSON file.
     """
     with open(source_file, "r", encoding="utf-8") as file:

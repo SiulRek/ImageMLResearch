@@ -6,11 +6,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class StandardNormalizer(StepBase):
     """
-    A preprocessing step that applies standard normalization (Z-score 
+    A preprocessing step that applies standard normalization (Z-score
     normalization) to an image tensor.
 
-    This process standardizes the image by subtracting the mean and dividing 
-    by the standard deviation, making the pixel values have a mean of 0 and 
+    This process standardizes the image by subtracting the mean and dividing
+    by the standard deviation, making the pixel values have a mean of 0 and
     a standard deviation of 1.
 
     Note
@@ -23,7 +23,7 @@ class StandardNormalizer(StepBase):
 
     def __init__(self):
         """
-        Initialize the StandardNormalizer for integration into an image 
+        Initialize the StandardNormalizer for integration into an image
         preprocessing pipeline.
         """
         super().__init__({})

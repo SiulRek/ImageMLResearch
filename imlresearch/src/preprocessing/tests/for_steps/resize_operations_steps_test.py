@@ -1,8 +1,8 @@
 """
 Test suites for image preprocessing steps performing resize operations.
 
-This module provides test cases for preprocessing steps that perform 
-resize operations within the image preprocessing pipeline. It ensures 
+This module provides test cases for preprocessing steps that perform
+resize operations within the image preprocessing pipeline. It ensures
 correct integration and functionality of these steps.
 """
 
@@ -21,7 +21,7 @@ class TestSquareShapePadder(TestSingleStep):
     """
     Test suite for the SquareShapePadder step in the preprocessing pipeline.
 
-    This class verifies that images are correctly padded to a square shape 
+    This class verifies that images are correctly padded to a square shape
     using the specified pixel value.
 
     Attributes
@@ -47,8 +47,8 @@ class TestSquareShapePadder(TestSingleStep):
         """
         Verify image dimensions and color channels in the processed dataset.
 
-        Compares processed images to the original dataset to ensure that 
-        padding modifies height and width while maintaining the expected 
+        Compares processed images to the original dataset to ensure that
+        padding modifies height and width while maintaining the expected
         number of color channels.
 
         Parameters
@@ -82,7 +82,7 @@ class TestShapeResizer(TestSingleStep):
     """
     Test suite for the ShapeResizer step in the preprocessing pipeline.
 
-    This class verifies that images are correctly resized to a desired shape, 
+    This class verifies that images are correctly resized to a desired shape,
     ensuring accuracy for both RGB and grayscale images.
 
     Attributes
@@ -108,8 +108,8 @@ class TestShapeResizer(TestSingleStep):
         """
         Verify image dimensions and color channels in the processed dataset.
 
-        Compares processed images to the original dataset to ensure resizing 
-        modifies height and width according to the expected values while 
+        Compares processed images to the original dataset to ensure resizing
+        modifies height and width according to the expected values while
         maintaining the correct number of color channels.
 
         Parameters
@@ -148,7 +148,7 @@ def load_resize_operations_steps_tests():
     """
     Load and aggregate test suites for resize operations preprocessing steps.
 
-    This function loads test cases for resize operations and combines them 
+    This function loads test cases for resize operations and combines them
     into a single comprehensive test suite.
 
     Returns

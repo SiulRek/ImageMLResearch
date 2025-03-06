@@ -103,7 +103,7 @@ class TestShuffleDataset(BaseTestCase):
 
     def test_shuffling_of_dataset_with_features_and_labels(self):
         """
-        Tests that shuffling works correctly for datasets containing 
+        Tests that shuffling works correctly for datasets containing
         both features and labels.
         """
         features = tf.random.normal((100, 28, 28, 1))

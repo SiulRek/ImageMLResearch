@@ -1,9 +1,9 @@
 """
-This module dynamically creates and manages unittest classes for testing 
+This module dynamically creates and manages unittest classes for testing
 various image preprocessing steps. Each class inherits from `TestSingleStep`.
 
-It utilizes dynamic class creation in Python to generate test cases for 
-different preprocessing steps. Some tests can be skipped based on 
+It utilizes dynamic class creation in Python to generate test cases for
+different preprocessing steps. Some tests can be skipped based on
 configuration flags.
 
 Key Components
@@ -11,17 +11,17 @@ Key Components
 ENABLE_VISUAL_INSPECTION : bool
     A flag to enable or disable tests requiring visual inspection of images.
 steps_data : list of tuple
-    A collection of tuples (step_class, arguments, 
-    visual_inspection_always_disable), representing the different image 
+    A collection of tuples (step_class, arguments,
+    visual_inspection_always_disable), representing the different image
     preprocessing steps and their parameters.
 DynamicTestStep
-    A class that dynamically generates test cases for specific image 
+    A class that dynamically generates test cases for specific image
     preprocessing steps.
 
 Notes
 -----
-This module accommodates variations in preprocessing steps, recognizing 
-that not all test cases in `TestSingleStep` are universally applicable. 
+This module accommodates variations in preprocessing steps, recognizing
+that not all test cases in `TestSingleStep` are universally applicable.
 Some steps may require customized modifications to standard test cases.
 """
 
@@ -71,7 +71,7 @@ def create_test_class_for_step(
             @skip("Visual inspection not enabled")
             def test_processed_image_visualization(self):
                 """
-                Skips the visualization test if visual inspection is 
+                Skips the visualization test if visual inspection is
                 disabled.
                 """
                 pass
@@ -119,12 +119,12 @@ def create_test_class_for_step(
 
 
 steps_data = [
-    (steps.AdaptiveHistogramEqualizer, 
+    (steps.AdaptiveHistogramEqualizer,
         {"clip_limit": 1.0, "tile_gridsize": (5, 5)}),
     (steps.GlobalHistogramEqualizer, {}),
     (steps.GaussianBlurFilter, {"kernel_size": (5, 5), "sigma": 2.0}),
     (steps.MedianBlurFilter, {"kernel_size": 5}),
-    (steps.BilateralFilter, 
+    (steps.BilateralFilter,
         {"diameter": 9, "sigma_color": 75, "sigma_space": 75}),
     (steps.AverageBlurFilter, {"kernel_size": (8, 8)}),
     (steps.BinaryThresholder, {"thresh": 128, "max_val": 255}),

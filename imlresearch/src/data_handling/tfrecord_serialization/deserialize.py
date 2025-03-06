@@ -5,7 +5,7 @@ import tensorflow as tf
 
 def parse_tfrecord(sample_proto, label_dtype=None):
     """
-    Parses a serialized `Example` proto to extract the image and optionally 
+    Parses a serialized `Example` proto to extract the image and optionally
     label tensors.
 
     Parameters
@@ -18,7 +18,7 @@ def parse_tfrecord(sample_proto, label_dtype=None):
     Returns
     -------
     tuple or tf.Tensor
-        If labels exist, returns a tuple (image, label). Otherwise, returns 
+        If labels exist, returns a tuple (image, label). Otherwise, returns
         only the image tensor.
     """
     feature_description = {
@@ -45,7 +45,7 @@ def deserialize_dataset_from_tfrecord(filepath, label_dtype=None):
     filepath : str
         The path to the TFRecord file.
     label_dtype : tf.DType, optional
-        The data type of the labels in the dataset. If None, assumes there 
+        The data type of the labels in the dataset. If None, assumes there
         are no labels.
 
     Returns

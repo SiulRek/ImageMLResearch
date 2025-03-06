@@ -8,7 +8,7 @@ class DilationFilter(StepBase):
     """
     A preprocessing step that applies dilation to an image.
 
-    Dilation enlarges the white regions of the image, making objects 
+    Dilation enlarges the white regions of the image, making objects
     appear larger.
     """
 
@@ -17,7 +17,7 @@ class DilationFilter(StepBase):
 
     def __init__(self, kernel_size=3, iterations=1):
         """
-        Initialize the DilationFilter for integration into an image 
+        Initialize the DilationFilter for integration into an image
         preprocessing pipeline.
 
         Parameters

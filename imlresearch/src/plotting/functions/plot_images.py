@@ -8,7 +8,7 @@ def plot_images(dataset, grid_size=(2, 2), label_to_title_func=None):
     """
     Plots a grid of images from a TensorFlow dataset.
 
-    The function determines a random skip value to avoid plotting the same 
+    The function determines a random skip value to avoid plotting the same
     images every time.
 
     Parameters

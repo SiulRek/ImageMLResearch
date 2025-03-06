@@ -7,8 +7,8 @@ class Rotator(StepBase):
     """
     A preprocessing step that rotates an image tensor by a specified angle.
 
-    The angle of rotation is specified as an input parameter. The angle must 
-    be a multiple of 90 degrees; otherwise, it will be rounded to the nearest 
+    The angle of rotation is specified as an input parameter. The angle must
+    be a multiple of 90 degrees; otherwise, it will be rounded to the nearest
     multiple of 90 degrees.
     """
 
@@ -17,13 +17,13 @@ class Rotator(StepBase):
 
     def __init__(self, angle=90.0):
         """
-        Initialize the Rotator for integration into an image preprocessing 
+        Initialize the Rotator for integration into an image preprocessing
         pipeline.
 
         Parameters
         ----------
         angle : float, optional
-            The angle of rotation in degrees. Must be a multiple of 90. 
+            The angle of rotation in degrees. Must be a multiple of 90.
             Default is 90.0.
         """
         super().__init__(locals())

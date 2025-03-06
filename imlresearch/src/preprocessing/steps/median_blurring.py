@@ -7,7 +7,7 @@ class MedianBlurFilter(StepBase):
     """
     A preprocessing step that applies a median filter to an image.
 
-    This filter reduces noise by replacing each pixel's value with the 
+    This filter reduces noise by replacing each pixel's value with the
     median of neighboring pixels defined by a kernel.
     """
 
@@ -16,13 +16,13 @@ class MedianBlurFilter(StepBase):
 
     def __init__(self, kernel_size=5):
         """
-        Initialize the `MedianBlurFilter` for integration into an image 
+        Initialize the `MedianBlurFilter` for integration into an image
         preprocessing pipeline.
 
         Parameters
         ----------
         kernel_size : int, optional
-            The size of the kernel. It must be an odd and positive integer. 
+            The size of the kernel. It must be an odd and positive integer.
             Default is 5.
         """
         super().__init__(locals())

@@ -9,7 +9,7 @@ from imlresearch.src.utils import unbatch_dataset_if_batched
 
 class DataRetriever(ResearchAttributes):
     """
-    Retrieve input and output data from `datasets_containers` and 
+    Retrieve input and output data from `datasets_containers` and
     `outputs_containers` in ResearchAttributes.
     """
 
@@ -19,7 +19,7 @@ class DataRetriever(ResearchAttributes):
 
         Notes
         -----
-        ResearchAttributes is not initialized here. Instead, 
+        ResearchAttributes is not initialized here. Instead,
         `synchronize_research_attributes` should be explicitly called.
 
         This initializes research attributes used in DataRetriever.

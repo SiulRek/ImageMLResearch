@@ -6,10 +6,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class RandomElasticTransformer(StepBase):
     """
-    A data augmentation step that applies a random elastic transformation 
+    A data augmentation step that applies a random elastic transformation
     to an image.
 
-    This transformation distorts the image locally using displacement fields 
+    This transformation distorts the image locally using displacement fields
     smoothed with a Gaussian filter, simulating elastic deformations.
     """
 
@@ -18,16 +18,16 @@ class RandomElasticTransformer(StepBase):
 
     def __init__(self, alpha=34, sigma=4, seed=42):
         """
-        Initialize the RandomElasticTransformer for integration into an 
+        Initialize the RandomElasticTransformer for integration into an
         image preprocessing pipeline.
 
         Parameters
         ----------
         alpha : float, optional
-            Intensity of the transformation. Higher values result in stronger 
+            Intensity of the transformation. Higher values result in stronger
             distortions. Default is 34.
         sigma : float, optional
-            Standard deviation of the Gaussian filter used to smooth the 
+            Standard deviation of the Gaussian filter used to smooth the
             displacement fields. Default is 4.
         seed : int, optional
             Random seed for reproducibility. Default is 42.

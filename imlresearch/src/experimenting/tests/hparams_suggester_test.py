@@ -103,8 +103,8 @@ class TestHParamsSuggester(BaseTestCase):
         self.assertNotEqual(trial_1, trial_2)
 
     def test_invalid_config(self):
-        """ 
-        Test if the suggester raises an error with an invalid configuration. 
+        """
+        Test if the suggester raises an error with an invalid configuration.
         """
         invalid_config = {
             "learning_rate": {"type": "float", "low": 0.1},

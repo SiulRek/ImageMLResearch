@@ -40,7 +40,7 @@ class TestDatasetFunctions(BaseTestCase):
 
     def test_split_proportions_error(self):
         """
-        Tests that an error is raised when the split proportions do not sum 
+        Tests that an error is raised when the split proportions do not sum
         to 1.0.
         """
         with self.assertRaises(ValueError):
@@ -93,7 +93,7 @@ class TestDatasetFunctions(BaseTestCase):
 
     def test_split_with_manual_dataset_size(self):
         """
-        Tests that `split_dataset` correctly handles a manually provided 
+        Tests that `split_dataset` correctly handles a manually provided
         dataset size.
         """
         train, val, test = split_dataset(self.dataset, dataset_size=100)

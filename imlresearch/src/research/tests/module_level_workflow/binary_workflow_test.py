@@ -16,7 +16,7 @@ from imlresearch.src.training.trainer import Trainer
 
 class TestBinaryModuleLevelWorkflow(BaseTestCase):
     """
-    Test case for the binary classification research workflow at the 
+    Test case for the binary classification research workflow at the
     module level.
     """
 
@@ -34,7 +34,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         """
         Set up the test environment before each test case.
 
-        This initializes research attributes, data handlers, trainers, 
+        This initializes research attributes, data handlers, trainers,
         and plotters.
         """
         super().setUp()
@@ -140,7 +140,7 @@ class TestBinaryModuleLevelWorkflow(BaseTestCase):
         """
         Test the complete binary classification research workflow.
 
-        This method ensures that datasets are loaded, split, backed up, 
+        This method ensures that datasets are loaded, split, backed up,
         restored, and correctly processed through trials.
         """
         dataset = self.load_mnist_digits_dataset(

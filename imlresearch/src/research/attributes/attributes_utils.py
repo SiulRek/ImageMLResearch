@@ -23,7 +23,7 @@ def copy_public_properties(source_instance, target_instance):
     """
     Copy public properties from one instance to another.
 
-    This function retrieves all public properties from `source_instance` 
+    This function retrieves all public properties from `source_instance`
     and sets them as attributes in `target_instance`.
 
     Parameters

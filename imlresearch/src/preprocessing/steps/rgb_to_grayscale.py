@@ -7,7 +7,7 @@ class RGBToGrayscale(StepBase):
     """
     A preprocessing step that converts an RGB image to a grayscale image.
 
-    The conversion uses the standard method for transforming RGB values into 
+    The conversion uses the standard method for transforming RGB values into
     a single grayscale value based on luminance.
     """
 
@@ -16,7 +16,7 @@ class RGBToGrayscale(StepBase):
 
     def __init__(self):
         """
-        Initialize the RGBToGrayscale for integration into an image 
+        Initialize the RGBToGrayscale for integration into an image
         preprocessing pipeline.
         """
         super().__init__(locals())
@@ -34,7 +34,7 @@ class RGBToGrayscale(StepBase):
         Returns
         -------
         tf.Tensor
-            The grayscale image tensor if the input is RGB, otherwise returns 
+            The grayscale image tensor if the input is RGB, otherwise returns
             the original tensor.
         """
         if image_tensor.shape[2] == 3:

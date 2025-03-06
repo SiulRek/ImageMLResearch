@@ -65,7 +65,7 @@ class TestPlotDecorator(PlottingTestCase):
 
     def test_plot_decorator_without_title_and_show(self):
         """
-        Tests plot_decorator without explicitly passing title and show 
+        Tests plot_decorator without explicitly passing title and show
         parameters.
         """
 

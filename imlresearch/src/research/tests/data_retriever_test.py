@@ -16,7 +16,7 @@ class TestDataRetriever(BaseTestCase):
         """
         Set up the test environment for DataRetriever.
 
-        This initializes a DataRetriever instance and creates mock datasets 
+        This initializes a DataRetriever instance and creates mock datasets
         and outputs for testing.
         """
         super().setUp()
@@ -59,7 +59,7 @@ class TestDataRetriever(BaseTestCase):
         """
         Test retrieval of class names from the label manager.
 
-        This test expects an AttributeError since no label manager 
+        This test expects an AttributeError since no label manager
         is initialized.
         """
         with self.assertRaises(AttributeError):

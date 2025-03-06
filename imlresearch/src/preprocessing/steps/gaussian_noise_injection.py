@@ -7,8 +7,8 @@ class GaussianNoiseInjector(StepBase):
     """
     A data augmentation step that injects Gaussian noise into an image tensor.
 
-    The noise intensity is specified by the mean and standard deviation of the 
-    Gaussian distribution. The output tensor type is `tf.float32`. Optionally, 
+    The noise intensity is specified by the mean and standard deviation of the
+    Gaussian distribution. The output tensor type is `tf.float32`. Optionally,
     the values of the output tensor can be clipped to a valid range.
     """
 
@@ -22,7 +22,7 @@ class GaussianNoiseInjector(StepBase):
 
     def __init__(self, mean=0.0, sigma=0.05, apply_clipping=True, seed=42):
         """
-        Initialize the GaussianNoiseInjector for integration into an image 
+        Initialize the GaussianNoiseInjector for integration into an image
         preprocessing pipeline.
 
         Parameters
@@ -30,10 +30,10 @@ class GaussianNoiseInjector(StepBase):
         mean : float, optional
             The mean of the Gaussian noise distribution. Default is 0.0.
         sigma : float, optional
-            The standard deviation of the Gaussian noise distribution. Default 
+            The standard deviation of the Gaussian noise distribution. Default
             is 0.05.
         apply_clipping : bool, optional
-            If True, clips the output values to be within a valid range. 
+            If True, clips the output values to be within a valid range.
             Default is True.
         seed : int, optional
             Random seed for reproducibility. Default is 42.
@@ -42,7 +42,7 @@ class GaussianNoiseInjector(StepBase):
 
     def _setup(self, dataset):
         """
-        Set up the GaussianNoiseInjector with a fixed random seed for 
+        Set up the GaussianNoiseInjector with a fixed random seed for
         reproducibility.
 
         Parameters

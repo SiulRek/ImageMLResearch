@@ -7,7 +7,7 @@ class MinMaxNormalizer(StepBase):
     """
     Applies min-max normalization to an image tensor.
 
-    The normalization rescales pixel values to the range [0, 1], ensuring 
+    The normalization rescales pixel values to the range [0, 1], ensuring
     the data is scaled appropriately for deep learning models.
     """
 

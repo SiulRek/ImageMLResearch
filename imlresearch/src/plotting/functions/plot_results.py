@@ -10,10 +10,10 @@ def plot_binary_classification_results(
     x, y_true, y_pred, class_names, grid_size=(2, 2)
 ):
     """
-    Plots a grid of images with their true and predicted labels for binary 
+    Plots a grid of images with their true and predicted labels for binary
     classification.
 
-    The title of each plot shows the true label, predicted label, and 
+    The title of each plot shows the true label, predicted label, and
     predicted probability.
 
     Parameters
@@ -79,7 +79,7 @@ def plot_multi_class_classification_results(
     """
     Plots a grid of images with their true and predicted labels.
 
-    If the `prediction_bar` parameter is set to True, it also shows a bar 
+    If the `prediction_bar` parameter is set to True, it also shows a bar
     plot with the predicted probabilities.
 
     Parameters
@@ -95,7 +95,7 @@ def plot_multi_class_classification_results(
     grid_size : tuple, optional
         Tuple specifying the grid size as (rows, columns). Defaults to (2, 2).
     prediction_bar : bool, optional
-        Whether to show the predicted probabilities as a bar plot. 
+        Whether to show the predicted probabilities as a bar plot.
         Defaults to False.
 
     Returns

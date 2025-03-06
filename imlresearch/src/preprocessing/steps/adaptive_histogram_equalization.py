@@ -5,10 +5,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class AdaptiveHistogramEqualizer(StepBase):
     """
-    A preprocessing step that applies Contrast Limited Adaptive Histogram 
+    A preprocessing step that applies Contrast Limited Adaptive Histogram
     Equalization (CLAHE) to an image.
 
-    For RGB images, each color channel (Red, Green, Blue) is processed 
+    For RGB images, each color channel (Red, Green, Blue) is processed
     separately to enhance contrast.
     """
 
@@ -17,17 +17,17 @@ class AdaptiveHistogramEqualizer(StepBase):
 
     def __init__(self, clip_limit=2.0, tile_gridsize=(8, 8)):
         """
-        Initialize the AdaptiveHistogramEqualizer for integration into an 
+        Initialize the AdaptiveHistogramEqualizer for integration into an
         image preprocessing pipeline.
 
         Parameters
         ----------
         clip_limit : float, optional
-            Threshold for contrast limiting. Higher values increase contrast, 
+            Threshold for contrast limiting. Higher values increase contrast,
             but too high values may lead to noise amplification. Default is 2.0.
         tile_gridsize : tuple of int, optional
-            The size of the grid for the tiles (regions) of the image to which 
-            CLAHE will be applied. Smaller tiles can lead to more localized 
+            The size of the grid for the tiles (regions) of the image to which
+            CLAHE will be applied. Smaller tiles can lead to more localized
             contrast enhancement. Default is (8, 8).
         """
         super().__init__(locals())

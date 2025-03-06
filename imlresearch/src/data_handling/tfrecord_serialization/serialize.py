@@ -85,7 +85,7 @@ def serialize_sample_for_jpeg(image, label=None):
 def serialize_dataset_to_tf_record(dataset, filepath, image_format):
     """
     Saves a dataset to a TFRecord file. If the dataset is batched, it will be
-    unbatched before saving. Supports labeled datasets, storing image-label 
+    unbatched before saving. Supports labeled datasets, storing image-label
     pairs.
 
     Parameters

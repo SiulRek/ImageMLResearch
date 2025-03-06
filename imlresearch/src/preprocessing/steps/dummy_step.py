@@ -14,7 +14,7 @@ class DummyStep(StepBase):
 
     def __init__(self):
         """
-        Initialize the DummyStep for integration into an image preprocessing 
+        Initialize the DummyStep for integration into an image preprocessing
         pipeline.
         """
         super().__init__(locals())

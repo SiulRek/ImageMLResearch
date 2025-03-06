@@ -17,7 +17,7 @@ class TestPlotTrainingHistory(PlottingTestCase):
     @classmethod
     def setUpClass(cls):
         """
-        Sets up the test class by creating a dummy Keras model and generating 
+        Sets up the test class by creating a dummy Keras model and generating
         training history with and without validation data.
         """
         super().setUpClass()

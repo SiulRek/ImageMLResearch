@@ -7,7 +7,7 @@ class MeanNormalizer(StepBase):
     """
     A preprocessing step that applies mean normalization to an image tensor.
 
-    This normalization ensures that pixel values are centered around zero 
+    This normalization ensures that pixel values are centered around zero
     and scaled based on the dataset's range.
 
     Note
@@ -20,7 +20,7 @@ class MeanNormalizer(StepBase):
 
     def __init__(self):
         """
-        Initialize the MeanNormalizer for integration into an image 
+        Initialize the MeanNormalizer for integration into an image
         preprocessing pipeline.
         """
         super().__init__({})

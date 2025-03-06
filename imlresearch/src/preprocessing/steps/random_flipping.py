@@ -7,10 +7,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class RandomFlipper(StepBase):
     """
-    A data augmentation step that flips the image randomly in a specified 
+    A data augmentation step that flips the image randomly in a specified
     direction.
 
-    The direction of the flip can be 'horizontal', 'vertical', or 'both'. 
+    The direction of the flip can be 'horizontal', 'vertical', or 'both'.
     A random decision is made for whether the flip is applied or not.
     """
 
@@ -25,7 +25,7 @@ class RandomFlipper(StepBase):
         Parameters
         ----------
         flip_direction : str, optional
-            Direction of the potential flip. Can be 'horizontal', 'vertical', 
+            Direction of the potential flip. Can be 'horizontal', 'vertical',
             or 'both'. Default is 'horizontal'.
         seed : int, optional
             Random seed for reproducible flipping. Default is 42.
@@ -67,7 +67,7 @@ class RandomFlipper(StepBase):
         Returns
         -------
         numpy.ndarray
-            The flipped image if the random flip is applied, otherwise the 
+            The flipped image if the random flip is applied, otherwise the
             original image.
         """
         flip_direction = self.parameters["flip_direction"]

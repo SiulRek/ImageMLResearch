@@ -7,7 +7,7 @@ class GaussianBlurFilter(StepBase):
     """
     A preprocessing step that applies a Gaussian blur filter to an image.
 
-    This step smooths the image by convolving it with a Gaussian function, 
+    This step smooths the image by convolving it with a Gaussian function,
     reducing noise and detail.
     """
 
@@ -16,16 +16,16 @@ class GaussianBlurFilter(StepBase):
 
     def __init__(self, kernel_size=(5, 5), sigma=0.3):
         """
-        Initialize the GaussianBlurFilter for use in an image preprocessing 
+        Initialize the GaussianBlurFilter for use in an image preprocessing
         pipeline.
 
         Parameters
         ----------
         kernel_size : tuple of int, optional
-            The size of the Gaussian kernel. Both values should be odd 
+            The size of the Gaussian kernel. Both values should be odd
             numbers. Default is (5, 5).
         sigma : float, optional
-            The standard deviation of the Gaussian kernel. A higher sigma 
+            The standard deviation of the Gaussian kernel. A higher sigma
             results in more blur. Default is 0.3.
         """
         super().__init__(locals())

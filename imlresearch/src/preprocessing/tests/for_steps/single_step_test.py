@@ -78,7 +78,7 @@ class GrayscaleToRGB(StepBase):
 
 
 class TypeCaster(StepBase):
-    """ A preprocessing step that casts an image tensor to a specified data 
+    """ A preprocessing step that casts an image tensor to a specified data
     type. """
 
     arguments_datatype = {"output_dtype": str}
@@ -323,8 +323,8 @@ class TestSingleStep(BaseTestCase):
             json_data = json.load(file)
 
         self.assertIn(
-            step_name, 
-            json_data.keys(), 
+            step_name,
+            json_data.keys(),
             "StepToTest has no entry in JSON template."
         )
 
@@ -386,9 +386,9 @@ class TestSingleStep(BaseTestCase):
             figure_name = "processed_rgb_images"
             plotter.save_plot_to_file(os.path.join(directory, figure_name))
             plotter.plot_image_comparison(
-                self.image_dataset, 
-                processed_rgb_dataset, 
-                1, 
+                self.image_dataset,
+                processed_rgb_dataset,
+                1,
                 "RGB Images comparison"
             )
             figure_name = "rgb_images_comparison"

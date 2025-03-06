@@ -7,7 +7,7 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class RandomRotator(StepBase):
     """
-    A preprocessing step that applies random rotation to an image within a 
+    A preprocessing step that applies random rotation to an image within a
     specified angle range.
 
     The rotation angle is randomly chosen from the specified range.
@@ -24,8 +24,8 @@ class RandomRotator(StepBase):
         Parameters
         ----------
         angle_range : tuple of int, optional
-            Tuple of two integers specifying the range of angles for rotation. 
-            For example, (-90, 90) allows rotations between -90 and 90 degrees. 
+            Tuple of two integers specifying the range of angles for rotation.
+            For example, (-90, 90) allows rotations between -90 and 90 degrees.
             Default is (-90, 90).
         seed : int, optional
             Random seed for reproducible rotations. Default is 42.

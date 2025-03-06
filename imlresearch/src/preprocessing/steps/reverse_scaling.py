@@ -7,7 +7,7 @@ class ReverseScaler(StepBase):
     """
     A preprocessing step that scales an image tensor by a specified factor.
 
-    The default scale factor is 255, which is commonly used to normalize 
+    The default scale factor is 255, which is commonly used to normalize
     0-255 RGB images to a 0-1 range.
 
     Note

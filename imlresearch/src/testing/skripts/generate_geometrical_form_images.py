@@ -7,7 +7,7 @@ def generate_geometrical_form_image(
     path, width, height, image_number, image_format="png"
 ):
     """
-    Generate an image with noise, a rectangle, and a circle, and save it to 
+    Generate an image with noise, a rectangle, and a circle, and save it to
     the specified path.
 
     Parameters
@@ -59,7 +59,7 @@ def generate_geometrical_form_images(
     path, num_images, width=600, height=400, start_number=1, image_format="png"
 ):
     """
-    Generate multiple images of geometrical forms and save them to the 
+    Generate multiple images of geometrical forms and save them to the
     specified path.
 
     Parameters

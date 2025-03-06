@@ -7,8 +7,8 @@ class OstuThresholder(StepBase):
     """
     A preprocessing step that applies Otsu's Thresholding to an image.
 
-    For RGB images, each color channel (Red, Green, Blue) is processed 
-    separately. Otsu's method automatically determines an optimal threshold 
+    For RGB images, each color channel (Red, Green, Blue) is processed
+    separately. Otsu's method automatically determines an optimal threshold
     value to separate the foreground from the background.
     """
 
@@ -25,7 +25,7 @@ class OstuThresholder(StepBase):
         thresh : float, optional
             The threshold value used for thresholding. Default is 0.
         max_val : float, optional
-            The maximum value that a pixel can take after thresholding. 
+            The maximum value that a pixel can take after thresholding.
             Default is 255.
         """
         super().__init__(locals())

@@ -5,7 +5,7 @@ ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 
 def search_files_with_name(root_path, filename):
     """
-    Search for files with an exact name in a specified directory and its 
+    Search for files with an exact name in a specified directory and its
     subdirectories.
 
     Parameters

@@ -1,6 +1,6 @@
 """
-Disclaimer: The classes in this module were used for visualization purposes 
-during the development of the Image Preprocessing Framework. They are not 
+Disclaimer: The classes in this module were used for visualization purposes
+during the development of the Image Preprocessing Framework. They are not
 used for plotting purposes in model development.
 """
 

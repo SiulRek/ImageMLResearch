@@ -35,7 +35,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         """
         Set up the test environment before each test case.
 
-        This initializes research attributes, data handlers, trainers, 
+        This initializes research attributes, data handlers, trainers,
         and plotters.
         """
         super().setUp()
@@ -141,7 +141,7 @@ class TestMultiClassModuleLevelWorkflow(BaseTestCase):
         """
         Test the complete multi-class research workflow.
 
-        This method ensures that datasets are loaded, split, backed up, 
+        This method ensures that datasets are loaded, split, backed up,
         restored, and correctly processed through trials.
         """
         dataset = self.load_mnist_digits_dataset(sample_num=1000, labeled=True)

@@ -2,7 +2,7 @@ def split_dataset(
     dataset, train_split=0.8, val_split=0.1, test_split=0.1, dataset_size=None
 ):
     """
-    Splits a TensorFlow dataset into training, validation, and test sets 
+    Splits a TensorFlow dataset into training, validation, and test sets
     based on the specified proportions.
 
     Parameters
@@ -10,15 +10,15 @@ def split_dataset(
     dataset : tf.data.Dataset
         The TensorFlow dataset to split.
     train_split : float, optional
-        Proportion of the dataset to include in the training set. 
+        Proportion of the dataset to include in the training set.
         Default is 0.8.
     val_split : float, optional
-        Proportion of the dataset to include in the validation set. 
+        Proportion of the dataset to include in the validation set.
         Default is 0.1.
     test_split : float, optional
         Proportion of the dataset to include in the test set. Default is 0.1.
     dataset_size : int, optional
-        The size of the dataset. If None, the size is determined using the 
+        The size of the dataset. If None, the size is determined using the
         `cardinality` method.
 
     Returns

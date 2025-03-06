@@ -11,7 +11,7 @@ from imlresearch.src.testing.helpers.empty_directory import empty_directory
 
 class TestBinaryResearcherLevelWorkflow(BaseTestCase):
     """
-    Test case for the binary classification research workflow from a 
+    Test case for the binary classification research workflow from a
     high-level perspective using the Researcher class.
     """
 
@@ -70,7 +70,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         Parameters
         ----------
         datasets_container : dict, optional
-            The datasets container to validate. If None, the researcher's 
+            The datasets container to validate. If None, the researcher's
             datasets container is used.
         batched : bool, optional
             Whether the dataset is expected to be batched, by default True.
@@ -124,7 +124,7 @@ class TestBinaryResearcherLevelWorkflow(BaseTestCase):
         """
         Test the complete binary classification research workflow.
 
-        This method ensures that datasets are loaded, split, backed up, 
+        This method ensures that datasets are loaded, split, backed up,
         restored, preprocessed, and correctly processed through trials.
         """
         dataset = self.load_mnist_digits_dataset(

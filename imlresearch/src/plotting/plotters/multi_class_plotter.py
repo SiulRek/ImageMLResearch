@@ -12,7 +12,7 @@ from imlresearch.src.plotting.plotters.plotter import Plotter, plot_decorator
 
 class MultiClassPlotter(Plotter):
     """
-    A class for plotting images and text using research attributes for 
+    A class for plotting images and text using research attributes for
     multi-class classification.
     """
 
@@ -49,7 +49,7 @@ class MultiClassPlotter(Plotter):
         Parameters
         ----------
         grid_size : tuple, optional
-            Tuple specifying the grid size as (rows, columns). 
+            Tuple specifying the grid size as (rows, columns).
             Defaults to (2, 2).
         **general_plot_kwargs : dict, optional
             General plot keyword arguments.
@@ -78,16 +78,16 @@ class MultiClassPlotter(Plotter):
         """
         Plots a grid of images with their true and predicted labels.
 
-        If the `prediction_bar` parameter is set to True, it also shows a 
+        If the `prediction_bar` parameter is set to True, it also shows a
         bar plot with the predicted probabilities.
 
         Parameters
         ----------
         grid_size : tuple, optional
-            Tuple specifying the grid size as (rows, columns). 
+            Tuple specifying the grid size as (rows, columns).
             Defaults to (2, 2).
         prediction_bar : bool, optional
-            Whether to show the predicted probabilities as a bar plot. 
+            Whether to show the predicted probabilities as a bar plot.
             Defaults to False.
 
         Returns

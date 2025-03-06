@@ -30,7 +30,7 @@ def _shapes_are_known(dataset):
 
 def _restore_dataset_shape(dataset):
     """
-    Restores the static shape of a dataset with 'unknown' shape by iterating 
+    Restores the static shape of a dataset with 'unknown' shape by iterating
     over its elements and rebuilding it with the correct static shape.
 
     Parameters
@@ -64,8 +64,8 @@ def prepare_dataset(
     repeat_num=None,
 ):
     """
-    Prepares a TensorFlow dataset by applying shuffling, batching, prefetching, 
-    and repeating a number of times. If a parameter is None, the corresponding 
+    Prepares a TensorFlow dataset by applying shuffling, batching, prefetching,
+    and repeating a number of times. If a parameter is None, the corresponding
     operation is not applied.
 
     Parameters

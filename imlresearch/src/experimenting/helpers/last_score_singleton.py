@@ -1,8 +1,8 @@
 class LastScoreSingleton:
     """
     Singleton class to store the last score of ML training.
-    
-    This class ensures that only one instance exists and provides methods 
+
+    This class ensures that only one instance exists and provides methods
     to set, retrieve, and clear the last recorded score.
     """
 

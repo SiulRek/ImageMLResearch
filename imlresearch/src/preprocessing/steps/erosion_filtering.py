@@ -8,7 +8,7 @@ class ErosionFilter(StepBase):
     """
     A preprocessing step that applies erosion to an image.
 
-    Erosion reduces the white regions in the image, making objects appear 
+    Erosion reduces the white regions in the image, making objects appear
     smaller.
     """
 

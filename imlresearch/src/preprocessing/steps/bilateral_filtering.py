@@ -23,7 +23,7 @@ class BilateralFilter(StepBase):
         Parameters
         ----------
         diameter : int, optional
-            Diameter of each pixel neighborhood used during filtering 
+            Diameter of each pixel neighborhood used during filtering
             (default is 9).
         sigma_color : float, optional
             Filter sigma in the color space. Larger values mean farther colors

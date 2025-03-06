@@ -10,7 +10,7 @@ def save_images(
     **kwargs,
 ):
     """
-    Saves images from a dataset to the specified directory. Supports both 
+    Saves images from a dataset to the specified directory. Supports both
     labeled and unlabeled datasets.
 
     Parameters
@@ -22,7 +22,7 @@ def save_images(
     image_format : str, optional
         The format for saving images ('jpg' or 'png'). Defaults to 'jpg'.
     prefix : str or function, optional
-        The prefix for naming the saved images. If a function is provided, 
+        The prefix for naming the saved images. If a function is provided,
         it should take a label and return a string. Defaults to None.
     start_number : int, optional
         The starting number for sequential naming. Defaults to 0.

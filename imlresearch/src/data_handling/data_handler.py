@@ -16,7 +16,7 @@ from imlresearch.src.research.attributes.research_attributes import (
 
 class DataHandler(ResearchAttributes):
     """
-    A class for handling dataset operations including creation, enhancement, 
+    A class for handling dataset operations including creation, enhancement,
     splitting, and saving images.
     """
 
@@ -37,7 +37,7 @@ class DataHandler(ResearchAttributes):
 
     def _assert_dataset_format(self, dataset):
         """
-        Checks if the dataset has the format (image, label) and if the image 
+        Checks if the dataset has the format (image, label) and if the image
         shape is (height, width, 1|3).
 
         Parameters
@@ -66,22 +66,22 @@ class DataHandler(ResearchAttributes):
 
     def load_dataset(self, data):
         """
-        Loads a dataset from the given data and stores it in the 
+        Loads a dataset from the given data and stores it in the
         'datasets_container' under 'complete_dataset'.
 
         Parameters
         ----------
         data : tf.data.Dataset or dict or pandas.DataFrame
             The data to load. It can be:
-            1. A TensorFlow dataset of tuples (image, label), where image 
+            1. A TensorFlow dataset of tuples (image, label), where image
                shape is (height, width, 1|3).
-            2. A dictionary or pandas DataFrame with 'path' and 'label' 
+            2. A dictionary or pandas DataFrame with 'path' and 'label'
                columns.
 
         Notes
         -----
-        When passing a `tf.data.Dataset`, it is recommended to provide a 
-        dataset without Keras operations like shuffling or batching. These 
+        When passing a `tf.data.Dataset`, it is recommended to provide a
+        dataset without Keras operations like shuffling or batching. These
         operations should be applied in the `prepare_datasets` method.
         """
         if isinstance(data, tf.data.Dataset):
@@ -128,13 +128,13 @@ class DataHandler(ResearchAttributes):
         repeat_num=None,
     ):
         """
-        Prepares datasets by applying transformations and updates them in the 
+        Prepares datasets by applying transformations and updates them in the
         'datasets_container'.
 
         Parameters
         ----------
         dataset_names : list, optional
-            The names of the datasets to enhance. Can be 'complete_dataset' or 
+            The names of the datasets to enhance. Can be 'complete_dataset' or
             any split datasets ('train_dataset', 'val_dataset', 'test_dataset').
             If None, all datasets are processed.
         batch_size : int, optional
@@ -162,7 +162,7 @@ class DataHandler(ResearchAttributes):
     def split_dataset(self, train_split, val_split,
                       test_split, dataset_size=None):
         """
-        Splits 'complete_dataset' into 'train_dataset', 'val_dataset', and 
+        Splits 'complete_dataset' into 'train_dataset', 'val_dataset', and
         'test_dataset'. Removes the 'complete_dataset' after splitting.
 
         Parameters
@@ -174,7 +174,7 @@ class DataHandler(ResearchAttributes):
         test_split : float
             Proportion of the dataset for testing.
         dataset_size : int, optional
-            The dataset size. If None, the size is determined using the 
+            The dataset size. If None, the size is determined using the
             'cardinality' method.
         """
         self._assert_dataset_exists("complete_dataset")
@@ -200,8 +200,8 @@ class DataHandler(ResearchAttributes):
         output_dir : str
             The directory to save the images.
         prefix : str or callable, optional
-            The prefix for the image files. If callable, it should take the 
-            label as input and return a string. If None, a default prefix is 
+            The prefix for the image files. If callable, it should take the
+            label as input and return a string. If None, a default prefix is
             used.
         num_images : int, optional
             The number of images to save.

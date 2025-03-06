@@ -7,7 +7,7 @@ class NLMeanDenoiser(StepBase):
     """
     A preprocessing step that applies Non-Local Mean Denoising to an image.
 
-    Non-Local Means Denoising reduces noise in an image by averaging pixels 
+    Non-Local Means Denoising reduces noise in an image by averaging pixels
     with similar neighborhood patterns across the image.
     """
 
@@ -26,13 +26,13 @@ class NLMeanDenoiser(StepBase):
         Parameters
         ----------
         h : float, optional
-            Filter strength. Higher values remove noise better but may also 
+            Filter strength. Higher values remove noise better but may also
             remove image details. Default is 1.0.
         template_window_size : int, optional
-            Odd size of the window used to compute the weighted average for 
+            Odd size of the window used to compute the weighted average for
             the given pixel. Default is 7.
         search_window_size : int, optional
-            Odd size of the window used to search for patches similar to the 
+            Odd size of the window used to search for patches similar to the
             one centered at the current pixel. Default is 21.
         """
         super().__init__(locals())

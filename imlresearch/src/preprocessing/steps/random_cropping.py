@@ -7,7 +7,7 @@ class RandomCropper(StepBase):
     """
     A data augmentation step that randomly crops a portion of the image.
 
-    The crop size is defined by the specified width and height, and the crop 
+    The crop size is defined by the specified width and height, and the crop
     is randomly placed within the image.
     """
 
@@ -25,7 +25,7 @@ class RandomCropper(StepBase):
             The size of the crop (width, height) in pixels.
             Default is (256, 256).
         seed : int, optional
-            A seed for the random number generator for reproducible results. 
+            A seed for the random number generator for reproducible results.
             Default is 42.
         """
         super().__init__(locals())

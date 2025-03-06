@@ -7,8 +7,8 @@ class AdaptiveThresholder(StepBase):
     """
     A preprocessing step that applies adaptive thresholding to an image.
 
-    This method dynamically determines threshold values for different regions 
-    of the image. For RGB images, each color channel (Red, Green, Blue) is 
+    This method dynamically determines threshold values for different regions
+    of the image. For RGB images, each color channel (Red, Green, Blue) is
     processed separately.
     """
 
@@ -17,13 +17,13 @@ class AdaptiveThresholder(StepBase):
 
     def __init__(self, block_size=15, c=-2, max_val=255):
         """
-        Initialize the AdaptiveThresholder for use in an image preprocessing 
+        Initialize the AdaptiveThresholder for use in an image preprocessing
         pipeline.
 
         Parameters
         ----------
         block_size : int, optional
-            The size of the pixel neighborhood used to calculate the threshold 
+            The size of the pixel neighborhood used to calculate the threshold
             value. Must be an odd number. Default is 15.
         c : float, optional
             A constant subtracted from the mean or weighted mean. Default is -2.

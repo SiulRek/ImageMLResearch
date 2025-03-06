@@ -13,7 +13,7 @@ def plot_training_history(history):
     Returns
     -------
     matplotlib.figure.Figure
-        The Matplotlib figure containing the training and validation 
+        The Matplotlib figure containing the training and validation
         history plot.
     """
     # Configuration
@@ -60,5 +60,5 @@ def plot_training_history(history):
             ax.legend(loc="best", fontsize=font_size)
             ax.grid(True)
 
-    plt.tight_layout()                  
+    plt.tight_layout()
     return fig

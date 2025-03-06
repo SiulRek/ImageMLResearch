@@ -1,6 +1,6 @@
 """
-This module facilitates running all unit tests across various submodules 
-of the Researcher system. It uses Python's built-in unittest framework to 
+This module facilitates running all unit tests across various submodules
+of the Researcher system. It uses Python's built-in unittest framework to
 run tests located in the 'tests' subdirectory of each module.
 """
 

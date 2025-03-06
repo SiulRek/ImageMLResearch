@@ -16,11 +16,11 @@ from imlresearch.src.utils.general.batch_utils import is_batched
 
 class _ResearcherBase(DataHandler, Trainer):
     """
-    A high-level interface for conducting image-based machine learning 
-    experiments. 
+    A high-level interface for conducting image-based machine learning
+    experiments.
 
-    This class inherits functionalities from DataHandler, Trainer, and 
-    ResearchAttributes. It also synchronizes research attributes from a 
+    This class inherits functionalities from DataHandler, Trainer, and
+    ResearchAttributes. It also synchronizes research attributes from a
     source instance during initialization.
     """
 
@@ -102,12 +102,12 @@ class _ResearcherBase(DataHandler, Trainer):
         dataset_names : list, optional
             The dataset names to apply the pipeline to, by default None.
         backup : bool, optional
-            Whether to backup all datasets before applying the pipeline, 
+            Whether to backup all datasets before applying the pipeline,
             by default False.
 
         Notes
         -----
-        It is not supported to apply a preprocessing pipeline on batched 
+        It is not supported to apply a preprocessing pipeline on batched
         datasets.
         """
         preprocessor = self._preprocessor
@@ -138,7 +138,7 @@ class BinaryResearcher(_ResearcherBase, BinaryPlotter):
     """
     A researcher class for binary image classification.
 
-    This class inherits from _ResearcherBase and BinaryPlotter to provide 
+    This class inherits from _ResearcherBase and BinaryPlotter to provide
     functionalities for binary image classification research.
     """
 
@@ -159,7 +159,7 @@ class MultiClassResearcher(_ResearcherBase, MultiClassPlotter):
     """
     A researcher class for multi-class image classification.
 
-    This class inherits from _ResearcherBase and MultiClassPlotter to 
+    This class inherits from _ResearcherBase and MultiClassPlotter to
     provide functionalities for multi-class image classification research.
     """
 

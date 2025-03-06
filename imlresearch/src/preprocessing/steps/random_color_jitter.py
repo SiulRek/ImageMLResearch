@@ -5,11 +5,11 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class RandomColorJitterer(StepBase):
     """
-    A data augmentation step that randomly alters the brightness, contrast, 
+    A data augmentation step that randomly alters the brightness, contrast,
     saturation, and hue of an image tensor.
 
-    Each attribute is adjusted within a specified range. For grayscale images, 
-    only brightness and contrast adjustments are applied, as saturation and 
+    Each attribute is adjusted within a specified range. For grayscale images,
+    only brightness and contrast adjustments are applied, as saturation and
     hue changes are not applicable.
     """
 
@@ -26,22 +26,22 @@ class RandomColorJitterer(StepBase):
         self, brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1, seed=42
     ):
         """
-        Initialize the RandomColorJitterer for integration into an image 
+        Initialize the RandomColorJitterer for integration into an image
         preprocessing pipeline.
 
         Parameters
         ----------
         brightness : float, optional
-            Maximum delta for brightness adjustment. Must be non-negative. 
+            Maximum delta for brightness adjustment. Must be non-negative.
             Default is 0.3.
         contrast : float, optional
-            Contrast factor range (lower, upper). Must be non-negative. 
+            Contrast factor range (lower, upper). Must be non-negative.
             Default is 0.3.
         saturation : float, optional
-            Saturation factor range (lower, upper). Must be non-negative. 
+            Saturation factor range (lower, upper). Must be non-negative.
             Default is 0.3.
         hue : float, optional
-            Maximum delta for hue adjustment. Must be in the range [0, 0.5]. 
+            Maximum delta for hue adjustment. Must be in the range [0, 0.5].
             Default is 0.1.
         seed : int, optional
             An optional integer seed for random operations. Default is 42.

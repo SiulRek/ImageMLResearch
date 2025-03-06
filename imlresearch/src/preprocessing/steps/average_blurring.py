@@ -7,7 +7,7 @@ class AverageBlurFilter(StepBase):
     """
     A preprocessing step that applies an average blur filter to an image.
 
-    This filter smooths the image by averaging the pixel values within a 
+    This filter smooths the image by averaging the pixel values within a
     kernel around each pixel.
     """
 
@@ -16,13 +16,13 @@ class AverageBlurFilter(StepBase):
 
     def __init__(self, kernel_size=(8, 8)):
         """
-        Initialize the `AverageBlurFilter` for integration into an image 
+        Initialize the `AverageBlurFilter` for integration into an image
         preprocessing pipeline.
 
         Parameters
         ----------
         kernel_size : tuple of int, optional
-            The size of the averaging kernel. Both values should be positive 
+            The size of the averaging kernel. Both values should be positive
             integers. Default is (8, 8).
         """
         super().__init__(locals())

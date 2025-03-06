@@ -38,7 +38,7 @@ class TestPlotMultiClassClassificationResults(PlottingTestCase):
 
     def test_plot_results_without_prediction_bar(self):
         """
-        Tests plotting multi-class classification results without prediction 
+        Tests plotting multi-class classification results without prediction
         bars.
         """
         fig = plot_multi_class_classification_results(

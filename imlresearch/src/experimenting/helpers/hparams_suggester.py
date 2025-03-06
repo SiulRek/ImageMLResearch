@@ -210,7 +210,7 @@ class HParamsSuggester:
 
     def _compile_hparams_configs(self, hparams_configs):
         """
-        Compiles hyperparameter configurations into distributions 
+        Compiles hyperparameter configurations into distributions
         and suggestion methods.
 
         Parameters

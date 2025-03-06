@@ -5,8 +5,8 @@ def is_batched(dataset):
     """
     Check if the dataset is batched.
 
-    Expects a dataset of type `tf.data.Dataset` and assumes that each sample 
-    is either an image or a tuple containing an image and its corresponding 
+    Expects a dataset of type `tf.data.Dataset` and assumes that each sample
+    is either an image or a tuple containing an image and its corresponding
     label. The images are expected to have 3 dimensions.
 
     Parameters
@@ -33,8 +33,8 @@ def unbatch_dataset_if_batched(dataset):
     """
     Unbatch the dataset if it is batched.
 
-    Expects a dataset of type `tf.data.Dataset` and assumes that each sample 
-    is either an image or a tuple containing an image and its corresponding 
+    Expects a dataset of type `tf.data.Dataset` and assumes that each sample
+    is either an image or a tuple containing an image and its corresponding
     label.
 
     Parameters

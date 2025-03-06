@@ -20,7 +20,7 @@ DATA_DIR = os.path.join(
 
 class BaseTestCase(unittest.TestCase):
     """
-    Abstract base class for test cases, providing setup and teardown 
+    Abstract base class for test cases, providing setup and teardown
     operations common across tests.
 
     Attributes
@@ -63,8 +63,8 @@ class BaseTestCase(unittest.TestCase):
         """
         Compute the test output directory path.
 
-        This method traverses up the file hierarchy until a directory 
-        named 'tests' is found, then returns the path to the 'outputs' 
+        This method traverses up the file hierarchy until a directory
+        named 'tests' is found, then returns the path to the 'outputs'
         subdirectory.
 
         Parameters

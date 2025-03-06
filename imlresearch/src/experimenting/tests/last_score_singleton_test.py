@@ -37,7 +37,7 @@ class TestLastScoreSingleton(BaseTestCase):
 
     def test_set_score_non_numeric(self):
         """
-        Tests if the set() method raises an AssertionError when non-numeric 
+        Tests if the set() method raises an AssertionError when non-numeric
         values are provided.
         """
         non_numeric_values = ["string", True, False, [], {}]
@@ -60,7 +60,7 @@ class TestLastScoreSingleton(BaseTestCase):
 
     def test_set_and_take_score_same_instances(self):
         """
-        Tests if the set() and take() methods work correctly within 
+        Tests if the set() and take() methods work correctly within
         the same instance.
         """
         score_instance = LastScoreSingleton()
@@ -102,7 +102,7 @@ class TestLastScoreSingleton(BaseTestCase):
 
     def test_take_without_previous_set(self):
         """
-        Tests if the take() method raises a ValueError when no score 
+        Tests if the take() method raises a ValueError when no score
         has been set.
         """
         score_instance = LastScoreSingleton()

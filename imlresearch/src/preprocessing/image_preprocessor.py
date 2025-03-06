@@ -45,7 +45,7 @@ class ImagePreprocessor:
     set_pipe(pipeline)
         Sets the preprocessing pipeline with a deep copy of provided steps.
     pipe_append(step)
-        Appends a new step to the pipeline, verifying it is a subclass of 
+        Appends a new step to the pipeline, verifying it is a subclass of
         StepBase.
     pipe_pop()
         Removes and returns the last step from the pipeline.
@@ -70,7 +70,7 @@ class ImagePreprocessor:
         Parameters
         ----------
         raise_step_process_exception : bool, optional
-            Determines whether exceptions during step processing are raised or 
+            Determines whether exceptions during step processing are raised or
             logged.
         """
         self._pipeline = []
@@ -112,7 +112,7 @@ class ImagePreprocessor:
 
     def _initialize_class_instance_serializer(self, step_class_mapping):
         """
-        Initializes the serializer for pipeline serialization and 
+        Initializes the serializer for pipeline serialization and
         deserialization.
 
         Parameters
@@ -218,7 +218,7 @@ class ImagePreprocessor:
 
     def load_randomized_pipe_from_json(self, json_path):
         """
-        Loads and reconstructs a preprocessing pipeline from a JSON file with 
+        Loads and reconstructs a preprocessing pipeline from a JSON file with
         randomized parameters.
 
         Parameters
@@ -276,7 +276,7 @@ class ImagePreprocessor:
         """
         Applies each preprocessing step to the provided dataset.
 
-        If `_raise_step_process_exception` is True, exceptions in processing a 
+        If `_raise_step_process_exception` is True, exceptions in processing a
         step will be caught and logged, and the process will return None.
         Otherwise, it will proceed without exception handling.
 

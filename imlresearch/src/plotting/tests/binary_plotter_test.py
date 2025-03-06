@@ -18,7 +18,7 @@ class TestBinaryPlotter(PlottingTestCase):
     @classmethod
     def setUpClass(cls):
         """
-        Sets up the test class by initializing a BinaryPlotter instance 
+        Sets up the test class by initializing a BinaryPlotter instance
         with sample binary classification data.
         """
         super().setUpClass()
@@ -58,7 +58,7 @@ class TestBinaryPlotter(PlottingTestCase):
     @classmethod
     def _get_images_and_labels_array(cls, dataset):
         """
-        Extracts images and labels from the dataset and converts them 
+        Extracts images and labels from the dataset and converts them
         into tensors.
 
         Parameters

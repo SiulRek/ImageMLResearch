@@ -11,26 +11,26 @@ class ResearchAttributes:
     Attributes
     ----------
     datasets_container : dict
-        Dictionary containing datasets. When creating new datasets, 
-        'complete_dataset' is added; when split, 'train_dataset', 
+        Dictionary containing datasets. When creating new datasets,
+        'complete_dataset' is added; when split, 'train_dataset',
         'val_dataset', and 'test_dataset' are added.
     label_manager : LabelManager
         LabelManager instance for handling labels.
     outputs_container : dict
-        Dictionary containing outputs in the form of tuples 
-        (y_true, y_pred). When fitting, outputs are added. The name 
-        corresponds to the dataset name replacing 'dataset' with 
+        Dictionary containing outputs in the form of tuples
+        (y_true, y_pred). When fitting, outputs are added. The name
+        corresponds to the dataset name replacing 'dataset' with
         'outputs', e.g., 'train_dataset' -> 'train_outputs'.
     model : tf.keras.Model
         The Keras model instance.
     training_history : dict
-        The tracked training history of the model after fitting 
+        The tracked training history of the model after fitting
         (Attribute 'history' of the return value).
     evaluation_metrics : dict
-        The tracked evaluation metrics of the model after evaluating. 
+        The tracked evaluation metrics of the model after evaluating.
         Can be set from outside. Format: {Set_Name: {Metric: Value}}.
     figures : dict
-        Dictionary containing the tracked figures. 
+        Dictionary containing the tracked figures.
         Format: {figure_name: figure}. Can be set from outside.
     """
 
@@ -41,8 +41,8 @@ class ResearchAttributes:
         Parameters
         ----------
         label_type : str or None, optional
-            The type of labels used: 'binary', 'multi_class', 'multi_label', 
-            'multi_label_multi_class', 'object_detection'. If None, 
+            The type of labels used: 'binary', 'multi_class', 'multi_label',
+            'multi_label_multi_class', 'object_detection'. If None,
             label_manager is set to None.
         class_names : list, optional
             The list of class names.
@@ -65,7 +65,7 @@ class ResearchAttributes:
         Returns
         -------
         dict
-            A dictionary of type tf.data.Dataset, where each sample 
+            A dictionary of type tf.data.Dataset, where each sample
             is a tuple (image, label).
         """
         return self._datasets_container
@@ -144,7 +144,7 @@ class ResearchAttributes:
 
     def synchronize_research_attributes(self, research_attributes):
         """
-        Synchronize research attributes with another ResearchAttributes 
+        Synchronize research attributes with another ResearchAttributes
         instance.
 
         Parameters

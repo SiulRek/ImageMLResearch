@@ -20,7 +20,7 @@ class BinaryPlotter(Plotter):
         Parameters
         ----------
         grid_size : tuple, optional
-            Tuple specifying the grid size as (rows, columns). Defaults 
+            Tuple specifying the grid size as (rows, columns). Defaults
             to (2, 2).
 
         Returns

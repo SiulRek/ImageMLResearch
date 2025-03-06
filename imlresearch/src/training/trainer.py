@@ -72,7 +72,7 @@ class Trainer(ResearchAttributes):
 
     def _evaluate_outputs(self):
         """
-        Evaluate model outputs using the appropriate evaluation function 
+        Evaluate model outputs using the appropriate evaluation function
         based on the label type.
         """
         if "test_output" not in self._outputs_container:
@@ -118,7 +118,7 @@ class Trainer(ResearchAttributes):
         """
         Fit the model, save training history, predict outputs, and evaluate.
 
-        Requires a 'train_dataset' for training. Optionally, a 'val_dataset' 
+        Requires a 'train_dataset' for training. Optionally, a 'val_dataset'
         can be provided for validation, and a 'test_dataset' for evaluation.
 
         Parameters

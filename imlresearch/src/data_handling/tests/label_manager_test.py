@@ -13,7 +13,7 @@ class TestLabelManager(BaseTestCase):
 
     def test_binary_labels_valid_input(self):
         """
-        Tests encoding of valid binary labels using both string and integer 
+        Tests encoding of valid binary labels using both string and integer
         inputs.
         """
         manager = LabelManager("binary")
@@ -43,7 +43,7 @@ class TestLabelManager(BaseTestCase):
 
     def test_multi_class_labels_valid_input(self):
         """
-        Tests encoding of valid multi-class labels using both string and 
+        Tests encoding of valid multi-class labels using both string and
         integer inputs.
         """
         manager = LabelManager("multi_class", class_names=["a", "b", "c", "d"])
@@ -71,7 +71,7 @@ class TestLabelManager(BaseTestCase):
 
     def test_multi_class_multi_label_not_implemented(self):
         """
-        Tests that multi-class multi-label encoding raises 
+        Tests that multi-class multi-label encoding raises
         a NotImplementedError.
         """
         manager = LabelManager("multi_class_multi_label")
@@ -88,7 +88,7 @@ class TestLabelManager(BaseTestCase):
 
     def test_default_dtype(self):
         """
-        Tests that the default data type for different label types is 
+        Tests that the default data type for different label types is
         `tf.float32`.
         """
         manager = LabelManager("multi_class", class_names=["a", "b", "c", "d"])

@@ -8,10 +8,10 @@ from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 class DilateErodeSequencer(StepBase):
     """
-    A preprocessing step that applies a sequence of dilation and erosion 
+    A preprocessing step that applies a sequence of dilation and erosion
     operations to an image.
 
-    This class can automatically generate an operation sequence based on the 
+    This class can automatically generate an operation sequence based on the
     provided iterations and erosion probability.
     """
 
@@ -31,7 +31,7 @@ class DilateErodeSequencer(StepBase):
         erosion_probability=0.5,
     ):
         """
-        Initialize the DilateErodeSequencer for use in an image preprocessing 
+        Initialize the DilateErodeSequencer for use in an image preprocessing
         pipeline.
 
         Parameters
@@ -40,13 +40,13 @@ class DilateErodeSequencer(StepBase):
             Size of the kernel for dilation and erosion operations.
             Default is 3.
         sequence : str, optional
-            The sequence of operations ('d' for dilation, 'e' for erosion). 
+            The sequence of operations ('d' for dilation, 'e' for erosion).
             Default is "de".
         iterations : int, optional
-            Number of times the sequence is repeated. If positive, a sequence 
+            Number of times the sequence is repeated. If positive, a sequence
             is generated automatically. Default is -1.
         erosion_probability : float, optional
-            Probability of choosing erosion when generating a random sequence. 
+            Probability of choosing erosion when generating a random sequence.
             Must be between 0 and 1. Default is 0.5.
 
         Raises
@@ -72,7 +72,7 @@ class DilateErodeSequencer(StepBase):
 
     def generate_sequence(self, sequence, iterations, erosion_probability):
         """
-        Generate a sequence of operations based on the specified probability 
+        Generate a sequence of operations based on the specified probability
         and iterations.
 
         Parameters
@@ -98,7 +98,7 @@ class DilateErodeSequencer(StepBase):
 
     def _choose_operation(self, erosion_probability):
         """
-        Randomly choose between dilation ('d') and erosion ('e') based on the 
+        Randomly choose between dilation ('d') and erosion ('e') based on the
         specified probability.
 
         Parameters
@@ -126,7 +126,7 @@ class DilateErodeSequencer(StepBase):
         Returns
         -------
         numpy.ndarray
-            The processed image after applying the dilation and erosion 
+            The processed image after applying the dilation and erosion
             sequence.
         """
         kernel = np.ones(

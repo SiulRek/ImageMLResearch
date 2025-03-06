@@ -18,7 +18,7 @@ class TestDataHandler(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         """
-        Sets up the test class by loading test data and initializing 
+        Sets up the test class by loading test data and initializing
         the `DataHandler` instance.
         """
         super().setUpClass()
@@ -32,7 +32,7 @@ class TestDataHandler(BaseTestCase):
 
     def _assert_dataset(self, dataset):
         """
-        Asserts that the dataset is of type `tf.data.Dataset` and that the 
+        Asserts that the dataset is of type `tf.data.Dataset` and that the
         images and labels have the correct shapes.
 
         Parameters
@@ -72,7 +72,7 @@ class TestDataHandler(BaseTestCase):
 
     def test_assert_dataset_format_passes(self):
         """
-        Tests that the `_assert_dataset_format` method passes for valid dataset 
+        Tests that the `_assert_dataset_format` method passes for valid dataset
         formats.
         """
         shapes_parameters = [
@@ -108,7 +108,7 @@ class TestDataHandler(BaseTestCase):
 
     def test_load_dataset_from_dict(self):
         """
-        Tests dataset creation from a dictionary and storage in the dataset 
+        Tests dataset creation from a dictionary and storage in the dataset
         container.
         """
         self.data_handler.load_dataset(self.jpg_dict)

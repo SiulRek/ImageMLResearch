@@ -7,7 +7,7 @@ class BinaryThresholder(StepBase):
     """
     A preprocessing step that applies binary thresholding to an image.
 
-    For RGB images, each color channel (Red, Green, Blue) is processed 
+    For RGB images, each color channel (Red, Green, Blue) is processed
     separately.
     """
 
@@ -16,18 +16,18 @@ class BinaryThresholder(StepBase):
 
     def __init__(self, thresh=128, max_val=255):
         """
-        Initialize the BinaryThresholder for integration into an image 
+        Initialize the BinaryThresholder for integration into an image
         preprocessing pipeline.
 
         Parameters
         ----------
         thresh : float, optional
-            The threshold value used for binary thresholding. Pixel values 
-            greater than this threshold are set to the maximum value (255, 
-            white), and values less than or equal to the threshold are set to 
+            The threshold value used for binary thresholding. Pixel values
+            greater than this threshold are set to the maximum value (255,
+            white), and values less than or equal to the threshold are set to
             0 (black). Default is 128.
         max_val : float, optional
-            The maximum value that a pixel can take after thresholding. 
+            The maximum value that a pixel can take after thresholding.
             Default is 255.
         """
         super().__init__(locals())

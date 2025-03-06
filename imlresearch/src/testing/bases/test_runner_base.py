@@ -14,8 +14,8 @@ class TestRunnerBase(ABC):
     """
     Base class for running unit tests.
 
-    This class sets up the environment for test execution, including 
-    initializing loggers and managing test suites. Subclasses should 
+    This class sets up the environment for test execution, including
+    initializing loggers and managing test suites. Subclasses should
     implement the `load_tests` method to specify which tests to run.
     """
 
@@ -23,7 +23,7 @@ class TestRunnerBase(ABC):
         """
         Initialize the TestRunnerBase instance.
 
-        This method sets up the test file path, output directory, logger, 
+        This method sets up the test file path, output directory, logger,
         and test suite.
         """
         self.test_file = self._infere_test_file_path()
@@ -46,8 +46,8 @@ class TestRunnerBase(ABC):
         """
         Infer the file path of the test file.
 
-        This method attempts to infer the file path from the module 
-        information. If that fails, it tries to infer the path from the 
+        This method attempts to infer the file path from the module
+        information. If that fails, it tries to infer the path from the
         command-line arguments.
 
         Returns
@@ -65,14 +65,14 @@ class TestRunnerBase(ABC):
         """
         Compute the directory path for test outputs.
 
-        This method traverses up the file hierarchy until it finds a 
-        directory named 'tests', then returns the path to the 'outputs' 
+        This method traverses up the file hierarchy until it finds a
+        directory named 'tests', then returns the path to the 'outputs'
         subdirectory.
 
         Parameters
         ----------
         parent_folder : str, optional
-            The parent folder name that contains the 'tests' directory, 
+            The parent folder name that contains the 'tests' directory,
             by default "tests".
 
         Returns
@@ -96,7 +96,7 @@ class TestRunnerBase(ABC):
         """
         Load specific tests into the test suite.
 
-        This method should be overridden in subclasses to specify which tests 
+        This method should be overridden in subclasses to specify which tests
         to add to the test suite.
         """
         pass

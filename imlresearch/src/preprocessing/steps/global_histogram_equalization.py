@@ -7,7 +7,7 @@ class GlobalHistogramEqualizer(StepBase):
     """
     A preprocessing step that applies global histogram equalization to an image.
 
-    This step enhances image contrast by distributing intensity values more 
+    This step enhances image contrast by distributing intensity values more
     evenly across the histogram. For RGB images, each color channel (Red, Green,
     Blue) is processed separately.
     """
@@ -17,7 +17,7 @@ class GlobalHistogramEqualizer(StepBase):
 
     def __init__(self):
         """
-        Initialize the GlobalHistogramEqualizer for use in an image 
+        Initialize the GlobalHistogramEqualizer for use in an image
         preprocessing pipeline.
         """
         super().__init__(locals())
