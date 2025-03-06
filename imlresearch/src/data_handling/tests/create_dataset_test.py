@@ -47,11 +47,6 @@ class TestCreateDataset(BaseTestCase):
         -------
         int
             The normalized label.
-
-        Raises
-        ------
-        ValueError
-            If the label type is invalid.
         """
         if isinstance(label, str):
             return int(label)

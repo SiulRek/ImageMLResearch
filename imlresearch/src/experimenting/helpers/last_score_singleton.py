@@ -31,11 +31,6 @@ class LastScoreSingleton:
         ----------
         score : int, float, or None
             The score value to store. Must be a numeric value or None.
-        
-        Raises
-        ------
-        AssertionError
-            If the score is not a number or is a boolean.
         """
         assert isinstance(
             score, (int, float, type(None))
@@ -52,11 +47,6 @@ class LastScoreSingleton:
         -------
         int, float, or None
             The last stored score.
-
-        Raises
-        ------
-        ValueError
-            If no score has been set yet.
         """
         if self._no_score_set:
             msg = "No score has been set yet! "

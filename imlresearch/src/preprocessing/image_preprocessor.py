@@ -119,13 +119,6 @@ class ImagePreprocessor:
         ----------
         step_class_mapping : dict
             Dictionary mapping step names to StepBase subclasses.
-
-        Raises
-        ------
-        TypeError
-            If step_class_mapping is not a dictionary.
-        ValueError
-            If any mapped class is not a subclass of StepBase.
         """
         if not isinstance(step_class_mapping, dict):
             raise TypeError(
@@ -160,11 +153,6 @@ class ImagePreprocessor:
         ----------
         pipeline : list of StepBase
             List of preprocessing steps to be set in the pipeline.
-
-        Raises
-        ------
-        ValueError
-            If any step is not an instance of a StepBase subclass.
         """
         for step in pipeline:
             if not isinstance(step, StepBase):
@@ -193,11 +181,6 @@ class ImagePreprocessor:
         ----------
         step : StepBase
             The preprocessing step to be appended.
-
-        Raises
-        ------
-        ValueError
-            If the provided step is not an instance of StepBase.
         """
         if not isinstance(step, StepBase):
             raise ValueError(

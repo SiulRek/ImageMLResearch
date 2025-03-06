@@ -25,11 +25,6 @@ def send_chatgpt_prompt(
     -------
     str
         The response message from the model.
-
-    Raises
-    ------
-    AssertionError
-        If `OPENAI_KEY` is not provided.
     """
     assert OPENAI_KEY is not None, (
         "Please provide an OPENAI_KEY by creating a keys.py file and defining "

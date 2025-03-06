@@ -49,11 +49,6 @@ class ShapeResizer(StepBase):
         ----------
         resize_method : str
             The method used for resizing.
-
-        Raises
-        ------
-        ValueError
-            If the resize method is not supported.
         """
         if resize_method not in self.resize_methods:
             raise ValueError(

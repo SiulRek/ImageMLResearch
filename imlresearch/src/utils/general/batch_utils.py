@@ -18,11 +18,6 @@ def is_batched(dataset):
     -------
     bool
         Whether the dataset is batched.
-
-    Raises
-    ------
-    ValueError
-        If the input is not a `tf.data.Dataset` object.
     """
     if not isinstance(dataset, tf.data.Dataset):
         msg = "The input dataset must be a tf.data.Dataset object."

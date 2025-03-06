@@ -126,12 +126,6 @@ def randomly_select_sequential_keys(input_dict, separator="__"):
     dict
         A new dictionary containing randomly selected keys and their
         corresponding values.
-
-    Raises
-    ------
-    KeyError
-        If any keys do not follow a sequential pattern or if indices are not
-        sequential.
     """
     end_pattern = rf"($|{re.escape(separator)}\S+)"
     ind_key_pattern = re.compile(rf"(.*?){re.escape(separator)}I(\d+)(.*?)")

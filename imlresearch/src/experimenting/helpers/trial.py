@@ -221,11 +221,6 @@ class Trial(AbstractContextManager):
         ----------
         trial_name : str
             The name of the trial to remove.
-
-        Raises
-        ------
-        ValueError
-            If the trial is not found in the experiment's trial list.
         """
         names = [trial["name"] for trial in self.experiment_trials]
         if trial_name not in names:

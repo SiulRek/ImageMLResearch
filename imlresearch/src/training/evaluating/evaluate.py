@@ -131,11 +131,6 @@ def get_evaluation_function(label_type):
     -------
     function
         Evaluation function.
-
-    Raises
-    ------
-    ValueError
-        If the label type is not supported for evaluation.
     """
     if label_type == "multi_class":
         return evaluate_multi_class_classification

@@ -114,11 +114,6 @@ class Plotter(DataRetriever):
             The name of the figure.
         fig : matplotlib.figure.Figure
             The figure to be added.
-
-        Raises
-        ------
-        ValueError
-            If the provided figure is not an instance of Matplotlib Figure.
         """
         if not isinstance(fig, plt.Figure):
             msg = "The figure must be an instance of matplotlib.pyplot.Figure."
@@ -151,11 +146,6 @@ class Plotter(DataRetriever):
         -------
         matplotlib.figure.Figure
             The figure containing the images.
-
-        Raises
-        ------
-        ValueError
-            If neither 'complete_dataset' nor 'train_dataset' is found.
         """
         dataset = self._datasets_container.get("complete_dataset") or \
                   self._datasets_container.get("train_dataset")
@@ -208,11 +198,6 @@ class Plotter(DataRetriever):
         -------
         matplotlib.figure.Figure
             The figure containing the model summary.
-
-        Raises
-        ------
-        ValueError
-            If no model is found to plot.
         """
         if not self._model:
             msg = "No model found to plot."
@@ -237,11 +222,6 @@ class Plotter(DataRetriever):
         -------
         matplotlib.figure.Figure
             The figure containing the training history.
-
-        Raises
-        ------
-        ValueError
-            If no training history is found to plot.
         """
         if not self._training_history:
             msg = "No training history found to plot."

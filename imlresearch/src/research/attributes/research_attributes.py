@@ -151,11 +151,6 @@ class ResearchAttributes:
         ----------
         research_attributes : ResearchAttributes
             The instance to synchronize with.
-
-        Raises
-        ------
-        ValueError
-            If the input instance is not of type ResearchAttributes.
         """
         if not isinstance(research_attributes, ResearchAttributes):
             raise ValueError(

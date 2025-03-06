@@ -28,12 +28,6 @@ def save_images(
         The starting number for sequential naming. Defaults to 0.
     num_images : int, optional
         The number of images to save.
-
-    Raises
-    ------
-    ValueError
-        If the image data type is not supported or the image format is 
-        not 'jpg' or 'png'.
     """
     image_format = kwargs.get("image_format", "jpg")
     prefix = kwargs.get("prefix", "image_")

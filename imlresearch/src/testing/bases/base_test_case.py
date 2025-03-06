@@ -48,11 +48,6 @@ class BaseTestCase(unittest.TestCase):
         -------
         str
             The inferred file path.
-
-        Raises
-        ------
-        FileNotFoundError
-            If the file path cannot be inferred.
         """
         module = cls.__module__
         if module in sys.modules:
@@ -81,11 +76,6 @@ class BaseTestCase(unittest.TestCase):
         -------
         str
             The output directory path.
-
-        Raises
-        ------
-        NotADirectoryError
-            If the 'tests' directory is not found.
         """
         current_dir = os.path.dirname(cls._infere_test_file_path())
 

@@ -46,11 +46,6 @@ class _TrialDefinitionsIterator:
         -------
         dict
             The trial definition.
-
-        Raises
-        ------
-        StopIteration
-            If all `num_trials` are already generated.
         """
         if self.trial_count == self.num_trials:
             raise StopIteration
@@ -73,11 +68,6 @@ def _load_definitions(definitions_json):
     -------
     dict
         A dictionary containing experiment metadata.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the JSON file is not found.
     """
     if not os.path.exists(definitions_json):
         msg = f"{definitions_json} is not found in the experiment directory."
@@ -95,11 +85,6 @@ def _assert_experiment_metadata(experiment_metadata):
     ----------
     experiment_metadata : dict
         The experiment metadata to validate.
-
-    Raises
-    ------
-    AssertionError
-        If any required key is missing.
     """
     expected_keys = ["name", "description", "directory"]
     for key in expected_keys:
@@ -123,13 +108,6 @@ def _process_trial_definitions(trial_definitions, experiment_dir):
     -------
     iterator
         An iterator of trial definitions.
-
-    Raises
-    ------
-    AssertionError
-        If required keys are missing in `trial_definitions`.
-    ValueError
-        If `trial_definitions` is neither a list nor a dictionary.
     """
     if isinstance(trial_definitions, list):
         expected_keys = {"name", "hyperparameters"}
@@ -178,11 +156,6 @@ def load_experiment_definition(definition_json):
         A tuple containing:
         - dict: Experiment metadata.
         - iterator: Trial definitions.
-
-    Raises
-    ------
-    AssertionError
-        If the definition file structure is incorrect.
     """
     exp_def = _load_definitions(definition_json)
     msg = "Expected 2 keys in the definition file."

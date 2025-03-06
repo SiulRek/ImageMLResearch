@@ -54,11 +54,6 @@ class TestRunnerBase(ABC):
         -------
         str
             The inferred file path.
-
-        Raises
-        ------
-        FileNotFoundError
-            If the test file path cannot be inferred.
         """
         module = cls.__module__
         if module in sys.modules:
@@ -84,11 +79,6 @@ class TestRunnerBase(ABC):
         -------
         str
             The path to the output directory.
-
-        Raises
-        ------
-        NotADirectoryError
-            If the 'tests' directory is not found in the path hierarchy.
         """
         current_dir = os.path.dirname(cls._infere_test_file_path())
 

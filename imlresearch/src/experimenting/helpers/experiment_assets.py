@@ -49,11 +49,6 @@ def assert_experiment_assets_attribute(experiment_assets):
     ----------
     experiment_assets : dict
         The experiment assets attribute to assert.
-
-    Raises
-    ------
-    ValueError
-        If the experiment assets attribute does not have the expected keys.
     """
     expected_keys = set(get_default_experiment_assets().keys())
     actual_keys = set(experiment_assets.keys())
@@ -76,11 +71,6 @@ def assert_trial_assets_attribute(trial_assets):
     ----------
     trial_assets : dict
         The trial assets attribute to assert.
-
-    Raises
-    ------
-    ValueError
-        If the trial assets attribute does not have the expected keys.
     """
     expected_keys = _TRIAL_KEYS
     actual_keys = set(trial_assets.keys())
@@ -158,11 +148,6 @@ def load_experiment_assets(experiment_dir):
     -------
     dict
         The loaded experiment assets.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the experiment assets file is not found.
     """
     experiment_info_path = os.path.join(
         experiment_dir, "experiment_info.json"

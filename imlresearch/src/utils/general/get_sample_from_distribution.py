@@ -20,14 +20,6 @@ def get_sample_from_distribution(distribution_data):
     -------
     float
         A single sample from the specified distribution.
-
-    Raises
-    ------
-    KeyError
-        If the 'distribution' key is missing in `distribution_data`.
-    ValueError
-        If the specified distribution is not supported or if invalid 
-        parameters are provided.
     """
     distribution_map = {
         "gaussian": np.random.normal,  # mean ('loc'), std deviation ('scale')

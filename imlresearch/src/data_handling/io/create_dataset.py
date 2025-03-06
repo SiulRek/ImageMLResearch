@@ -34,12 +34,6 @@ def create_dataset(data, label_type=None, class_names=None):
         'image' is the decoded image file and 'encoded label' is processed by 
         LabelManager. If no labels are provided, returns a dataset of images 
         only.
-
-    Raises
-    ------
-    ValueError
-        If the input data is not a list of dictionaries, dictionary, or 
-        pandas DataFrame.
     """
     if isinstance(data, pd.DataFrame):
         paths = data["path"].tolist()

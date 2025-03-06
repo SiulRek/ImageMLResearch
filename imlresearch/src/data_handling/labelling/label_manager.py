@@ -70,11 +70,6 @@ class LabelManager:
         ----------
         class_names : list
             The list of class names.
-
-        Raises
-        ------
-        ValueError
-            If class names are required but not provided.
         """
         if not class_names and self._label_type == "multi_class":
             msg = (
@@ -100,11 +95,6 @@ class LabelManager:
             The type of label encoding to manage. Supported types are 
             'binary', 'multi_class', 'multi_label', 
             'multi_class_multi_label', and 'object_detection'.
-
-        Raises
-        ------
-        ValueError
-            If the label type is not supported.
         """
 
         def raise_exception_when_called(exception, msg):
@@ -149,11 +139,6 @@ class LabelManager:
         -------
         int
             The index of the class.
-
-        Raises
-        ------
-        ValueError
-            If the class name is not in the class list.
         """
         class_name = self.class_names.index(class_name)
         if class_name is not None:
@@ -174,11 +159,6 @@ class LabelManager:
         -------
         tf.Tensor
             A TensorFlow constant of the label in binary format.
-
-        Raises
-        ------
-        ValueError
-            If the label is invalid for binary classification.
         """
         label = self.get_index(label) if isinstance(label, str) else label
         try:
@@ -204,11 +184,6 @@ class LabelManager:
         -------
         tf.Tensor
             A one-hot encoded TensorFlow constant of the label.
-
-        Raises
-        ------
-        ValueError
-            If encoding fails.
         """
         label = self.get_index(label) if isinstance(label, str) else label
         try:
@@ -251,11 +226,6 @@ class LabelManager:
         -------
         str
             The class name corresponding to the numeric label.
-
-        Raises
-        ------
-        ValueError
-            If the index is out of bounds or not convertible to an integer.
         """
         if not self.class_names:
             msg = "No class names are provided for label decoding."

@@ -86,11 +86,6 @@ def prepare_dataset(
     -------
     tf.data.Dataset
         The prepared TensorFlow dataset.
-
-    Raises
-    ------
-    ValueError
-        If shuffling is applied to a dataset with an unknown or irregular shape.
     """
     if shuffle_seed:
         try:

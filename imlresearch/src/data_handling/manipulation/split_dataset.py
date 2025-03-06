@@ -27,12 +27,6 @@ def split_dataset(
         - The training dataset, or None if its size is 0.
         - The validation dataset, or None if its size is 0.
         - The test dataset, or None if its size is 0.
-
-    Raises
-    ------
-    ValueError
-        If the sum of train_split, val_split, and test_split is not equal 
-        to 1.0, or if the dataset size cannot be determined.
     """
     if train_split + val_split + test_split != 1.0:
         msg = "The sum of train_split, val_split, and test_split should be 1.0."

@@ -32,12 +32,6 @@ def copy_public_properties(source_instance, target_instance):
         The instance from which properties are copied.
     target_instance : object
         The class instance to insert attributes into.
-
-    Raises
-    ------
-    AttributeError
-        If a property is read-only and cannot be accessed via a private 
-        attribute.
     """
     for attr_name in dir(source_instance):
         if is_public_property(attr_name, source_instance):

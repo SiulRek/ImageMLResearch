@@ -42,11 +42,6 @@ def _get_execution_code(experiment_dir):
     -------
     str
         The content of the execution script.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the execution script is not found.
     """
     execution_script = os.path.join(experiment_dir, "execution.py")
     if not os.path.exists(execution_script):
@@ -70,11 +65,6 @@ def _get_results(output_dir):
     -------
     str
         The summary of the experiment report.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the experiment report file is not found.
     """
     report_file = os.path.join(output_dir, "experiment_report.md")
     if not os.path.exists(report_file):
@@ -95,11 +85,6 @@ def ask_for_experiment_analysis(experiment_dir):
     ----------
     experiment_dir : str
         The directory of the experiment to analyze.
-
-    Raises
-    ------
-    FileNotFoundError
-        If required experiment files are not found.
     """
     output_dir = os.path.join(experiment_dir, "output")
     prompt_file = os.path.join(experiment_dir, "prompt.txt")

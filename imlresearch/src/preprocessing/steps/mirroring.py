@@ -41,11 +41,6 @@ class Mirrorer(StepBase):
         -------
         tf.Tensor
             The mirrored image tensor.
-
-        Raises
-        ------
-        ValueError
-            If an invalid mirror direction is provided.
         """
         direction = self.parameters["mirror_direction"]
 

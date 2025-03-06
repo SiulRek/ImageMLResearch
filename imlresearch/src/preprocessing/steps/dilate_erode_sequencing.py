@@ -128,11 +128,6 @@ class DilateErodeSequencer(StepBase):
         numpy.ndarray
             The processed image after applying the dilation and erosion 
             sequence.
-
-        Raises
-        ------
-        ValueError
-            If an invalid operation is found in the sequence.
         """
         kernel = np.ones(
             (self.parameters["kernel_size"], self.parameters["kernel_size"]),

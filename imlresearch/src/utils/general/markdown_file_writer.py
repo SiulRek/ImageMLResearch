@@ -14,11 +14,6 @@ def _stringify_elements(iterable):
     -------
     iterable
         The converted iterable with all elements as strings.
-
-    Raises
-    ------
-    ValueError
-        If an element type cannot be converted to a string.
     """
     if isinstance(iterable, dict):
         return {

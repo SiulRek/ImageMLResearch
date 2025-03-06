@@ -60,11 +60,6 @@ class DataRetriever(ResearchAttributes):
         -------
         list
             The class names.
-
-        Raises
-        ------
-        AttributeError
-            If no class names are found in the label manager.
         """
         try:
             return self.label_manager.class_names
@@ -81,11 +76,6 @@ class DataRetriever(ResearchAttributes):
         -------
         tuple
             (y_true, y_pred)
-
-        Raises
-        ------
-        ValueError
-            If neither 'complete_output' nor 'test_output' is found.
         """
         complete_output = self._outputs_container.get("complete_output")
         test_output = self._outputs_container.get("test_output")
@@ -109,11 +99,6 @@ class DataRetriever(ResearchAttributes):
         -------
         object
             The output data associated with the given name.
-
-        Raises
-        ------
-        ValueError
-            If no output data is found with the specified name.
         """
         if output_name not in self._outputs_container:
             raise ValueError(
@@ -134,11 +119,6 @@ class DataRetriever(ResearchAttributes):
         -------
         tf.Tensor
             The retrieved input data.
-
-        Raises
-        ------
-        ValueError
-            If no dataset is found with the specified name.
         """
         if dataset_name not in self._datasets_container:
             raise ValueError(f"No dataset found with name '{dataset_name}'.")
@@ -159,11 +139,6 @@ class DataRetriever(ResearchAttributes):
         -------
         tuple
             (x, y_true, y_pred)
-
-        Raises
-        ------
-        ValueError
-            If no dataset is found or if output data is not synchronized.
         """
         for dataset_name in ["complete_dataset", "test_dataset"]:
             if (

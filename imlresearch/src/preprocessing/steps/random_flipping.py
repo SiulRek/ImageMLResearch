@@ -29,11 +29,6 @@ class RandomFlipper(StepBase):
             or 'both'. Default is 'horizontal'.
         seed : int, optional
             Random seed for reproducible flipping. Default is 42.
-
-        Raises
-        ------
-        ValueError
-            If flip_direction is not one of 'horizontal', 'vertical', or 'both'.
         """
         super().__init__(locals())
         if flip_direction not in ["horizontal", "vertical", "both"]:

@@ -125,11 +125,6 @@ class Trainer(ResearchAttributes):
         ----------
         **kwargs : dict
             Keyword arguments for the Keras model's `fit` method.
-
-        Raises
-        ------
-        ValueError
-            If no compiled model is set or no training dataset is available.
         """
         if self._model is None:
             raise ValueError("A compiled model must be set before calling fit.")
