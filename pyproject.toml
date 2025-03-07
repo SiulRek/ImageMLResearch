@@ -4,20 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "imlresearch"
-version = "0.0.3"
 description = "Image Machine Learning Research Toolkit"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
-license = { text = "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007" }
+license = {file = "LICENSE"}
 authors = [
     { name = "SiulRek", email = "luiskraker2000@gmail.com" }
 ]
+dynamic = ["version"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: MIT License",
     "Operating System :: Unix",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
