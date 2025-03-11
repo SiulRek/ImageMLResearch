@@ -159,8 +159,8 @@ class DataHandler(ResearchAttributes):
             )
             self._datasets_container.update({dataset_name: enhanced_dataset})
 
-    def split_dataset(self, train_split, val_split,
-                      test_split, dataset_size=None):
+    def split_dataset(self, train_split=0.8, val_split=0.1,
+                      test_split=0.1, dataset_size=None):
         """
         Splits 'complete_dataset' into 'train_dataset', 'val_dataset', and
         'test_dataset'. Removes the 'complete_dataset' after splitting.
@@ -204,7 +204,8 @@ class DataHandler(ResearchAttributes):
             label as input and return a string. If None, a default prefix is
             used.
         num_images : int, optional
-            The number of images to save.
+            The number of images to save. If None, the complete dataset is 
+            taken.
         """
         image_format = "jpg"
         if prefix is None:
