@@ -2,21 +2,11 @@ from copy import deepcopy
 
 import tensorflow as tf
 
-from imlresearch.src.data_handling.manipulation.pack_images_and_labels import (
-    pack_images_and_labels,
-)
-from imlresearch.src.data_handling.manipulation.unpack_dataset import (
-    unpack_dataset,
-)
-from imlresearch.src.preprocessing.definitions.step_class_mapping import (
-    STEP_CLASS_MAPPING,
-)
-from imlresearch.src.preprocessing.helpers.get_pipeline_code_representation import (    # noqa: E501
-    get_pipeline_code_representation,
-)
-from imlresearch.src.preprocessing.helpers.json_instances_serializer import (
-    JSONInstancesSerializer,
-)
+from imlresearch.src.data_handling.manipulation.pack_images_and_labels import pack_images_and_labels    # noqa: E501
+from imlresearch.src.data_handling.manipulation.unpack_dataset import unpack_dataset    # noqa: E501
+from imlresearch.src.preprocessing.definitions.step_class_mapping import STEP_CLASS_MAPPING   # noqa: E501
+from imlresearch.src.preprocessing.helpers.get_pipeline_code_representation import get_pipeline_code_representation   # noqa: E501
+from imlresearch.src.preprocessing.helpers.json_instances_serializer import JSONInstancesSerializer  # noqa: E501
 from imlresearch.src.preprocessing.steps.step_base import StepBase
 
 
@@ -122,7 +112,7 @@ class ImagePreprocessor:
         """
         if not isinstance(step_class_mapping, dict):
             raise TypeError(
-                f"'step_class_mapping' must be of type dict, not "
+                "'step_class_mapping' must be of type dict, not "
                 f"{type(step_class_mapping)}."
             )
 
@@ -140,9 +130,13 @@ class ImagePreprocessor:
 
         Parameters
         ----------
-        datatype : tf.DType
+        datatype : tf.dtpyes.DType
             The default output datatype for the pipeline steps.
         """
+        if not isinstance(datatype, tf.dtypes.DType):
+            raise TypeError(
+                f"Expecting a tf.dtypes.DType, got {type(datatype)} instead."
+            )
         StepBase.default_output_datatype = datatype
 
     def set_pipe(self, pipeline):
