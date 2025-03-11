@@ -26,12 +26,12 @@ def send_chatgpt_prompt(
     str
         The response message from the model.
     """
-    assert OPENAI_KEY is not None, (
-        "Please provide an OPENAI_KEY by creating a keys.py file and defining "
-        "the OPENAI_KEY variable in it."
+    msg = "Please enter your OpenAI API key: "
+    openai_key = (
+        OPENAI_KEY if OPENAI_KEY else input(msg)
     )
 
-    client = OpenAI(api_key=OPENAI_KEY)
+    client = OpenAI(api_key=openai_key)
 
     response = client.chat.completions.with_raw_response.create(
         messages=[
