@@ -16,7 +16,8 @@ IMLResearch = "IMLResearch"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
-    "sphinx.ext.autosummary",
+    "sphinx.ext.viewcode",
+    "sphinxcontrib.bibtex",
 ]
 
 autosummary_generate = True  # Generate summary tables automatically
@@ -25,6 +26,9 @@ autosummary_generate = True  # Generate summary tables automatically
 html_theme = "furo"
 # html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+
+# Bibtext file
+bibtex_bibfiles = ["references.bib"]
 
 # The master toctree document.
 root_doc = "index"

@@ -52,7 +52,7 @@ Depending on the classification type, the implementation differs. The framework 
 
 ----
 
-For recap here all the methods are listed below:
+For recap, here are all the methods included in the ``Researcher`` class:
 
 - `load_dataset() <DataHandler_load_dataset>`
 - `prepare_datasets() <DataHandler_prepare_datasets>`
