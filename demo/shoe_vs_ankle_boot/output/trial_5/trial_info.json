@@ -2,7 +2,7 @@
     "name": "Trial 5",
     "start_time": "2025-01-20 10:52:52.016",
     "duration": "04.637",
-    "directory": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/trial_5",
+    "directory": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/trial_5",
     "hyperparameters": {
         "units1": 256,
         "dropout1": 0.4,
@@ -11,12 +11,12 @@
         "learning_rate": 0.0001
     },
     "figures": {
-        "model_summary": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/trial_5/model_summary.png",
-        "training_history": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/trial_5/training_history.png",
-        "confusion_matrix": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/trial_5/confusion_matrix.png",
-        "roc_curve": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/trial_5/roc_curve.png",
-        "pr_curve": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/trial_5/pr_curve.png",
-        "results": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/trial_5/results.png"
+        "model_summary": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/trial_5/model_summary.png",
+        "training_history": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/trial_5/training_history.png",
+        "confusion_matrix": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/trial_5/confusion_matrix.png",
+        "roc_curve": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/trial_5/roc_curve.png",
+        "pr_curve": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/trial_5/pr_curve.png",
+        "results": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/trial_5/results.png"
     },
     "evaluation_metrics": {
         "train": {

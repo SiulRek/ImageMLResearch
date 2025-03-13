@@ -1,13 +1,13 @@
 {
     "name": "Shoe vs Ankle Boot Experiment",
     "description": "Binary classification on Fashion MNIST dataset (Sneaker vs Ankle Boot)",
-    "directory": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output",
+    "directory": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output",
     "sort_metric": "accuracy",
     "start_time": "2025-01-20 10:52:29.121",
     "resume_time": "2025-01-20 10:52:29.121",
     "duration": "0:00:27.983",
     "figures": {
-        "history_of_best_3_trials": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot_experiment/output/history_of_best_3_trials.png"
+        "history_of_best_3_trials": "/home/krakerlu/github/ImageMLResearch/demo/shoe_vs_ankle_boot/output/history_of_best_3_trials.png"
     },
     "trials": [
         "Trial 2",

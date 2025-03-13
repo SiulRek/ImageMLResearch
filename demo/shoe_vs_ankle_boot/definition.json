@@ -1,6 +1,6 @@
 {
     "experiment_definition": {
-        "directory": "demo/shoe_vs_ankle_boot_experiment",
+        "directory": "demo/shoe_vs_ankle_boot",
         "name": "Shoe vs Ankle Boot Experiment",
         "description": "Binary classification on Fashion MNIST dataset (Sneaker vs Ankle Boot)"
     },
