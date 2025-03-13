@@ -1,0 +1,27 @@
+2025-03-12 15:28:06,933 - INFO - Creating new experiment: MNIST Digits Experiment
+2025-03-12 15:28:06,974 - INFO - Starting trial: trial_1
+2025-03-12 15:28:07,026 - ERROR - Exception occurred:
+ Expected `metrics` argument to be a list, tuple, or dict. Received instead: metrics=accuracy of type <class 'str'>
+2025-03-12 15:32:27,194 - INFO - Resuming experiment: MNIST Digits Experiment
+2025-03-12 15:32:27,194 - WARNING - Ignoring directory and/or name parameters
+2025-03-12 15:32:27,249 - INFO - Starting trial: trial_1
+2025-03-12 15:32:40,960 - INFO - Finalizing trial: trial_1
+2025-03-12 15:32:42,207 - INFO - Starting trial: trial_2
+2025-03-12 15:32:53,826 - INFO - Finalizing trial: trial_2
+2025-03-12 15:32:55,063 - INFO - Starting trial: trial_3
+2025-03-12 15:33:07,464 - INFO - Finalizing trial: trial_3
+2025-03-12 15:33:08,500 - INFO - Starting trial: trial_4
+2025-03-12 15:33:19,781 - INFO - Finalizing trial: trial_4
+2025-03-12 15:33:20,812 - INFO - Starting trial: trial_5
+2025-03-12 15:33:31,237 - INFO - Finalizing trial: trial_5
+2025-03-12 15:33:32,237 - INFO - Starting trial: trial_6
+2025-03-12 15:33:43,613 - INFO - Finalizing trial: trial_6
+2025-03-12 15:33:45,059 - INFO - Starting trial: trial_7
+2025-03-12 15:33:56,635 - INFO - Finalizing trial: trial_7
+2025-03-12 15:33:57,552 - INFO - Starting trial: trial_8
+2025-03-12 15:34:09,765 - INFO - Finalizing trial: trial_8
+2025-03-12 15:34:10,878 - INFO - Starting trial: trial_9
+2025-03-12 15:34:23,267 - INFO - Finalizing trial: trial_9
+2025-03-12 15:34:24,659 - INFO - Starting trial: trial_10
+2025-03-12 15:34:36,075 - INFO - Finalizing trial: trial_10
+2025-03-12 15:34:37,195 - INFO - Finalizing experiment: MNIST Digits Experiment

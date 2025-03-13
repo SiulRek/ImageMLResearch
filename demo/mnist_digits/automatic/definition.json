@@ -1,0 +1,33 @@
+{
+  "experiment_metadata": {
+    "name": "MNIST Digits Experiment",
+    "description": "In this experiment, a neural network is trained with different hyperparameters to classify MNIST digits.",
+    "directory": "demo/mnist_digits/automatic",
+    "sort_metric": "accuracy"
+  },
+  "trial_definitions": {
+    "hparams_configs": {
+      "units1": {
+        "type": "int",
+        "low": 32,
+        "high": 128,
+        "step": 32,
+        "nearest_power2": true
+    },
+    "units2": {
+        "type": "int",
+        "low": 32,
+        "high": 128,
+        "step": 32,
+        "nearest_power2": true
+    },
+    "learning_rate": {
+        "type": "float",
+        "low": 1e-3,
+        "high": 1e-1,
+        "log": true
+    }
+  },
+  "num_trials": 10
+}
+}

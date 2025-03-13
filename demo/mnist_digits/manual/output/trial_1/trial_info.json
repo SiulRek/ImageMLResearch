@@ -2,16 +2,16 @@
     "name": "Trial 1",
     "start_time": "2024-10-08 11:54:30.641",
     "duration": "08.194",
-    "directory": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits_experiment/output/trial_1",
+    "directory": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits/manual/output/trial_1",
     "hyperparameters": {
         "units1": 128,
         "units2": 64,
         "learning_rate": 0.001
     },
     "figures": {
-        "model_summary": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits_experiment/output/trial_1/model_summary.png",
-        "training_history": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits_experiment/output/trial_1/training_history.png",
-        "results": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits_experiment/output/trial_1/results.png"
+        "model_summary": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits/manual/output/trial_1/model_summary.png",
+        "training_history": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits/manual/output/trial_1/training_history.png",
+        "results": "/home/krakerlu/github/ImageMLResearch/demo/mnist_digits/manual/output/trial_1/results.png"
     },
     "evaluation_metrics": {
         "train": {

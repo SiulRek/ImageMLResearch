@@ -2,7 +2,7 @@
   "experiment_metadata": {
     "name": "MNIST Digits Experiment",
     "description": "In this experiment, a neural network is trained with different hyperparameters to classify MNIST digits.",
-    "directory": "demo/mnist_digits_experiment"
+    "directory": "demo/mnist_digits/manual"
   },
   "trial_definitions": [
     {
