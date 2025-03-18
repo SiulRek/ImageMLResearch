@@ -22,19 +22,6 @@ class BaseTestCase(unittest.TestCase):
     """
     Abstract base class for test cases, providing setup and teardown
     operations common across tests.
-
-    Attributes
-    ----------
-    output_dir : str
-        Directory where test outputs will be saved.
-    temp_dir : str
-        Temporary directory for use during tests.
-    log_file : str
-        Path to the log file used to record test results.
-    logger : TestResultLogger
-        Logger instance for test outcomes.
-    remove_temp_dir : bool
-        Whether to remove the temp directory after tests.
     """
 
     remove_temp_dir = True
