@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(file_dir, "../../")))
 project = "Image Machine Learning Research"
 copyright = "2025, Luis Kraker"
 author = "Luis Kraker"
-release = "0.0.3"
+release = "0.0.0"   # Default version
 IMLResearch = "IMLResearch"
 
 # Sphinx extensions
