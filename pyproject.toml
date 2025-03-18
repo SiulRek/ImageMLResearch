@@ -23,7 +23,9 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development",
 ]
-urls = { "Repository" = "https://github.com/SiulRek/ImageMLResearch" }
+urls = { "Repository" = "https://github.com/SiulRek/ImageMLResearch", "Documentation" = "https://imagemlresearch.readthedocs.io/en/api-development/", "Thesis" = "https://epub.fh-joanneum.at/obvfhjhs/content/titleinfo/11577952" }
+
+
 
 dependencies = [
     "tensorflow==2.17.0",
