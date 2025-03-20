@@ -52,6 +52,13 @@ class PlottingTestRunner(TestRunnerBase):
         self.load_test_module(plot_results_test)
 
 
-if __name__ == "__main__":
+def run_tests():
+    """
+    Run the tests for the Plotting module.
+    """
     runner = PlottingTestRunner()
     runner.run_tests()
+
+
+if __name__ == "__main__":
+    run_tests()

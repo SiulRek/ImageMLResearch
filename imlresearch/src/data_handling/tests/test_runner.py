@@ -29,6 +29,13 @@ class DataHandlingTestRunner(TestRunnerBase):
         self.load_test_module(save_images_test)
 
 
-if __name__ == "__main__":
+def run_tests():
+    """
+    Run the tests for the Data Handling module.
+    """
     runner = DataHandlingTestRunner()
     runner.run_tests()
+
+
+if __name__ == "__main__":
+    run_tests()

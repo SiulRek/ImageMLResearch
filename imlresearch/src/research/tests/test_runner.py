@@ -34,6 +34,13 @@ class ResearchTestRunner(TestRunnerBase):
             self.load_test_case(test)
 
 
-if __name__ == "__main__":
+def run_tests():
+    """
+    Run the tests for the Research module.
+    """
     runner = ResearchTestRunner()
     runner.run_tests()
+
+
+if __name__ == "__main__":
+    run_tests()

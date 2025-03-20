@@ -1,10 +1,6 @@
 from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
-from imlresearch.src.utils.tests.get_sample_from_distribution_test import (
-    TestGetSampleFromDistribution,
-)
-from imlresearch.src.utils.tests.unbatch_dataset_if_batched_test import (
-    TestUnbatchDatasetIfBatched,
-)
+from imlresearch.src.utils.tests.get_sample_from_distribution_test import TestGetSampleFromDistribution
+from imlresearch.src.utils.tests.unbatch_dataset_if_batched_test import TestUnbatchDatasetIfBatched
 
 
 class UtilsTestRunner(TestRunnerBase):
@@ -20,6 +16,13 @@ class UtilsTestRunner(TestRunnerBase):
         self.load_test_case(TestGetSampleFromDistribution)
 
 
-if __name__ == "__main__":
+def run_tests():
+    """
+    Run the tests for the Utils module.
+    """
     runner = UtilsTestRunner()
     runner.run_tests()
+
+
+if __name__ == "__main__":
+    run_tests()

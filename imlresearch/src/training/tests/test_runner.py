@@ -11,6 +11,13 @@ class TrainingTestRunner(TestRunnerBase):
         self.load_test_case(TestTrainer)
 
 
-if __name__ == "__main__":
+def run_tests():
+    """
+    Run the tests for the Training module.
+    """
     runner = TrainingTestRunner()
     runner.run_tests()
+
+
+if __name__ == "__main__":
+    run_tests()

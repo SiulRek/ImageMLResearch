@@ -32,6 +32,13 @@ class ExperimentingTestRunner(TestRunnerBase):
         self.load_test_case(TestLastScoreSingleton)
 
 
-if __name__ == "__main__":
+def run_tests():
+    """
+    Run the tests for the Experimenting module.
+    """
     runner = ExperimentingTestRunner()
     runner.run_tests()
+
+
+if __name__ == "__main__":
+    run_tests()

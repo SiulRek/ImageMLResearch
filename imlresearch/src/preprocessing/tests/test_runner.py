@@ -66,6 +66,13 @@ class PreprocessingTestRunner(TestRunnerBase):
         self.test_suite.addTest(load_long_pipeline_tests(1))
 
 
-if __name__ == "__main__":
+def run_tests():
+    """
+    Run the tests for the Preprocessing module.
+    """
     runner = PreprocessingTestRunner()
     runner.run_tests()
+
+
+if __name__ == "__main__":
+    run_tests()
