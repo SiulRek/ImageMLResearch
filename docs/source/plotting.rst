@@ -2,12 +2,17 @@
 
 Plotting
 -----------------------------------------------
+
+Description
++++++++++++
+
 The Plotting module provides tools for visualizing images, text, model
 summaries, and training history. It includes a general ``Plotter`` class with 
 common visualization methods and specialized subclasses like ``BinaryPlotter`` 
 and ``MultiClassPlotter`` for binary and multi-class classification.
 
-----
+Main classes
+++++++++++++
 
 .. class:: Plotter
 

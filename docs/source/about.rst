@@ -7,9 +7,12 @@
 
 Installation
 -----------------------------------------------
-.. raw:: html
 
-  <span style="color: red;">Coming Soon</span>
+To install the library, use the following command:
+
+.. code-block:: bash
+
+  pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ imlresearch
 
 ----
 

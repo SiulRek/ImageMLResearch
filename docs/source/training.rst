@@ -2,9 +2,14 @@
 
 Training
 -----------------------------------------------
+
+Description
++++++++++++
+
 The Training module provides a class for training Keras models using datasets from ``research_attributes``.
 
-----
+Main class
+++++++++++
 
 .. class:: Trainer
 
@@ -34,7 +39,8 @@ The Training module provides a class for training Keras models using datasets fr
         :param kwargs: Keyword arguments for the Keras model's ``fit`` method.
         :type kwargs: dict
 
-----
+Evaluation Methods:
++++++++++++++++++++
 
 Supported evaluation methods include:
 

@@ -2,9 +2,14 @@
 
 Data Handling
 -----------------------------------------------
+
+Description
++++++++++++
+
 The Data Handling module facilitates the preparation of raw data for machine learning experiments using the ``DataHandler`` class.
 
-----
+Main class
+++++++++++
 
 .. class:: DataHandler
 

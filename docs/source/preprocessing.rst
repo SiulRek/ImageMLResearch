@@ -2,6 +2,10 @@
 
 Image Preprocessing
 -----------------------------------------------
+
+Description
+++++++++++++
+
 The Image Preprocessing module manages and applies a sequence of preprocessing
 steps to image datasets using the ``ImagePreprocessor`` class.
 
@@ -12,7 +16,8 @@ Key Definitions:
     the abstract class ``StepBase``.
 2. **Pipeline**: An ordered list of preprocessing steps applied sequentially to an image dataset.
 
-----
+Main class
+++++++++++
 
 .. class:: ImagePreprocessor
 
@@ -102,7 +107,9 @@ Key Definitions:
 
         :returns: *(str)* A string representation of the pipeline in a code-like format.
 
-----
+
+Available Preprocessing Steps
++++++++++++++++++++++++++++++
 
 The following preprocessing steps are available in the module:
 

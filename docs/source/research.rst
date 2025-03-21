@@ -2,6 +2,10 @@
 
 Researcher
 -----------------------------------------------
+
+Description
++++++++++++
+
 The ``Researcher`` class serves as the high-level API that integrates the core research modules through either inheritance or composition. This design provides flexibility and a structured workflow for users.
 
 The ``Researcher`` class integrates the following submodules (as listed above):
@@ -14,7 +18,8 @@ The ``Researcher`` class integrates the following submodules (as listed above):
 
 Depending on the classification type, the implementation differs. The framework provides two specialized classes for binary and multi-class classification, namely ``BinaryResearcher`` and ``MultiClassResearcher``. For simplicity, the name ``Researcher`` is used to refer to both classes in this documentation.
 
-----
+Main class
+++++++++++
 
 .. class:: Researcher
 
@@ -50,7 +55,9 @@ Depending on the classification type, the implementation differs. The framework 
         :type kwargs: dict
         :returns: *(Any)* The processed dataset after applying the preprocessing pipeline.
 
-----
+
+Class Methods
++++++++++++++
 
 For recap, here are all the methods included in the ``Researcher`` class:
 

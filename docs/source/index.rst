@@ -36,7 +36,7 @@ Welcome to |IMLResearch| |version|
 
 
 .. toctree::
-   :caption: Modules
+   :caption: Low-Level Modules
    :maxdepth: 1
 
    data_handling
@@ -44,6 +44,11 @@ Welcome to |IMLResearch| |version|
    plotting
    training
    experimenting
+
+.. toctree::
+   :caption: High-Level API
+   :maxdepth: 1
+   
    research
 
 .. toctree::
