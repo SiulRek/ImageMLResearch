@@ -1,6 +1,6 @@
 from imlresearch.src.testing.bases.test_runner_base import TestRunnerBase
-from imlresearch.src.utils.tests.get_sample_from_distribution_test import TestGetSampleFromDistribution
-from imlresearch.src.utils.tests.unbatch_dataset_if_batched_test import TestUnbatchDatasetIfBatched
+from imlresearch.src.utils.tests.get_sample_from_distribution_test import TestGetSampleFromDistribution    # noqa: E501
+from imlresearch.src.utils.tests.unbatch_dataset_if_batched_test import TestUnbatchDatasetIfBatched     # noqa: E501
 
 
 class UtilsTestRunner(TestRunnerBase):
