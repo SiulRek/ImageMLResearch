@@ -14,7 +14,7 @@ categories: experiment definition, execution, and outputs.
     :alt: Experiment Assets
     :align: center
 
-The following sections explain the implementation of the three categories and demonstrate an experiment using the *MNIST Digit* dataset :cite:`mnist1998`.
+The following sections explain the implementation of the three categories and demonstrate an experiment using the *MNIST Digit* dataset :cite:`mnist1998`. For real-world examples, visit the `ImageMLResearch demo directory <https://github.com/SiulRek/ImageMLResearch/tree/api-development/demo>`_.
 
 .. _Recipes_DefiningExperiment:
 
