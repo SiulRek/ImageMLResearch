@@ -128,6 +128,12 @@ class TestRunnerBase(ABC):
         Run the tests in the test suite.
 
         Prints the results if called from the command line.
+
+        Returns
+        -------
+
+        unittest.TestResult
+            The test result object.
         """
         self.load_tests()
         test_result = unittest.TextTestRunner().run(self.test_suite)
@@ -144,3 +150,5 @@ class TestRunnerBase(ABC):
             f"Simple test results logged to: "
             f"{self.log_file.replace('.log', '_simple.log')}"
         )
+        
+        return test_result

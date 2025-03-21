@@ -19,10 +19,14 @@ class UtilsTestRunner(TestRunnerBase):
 def run_tests():
     """
     Run the tests for the Utils module.
+
+    Returns
+    -------
+    unittest.TestResult
+        The test result object.
     """
     runner = UtilsTestRunner()
-    runner.run_tests()
-
+    return runner.run_tests()
 
 if __name__ == "__main__":
     run_tests()

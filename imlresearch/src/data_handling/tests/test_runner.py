@@ -32,9 +32,14 @@ class DataHandlingTestRunner(TestRunnerBase):
 def run_tests():
     """
     Run the tests for the Data Handling module.
+
+    Returns
+    -------
+    unittest.TestResult
+        The test result object.
     """
     runner = DataHandlingTestRunner()
-    runner.run_tests()
+    return runner.run_tests()
 
 
 if __name__ == "__main__":

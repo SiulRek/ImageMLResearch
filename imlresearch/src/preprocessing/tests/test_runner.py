@@ -69,9 +69,14 @@ class PreprocessingTestRunner(TestRunnerBase):
 def run_tests():
     """
     Run the tests for the Preprocessing module.
+
+    Returns
+    -------
+    unittest.TestResult
+        The test result object.
     """
     runner = PreprocessingTestRunner()
-    runner.run_tests()
+    return runner.run_tests()
 
 
 if __name__ == "__main__":

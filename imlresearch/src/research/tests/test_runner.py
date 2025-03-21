@@ -37,9 +37,14 @@ class ResearchTestRunner(TestRunnerBase):
 def run_tests():
     """
     Run the tests for the Research module.
+
+    Returns
+    -------
+    unittest.TestResult
+        The test result object.
     """
     runner = ResearchTestRunner()
-    runner.run_tests()
+    return runner.run_tests()
 
 
 if __name__ == "__main__":

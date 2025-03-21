@@ -35,8 +35,8 @@ def run_tests():
 
     Returns
     -------
-    str
-        A message summarizing the test results.
+    unittest.TestResult
+        The aggregated test result
     """
     os.makedirs(FILE_DIR, exist_ok=True)
     TestResultLogger(LOG_FILE)
@@ -69,6 +69,8 @@ def run_tests():
     print(f"Test results logged to file: {LOG_FILE}")
     print(f"Test errors logged to file: {error_log_file}")
     print(f"Simple test results logged to file: {simple_log_file}")
+
+    return result
 
 
 if __name__ == "__main__":
