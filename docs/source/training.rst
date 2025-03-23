@@ -8,7 +8,7 @@ Description
 
 The Training module provides a class for training Keras models using datasets from ``research_attributes``.
 
-Main class
+Main Class
 ++++++++++
 
 .. class:: Trainer

@@ -18,7 +18,7 @@ The ``Researcher`` class integrates the following submodules (as listed above):
 
 Depending on the classification type, the implementation differs. The framework provides two specialized classes for binary and multi-class classification, namely ``BinaryResearcher`` and ``MultiClassResearcher``. For simplicity, the name ``Researcher`` is used to refer to both classes in this documentation.
 
-Main class
+Main Class
 ++++++++++
 
 .. class:: Researcher

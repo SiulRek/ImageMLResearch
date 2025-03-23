@@ -11,7 +11,7 @@ experiments, organizing trials, and analyzing results. It includes the
 ``Experiment`` class, which acts as a context manager for conducting and 
 tracking experiments efficiently.
 
-Main class
+Main Class
 ++++++++++
 
 .. class:: Experiment

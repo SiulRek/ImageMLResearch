@@ -16,7 +16,7 @@ Key Definitions:
     the abstract class ``StepBase``.
 2. **Pipeline**: An ordered list of preprocessing steps applied sequentially to an image dataset.
 
-Main class
+Main Class
 ++++++++++
 
 .. class:: ImagePreprocessor
