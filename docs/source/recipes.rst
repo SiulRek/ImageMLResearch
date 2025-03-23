@@ -113,10 +113,12 @@ Example Implementation
 .. code-block:: python
 
     import os
+
     import tensorflow as tf
-    from imlresearch.utils import load_experiment_definition
+
     from imlresearch.preprocessing_steps import ReverseScaler, TypeCaster
     from imlresearch.researcher import MultiClassResearcher
+    from imlresearch.utils import load_experiment_definition
 
     def load_dataset():
         (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.mnist.load_data()
