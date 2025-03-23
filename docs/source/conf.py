@@ -9,7 +9,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(file_dir, "../../")))
 project = "Image Machine Learning Research"
 copyright = "2025, Luis Kraker"
 author = "Luis Kraker"
-release = "0.0.0"   # Default version
 IMLResearch = "IMLResearch"
 
 # Sphinx extensions
@@ -34,17 +33,16 @@ bibtex_bibfiles = ["references.bib"]
 root_doc = "index"
 
 # Extract Version
+version = "0.0.0" # Default version
 _path = os.path.abspath(f"{__file__}/../../../imlresearch/src/version.py")
 with open(_path, encoding="utf-8") as f:
     for line in f:
         match = re.search('__version__ = "([0-9][.][0-9]+[.][0-9]+)"', line)
         if match:
-            release = match.group(1)
-            print(f"{__file__}: setting version from {_path}: {release}")
+            version = match.group(1)
             break
     else:
         raise Exception(f"Failed to find `__version__ = ...` in {_path}")
-version = release
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 # (This is telling Sphinx to automatically determine the most appropriate role
@@ -65,5 +63,5 @@ show_authors = True
 # Substitution reference for .rst files
 rst_prolog = f"""
 .. |IMLResearch| replace:: {IMLResearch}
-.. |version| replace:: {release}
+.. |version| replace:: {version}
 """
