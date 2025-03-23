@@ -1,5 +1,5 @@
 {
-    "name": "MNIST Digits Experiment",
+    "name": "MNIST Digits Experiment (Automatic)",
     "description": "In this experiment, a neural network is trained with different hyperparameters to classify MNIST digits.",
     "directory": "/home/siulrek/MY_ROOM/github/ImageMLResearch/demo/mnist_digits/automatic/output",
     "sort_metric": "accuracy",

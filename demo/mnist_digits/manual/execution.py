@@ -56,7 +56,7 @@ def make_model(hyperparameters):
             learning_rate=hyperparameters["learning_rate"]
         ),
         loss="categorical_crossentropy",
-        metrics="accuracy",
+        metrics=["accuracy"],
     )
     return model
 

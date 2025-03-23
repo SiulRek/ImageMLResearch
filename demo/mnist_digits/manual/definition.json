@@ -1,6 +1,6 @@
 {
   "experiment_metadata": {
-    "name": "MNIST Digits Experiment",
+    "name": "MNIST Digits Experiment (Manual)",
     "description": "In this experiment, a neural network is trained with different hyperparameters to classify MNIST digits.",
     "directory": "demo/mnist_digits/manual"
   },

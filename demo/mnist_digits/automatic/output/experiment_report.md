@@ -1,4 +1,4 @@
-# <span style='color:rgb(105, 169, 201);'>Experiment Report: MNIST Digits Experiment</span>
+# <span style='color:rgb(105, 169, 201);'>Experiment Report: MNIST Digits Experiment (Automatic)</span>
 
 ## <span style='color:rgb(105, 169, 201);'>Metadata</span>
 
