@@ -1,0 +1,14 @@
+{
+    "name": "MNIST Digits Experiment (Low-Level)",
+    "description": "In this experiment, a neural network is trained with different hyperparameters to classify MNIST digits.",
+    "directory": "/home/siulrek/MY_ROOM/github/ImageMLResearch/demo/mnist_digits/low_level/output",
+    "sort_metric": "accuracy",
+    "start_time": "2025-03-23 12:37:22.900",
+    "resume_time": "2025-03-23 12:39:11.052",
+    "duration": "0:00:29.47",
+    "figures": {},
+    "trials": [
+        "Trial 2",
+        "Trial 1"
+    ]
+}

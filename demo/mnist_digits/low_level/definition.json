@@ -1,0 +1,25 @@
+{
+  "experiment_metadata": {
+    "name": "MNIST Digits Experiment",
+    "description": "In this experiment, a neural network is trained with different hyperparameters to classify MNIST digits.",
+    "directory": "demo/mnist_digits/low_level"
+  },
+  "trial_definitions": [
+    {
+      "name": "Trial 1",
+      "hyperparameters": {
+        "units1": 128,
+        "units2": 64,
+        "learning_rate": 0.001
+      }
+    },
+    {
+      "name": "Trial 2",
+      "hyperparameters": {
+        "units1": 256,
+        "units2": 128,
+        "learning_rate": 0.001
+      }
+    }
+  ]
+}

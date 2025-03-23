@@ -1,0 +1,11 @@
+2025-03-23 12:37:22,900 - INFO - Creating new experiment: MNIST Digits Experiment
+2025-03-23 12:37:22,900 - INFO - Starting trial: Trial 1
+2025-03-23 12:37:22,960 - ERROR - Exception occurred:
+ Expected `metrics` argument to be a list, tuple, or dict. Received instead: metrics=accuracy of type <class 'str'>
+2025-03-23 12:39:11,052 - INFO - Resuming experiment: MNIST Digits Experiment
+2025-03-23 12:39:11,052 - WARNING - Ignoring directory and/or name parameters
+2025-03-23 12:39:11,052 - INFO - Starting trial: Trial 1
+2025-03-23 12:39:24,992 - INFO - Finalizing trial: Trial 1
+2025-03-23 12:39:25,894 - INFO - Starting trial: Trial 2
+2025-03-23 12:39:39,664 - INFO - Finalizing trial: Trial 2
+2025-03-23 12:39:40,462 - INFO - Finalizing experiment: MNIST Digits Experiment
