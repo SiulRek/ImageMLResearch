@@ -43,10 +43,10 @@ version = {attr = "imlresearch.src.version.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["."]
-exclude = ["./demo", "./local", "demo*", "local*"]
 
 [tool.setuptools.package-data]
 "*" = ["*.png", "*.jpg", "*.tfrecord", "*.json"]    # Required for test data
+
 
 # NOTE: Apply ruff on imlresearch/src
 [tool.ruff]
