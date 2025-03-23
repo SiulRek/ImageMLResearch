@@ -39,6 +39,7 @@ Welcome to |IMLResearch| |version|
    :caption: Low-Level Modules
    :maxdepth: 1
 
+   shared_attributes
    data_handling
    preprocessing
    plotting
