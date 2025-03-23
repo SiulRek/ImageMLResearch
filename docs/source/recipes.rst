@@ -56,7 +56,7 @@ The *experiment definition* category contains assets specific to each experiment
         ]
     }
 
-To load the trials, use the ``load_experiment_definition()`` function. This function reads the experiment metadata and trial configurations from the JSON file. The function signature is as follows:
+To load the trials, use the ``load_experiment_definition()`` function inside the ``utils`` module. This function reads the experiment metadata and trial configurations from the JSON file. The function signature is as follows:
 
 .. function:: load_experiment_definition(definition_json)
 
