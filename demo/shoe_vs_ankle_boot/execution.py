@@ -3,7 +3,7 @@ import os
 
 import tensorflow as tf
 
-from imlresearch import BinaryResearcher
+from imlresearch.src.research.researchers import BinaryResearcher
 
 
 def load_fashion_mnist_binary():
