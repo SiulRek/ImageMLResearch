@@ -42,7 +42,8 @@ The framework allocates its low-level responsibilities to five research modules 
 * :ref:`Experimenting <Modules_Experimenting>`  
   Oversees the experiment lifecycle, manages trials, stores assets in an experiment directory, and generates experiment reports.
 
-  To facilitate seamless interaction between the research modules, a high-level class named ``Researcher`` is constructed using inheritance or composition.
+
+To facilitate seamless interaction between the research modules, a high-level class named ``Researcher`` is constructed using inheritance or composition.
 
 ----
 
