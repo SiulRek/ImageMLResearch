@@ -11,12 +11,6 @@ HOME_DIR = os.path.expanduser("~")
 BUILD_DIR = os.path.join(HOME_DIR, "tmp", "imlresearch_builds")
 DIST_DIRS = ["dist", "imlresearch.egg-info"]
 
-REPLACE_MAP = {
-    ".src": "._src",
-    r"/src": r"/_src",
-    '"src': '"_src',
-}
-
 
 class BuildFailed(Exception):
     pass
@@ -30,7 +24,7 @@ def run_unit_tests():
     print("All unit tests passed!")
 
 
-def run_ruff_checks():
+def run_code_style_checks():
     print("Running ruff checks...")
     output = subprocess.check_output("ruff check imlresearch/src", shell=True)
     if output != b"All checks passed!\n":
@@ -38,7 +32,7 @@ def run_ruff_checks():
     print("All ruff checks passed!")
 
 
-def delete_build_artifacts():
+def delete_old_build_artifacts():
     for dist_dir in DIST_DIRS:
         if os.path.exists(dist_dir):
             shutil.rmtree(dist_dir)
@@ -69,6 +63,8 @@ def remove_tests_from_codebase():
 
 
 def setup_build_dir(exclude_tests=True):
+    delete_old_build_artifacts()
+
     if not os.path.exists(BUILD_DIR):
         os.makedirs(BUILD_DIR)
     shutil.copytree("imlresearch", f"{BUILD_DIR}/imlresearch")
@@ -111,8 +107,7 @@ def exclude_tests_query():
 
 def build_package():
     run_unit_tests()
-    run_ruff_checks()
-    delete_build_artifacts()
+    run_code_style_checks()
     setup_build_dir(exclude_tests=exclude_tests_query())
     with set_temporary_cwd(BUILD_DIR):
         os.system(f"{sys.executable} -m build")
