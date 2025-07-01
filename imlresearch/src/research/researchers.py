@@ -35,10 +35,9 @@ class _ResearcherBase(DataHandler, Trainer):
         class_names : list
             The class names for the research attributes.
         """
-        assert class_names is not None, (
-            "It is recommended to provide class names."
+        assert label_type is not None, (
+            "It is recommended to provide a label type."
         )
-
         # Last one to be initialized overwrites the previous ones in case of
         # conflicts. This should only occur in the case of label_manager.
         Trainer.__init__(self)
