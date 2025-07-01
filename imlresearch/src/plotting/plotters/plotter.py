@@ -126,7 +126,9 @@ class Plotter(DataRetriever):
         self, grid_size=(2, 2), label_to_title_func=None, **general_plot_kwargs
     ):
         """
-        Plots images from the complete dataset.
+        Plots images from the complete dataset. If dataset is bigger than
+        the grid size, a random skip value is determined to avoid plotting
+        the same images every time.
 
         Parameters
         ----------
