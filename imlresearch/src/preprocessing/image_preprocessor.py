@@ -298,8 +298,9 @@ class ImagePreprocessor:
                     print(msg)
                     self._occurred_exception_message = msg
                     return None
-
-        self._consume_tf_dataset(processed_dataset)
+    
+        if not self._raise_step_process_exception:
+            self._consume_tf_dataset(processed_dataset)
 
         if label_dataset is not None:
             processed_dataset = pack_images_and_labels(
