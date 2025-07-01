@@ -52,8 +52,8 @@ class DataHandler(ResearchAttributes):
         """
         for sample in dataset.take(1):
             if (
-                not isinstance(sample, tuple) or len(sample) != 2
-            ):  # XXX And instead of Or?
+                not isinstance(sample, tuple) and len(sample) != 2
+            ):
                 msg = "Dataset must be of form (image, label)."
                 raise ValueError(msg)
             img, _ = sample
