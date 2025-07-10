@@ -14,15 +14,14 @@ categories: experiment definition, execution, and outputs.
     :alt: Experiment Assets
     :align: center
 
-The following sections explain the implementation of the three categories and demonstrate an experiment using the *MNIST Digit* dataset :cite:`mnist1998`. For real-world examples, visit the `ImageMLResearch demo directory <https://github.com/SiulRek/ImageMLResearch/tree/api-development/demo>`_.
+The following sections detail the implementation of these three categories and demonstrate an experiment using the *MNIST Digits* dataset :cite:`mnist1998`. To follow along, create a dedicated directory for your experiment. For real-world examples, see the `ImageMLResearch demo directory <https://github.com/SiulRek/ImageMLResearch/tree/api-development/demo>`_.
 
 .. _Recipes_DefiningExperiment:
 
 Defining an Experiment
 -----------------------------------------------
 
-The *experiment definition* category contains assets specific to each experiment, including metadata 
-(e.g., name, directory, sorting metric) and trial configurations. These assets are stored in JSON format. You can find an example below.
+The *experiment definition* includes all the elements that describe the experiment setup, such as metadata (name, directory, sorting metric) and trial configurations. These details are stored in a JSON file called ``definition.json`` within the experiment directory. Below is an example you can use as a template for defining your own experiment.
 
 .. **Example: MNIST Digits Experiment Definition (Manual Trial Configuration)**
 
@@ -33,7 +32,7 @@ The *experiment definition* category contains assets specific to each experiment
         "experiment_metadata": {
             "name": "MNIST Digits Experiment",
             "description": "A neural network is trained with different hyperparameters to classify MNIST digits.",
-            "directory": "demo/mnist_digits_experiment",
+            "directory": "path/to/experiment_directory",
             "sort_metric": "accuracy"
         },
         "trial_definitions": [
@@ -91,7 +90,7 @@ The experiment execution establishes the actual experiment workflow, encompassin
 - Model creation and training
 - Plotting and evaluation
 
-To maintain reproducibility, it is recommended to design the experiment workflow within a single Python script, leveraging the framework’s capabilities. The script should reside in the experiment directory and be exclusively used for the specific experiment.
+To maintain reproducibility, it is recommended to design the experiment workflow within a single Python script, leveraging the framework’s capabilities. The recommended name for this script is ``execution.py``. It should reside in the experiment directory and be exclusively used for the specific experiment.
 
 Workflow
 ^^^^^^^^
@@ -108,17 +107,16 @@ Steps:
    - Creates, trains, and evaluates a neural network for a specific hyperparameter combination.
    - Generates experiment outcomes, including the experiment report, using the underlying framework.
 
-Example Implementation
+Implementation Example
 ^^^^^^^^^^^^^^^^^^^^^^
+
 .. code-block:: python
 
     import os
-
     import tensorflow as tf
-
+    from imlresearch.utils import load_experiment_definition
     from imlresearch.preprocessing_steps import ReverseScaler, TypeCaster
     from imlresearch.researcher import MultiClassResearcher
-    from imlresearch.utils import load_experiment_definition
 
     def load_dataset():
         (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.mnist.load_data()
@@ -160,7 +158,7 @@ Example Implementation
         preprocessing_pipe = create_preprocessing_pipeline()
         researcher.apply_preprocessing_pipeline(preprocessing_pipe)
         researcher.prepare_datasets(batch_size=32, shuffle_seed=42)
-        researcher.split_dataset(train_size=0.8, val_size=0.1, test_size=0.1)
+        researcher.split_dataset(train_split=0.8, val_split=0.1, test_split=0.1)
 
         # Experiment Execution
         with researcher.run_experiment(**experimant_metadata) as experiment:
