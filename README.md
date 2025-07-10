@@ -7,7 +7,7 @@ You can install ImageMLResearch using pip:
 ```bash
 pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ imlresearch
 ```
-
+ 
 📦 **Dependencies**
 
 When installing this package, the following libraries and their specific versions will also be installed:
@@ -26,3 +26,11 @@ opencv-python==4.8.1.78
 ⚠️ **Important**  
 If your current environment already contains different versions of these libraries, `pip` may raise conflicts during installation.  
 To avoid such issues, it is **strongly recommended** to install ImageMLResearch in a **clean virtual environment**.
+
+🧪 **Testing**  
+The functionality of the code can be tested using the following command:
+
+```python
+from imlresearch.tests import run_all_tests
+run_all_tests()
+```
