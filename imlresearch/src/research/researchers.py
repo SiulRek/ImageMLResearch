@@ -59,7 +59,7 @@ class _ResearcherBase(DataHandler, Trainer):
         return self._preprocessor
 
     def run_experiment(
-        self, directory, name, description, ask_for_analysis=False
+        self, directory, name, description, sort_metric="accuracy", ask_for_analysis=False
     ):
         """
         Set up and run an experiment within a context manager.
@@ -72,6 +72,8 @@ class _ResearcherBase(DataHandler, Trainer):
             The name of the experiment.
         description : str
             The description of the experiment for the report.
+        sort_metric : str, optional
+            The metric to sort the results by, by default "accuracy".
         ask_for_analysis : bool, optional
             Whether to ask AI for analysis, by default False.
 
@@ -82,9 +84,10 @@ class _ResearcherBase(DataHandler, Trainer):
         """
         return Experiment(
             self,
-            directory,
-            name,
-            description,
+            directory=directory,
+            name=name,
+            description=description,
+            sort_metric=sort_metric,
             ask_for_analysis=ask_for_analysis,
         )
 
