@@ -26,14 +26,18 @@ def run_unit_tests():
 
 def run_code_style_checks():
     print("Running ruff checks...")
-    output = subprocess.check_output("ruff check imlresearch/src", shell=True)
-    if output != b"All checks passed!\n":
-        raise BuildFailed("Some ruff checks failed!:\n", output)
+    try:
+        output = subprocess.check_output("ruff check imlresearch/src", shell=True)
+    except subprocess.CalledProcessError as e:
+        msg = "Ruff checks failed with the following output:\n"
+        msg += e.output.decode("utf-8")
+        raise BuildFailed(msg)
     print("All ruff checks passed!")
 
 
 def delete_old_build_artifacts():
     for dist_dir in DIST_DIRS:
+        dist_dir = os.path.join(BUILD_DIR, dist_dir)
         if os.path.exists(dist_dir):
             shutil.rmtree(dist_dir)
     if os.path.exists(BUILD_DIR):
@@ -112,7 +116,7 @@ def build_package():
     with set_temporary_cwd(BUILD_DIR):
         os.system(f"{sys.executable} -m build")
     print("\n", "*" * 50)
-    print(f"Build package is available at {BUILD_DIR}")
+    print(f"Build package is available at: {BUILD_DIR}")
 
 
 if __name__ == "__main__":
