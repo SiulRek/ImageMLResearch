@@ -27,12 +27,12 @@ The *experiment definition* includes all the elements that describe the experime
 
 .. _Recipes_ExampleExperimentDefinition:
 .. code-block:: json
-
+    
     {
         "experiment_metadata": {
             "name": "MNIST Digits Experiment",
             "description": "A neural network is trained with different hyperparameters to classify MNIST digits.",
-            "directory": "path/to/experiment_directory",
+            "DIRECTORY": "<PATH/TO/EXPERIMENT_DIRECTORY>",
             "sort_metric": "accuracy"
         },
         "trial_definitions": [
@@ -112,6 +112,7 @@ Implementation Example
 
 .. code-block:: python
 
+    # execution.py
     import os
     import tensorflow as tf
     from imlresearch.utils import load_experiment_definition
