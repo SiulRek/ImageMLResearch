@@ -65,9 +65,7 @@ class TestExperiment(BaseTestCase):
         """
         with self.call_test_experiment() as experiment:
             self.assertIsInstance(experiment, Experiment)
-            self.assertEqual(
-                experiment.experiment_assets["name"], self.name
-            )
+            self.assertEqual(experiment.experiment_assets["name"], self.name)
             self.assertEqual(
                 experiment.experiment_assets["description"],
                 self.description,
@@ -111,6 +109,7 @@ class TestExperiment(BaseTestCase):
         """
         Tests that an exception during an experiment is properly handled.
         """
+
         def raise_error_with_traceback():
             try:
                 raise ValueError()
@@ -196,22 +195,24 @@ class TestExperiment(BaseTestCase):
         new_sort_metric = "accuracy_inv"
 
         experiment = self._run_trials_in_experiment(trial_definitions)
-        reloaded_experiment = Experiment(
+        with Experiment(
             research_attributes=self.research_attributes,
             directory=self.directory,
             name=self.name,
             description=new_description,
             sort_metric=new_sort_metric,
-        )
-        description = reloaded_experiment.experiment_assets["description"]
-        sort_metric = reloaded_experiment.experiment_assets["sort_metric"]
-        self.assertEqual(description, new_description)
-        self.assertEqual(sort_metric, new_sort_metric)
-        trials_data = experiment.experiment_assets["trials"]
-        reloaded_trials_data = reloaded_experiment.experiment_assets["trials"]
+        ) as reloaded_experiment:
+            description = reloaded_experiment.experiment_assets["description"]
+            sort_metric = reloaded_experiment.experiment_assets["sort_metric"]
+            self.assertEqual(description, new_description)
+            self.assertEqual(sort_metric, new_sort_metric)
+            trials_data = experiment.experiment_assets["trials"]
+            reloaded_trials_data = reloaded_experiment.experiment_assets[
+                "trials"
+            ]
 
-        self.assertIn(trials_data[0], reloaded_trials_data)
-        self.assertIn(trials_data[1], reloaded_trials_data)
+            self.assertIn(trials_data[0], reloaded_trials_data)
+            self.assertIn(trials_data[1], reloaded_trials_data)
 
     def test_trials_order(self):
         def metric_val(trial_num, metric):
@@ -257,6 +258,7 @@ class TestExperiment(BaseTestCase):
         """
         Tests that an experiment can be resumed correctly.
         """
+
         def get_experiment_duration(experiment):
             duration = experiment.experiment_assets["duration"]
             duration = float(duration.replace(":", ""))
