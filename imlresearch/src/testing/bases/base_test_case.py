@@ -20,8 +20,8 @@ DATA_DIR = os.path.join(
 
 class BaseTestCase(unittest.TestCase):
     """
-    Abstract base class for test cases, providing setup and teardown
-    operations common across tests.
+    Abstract base class for test cases, providing setup and teardown operations
+    common across tests.
     """
 
     remove_temp_dir = True
@@ -41,18 +41,21 @@ class BaseTestCase(unittest.TestCase):
             return sys.modules[module].__file__
 
         if len(sys.argv) > 1:
-            return sys.argv[1]  # First argument is expected to be the test file
+            return sys.argv[
+                1
+            ]  # First argument is expected to be the test file
 
-        raise FileNotFoundError("Cannot infer test file path.")
+        raise FileNotFoundError(
+            "Cannot infer test file path."
+        )
 
     @classmethod
     def _compute_output_dir(cls, parent_folder="tests"):
         """
         Compute the test output directory path.
 
-        This method traverses up the file hierarchy until a directory
-        named 'tests' is found, then returns the path to the 'outputs'
-        subdirectory.
+        This method traverses up the file hierarchy until a directory named
+        'tests' is found, then returns the path to the 'outputs' subdirectory.
 
         Parameters
         ----------
@@ -87,8 +90,7 @@ class BaseTestCase(unittest.TestCase):
         """
         name = cls.__name__.removeprefix("Test")
         name = "".join(
-            letter if not letter.isupper() else f" {letter}"
-            for letter in name
+            letter if not letter.isupper() else f" {letter}" for letter in name
         ).strip()
         return name.replace("_", " ").replace("  ", " ") + " Test"
 
@@ -161,10 +163,19 @@ class BaseTestCase(unittest.TestCase):
 
     def tearDown(self):
         """
-        Instance-level teardown: log test outcome and remove the temp directory.
+        Instance-level teardown: log test outcome and remove the temp
+        directory.
         """
         if os.path.exists(self.temp_dir) and self.remove_temp_dir:
-            shutil.rmtree(self.temp_dir)
+            try:
+                shutil.rmtree(self.temp_dir)
+            except PermissionError as e:
+                if os.name == "nt" and "hparams_suggester_study.db" in str(e):
+                    # On Windows, the Optuna study DB might be locked even if
+                    # usage has ended.
+                    pass
+                else:
+                    raise
 
     @classmethod
     def load_geometrical_forms_dataset(cls):
