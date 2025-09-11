@@ -59,7 +59,12 @@ class _ResearcherBase(DataHandler, Trainer):
         return self._preprocessor
 
     def run_experiment(
-        self, directory, name, description, sort_metric="accuracy", ask_for_analysis=False
+        self,
+        directory,
+        name,
+        description,
+        sort_metric="accuracy",
+        ask_for_analysis=False,
     ):
         """
         Set up and run an experiment within a context manager.
