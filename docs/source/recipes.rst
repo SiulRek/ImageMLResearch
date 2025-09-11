@@ -134,7 +134,8 @@ Implementation Example
     def make_model(hyperparameters):
         model = tf.keras.models.Sequential(
             [
-                tf.keras.layers.Flatten(input_shape=(28, 28, 3)),
+                tf.keras.layers.Input(shape=(28, 28, 3)),
+                tf.keras.layers.Flatten(),
                 tf.keras.layers.Dense(hyperparameters["units1"], activation="relu"),
                 tf.keras.layers.Dense(hyperparameters["units2"], activation="relu"),
                 tf.keras.layers.Dense(10, activation="softmax"),
