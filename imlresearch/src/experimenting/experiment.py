@@ -243,6 +243,7 @@ class Experiment(AbstractContextManager, ResearchAttributes):
         if exc_type is not None:
             self.logger.error(f"Exception occurred:\n {exc_value}")
             self._write_experiment_assets()
+            self.logger.close_logger()
             raise
 
     def _sort_trials(self):
