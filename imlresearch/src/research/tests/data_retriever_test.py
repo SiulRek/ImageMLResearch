@@ -23,8 +23,8 @@ class TestDataRetriever(BaseTestCase):
         self.data_retriever = DataRetriever()
 
         # Create some mock data
-        self.y_true = np.array([0, 1, 1, 0])
-        self.y_pred = np.array([0, 1, 0, 0])
+        self.y_true = np.array([0, 1, 1, 0], dtype=np.int32)
+        self.y_pred = np.array([0, 1, 0, 0], dtype=np.int32)
         self.dataset = tf.data.Dataset.from_tensor_slices(
             (self.y_true, self.y_pred)
         ).batch(2)
@@ -99,7 +99,7 @@ class TestDataRetriever(BaseTestCase):
         x = self.data_retriever._retrieve_input_data_by_name(
             "complete_dataset"
         )
-        expected_tensor = tf.constant([[0, 1], [1, 0]], dtype=tf.int64)
+        expected_tensor = tf.constant([[0, 1], [1, 0]], dtype=tf.int32)
 
         self.assertTrue(tf.reduce_all(tf.equal(x, expected_tensor)))
 
@@ -113,7 +113,7 @@ class TestDataRetriever(BaseTestCase):
         Test retrieval of input and output data for the test dataset.
         """
         x, y_true, y_pred = self.data_retriever._retrieve_test_input_output_data()  # noqa
-        expected_tensor = tf.constant([[0, 1], [1, 0]], dtype=tf.int64)
+        expected_tensor = tf.constant([[0, 1], [1, 0]], dtype=tf.int32)
 
         self.assertTrue(tf.reduce_all(tf.equal(x, expected_tensor)))
         self.assertTrue(np.array_equal(y_true, self.y_true))
