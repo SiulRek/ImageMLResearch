@@ -51,9 +51,7 @@ class DataHandler(ResearchAttributes):
             If the dataset is not in the required format.
         """
         for sample in dataset.take(1):
-            if (
-                not isinstance(sample, tuple) and len(sample) != 2
-            ):
+            if not isinstance(sample, tuple) and len(sample) != 2:
                 msg = "Dataset must be of form (image, label)."
                 raise ValueError(msg)
             img, _ = sample
@@ -78,11 +76,11 @@ class DataHandler(ResearchAttributes):
             2. A dictionary or pandas DataFrame with 'path' and 'label'
                columns.
 
-        Notes
+        Notes 
         -----
-        When passing a `tf.data.Dataset`, it is recommended to provide a
-        dataset without Keras operations like shuffling or batching. These
-        operations should be applied in the `prepare_datasets` method.
+        When passing a `tf.data.Dataset`, it is recommended to
+        provide a dataset without Keras operations like shuffling or batching.
+        These operations should be applied in the `prepare_datasets` method.
         """
         if isinstance(data, tf.data.Dataset):
             self._assert_dataset_format(data)
@@ -92,7 +90,7 @@ class DataHandler(ResearchAttributes):
             dataset = create_dataset(
                 data,
                 self._label_manager.label_type,
-                self._label_manager.class_names
+                self._label_manager.class_names,
             )
             self._assert_dataset_format(dataset)
             self._datasets_container.update({"complete_dataset": dataset})
@@ -135,16 +133,20 @@ class DataHandler(ResearchAttributes):
         ----------
         dataset_names : list, optional
             The names of the datasets to enhance. Can be 'complete_dataset' or
-            any split datasets ('train_dataset', 'val_dataset', 'test_dataset').
-            If None, all datasets are processed.
+            any split datasets ('train_dataset', 'val_dataset',
+            'test_dataset'). If None (default), all datasets in the container
+            are processed.
         batch_size : int, optional
-            The batch size for the dataset.
+            The batch size for the dataset. If None (default), no batching is
+            applied.
         shuffle_seed : int, optional
-            The seed for shuffling. If None, no shuffling is applied.
+            The seed for shuffling. If None (default), no shuffling is applied.
         prefetch_buffer_size : int, optional
-            The prefetch buffer size.
+            The prefetch buffer size. Defaults to
+            tf.data.experimental.AUTOTUNE.
         repeat_num : int, optional
-            The number of times to repeat the dataset.
+            The number of times to repeat the dataset. If None (default), no
+            repeating is applied.
         """
         dataset_names = dataset_names or list(self._datasets_container.keys())
         for dataset_name in dataset_names:
@@ -159,8 +161,9 @@ class DataHandler(ResearchAttributes):
             )
             self._datasets_container.update({dataset_name: enhanced_dataset})
 
-    def split_dataset(self, train_split=0.8, val_split=0.1,
-                      test_split=0.1, dataset_size=None):
+    def split_dataset(
+        self, train_split=0.8, val_split=0.1, test_split=0.1, dataset_size=None
+    ):
         """
         Splits 'complete_dataset' into 'train_dataset', 'val_dataset', and
         'test_dataset'. Removes the 'complete_dataset' after splitting.
@@ -204,7 +207,7 @@ class DataHandler(ResearchAttributes):
             label as input and return a string. If None, a default prefix is
             used.
         num_images : int, optional
-            The number of images to save. If None, the complete dataset is 
+            The number of images to save. If None, the complete dataset is
             taken.
         """
         image_format = "jpg"

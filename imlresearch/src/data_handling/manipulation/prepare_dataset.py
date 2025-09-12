@@ -65,22 +65,22 @@ def prepare_dataset(
 ):
     """
     Prepares a TensorFlow dataset by applying shuffling, batching, prefetching,
-    and repeating a number of times. If a parameter is None, the corresponding
-    operation is not applied.
+    and repeating a number of times.
 
     Parameters
     ----------
     dataset : tf.data.Dataset
         The initial TensorFlow dataset to enhance.
     batch_size : int, optional
-        Size of batches of data.
+        Size of batches of data. If None (default), no batching is applied.
     shuffle_seed : int, optional
-        Seed for random shuffling.
+        Seed for random shuffling. If None (defualt), no shuffling is applied.
     prefetch_buffer_size : int, optional
-        Number of batches to prefetch
+        Number of batches to prefetch.
         (default is tf.data.experimental.AUTOTUNE).
     repeat_num : int, optional
-        Number of times to repeat the dataset.
+        Number of times to repeat the dataset. If None (default), no repeating
+        is applied.
 
     Returns
     -------
