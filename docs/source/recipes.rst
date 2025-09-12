@@ -32,7 +32,7 @@ The *experiment definition* includes all the elements that describe the experime
         "experiment_metadata": {
             "name": "MNIST Digits Experiment",
             "description": "A neural network is trained with different hyperparameters to classify MNIST digits.",
-            "DIRECTORY": "<PATH/TO/EXPERIMENT_DIRECTORY>",
+            "directory": "<PATH/TO/EXPERIMENT_DIRECTORY>",
             "sort_metric": "accuracy"
         },
         "trial_definitions": [
