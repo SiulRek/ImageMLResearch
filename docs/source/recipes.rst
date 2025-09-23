@@ -32,7 +32,7 @@ The *experiment definition* includes all the elements that describe the experime
         "experiment_metadata": {
             "name": "MNIST Digits Experiment",
             "description": "A neural network is trained with different hyperparameters to classify MNIST digits.",
-            "directory": "<PATH/TO/EXPERIMENT_DIRECTORY>",
+            "directory": "PATH/TO/EXPERIMENT_DIRECTORY",
             "sort_metric": "accuracy"
         },
         "trial_definitions": [
@@ -150,7 +150,7 @@ Implementation Example
         )
         return model
 
-    def make_experiment(experimant_metadata, trial_definitions):
+    def make_experiment(experiment_metadata, trial_definitions):
         # Experiment Setup
         researcher = MultiClassResearcher(
             class_names=["Digit " + str(i) for i in range(10)]
@@ -163,7 +163,7 @@ Implementation Example
         researcher.split_dataset(train_split=0.8, val_split=0.1, test_split=0.1)
 
         # Experiment Execution
-        with researcher.run_experiment(**experimant_metadata) as experiment:
+        with researcher.run_experiment(**experiment_metadata) as experiment:
             for trial_definition in trial_definitions:
                 with experiment.run_trial(**trial_definition) as trial:
                     if trial.already_runned:
