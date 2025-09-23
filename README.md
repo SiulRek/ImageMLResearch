@@ -17,8 +17,7 @@ pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://
 ```
 
 📦 **Dependencies**
-
-When installing this package, the following libraries and their specific versions will also be installed:
+This package supports Python 3.10–3.12. When installing, the following libraries and their specific versions will also be installed:
 
 ```
 tensorflow==2.17.0  
