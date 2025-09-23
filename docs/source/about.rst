@@ -7,6 +7,7 @@
 
 Installation
 -----------------------------------------------
+This library supports Python 3.10–3.12.
 
 To install the library, use the following command:
 
