@@ -110,8 +110,8 @@ def exclude_tests_query():
 
 
 def build_package():
-    run_unit_tests()
     run_code_style_checks()
+    run_unit_tests()
     setup_build_dir(exclude_tests=exclude_tests_query())
     with set_temporary_cwd(BUILD_DIR):
         os.system(f"{sys.executable} -m build")
