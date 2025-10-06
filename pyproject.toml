@@ -47,28 +47,62 @@ version = {attr = "imlresearch.src.version.__version__"}
 where = ["."]
 
 [tool.setuptools.package-data]
-"*" = ["*.png", "*.jpg", "*.tfrecord", "*.json"]    # Required for test data
+# Include required non-Python files (e.g., test data)
+"*" = ["*.png", "*.jpg", "*.tfrecord", "*.json"]
 
 
-# NOTE: Apply ruff on imlresearch/src
+# Apply ruff checks to imlresearch/src
 [tool.ruff]
 line-length = 80
 
 [tool.ruff.lint]
 select = [
-    "E",  # pycodestyle error
+    "E",  # pycodestyle errors
     "F",  # Pyflakes
     "I",  # isort
 ]
 ignore = [
-    "I001",  # ignore sort of imports,
+    "I001",  # do not enforce import sorting
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/__init__.py" = ["E501", "F401"]  # lines too long; imported but unused
+# Ignore:
+# - E501: line too long
+# - F401: imported but unused
+"**/__init__.py" = ["E501", "F401"]
 
 [tool.ruff.lint.isort]
 force-single-line = true
 
+
+[tool.pylint.'MAIN']
+load-plugins = ["pylint_per_file_ignores"]
+
+[tool.pylint.'MESSAGES CONTROL']
+# Disable globally:
+# - C0114: missing module docstring
+# - E1101: no-member (false positives for tf and cv2)
+disable = ["C0114", "E1101"]
+
+per-file-ignores = [
+    # Ignore in tests:
+    # - W0613: unused-argument (common in test methods with 'self')
+    # - W0212: protected-access (intentional in tests)
+    "imlresearch/src/preprocessing/tests/*:W0613,W0212",
+    "imlresearch/src/training/tests/*:W0613,W0212",
+    "imlresearch/src/utils/tests/*:W0613,W0212",
+    "imlresearch/src/data_handling/tests/*:W0613,W0212",
+    "imlresearch/src/plotting/tests/*:W0613,W0212",
+    "imlresearch/src/research/tests/*:W0613,W0212",
+    "imlresearch/src/experimenting/tests/*:W0613,W0212",
+    "imlresearch/api/tests/*:W0613,W0212",
+
+    # Ignore unused-argument (W0613) in preprocessing steps,
+    # since they must conform to a fixed function signature
+    "imlresearch/src/preprocessing/steps/*:W0613"
+]
+
+
 [tool.black]
 line-length = 79
+
