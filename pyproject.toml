@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "imlresearch"
-description = "Image Machine Learning Research Toolkit"
+description = "A Python Toolkit for Reproducible Image-Based ML Experiments"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
@@ -25,7 +25,7 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development",
 ]
-urls = { "Repository" = "https://github.com/SiulRek/ImageMLResearch", "Documentation" = "https://imagemlresearch.readthedocs.io/en/api-development/", "Thesis" = "https://epub.fh-joanneum.at/obvfhjhs/content/titleinfo/11577952" }
+urls = { "Repository" = "https://github.com/SiulRek/ImageMLResearch", "Documentation" = "https://imagemlresearch.readthedocs.io/en/api-development/" }
 
 
 
