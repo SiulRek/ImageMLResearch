@@ -15,7 +15,7 @@ authors:
     orcid: 0000-0001-9078-0044
     affiliation: 1
 affiliations:
-  - name: FH JOANNEUM University of Applied Sciences, Graz, Austria – ENDLESS Research Project
+  - name: FH JOANNEUM University of Applied Sciences, Graz, Austria
     index: 1
     ror: 01x3znb20
 date: 30 September 2025
@@ -57,7 +57,7 @@ The structure of an `ImageMLResearch` experiment is illustrated in the diagram b
 
 The metadata specifies the experiment name, directory, and sorting metric, while trials can be configured either manually or generated automatically through hyperparameter tuning. For example, running an MNIST digit experiment with two trials produces the following directory structure.
 
-<img src="./output_folder_structure.jpg" alt="ImageMLResearch Experiment Output Structure" width="45%" />
+![ImageMLResearch Experiment Output Structure](./output_folder_structure.png)
 
 ## Quality Control
 
