@@ -53,11 +53,11 @@ These modules are coordinated through high-level `Researcher` classes that integ
 ## Illustrative Example
 The structure of an `ImageMLResearch` experiment is illustrated in the diagram below.
 
-![ImageMLResearch Experiment Structure](./experiment_structure.png)
+![Structure of an ImageMLResearch Experiment](./experiment_structure.png)
 
 The metadata specifies the experiment name, directory, and sorting metric, while trials can be configured either manually or generated automatically through hyperparameter tuning. For example, running an MNIST digit experiment with two trials produces the following directory structure.
 
-![ImageMLResearch Experiment Output Structure](./output_folder_structure.png)
+![Output directory layout for a two-trial MNIST experiment](./output_folder_structure.png)
 
 ## Quality Control
 
