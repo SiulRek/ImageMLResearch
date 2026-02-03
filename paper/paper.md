@@ -35,6 +35,11 @@ General-purpose frameworks such as TensorFlow [@abadi2016tensorflow] and PyTorch
 
 `ImageMLResearch` addresses this gap by structuring the experiment lifecycle for image classification into modular components. It supports the consistent definition, execution, and documentation of experiments without reliance on external services. This makes the toolkit especially suited for exploratory research, and smaller projects where transparent and reproducible experiment management is essential.
 
+## State of the Field
+
+Reproducibility and systematic experimentation are longstanding challenges in image-based machine learning research. Existing tools such as experiment tracking platforms (e.g., MLflow, Weights & Biases) and workflow managers provide infrastructure for logging metrics and managing runs, but they are often agnostic to domain-specific requirements in image analysis. As a result, researchers frequently rely on custom scripts and ad hoc conventions to manage datasets, preprocessing pipelines, model variants, and evaluation protocols, which complicates reproducibility and comparison across experiments.
+
+ImageMLResearch addresses this gap by focusing specifically on image-based machine learning workflows and by tightly integrating experiment configuration, dataset handling, preprocessing, model training, and evaluation within a unified, reproducible framework. Unlike generic experiment trackers, the toolkit emphasizes transparent configuration, deterministic experiment definitions, and structured output artifacts tailored to image data. This design reduces boilerplate code and lowers the barrier to conducting controlled, comparable experiments in image-based research settings.
 
 ## Software Description
 
