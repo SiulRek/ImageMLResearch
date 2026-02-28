@@ -1,4 +1,7 @@
 # ImageMLResearch
+
+[![Python 3.10–3.12](https://img.shields.io/badge/python-3.10%E2%80%933.12-blue.svg)](https://www.python.org/downloads/)
+
 ImageMLResearch is a toolkit to help with image-based machine learning projects using Python. It includes functions for data handling, preprocessing, plotting, and more. These functions are combined into a single `Researcher` class to make experimentation easier and more efficient. Please note that this toolkit is specifically designed for image classification tasks and does not support regression problems.
 
 For comprehensive usage instructions and API details, refer to the [official documentation](https://imagemlresearch.readthedocs.io/en/api-development/index.html).
@@ -45,6 +48,6 @@ pip install --cache-dir=/opt/tmp tensorflow[and-cuda]
 The functionality of the code can be tested using the following command:
 
 ```python
-from imlresearch.tests import run_all_tests
+from imlresearch.api.tests import run_all_tests
 run_all_tests()
 ```
