@@ -27,12 +27,25 @@ def run_unit_tests():
 def run_code_style_checks():
     print("Running ruff checks...")
     try:
-        output = subprocess.check_output("ruff check imlresearch/src", shell=True)
+        subprocess.check_output("ruff check imlresearch/src", shell=True)
     except subprocess.CalledProcessError as e:
         msg = "Ruff checks failed with the following output:\n"
         msg += e.output.decode("utf-8")
         raise BuildFailed(msg)
     print("All ruff checks passed!")
+
+
+def run_test_coverage():
+    print("Running test coverage...")
+    try:
+        test_runner = "imlresearch/src/testing/master/master_test_runner.py"
+        subprocess.check_output(f"coverage run {test_runner}", shell=True)
+        subprocess.check_output("coverage html", shell=True)
+    except subprocess.CalledProcessError as e:
+        msg = "Test coverage failed with the following output:\n"
+        msg += e.output.decode("utf-8")
+        raise BuildFailed(msg)
+    print("All test coverage checks passed!")
 
 
 def delete_old_build_artifacts():
@@ -112,6 +125,7 @@ def exclude_tests_query():
 def build_package():
     run_code_style_checks()
     run_unit_tests()
+    run_test_coverage()
     setup_build_dir(exclude_tests=exclude_tests_query())
     with set_temporary_cwd(BUILD_DIR):
         os.system(f"{sys.executable} -m build")

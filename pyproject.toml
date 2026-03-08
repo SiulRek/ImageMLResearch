@@ -104,3 +104,24 @@ per-file-ignores = [
 
 [tool.black]
 line-length = 79
+
+[tool.coverage.run]
+# Note: coverage may be underreported for some preprocessing steps because
+# TensorFlow executes parts of the functionality lazily, and those deferred
+# executions are not fully tracked by the coverage tool.
+source = ["imlresearch"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+omit = [
+    "*/tests/*",
+    "*/testing/*",
+    "*/*_test.py",
+    "*/master_test_runner.py",
+]
+skip_covered = false
+fail_under = 80
+
+[tool.coverage.html]
+directory = "htmlcov"
