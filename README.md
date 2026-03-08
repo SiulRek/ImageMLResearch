@@ -23,6 +23,7 @@ pip install --upgrade imlresearch
 This package supports Python 3.10–3.12. When installing, the following core libraries will also be installed:
 
 ```
+numpy>=1.23.5,<2
 tensorflow>=2.13,<2.18
 optuna>=3.3,<4.8
 opencv-python>=4.8,<4.14

@@ -29,6 +29,7 @@ classifiers = [
 urls = { "Repository" = "https://github.com/SiulRek/ImageMLResearch", "Documentation" = "https://imagemlresearch.readthedocs.io/en/api-development/" }
 
 dependencies = [
+    "numpy>=1.23.5,<2",
     "tensorflow>=2.13,<2.18",
     "optuna>=3.3,<4.8",
     "opencv-python>=4.8,<4.14",
