@@ -39,8 +39,12 @@ def run_test_coverage():
     print("Running test coverage...")
     try:
         test_runner = "imlresearch/src/testing/master/master_test_runner.py"
-        subprocess.check_output(f"coverage run {test_runner}", shell=True)
-        subprocess.check_output("coverage html", shell=True)
+        cmd = (
+            f"{sys.executable} -m "
+            f"coverage run {test_runner}"
+            f" && {sys.executable} -m coverage report"
+        )
+        subprocess.check_output(cmd, shell=True)
     except subprocess.CalledProcessError as e:
         msg = "Test coverage failed with the following output:\n"
         msg += e.output.decode("utf-8")
@@ -122,10 +126,12 @@ def exclude_tests_query():
     return exclude_tests.lower() in ["y", "yes"]
 
 
-def build_package():
+def build_package(check_only=False):
     run_code_style_checks()
     run_unit_tests()
     run_test_coverage()
+    if check_only:
+        return
     setup_build_dir(exclude_tests=exclude_tests_query())
     with set_temporary_cwd(BUILD_DIR):
         os.system(f"{sys.executable} -m build")
@@ -134,4 +140,4 @@ def build_package():
 
 
 if __name__ == "__main__":
-    build_package()
+    build_package(True)
