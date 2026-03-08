@@ -19,25 +19,29 @@ pip install imlresearch
 pip install --upgrade imlresearch
 ```
 
-📦 **Dependencies**  
-This package supports Python 3.10–3.12. When installing, the following libraries and their specific versions will also be installed:
+📦 **Core Dependencies**  
+This package supports Python 3.10–3.12. When installing, the following core libraries will also be installed:
 
 ```
-tensorflow==2.17.0  
-pandas==2.2.2  
-matplotlib==3.8.0  
-openai==1.34.0  
-optuna==3.6.1  
-seaborn==0.13.2  
-scikit-learn==1.4.1.post1  
-opencv-python==4.8.1.78  
+tensorflow>=2.13,<2.18
+optuna>=3.3,<4.8
+opencv-python>=4.8,<4.14
+scikit-learn>=1.4,<1.8
+seaborn>=0.12,<0.14
 ```
 
-⚠️ **Important**  
-If your current environment already contains different versions of these libraries, `pip` may raise conflicts during installation.  
-To avoid such issues, it is **strongly recommended** to install ImageMLResearch in a **clean virtual environment**.
+📦 **Optional Dependency for AI Report Generation**
 
-💡 **Optional**  
+```
+openai==1.34.0
+```
+
+Install with:
+```bash
+pip install imlresearch[ai-report]
+```
+
+💡 **Optional GPU Support for TensorFlow**  
 If you have a compatible GPU and wish to enable GPU acceleration for TensorFlow, you can install the CUDA-enabled version with the following command:
 
 ```bash
