@@ -58,7 +58,7 @@ In contrast, `ImageMLResearch` focuses on structuring the full experiment lifecy
 
 These modules are coordinated through high-level `Researcher` classes that integrate the experiment lifecycle. Assets are organized into **definition**, **execution**, and **output** layers, ensuring clear separation of concerns. The toolkit automatically tracks logs, figures, and experiment metadata, generating human-readable markdown reports. Hyperparameter optimization is supported through Optuna, and a proof-of-concept AI-assisted analysis feature demonstrates automated interpretation of experiment results.
 
-The software design emphasizes reproducibility through explicit configuration and deterministic experiment definitions, and portability through file-based outputs rather than reliance on external services. The modular structure allows individual components (e.g., preprocessing or training strategies) to be replaced without changing the surrounding experiment orchestration, supporting method comparison and benchmarking with minimal boilerplate.
+The software design emphasizes reproducibility through explicit configuration and deterministic experiment definitions. The modular structure allows individual components (e.g., preprocessing or training strategies) to be replaced without changing the surrounding experiment orchestration, supporting method comparison and benchmarking with minimal boilerplate. The design focuses on simplicity and reproducibility by using TensorFlow as a single framework, avoiding added complexity from supporting multiple backends. File-based outputs keep results easy to inspect and share, and JSON configuration provides a clear, structured format despite being less flexible than alternatives.
 
 ## Research Impact Statement
 
