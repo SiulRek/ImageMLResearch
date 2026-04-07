@@ -125,13 +125,14 @@ def exclude_tests_query():
     )
     return exclude_tests.lower() in ["y", "yes"]
 
-
-def build_package(check_only=False):
+def run_pre_build_checks():
     run_code_style_checks()
     run_unit_tests()
     run_test_coverage()
-    if check_only:
-        return
+
+def build_package():
+
+    run_pre_build_checks()
     setup_build_dir(exclude_tests=exclude_tests_query())
     with set_temporary_cwd(BUILD_DIR):
         os.system(f"{sys.executable} -m build")
@@ -140,4 +141,4 @@ def build_package(check_only=False):
 
 
 if __name__ == "__main__":
-    build_package(True)
+    build_package()

@@ -29,13 +29,13 @@ jobs:
           pip install .
           pip install ruff coverage
 
-      - name: Run checks
+      - name: Run checks — Formatting checks, Unittests and Test Coverage
         run: |
           python <<'PY'
-          from pip_build import build_package
+          from pip_build import run_pre_build_checks
 
           try:
-              build_package(check_only=True)
+              run_pre_build_checks()
           except Exception:
               raise SystemExit(1)
           else:
