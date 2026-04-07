@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "imlresearch"
 description = "A Python Toolkit for Reproducible Image-Based ML Experiments"
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.13"
 license = {file = "LICENSE"}
 authors = [
     { name = "SiulRek", email = "luiskraker2000@gmail.com" }
@@ -34,7 +34,7 @@ dependencies = [
     "optuna>=3.3,<4.8",
     "opencv-python>=4.8,<4.14",
     "scikit-learn>=1.4,<1.8",
-    "seaborn>=0.12,<0.14",
+    "seaborn>=0.12.0,<=0.13.2",
 ]
 
 [project.optional-dependencies]

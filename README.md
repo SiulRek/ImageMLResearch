@@ -28,7 +28,7 @@ tensorflow>=2.13,<2.18
 optuna>=3.3,<4.8
 opencv-python>=4.8,<4.14
 scikit-learn>=1.4,<1.8
-seaborn>=0.12,<0.14
+seaborn>=0.12.0,<=0.13.2
 ```
 
 📦 **Optional Dependency for AI Report Generation**
