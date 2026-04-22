@@ -86,7 +86,7 @@ The metadata specifies the experiment name, directory, and sorting metric, while
 
 # Quality Control
 
-`ImageMLResearch` is maintained under version control with Git and GitHub. Unit tests are implemented with Python’s unittest framework for each module, executed with a dedicated test runner that reports pass/fail/error logs. Code quality is enforced using Pylint and Ruff in accordance with PEP 8. AI-assisted consistency checks are performed with GitHub Copilot.
+`ImageMLResearch` is maintained under version control with Git and GitHub. Unit tests are implemented with Python’s unittest framework for each module, executed with a dedicated test runner that reports pass/fail/error logs. Code quality is enforced using Pylint [@pylint] and Ruff [@ruff] in accordance with PEP 8. AI-assisted consistency checks are performed with GitHub Copilot.
 
 # Acknowledgements
 
