@@ -76,7 +76,7 @@ The authors maintain full responsibility for the software's architecture, the im
 
 The structure of an `ImageMLResearch` experiment is illustrated in the diagram below.
 
-![Structure of an ImageMLResearch Experiment](./experiment_structure.svg){width=90%}
+![Structure of an ImageMLResearch Experiment](./experiment_structure.svg)
 
 The metadata specifies the experiment name, directory, and sorting metric, while trials can be configured either manually or generated automatically through hyperparameter tuning. For example, running an MNIST digit experiment with two trials produces the following directory structure.
 
