@@ -22,8 +22,6 @@ date: 30 September 2025
 bibliography: paper.bib
 ---
 
-# ImageMLResearch: A Python Toolkit for Reproducible Image-Based ML Experiments
-
 # Summary
 
 `ImageMLResearch` is an open-source Python toolkit that streamlines and standardizes image-based machine learning (ML) research. While ML has achieved remarkable success in computer vision, the complexity of research workflows remains a barrier to reproducibility and accessibility. Many projects rely on loosely connected scripts or notebooks, leading to fragmented experiment management and limited reproducibility.
